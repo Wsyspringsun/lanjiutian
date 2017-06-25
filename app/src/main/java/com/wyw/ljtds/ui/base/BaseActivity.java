@@ -45,8 +45,6 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     //广播
     protected BroadcastReceiver receiver;
 
-    //    protected boolean refreshForMain = true;
-//    protected boolean refreshForOther = true;
     protected boolean canShowLogin = true;
     protected boolean canShowAddress = true;
     private static final int REQUEST_CODE_PERMISSION_XIAONENG = 11;
