@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:fresco="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/basebackground"
+              android:orientation="vertical">
+
+    <include layout="@layout/main_header_return_red"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x10"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/touxiang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="@dimen/x10">
+
+            <TextView
+                android:id="@+id/name"
+                style="@style/font_ww_14"
+                android:layout_marginLeft="@dimen/x12"
+                android:layout_marginTop="@dimen/x2"
+                android:layout_toRightOf="@+id/sdv_item_head_img"
+                android:singleLine="true"
+                android:textColor="@color/font_black2"/>
+
+            <TextView
+                android:id="@+id/nicheng"
+                style="@style/font_ww_14"
+                android:layout_alignBottom="@+id/sdv_item_head_img"
+                android:layout_marginBottom="@dimen/x2"
+                android:layout_marginLeft="@dimen/x12"
+                android:layout_toRightOf="@+id/sdv_item_head_img"
+                android:singleLine="true"
+                android:textColor="@color/gray"/>
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/sdv_item_head_img"
+                android:layout_width="@dimen/x45"
+                android:layout_height="@dimen/x45"
+                fresco:fadeDuration="200"
+                fresco:failureImage="@mipmap/icon_moren_tou"
+                fresco:failureImageScaleType="centerInside"
+                fresco:placeholderImage="@mipmap/icon_moren_tou"
+                fresco:roundAsCircle="true"
+                fresco:roundingBorderColor="@color/gray1"
+                fresco:roundingBorderWidth="1dp"/>
+
+            <ImageView
+                android:id="@+id/touxiang_jt"
+                android:layout_width="@dimen/x14"
+                android:layout_height="@dimen/x14"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/jiantou_you_hui"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:background="@drawable/button_select_color"
+            android:clickable="true"
+            android:padding="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:text="@string/manage_address"
+                android:textColor="@color/font_black2"/>
+
+            <ImageView
+                android:layout_width="@dimen/x14"
+                android:layout_height="@dimen/x14"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/jiantou_you_hui"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/shiming"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x1"
+            android:background="@drawable/button_select_color"
+            android:clickable="true"
+            android:padding="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:text="实名认证"
+                android:textColor="@color/font_black2"/>
+
+            <TextView
+                android:id="@+id/shiming_xin"
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/x8"
+                android:layout_toLeftOf="@+id/shimings_jt"
+                android:textColor="@color/gray"/>
+
+            <ImageView
+                android:id="@+id/shimings_jt"
+                android:layout_width="@dimen/x14"
+                android:layout_height="@dimen/x14"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/jiantou_you_hui"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/anquan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x1"
+            android:background="@drawable/button_select_color"
+            android:clickable="true"
+            android:padding="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:text="@string/manage_safety"
+                android:textColor="@color/font_black2"/>
+
+            <ImageView
+                android:layout_width="@dimen/x14"
+                android:layout_height="@dimen/x14"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/jiantou_you_hui"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/guanyu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x1"
+            android:background="@drawable/button_select_color"
+            android:clickable="true"
+            android:padding="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:text="@string/app_update"
+                android:textColor="@color/font_black2"/>
+
+            <ImageView
+                android:id="@+id/guanyu_jt"
+                android:layout_width="@dimen/x14"
+                android:layout_height="@dimen/x14"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/jiantou_you_hui"/>
+
+            <TextView
+                android:id="@+id/guanyu_xin"
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/x8"
+                android:layout_toLeftOf="@+id/guanyu_jt"
+                android:textColor="@color/gray"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/qiehuan"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x38"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/background_submit"
+            android:gravity="center"
+            android:text="退出当前用户"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x35"
+        android:background="@color/base_bar">
+
+
+        <LinearLayout
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/x5"
+            android:layout_marginLeft="@dimen/x5">
+
+            <ImageView
+                android:layout_width="@dimen/x18"
+                android:layout_height="@dimen/x18"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/jiantou_zuo_bai" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_centerInParent="true"
+            style="@style/font_ww_16"
+            android:text="@string/user_dingdan"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/message"
+            android:layout_width="@dimen/x18"
+            android:layout_height="@dimen/x18"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_xiaoxi"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/x10"/>
+
+
+    </RelativeLayout>
+
+    <!--
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x31">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x35"
+            android:orientation="horizontal"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/order1"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textColor="@color/base_bar"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/all"/>
+
+            <TextView
+                android:id="@+id/order2"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textColor="@color/font_black2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/daifu"/>
+
+            <TextView
+                android:id="@+id/order3"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textColor="@color/font_black2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/daishou"/>
+
+            <TextView
+                android:id="@+id/order4"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textColor="@color/font_black2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/daiping"/>
+
+            <TextView
+                android:id="@+id/order5"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textColor="@color/font_black2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/shohou"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/gray1"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+    -->
+    <com.gxz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x33"
+        android:textColor="@color/font_black2"
+        android:textSize="12sp"
+        app:pstsDividerColor="@android:color/transparent"
+        app:pstsIndicatorColor="@android:color/transparent"
+        app:pstsIndicatorHeight="0.5dp"
+        app:pstsScaleZoomMax="0.1"
+        app:pstsShouldExpand="true"
+        app:pstsTabPaddingLeftRight="12dp"
+        app:pstsTextSelectedColor="@color/base_bar"
+        app:pstsUnderlineColor="@color/whitesmoke" />
+
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/viewPager1"
+        android:flipInterval="30"
+        android:persistentDrawingCache="animation">
+
+    </android.support.v4.view.ViewPager>
+
+</LinearLayout>

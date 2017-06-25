@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basebackground">
+
+    <include layout="@layout/main_header_return"/>
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/x10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:padding="@dimen/x10"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textSize="14sp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:text="@string/shouhuo_name"
+                android:textColor="@color/font_black2"/>
+
+            <EditText
+                android:id="@+id/name"
+                android:maxLines="1"
+                android:textSize="14sp"
+                android:textColor="@color/font_black2"
+                android:background="@null"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/basebackground"/>
+
+        <LinearLayout
+            android:padding="@dimen/x10"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textSize="14sp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:text="@string/shouhuo_phone"
+                android:textColor="@color/font_black2"/>
+
+            <EditText
+                android:inputType="phone"
+                android:id="@+id/phone"
+                android:maxLines="1"
+                android:textSize="14sp"
+                android:textColor="@color/font_black2"
+                android:background="@null"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/basebackground"/>
+
+        <RelativeLayout
+            android:id="@+id/select_shengshi"
+            android:padding="@dimen/x10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/diqu"
+                android:layout_centerVertical="true"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:text="@string/shouhuo_address"
+                android:textColor="@color/font_black2"/>
+
+            <TextView
+                android:id="@+id/shengshi"
+                android:layout_toRightOf="@+id/diqu"
+                android:layout_marginLeft="@dimen/x20"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/jiantou1"
+                android:layout_marginRight="@dimen/x6"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:gravity="right"
+                android:layout_height="wrap_content"
+                android:text="请选择省市"
+                android:textColor="@color/gray"/>
+
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/jiantou1"
+                android:layout_width="@dimen/x16"
+                android:layout_height="@dimen/x15"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/jiantou_you_hui"
+                android:layout_alignParentRight="true"/>
+
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/basebackground"/>
+
+        <!--RelativeLayout
+            android:padding="@dimen/x10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/jiedao"
+                android:layout_centerVertical="true"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:text="@string/shouhuo_street"
+                android:textColor="@color/font_black2"/>
+
+            <TextView
+                android:layout_toRightOf="@+id/jiedao"
+                android:layout_marginLeft="@dimen/x20"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/jiantou2"
+                android:layout_marginRight="@dimen/x6"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:gravity="right"
+                android:layout_height="wrap_content"
+                android:text="@string/qingxuanze"
+                android:textColor="@color/gray"/>
+
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/jiantou2"
+                android:layout_width="@dimen/x14"
+                android:layout_height="@dimen/x15"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/jiantou_you_hui"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout-->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/basebackground"/>
+
+        <EditText
+            android:id="@+id/xiangxi"
+            android:textSize="14sp"
+            android:textColor="@color/font_black2"
+            android:hint="@string/shouhuo_xiangxi"
+            android:gravity="top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/x10"
+            android:background="@null"
+            android:lineSpacingExtra="@dimen/x4"
+            android:maxLines="8"
+            android:lines="4"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:paddingRight="@dimen/x8"
+        android:paddingLeft="@dimen/x10"
+        android:layout_marginTop="@dimen/x10"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_centerVertical="true"
+            style="@style/font_ww_14"
+            android:text="@string/address_moren"
+            android:textColor="@color/font_black2"/>
+
+        <CheckBox
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/x5"
+            android:layout_marginBottom="@dimen/x5"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20"
+            style="@style/MyCheckBox"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/shanchu"
+        android:paddingRight="@dimen/x8"
+        android:paddingLeft="@dimen/x10"
+        android:layout_marginTop="@dimen/x10"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            android:layout_marginTop="@dimen/x5"
+            android:layout_marginBottom="@dimen/x5"
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x20"
+            android:text="@string/shouhuo_shanchu"
+            android:textColor="@color/font_black2"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/whitesmoke"
+                android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/x12">
+
+        <TextView
+            style="@style/font_ww_16_black"
+            android:layout_centerInParent="true"
+            android:text="@string/fapiao_xuanze"/>
+
+        <ImageView
+            android:id="@+id/quxiao"
+            android:layout_width="@dimen/x15"
+            android:layout_height="@dimen/x15"
+            android:layout_alignParentRight="true"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_chahao"/>
+
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/fenge"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_below="@+id/title"
+        android:background="@color/gray1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fenge"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RadioGroup
+            android:id="@+id/fapiao_rg1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginTop="@dimen/x10"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/fapiao_rb1"
+                android:layout_width="@dimen/x64"
+                android:layout_height="wrap_content"
+                android:background="@drawable/select_btn_order"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="@dimen/x5"
+                android:text="@string/fapiao_mx"
+                android:textColor="@color/select_btn_order_text"
+                android:textSize="14sp"/>
+
+            <RadioButton
+                android:id="@+id/fapiao_rb2"
+                android:layout_width="@dimen/x64"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x15"
+                android:background="@drawable/select_btn_order"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="@dimen/x5"
+                android:text="@string/fapiao_bg"
+                android:textColor="@color/select_btn_order_text"
+                android:textSize="14sp"/>
+
+            <RadioButton
+                android:id="@+id/fapiao_rb3"
+                android:layout_width="@dimen/x64"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x15"
+                android:background="@drawable/select_btn_order"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="@dimen/x5"
+                android:text="@string/fapiao_jj"
+                android:textColor="@color/select_btn_order_text"
+                android:textSize="14sp"/>
+
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/fapiao_rg2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/x10"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginTop="@dimen/x6"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/fapiao_rb4"
+                android:layout_width="@dimen/x64"
+                android:layout_height="wrap_content"
+                android:background="@drawable/select_btn_order"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="@dimen/x5"
+                android:text="@string/fapiao_yy"
+                android:textColor="@color/select_btn_order_text"
+                android:textSize="14sp"/>
+
+            <RadioButton
+                android:id="@+id/fapiao_rb5"
+                android:layout_width="@dimen/x64"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x15"
+                android:background="@drawable/select_btn_order"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="@dimen/x5"
+                android:text="@string/fapiao_hc"
+                android:textColor="@color/select_btn_order_text"
+                android:textSize="14sp"/>
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/queding"
+        android:layout_width="@dimen/x150"
+        android:layout_height="@dimen/x30"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/x40"
+        android:background="@drawable/background_submit_yuan"
+        android:text="@string/alert_queding"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+
+</RelativeLayout>

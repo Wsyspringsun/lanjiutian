@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <cn.bingoogolapple.photopicker.widget.BGAHackyViewPager
+        android:id="@+id/bga_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
+
+    </cn.bingoogolapple.photopicker.widget.BGAHackyViewPager>
+
+    <ImageView
+        android:id="@+id/fanhui"
+        android:layout_width="@dimen/x20"
+        android:layout_height="@dimen/x20"
+        android:layout_marginLeft="@dimen/x15"
+        android:layout_marginTop="@dimen/x15"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/jiantou_zuo_hei"/>
+
+    <TextView
+        android:id="@+id/number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/x15"
+        android:layout_marginTop="@dimen/x15"
+        android:textColor="@color/font_black2"
+        android:textSize="20sp"/>
+
+</RelativeLayout>

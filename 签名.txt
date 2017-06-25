@@ -1,0 +1,15 @@
+别名: lanjiutian
+创建日期: 2017-5-15
+条目类型: PrivateKeyEntry
+证书链长度: 1
+证书[1]:
+所有者: CN=lanjiutian, OU=lanjiutian, O=lanjiutian, L=shanxi, ST=jincheng, C=86
+发布者: CN=lanjiutian, OU=lanjiutian, O=lanjiutian, L=shanxi, ST=jincheng, C=86
+序列号: 17c5bd05
+有效期开始日期: Mon May 15 15:10:36 CST 2017, 截止日期: Fri May 09 15:10:36 CST 2042
+证书指纹:
+	 MD5: 46:B7:DC:13:1E:98:66:4C:BC:09:B1:95:FA:5E:64:19
+	 SHA1: 57:9B:65:70:3F:18:73:58:B9:A7:76:E8:98:7F:24:23:DD:C8:96:C9
+	 SHA256: 3A:10:F7:B2:2C:CB:60:C1:FE:BB:5A:93:C7:AD:D7:7F:6C:D5:27:78:D5:BC:81:15:57:3F:13:36:63:30:4B:43
+	 签名算法名称: SHA256withRSA
+	 版本: 3

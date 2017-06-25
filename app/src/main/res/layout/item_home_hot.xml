@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:fresco="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/x142"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x142">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/sdv_item_head_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            fresco:actualImageScaleType="fitXY"
+            fresco:fadeDuration="200"
+            fresco:failureImage="@mipmap/zhanweitu_lunbo"
+            fresco:failureImageScaleType="centerInside"
+            fresco:placeholderImage="@mipmap/zhanweitu_lunbo"/>
+
+        <RelativeLayout
+            android:id="@+id/hot_ll_wai"
+            android:layout_width="@dimen/x34"
+            android:layout_height="@dimen/x44"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x17"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:id="@+id/hot_ll_nei"
+                android:layout_width="@dimen/x32"
+                android:layout_height="@dimen/x42"
+                android:layout_centerInParent="true"
+                android:background="@color/gray1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/number"
+                    style="@style/font_ww_14"
+                    android:textColor="@color/white"/>
+
+                <TextView
+                    style="@style/font_ww_10"
+                    android:layout_marginTop="@dimen/x4"
+                    android:text="件单品"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:paddingLeft="@dimen/x8"
+            android:id="@+id/hot_list_img"
+            android:layout_width="@dimen/x200"
+            android:layout_height="@dimen/x80"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x52"
+            android:background="@color/white"
+            android:visibility="gone">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+
+</LinearLayout>

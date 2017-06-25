@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include layout="@layout/main_header_search1"/>
+
+    <TextView
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginTop="@dimen/x10"
+        style="@style/font_ww_14"
+        android:text="@string/zuijinsousuo"
+        android:textColor="@color/font_black2"/>
+
+    <TextView
+        android:gravity="center"
+        android:padding="@dimen/x30"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/font_black2"
+        android:text="@string/zanwusousuo"/>
+
+    <TextView
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginTop="@dimen/x10"
+        style="@style/font_ww_14"
+        android:text="@string/cainixihuan"
+        android:textColor="@color/font_black2"/>
+
+    <com.wyw.ljtds.widget.MyGridView
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_marginTop="@dimen/x5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="5"
+        android:verticalSpacing="@dimen/x10"
+        android:horizontalSpacing="@dimen/x12"
+        android:id="@+id/gridview">
+
+    </com.wyw.ljtds.widget.MyGridView>
+
+</LinearLayout>

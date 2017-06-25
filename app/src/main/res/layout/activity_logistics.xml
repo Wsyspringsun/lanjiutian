@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/main_header_return" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/x10">
+
+                <TextView
+                    android:id="@+id/zhuangtai"
+                    style="@style/font_ww_16_black"/>
+
+                <TextView
+                    android:id="@+id/wuliu"
+                    style="@style/font_ww_16_black"
+                    android:layout_marginTop="@dimen/x4"/>
+
+                <TextView
+                    android:id="@+id/dingdan"
+                    style="@style/font_ww_16_black"
+                    android:layout_marginTop="@dimen/x4"/>
+
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/reclcyer">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <View
+                android:layout_marginTop="@dimen/x5"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray" />
+
+            <com.wyw.ljtds.widget.logistics.StepView
+                android:id="@+id/stepView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:padding="@dimen/x10"
+                app:rightMargin="@dimen/x20"
+                app:leftMargin="@dimen/x5"
+                app:defaultDotColor="@color/gray1"
+                app:highDotColor="@color/base_bar"
+                app:dotPosition="top"
+                app:lineColor="@color/basebackground"
+                app:lineWidth="@dimen/x1"
+                app:radius="5dp"/>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/user_img"
+        android:layout_width="@dimen/x32"
+        android:layout_height="@dimen/x32"
+        android:layout_below="@+id/user_shezhi"
+        android:layout_marginLeft="@dimen/x12"
+        android:layout_marginTop="@dimen/x12"
+        fresco:backgroundImage="@color/white"
+        fresco:failureImage="@mipmap/icon_moren_tou"
+        fresco:failureImageScaleType="centerInside"
+        fresco:placeholderImage="@mipmap/icon_moren_tou"
+        fresco:roundAsCircle="true"
+        fresco:roundingBorderColor="@color/gray1"
+        fresco:roundingBorderWidth="1dp"/>
+
+
+    <TextView
+        android:id="@+id/name"
+        style="@style/font_ww_14"
+        android:layout_alignTop="@+id/user_img"
+        android:layout_marginLeft="@dimen/x8"
+        android:layout_toRightOf="@+id/user_img"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="12"
+        android:textColor="@color/font_black2"/>
+
+    <TextView
+        android:id="@+id/time"
+        style="@style/font_ww_12"
+        android:layout_alignBottom="@+id/user_img"
+        android:layout_marginLeft="@dimen/x8"
+        android:layout_toRightOf="@+id/user_img"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="2017-8-45"
+        android:textColor="@color/gray"/>
+
+    <TextView
+        android:id="@+id/context"
+        style="@style/font_ww_14"
+        android:layout_below="@+id/user_img"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_marginTop="@dimen/x10"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textColor="@color/font_black2"/>
+
+    <cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout
+        android:id="@+id/item_moment_photos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/context"
+        android:layout_marginBottom="@dimen/x10"
+        android:layout_marginTop="@dimen/x7"
+        app:bga_npl_itemCornerRadius="0dp"
+        app:bga_npl_itemSpanCount="3"
+        app:bga_npl_itemWhiteSpacing="@dimen/x3"
+        app:bga_npl_itemWidth="0dp"
+        app:bga_npl_otherWhiteSpacing="0dp"
+        app:bga_npl_placeholderDrawable="@mipmap/bga_pp_ic_holder_light"
+        app:bga_npl_showAsLargeWhenOnlyOne="false"/>
+
+</RelativeLayout>

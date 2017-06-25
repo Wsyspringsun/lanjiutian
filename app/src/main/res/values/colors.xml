@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 深蓝色 -->
+    <color name="colorPrimary">#3F51B5</color>
+    <!-- 中蓝色 -->
+    <color name="colorPrimaryDark">#303F9F</color>
+    <!-- 天蓝色 -->
+    <color name="skyblue">#87ceeb</color>
+
+    <color name="denglu">#281b6d</color>
+
+    <color name="violet">#BA55D3</color>
+
+    <color name="colorLightBlue">#0093e7</color>
+
+    <color name="login_bile">#004ea2</color>
+
+    <color name="reveal_color">#1b000000</color>
+    <color name="recommend_bar_text">#0083ca</color>
+
+
+    <!-- 深粉红色 -->
+    <color name="colorAccent">#FF4081</color>
+    <!-- 粉红色 -->
+    <color name="pink">#ffc0cb</color>
+    <!-- 巧可力色 -->
+    <color name="chocolate">#d2691e</color>
+    <!-- app主色 -->
+    <color name="base_bar">#f10215</color>
+
+    <!-- 黄色 -->
+    <color name="yellow">#ffff00</color>
+    <!-- 金色 -->
+    <color name="gold">#ffd700</color>
+    <!-- 橙色 -->
+    <color name="oragen">#ff946e</color>
+    <!-- 橘黄色 -->
+    <color name="juse">#ff9503</color>
+
+
+    <color name="grey3">#8B5A2B</color>
+    <!-- 灰色 -->
+    <color name="gray">#808080</color>
+    <!-- 深灰 -->
+    <color name="shenhui">#767676</color>
+    <!-- 黑色 -->
+    <color name="black">#000000</color>
+    <!-- 文字黑色一号 -->
+    <color name="font_black1">#0F0F0F</color>
+    <!-- 文字黑色二号 -->
+    <color name="font_black2">#2D2D2D</color>
+    <!-- 茶色 -->
+    <color name="tan">#d2b48c</color>
+    <!-- 分割线 -->
+    <color name="gray1">#ccc</color>
+    <!-- 背景色 -->
+    <color name="basebackground">#ede9e9</color>
+
+
+    <!-- 白色 -->
+    <color name="white">#ffffff</color>
+    <!-- 烟白色 -->
+    <color name="whitesmoke">#f5f5f5</color>
+    
+    <color name="trans">#00000000</color>
+
+
+    <!-- 草绿色 -->
+    <color name="lawngreen">#60cd89</color>
+    <!-- 碧绿色 -->
+    <color name="aquamarine">#7fffd4</color>
+
+
+    <color name="nodeColor">#cccccc</color>
+    <color name="nodeTextColor">#00bcb4</color>
+
+</resources>

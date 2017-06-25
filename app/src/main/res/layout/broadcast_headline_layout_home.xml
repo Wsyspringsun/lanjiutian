@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x35">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x24"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/x11"
+        android:paddingRight="@dimen/x11">
+
+        <ImageView
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_guangbo" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/x6"
+            android:background="@color/gray" />
+
+        <ViewSwitcher
+            android:id="@+id/taobao_headline_viewswitcher"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/x20"
+            android:layout_marginLeft="@dimen/x5"
+            android:layout_marginRight="@dimen/x4"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/subView1"
+                    layout="@layout/broadcast_headline_holder" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/subView2"
+                    layout="@layout/broadcast_headline_holder" />
+
+            </LinearLayout>
+
+        </ViewSwitcher>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray" />
+
+        <TextView
+            android:id="@+id/taobao_headline_more_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/x6"
+            android:gravity="center_vertical"
+            android:text="@string/gengduo"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

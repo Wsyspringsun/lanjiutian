@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basebackground">
+
+    <include layout="@layout/main_header_return"/>
+
+    <RelativeLayout
+        android:id="@+id/bangzhu1"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x40">
+
+        <ImageView
+            android:id="@+id/bangzhu_wenti_img"
+            android:src="@mipmap/bangzhu_wenti"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x15"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20" />
+
+        <TextView
+            android:textColor="@color/font_black2"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/bangzhu_wenti_img"
+            android:layout_marginLeft="@dimen/x8"
+            style="@style/font_ww_14"
+            android:text="@string/bangzhu_wenti"/>
+        
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/x10"
+            android:scaleType="fitXY"
+            android:layout_width="@dimen/x16"
+            android:layout_height="@dimen/x12"
+            android:src="@mipmap/jiantou_you_hei"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="@dimen/x2"
+        android:id="@+id/bangzhu2"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x40">
+
+        <ImageView
+            android:id="@+id/bangzhu_peisong_img"
+            android:src="@mipmap/bangzhu_peisong"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x15"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20" />
+
+        <TextView
+            android:textColor="@color/font_black2"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/bangzhu_peisong_img"
+            android:layout_marginLeft="@dimen/x8"
+            style="@style/font_ww_14"
+            android:text="@string/bangzhu_peisong"/>
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/x10"
+            android:scaleType="fitXY"
+            android:layout_width="@dimen/x16"
+            android:layout_height="@dimen/x12"
+            android:src="@mipmap/jiantou_you_hei"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="@dimen/x2"
+        android:id="@+id/bangzhu3"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x40">
+
+        <ImageView
+            android:id="@+id/bangzhu_zhinan_img"
+            android:src="@mipmap/bangzhu_zhinan"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x15"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20" />
+
+        <TextView
+            android:textColor="@color/font_black2"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/bangzhu_zhinan_img"
+            android:layout_marginLeft="@dimen/x8"
+            style="@style/font_ww_14"
+            android:text="@string/bangzhu_zhinan"/>
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/x10"
+            android:scaleType="fitXY"
+            android:layout_width="@dimen/x16"
+            android:layout_height="@dimen/x12"
+            android:src="@mipmap/jiantou_you_hei"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="@dimen/x2"
+        android:id="@+id/bangzhu4"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x40">
+
+        <ImageView
+            android:id="@+id/bangzhu_kefu_img"
+            android:src="@mipmap/bangzhu_kefu"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x15"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20" />
+
+        <TextView
+            android:textColor="@color/font_black2"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/bangzhu_kefu_img"
+            android:layout_marginLeft="@dimen/x8"
+            style="@style/font_ww_14"
+            android:text="@string/bangzhu_kefu"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

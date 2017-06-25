@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <TextView
+        android:maxLines="1"
+        android:singleLine="true"
+        android:id="@+id/headline_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textColor="@color/base_bar"
+        android:textSize="14sp"/>
+
+    <!--
+    <ImageView
+        android:id="@+id/headline_title_iv"
+        android:layout_width="@dimen/x18"
+        android:layout_height="@dimen/x14"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/headline_title_tv"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:scaleType="fitXY"
+        android:src="@mipmap/jiantou_you_hong"/>
+        -->
+
+</RelativeLayout>

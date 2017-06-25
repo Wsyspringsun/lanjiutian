@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basebackground">
+
+    <include layout="@layout/main_header_return_red"/>
+
+    <TextView
+        android:layout_margin="@dimen/x10"
+        style="@style/font_ww_12"
+        android:textColor="@color/font_black2"
+        android:text="@string/shiming"/>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x35"
+        android:orientation="horizontal"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/name"
+            android:textColor="@color/font_black1"/>
+
+        <EditText
+            android:singleLine="true"
+            android:id="@+id/ed_name"
+            android:background="@null"
+            android:textSize="14sp"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/x10"
+            android:hint="@string/shiming_name"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x35"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/x5">
+
+        <TextView
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/shiming_card"
+            android:textColor="@color/font_black1"/>
+
+        <EditText
+            android:singleLine="true"
+            android:inputType="number"
+            android:digits="0123456789xX"
+            android:maxLines="1"
+            android:id="@+id/ed_card"
+            android:background="@null"
+            android:textSize="14sp"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/x10"
+            android:hint="@string/shiming_card"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/next"
+        android:textSize="18sp"
+        android:text="@string/next"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/x30"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x35"
+        android:layout_marginLeft="@dimen/x15"
+        android:layout_marginRight="@dimen/x15"
+        android:background="@drawable/background_submit_yuan"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginLeft="@dimen/x15"
+        android:gravity="center_vertical">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/x20"
+            android:checked="true"/>
+
+        <TextView
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/x6"
+            style="@style/font_ww_12"
+            android:text="@string/shiming_tiaoli"/>
+
+        <TextView
+            android:textColor="@color/black"
+            android:gravity="center"
+            style="@style/font_ww_12"
+            android:text="@string/shiming_tiaoli1"/>
+
+    </LinearLayout>
+
+</LinearLayout>

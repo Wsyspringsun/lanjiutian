@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="font_ww_18_black">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/font_black1</item>
+    </style>
+
+
+    <style name="font_ww_16_black">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/font_black2</item>
+    </style>
+
+
+    <style name="font_ww_16">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
+    <style name="font_ww_14">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+
+    <style name="font_ww_12">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+
+    <style name="font_ww_10">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+
+    <!-- 圆形checkbox -->
+    <style name="MyCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_selected</item>
+    </style>
+
+
+    <!--星星控件属性-->
+    <declare-styleable name="StarBarView">
+        <!--设置星星间的间隔-->
+        <attr name="space_width" format="dimension"/>
+        <!--星星间宽度-->
+        <attr name="star_width" format="dimension"/>
+        <!--星星间高度-->
+        <attr name="star_height" format="dimension"/>
+        <!--最大数量-->
+        <attr name="star_max" format="integer"/>
+        <!--选中数量-->
+        <attr name="star_rating" format="float"/>
+        <!--未选中图片-->
+        <attr name="star_hollow" format="reference"/>
+        <!--选中图片-->
+        <attr name="star_solid" format="reference"/>
+        <!--是否可以滑动改变选中数量-->
+        <attr name="star_isIndicator" format="boolean"/>
+        <!--排列方向-->
+        <attr name="star_orientation" format="enum">
+            <enum name="vertical" value="1"/>
+            <enum name="horizontal" value="0"/>
+        </attr>
+    </declare-styleable>
+
+
+    <!-- 商品属性选择 -->
+    <style name="BottomDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+
+    <!-- 商品详情的导航栏 -->
+    <declare-styleable name="SlideDetailsLayout">
+        <!-- float value for indicate the moment of switch panel-->
+        <attr name="percent" format="float"/>
+        <!-- how long the animation keep-->
+        <attr name="duration" format="integer"/>
+        <!-- default panel to show after init-->
+        <attr name="default_panel" format="enum">
+            <enum name="front" value="0"/>
+            <enum name="behind" value="1"/>
+        </attr>
+    </declare-styleable>
+
+
+    <!-- 等待动画 显示消失动画-->
+    <style name="PopWindowAnimStyle">
+        <item name="android:windowShowAnimation">@anim/dialog_enter</item>
+        <!-- 指定显示的动画xml  -->
+        <item name="android:windowHideAnimation">@anim/dialog_exit</item>
+        <!-- 指定消失的动画xml  -->
+    </style>
+
+    <!-- 等待动画 dialog -->
+    <style name="MyDialogStyle">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+
+    <!-- 倒计时 -->
+    <declare-styleable name="SnapUpCountDownTimerView">
+        <attr name="viewSize" format="integer"/>
+    </declare-styleable>
+
+    <style name="RushBuyCountDownTimerViewStyle" parent="SnapUpView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">0</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="RushBuyCountDownTimerViewStyleRed" parent="RushBuyCountDownTimerViewStyle">
+        <item name="android:textColor">@android:color/holo_red_light</item>
+    </style>
+
+    <style name="SnapUpViewColon" parent="SnapUpView">
+        <item name="android:textColor">#4F4242</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:text">:</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SnapUpView">
+        <!--//改变控件大小-->
+        <item name="android:textSize">20sp</item>
+    </style>
+
+
+    <!-- 商品选择规格 popwindown -->
+    <style name="popWindow_anim_style" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/pop_up_in</item>
+        <item name="android:windowExitAnimation">@anim/pop_down_out</item>
+    </style>
+
+
+    <!-- 数量加减控件 -->
+    <declare-styleable name="NumberButton">
+        <attr name="editable" format="boolean"/>
+        <attr name="buttonWidth" format="dimension"/>
+        <attr name="textWidth" format="dimension"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="textColor" format="color"/>
+    </declare-styleable>
+
+
+    <!-- 通用的alertdioalg  改变按钮颜色 -->
+    <style name="AllAlertDialog" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
+        <!--修改AlertDialog按钮的颜色-->
+        <item name="colorAccent">@color/base_bar</item>
+    </style>
+
+
+    <!-- 物流信息 -->
+    <declare-styleable name="StepView">
+        <attr name="leftMargin" format="dimension"/>
+        <attr name="rightMargin" format="dimension"/>
+        <attr name="lineWidth" format="dimension"/>
+        <attr name="radius" format="dimension"/>
+        <attr name="lineColor" format="color"/>
+        <attr name="defaultDotColor" format="color"/>
+        <attr name="highDotColor" format="color"/>
+        <attr name="dotPosition" format="enum">
+            <enum name="top" value="0"/>
+            <enum name="center" value="1"/>
+        </attr>
+        <attr name="defaultDotDrawable" format="reference"/>
+        <attr name="highDotDrawable" format="reference"/>
+    </declare-styleable>
+
+
+    <!-- 人体部位 -->
+    <declare-styleable name="PathView">
+        <attr name="pathColor"
+              format="color"/>
+        <attr name="pathWidth"
+              format="float"/>
+        <attr name="svg"
+              format="reference"/>
+    </declare-styleable>
+
+    <!-- 自定义选择器 -->
+    <style name="picker_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+</resources>

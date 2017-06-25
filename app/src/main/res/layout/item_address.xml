@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingTop="@dimen/x10">
+
+    <RelativeLayout
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/name"
+            style="@style/font_ww_16"
+            android:text="@string/address_name"
+            android:textColor="@color/font_black2"/>
+
+        <TextView
+            android:id="@+id/phone"
+            android:layout_alignParentRight="true"
+            style="@style/font_ww_16"
+            android:text="@string/address_phone"
+            android:textColor="@color/font_black2"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/xiangxi"
+        android:padding="@dimen/x10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/font_black2"
+        android:text="@string/address_ads"
+        android:lineSpacingExtra="@dimen/x4"
+        android:maxLines="5"/>
+
+    <View
+        android:layout_marginBottom="@dimen/x6"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:background="@color/basebackground"/>
+
+    <RelativeLayout
+        android:layout_marginLeft="@dimen/x8"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <CheckBox
+                android:id="@+id/ischeck"
+                android:layout_width="@dimen/x20"
+                android:layout_height="@dimen/x20"
+                style="@style/MyCheckBox"
+                android:checked="false"/>
+
+            <TextView
+                android:layout_marginLeft="@dimen/x6"
+                style="@style/font_ww_14"
+                android:text="@string/address_moren"
+                android:textColor="@color/base_bar"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x8"
+            android:layout_toLeftOf="@+id/shanchu"
+            android:id="@+id/bianji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/x14"
+                android:layout_height="@dimen/x16"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_bianji"/>
+
+            <TextView
+                android:layout_marginLeft="@dimen/x5"
+                style="@style/font_ww_14"
+                android:text="@string/bianji"
+                android:textColor="@color/font_black2"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:id="@+id/shanchu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/x14"
+                android:layout_height="@dimen/x16"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_bianji"/>
+
+            <TextView
+                android:layout_marginLeft="@dimen/x5"
+                style="@style/font_ww_14"
+                android:text="@string/shanchu"
+                android:textColor="@color/font_black2"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x15"
+        android:background="@color/basebackground"
+        android:layout_marginTop="@dimen/x6"/>
+
+</LinearLayout>

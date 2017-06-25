@@ -1,0 +1,2 @@
+include ':easypermissions', 'app', ':circledialog', ':flowlayout-lib', ':MarqueeView'
+include ':xiaonengChatUI'

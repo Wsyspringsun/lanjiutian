@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 轮播banner小圆点 -->
+    <dimen name="point_size">9dp</dimen>
+    <dimen name="point_margin">9dp</dimen>
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="region_width">50dp</dimen>
+    <dimen name="popwindow">180dp</dimen>
+</resources>

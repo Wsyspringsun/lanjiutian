@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white">
+
+    <Button
+        android:id="@+id/queding"
+        android:layout_width="@dimen/x120"
+        android:layout_height="@dimen/x30"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/background_submit_yuan"
+        android:text="@string/alert_queding"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/basebackground"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <include layout="@layout/main_header_return"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_16_black"
+                android:text="支付方式："/>
+
+            <RadioGroup
+                android:id="@+id/radio1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x10"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/zhifu_rb1"
+                    android:layout_width="@dimen/x64"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/select_btn_order"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:padding="@dimen/x5"
+                    android:text="@string/pay_choice1"
+                    android:textColor="@color/select_btn_order_text"
+                    android:textSize="14sp"/>
+
+                <RadioButton
+                    android:id="@+id/zhifu_rb2"
+                    android:layout_width="@dimen/x64"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x15"
+                    android:background="@drawable/select_btn_order"
+                    android:button="@drawable/select_btn_order"
+                    android:gravity="center"
+                    android:padding="@dimen/x5"
+                    android:text="@string/pay_choice2"
+                    android:textColor="@color/select_btn_order_text"
+                    android:textSize="14sp"/>
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/x5"
+            android:paddingLeft="@dimen/x10"
+            android:paddingRight="@dimen/x10"
+            android:paddingTop="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_16_black"
+                android:text="配送区域："/>
+
+            <RadioGroup
+                android:id="@+id/peisong_rg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x10"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/peisong_rb1"
+                    android:layout_width="@dimen/x64"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/select_btn_order"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:padding="@dimen/x5"
+                    android:text="@string/shiqu"
+                    android:textColor="@color/select_btn_order_text"
+                    android:textSize="14sp"/>
+
+                <RadioButton
+                    android:id="@+id/peisong_rb2"
+                    android:layout_width="@dimen/x64"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x15"
+                    android:background="@drawable/select_btn_order"
+                    android:button="@drawable/select_btn_order"
+                    android:gravity="center"
+                    android:padding="@dimen/x5"
+                    android:text="@string/xiancheng"
+                    android:textColor="@color/select_btn_order_text"
+                    android:textSize="14sp"/>
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/x5"
+            android:paddingLeft="@dimen/x10"
+            android:paddingRight="@dimen/x10"
+            android:paddingTop="@dimen/x5">
+
+            <TextView
+                style="@style/font_ww_16_black"
+                android:text="配送区域："/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_division_line"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/time1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x10"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x15"
+                android:background="@drawable/background_division_line"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/time2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x10"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/x5">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/x7"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_marginRight="@dimen/x30"
+                android:layout_marginTop="@dimen/x10"
+                android:background="@drawable/pay_choice_text_background"
+                android:padding="@dimen/x8"
+                android:text="市区两小时内送达，县城两日内到货。详情请见帮助中心的区域划分。"
+                android:textColor="@color/font_black2"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/x5"
+            android:paddingLeft="@dimen/x10"
+            android:paddingRight="@dimen/x10"
+            android:paddingTop="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_16_black"
+                android:text="积分优惠："/>
+
+            <RadioGroup
+                android:id="@+id/radio2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x10"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/jifen_rb1"
+                    android:layout_width="@dimen/x64"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/select_btn_order"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:padding="@dimen/x5"
+                    android:text="不用积分"
+                    android:textColor="@color/select_btn_order_text"
+                    android:textSize="14sp"/>
+
+                <RadioButton
+                    android:id="@+id/jifen_rb2"
+                    android:layout_width="@dimen/x64"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:background="@drawable/select_btn_order"
+                    android:button="@drawable/select_btn_order"
+                    android:gravity="center"
+                    android:padding="@dimen/x5"
+                    android:text="300积分"
+                    android:textColor="@color/select_btn_order_text"
+                    android:textSize="14sp"/>
+
+                <RadioButton
+                    android:id="@+id/jifen_rb3"
+                    android:layout_width="@dimen/x64"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:background="@drawable/select_btn_order"
+                    android:button="@drawable/select_btn_order"
+                    android:gravity="center"
+                    android:padding="@dimen/x5"
+                    android:text="600积分"
+                    android:textColor="@color/select_btn_order_text"
+                    android:textSize="14sp"/>
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/x5">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_marginRight="@dimen/x30"
+                android:layout_marginTop="@dimen/x10"
+                android:background="@drawable/pay_choice_text_background"
+                android:gravity="center"
+                android:paddingTop="@dimen/x5"
+                android:text="积分邮费及兑换说明"
+                android:textColor="@color/font_black2"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/shuoming"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/x2"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_marginRight="@dimen/x30"
+                android:background="@drawable/pay_choice_text_background"
+                android:padding="@dimen/x8"
+                android:textColor="@color/font_black2"
+                android:textSize="12sp"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

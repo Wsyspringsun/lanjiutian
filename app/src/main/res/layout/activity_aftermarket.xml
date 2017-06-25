@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include layout="@layout/main_header_return"/>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/x12"
+        android:layout_marginLeft="@dimen/x8"
+        android:layout_marginRight="@dimen/x8"
+        android:padding="@dimen/x8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/background_text_gray">
+
+        <TextView
+            style="@style/font_ww_14"
+            android:text="*"
+            android:textColor="@color/base_bar"/>
+
+        <TextView
+            android:layout_marginLeft="@dimen/x3"
+            style="@style/font_ww_14"
+            android:textColor="@color/font_black2"
+            android:text="@string/shouhou_shenqing"/>
+
+        <TextView
+            android:layout_marginRight="@dimen/x5"
+            android:layout_marginLeft="@dimen/x15"
+            android:textSize="14sp"
+            android:textColor="@color/font_black1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@mipmap/jiantou_xia"
+            android:text="退货退款"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginLeft="@dimen/x8"
+        android:layout_marginRight="@dimen/x8"
+        android:padding="@dimen/x8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/background_text_gray">
+
+        <TextView
+            style="@style/font_ww_14"
+            android:text="*"
+            android:textColor="@color/base_bar"/>
+
+        <TextView
+            android:layout_marginLeft="@dimen/x3"
+            style="@style/font_ww_14"
+            android:textColor="@color/font_black2"
+            android:text="@string/shouhou_yuanyin"/>
+
+        <TextView
+            android:layout_marginRight="@dimen/x5"
+            android:layout_marginLeft="@dimen/x15"
+            android:textSize="14sp"
+            android:textColor="@color/font_black1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@mipmap/jiantou_xia"
+            android:text="请选择退款原因"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginLeft="@dimen/x8"
+        android:layout_marginRight="@dimen/x8"
+        android:padding="@dimen/x8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/background_text_gray">
+
+        <TextView
+            style="@style/font_ww_14"
+            android:text="*"
+            android:textColor="@color/base_bar"/>
+
+        <TextView
+            android:layout_marginLeft="@dimen/x3"
+            style="@style/font_ww_14"
+            android:textColor="@color/font_black2"
+            android:text="@string/shouhou_jine"/>
+
+        <TextView
+            android:layout_marginRight="@dimen/x5"
+            android:layout_marginLeft="@dimen/x15"
+            android:textSize="14sp"
+            android:textColor="@color/base_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/meiqian"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/x15"
+        android:layout_marginLeft="@dimen/x8"
+        android:layout_marginRight="@dimen/x8"
+        android:padding="@dimen/x8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/background_text_gray">
+
+
+        <TextView
+            android:layout_marginLeft="@dimen/x3"
+            style="@style/font_ww_14"
+            android:textColor="@color/font_black2"
+            android:text="@string/shouhou_shuoming"/>
+
+        <EditText
+            android:gravity="top"
+            android:lineSpacingExtra="@dimen/x3"
+            android:textSize="13sp"
+            android:background="@null"
+            android:layout_marginTop="@dimen/x4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="5"
+            android:maxLines="10"/>
+
+    </LinearLayout>
+
+    <cn.bingoogolapple.photopicker.widget.BGASortableNinePhotoLayout
+        android:id="@+id/snpl_moment_add_photos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginTop="@dimen/x15"
+        android:layout_marginBottom="@dimen/x10"
+        android:layout_marginRight="@dimen/x10"
+        app:bga_snpl_deleteDrawable="@mipmap/bga_pp_ic_delete"
+        app:bga_snpl_deleteDrawableOverlapQuarter="false"
+        app:bga_snpl_editable="true"
+        app:bga_snpl_itemCornerRadius="0dp"
+        app:bga_snpl_itemSpanCount="3"
+        app:bga_snpl_itemWhiteSpacing="8dp"
+        app:bga_snpl_itemWidth="0dp"
+        app:bga_snpl_maxItemCount="3"
+        app:bga_snpl_otherWhiteSpacing="60dp"
+        app:bga_snpl_placeholderDrawable="@mipmap/bga_pp_ic_holder_dark"
+        app:bga_snpl_plusDrawable="@mipmap/bga_pp_ic_plus"
+        app:bga_snpl_plusEnable="true"
+        app:bga_snpl_sortable="true" />
+
+</LinearLayout>

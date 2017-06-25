@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:fresco="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <include layout="@layout/main_header_return"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/x10">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/iv_adapter_list_pic"
+            android:layout_width="@dimen/x35"
+            android:layout_height="@dimen/x35"
+            android:layout_marginLeft="@dimen/x10"
+            fresco:actualImageScaleType="fitXY"
+            fresco:fadeDuration="200"
+            fresco:failureImage="@mipmap/zhanweitu"
+            fresco:failureImageScaleType="centerInside"
+            fresco:placeholderImage="@mipmap/zhanweitu"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x35">
+
+            <ImageView
+                android:id="@+id/haoping"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/pingjia_hao1"/>
+
+            <ImageView
+                android:id="@+id/zhongping"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/pingjia_zhong2"/>
+
+            <ImageView
+                android:id="@+id/chaping"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/pingjia_cha2"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:background="@color/basebackground"/>
+
+    <EditText
+        android:id="@+id/et_moment_add_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@null"
+        android:gravity="start"
+        android:hint="这一刻的想法..."
+        android:lines="7"
+        android:maxLines="14"
+        android:textColor="@color/font_black2"
+        android:textSize="14sp"/>
+
+    <cn.bingoogolapple.photopicker.widget.BGASortableNinePhotoLayout
+        android:id="@+id/snpl_moment_add_photos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/x10"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginRight="@dimen/x10"
+        app:bga_snpl_deleteDrawable="@mipmap/bga_pp_ic_delete"
+        app:bga_snpl_deleteDrawableOverlapQuarter="false"
+        app:bga_snpl_editable="true"
+        app:bga_snpl_itemCornerRadius="0dp"
+        app:bga_snpl_itemSpanCount="4"
+        app:bga_snpl_itemWhiteSpacing="6dp"
+        app:bga_snpl_itemWidth="0dp"
+        app:bga_snpl_maxItemCount="5"
+        app:bga_snpl_otherWhiteSpacing="50dp"
+        app:bga_snpl_placeholderDrawable="@mipmap/bga_pp_ic_holder_dark"
+        app:bga_snpl_plusDrawable="@mipmap/bga_pp_ic_plus"
+        app:bga_snpl_plusEnable="true"
+        app:bga_snpl_sortable="true"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x8"
+        android:background="@color/basebackground"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x30"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/x16"
+            android:layout_height="@dimen/x16"
+            android:layout_marginLeft="@dimen/x10"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_dianpu"/>
+
+        <TextView
+            android:id="@+id/group_name"
+            style="@style/font_ww_14"
+            android:layout_marginLeft="@dimen/x7"
+            android:textColor="@color/font_black2"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginTop="@dimen/x6"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/font_ww_14"
+            android:text="@string/order_pf1"
+            android:textColor="@color/font_black2"/>
+
+        <com.wyw.ljtds.widget.StarBarView
+            android:id="@+id/star1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x13"
+            android:layout_marginTop="@dimen/x3"
+            app:space_width="@dimen/x8"
+            app:star_height="@dimen/x15"
+            app:star_hollow="@mipmap/ic_star_yellow_normal"
+            app:star_isIndicator="false"
+            app:star_max="5"
+            app:star_orientation="horizontal"
+            app:star_rating="5"
+            app:star_solid="@mipmap/ic_star_yellow_selected"
+            app:star_width="@dimen/x15"/>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginTop="@dimen/x3">
+
+        <TextView
+            android:id="@+id/tv_pj2"
+            style="@style/font_ww_14"
+            android:layout_centerVertical="true"
+            android:text="@string/order_pf2"
+            android:textColor="@color/font_black2"/>
+
+        <com.wyw.ljtds.widget.StarBarView
+            android:id="@+id/star2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x13"
+            android:layout_toRightOf="@+id/tv_pj2"
+            app:space_width="@dimen/x8"
+            app:star_height="@dimen/x10"
+            app:star_hollow="@mipmap/ic_star_yellow_normal"
+            app:star_isIndicator="true"
+            app:star_max="5"
+            app:star_orientation="horizontal"
+            app:star_rating="5"
+            app:star_solid="@mipmap/ic_star_yellow_selected"
+            app:star_width="@dimen/x14"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginTop="@dimen/x3"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/font_ww_14"
+            android:text="@string/order_pf3"
+            android:textColor="@color/font_black2"/>
+
+        <com.wyw.ljtds.widget.StarBarView
+            android:id="@+id/star3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x13"
+            android:layout_marginTop="@dimen/x3"
+            app:space_width="@dimen/x8"
+            app:star_height="@dimen/x15"
+            app:star_hollow="@mipmap/ic_star_yellow_normal"
+            app:star_isIndicator="false"
+            app:star_max="5"
+            app:star_orientation="horizontal"
+            app:star_rating="5"
+            app:star_solid="@mipmap/ic_star_yellow_selected"
+            app:star_width="@dimen/x15"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginTop="@dimen/x3"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/font_ww_14"
+            android:text="@string/order_pf4"
+            android:textColor="@color/font_black2"/>
+
+        <com.wyw.ljtds.widget.StarBarView
+            android:id="@+id/star4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x13"
+            android:layout_marginTop="@dimen/x3"
+            app:space_width="@dimen/x8"
+            app:star_height="@dimen/x15"
+            app:star_hollow="@mipmap/ic_star_yellow_normal"
+            app:star_isIndicator="false"
+            app:star_max="5"
+            app:star_orientation="horizontal"
+            app:star_rating="5"
+            app:star_solid="@mipmap/ic_star_yellow_selected"
+            app:star_width="@dimen/x15"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginTop="@dimen/x3"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/font_ww_14"
+            android:text="@string/order_pf5"
+            android:textColor="@color/font_black2"/>
+
+        <com.wyw.ljtds.widget.StarBarView
+            android:id="@+id/star5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x13"
+            android:layout_marginTop="@dimen/x3"
+            app:space_width="@dimen/x8"
+            app:star_height="@dimen/x15"
+            app:star_hollow="@mipmap/ic_star_yellow_normal"
+            app:star_isIndicator="false"
+            app:star_max="5"
+            app:star_orientation="horizontal"
+            app:star_rating="5"
+            app:star_solid="@mipmap/ic_star_yellow_selected"
+            app:star_width="@dimen/x15"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/whitesmoke"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/x12">
+
+        <TextView
+            android:layout_centerInParent="true"
+            style="@style/font_ww_16_black"
+            android:text="@string/pay_choice1"/>
+
+        <ImageView
+            android:id="@+id/quxiao"
+            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/x15"
+            android:layout_height="@dimen/x15"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_chahao"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:background="@color/gray1"/>
+
+    <LinearLayout
+        android:id="@+id/select1"
+        android:paddingLeft="@dimen/x100"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x38"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <CheckBox
+            android:enabled="false"
+            android:id="@+id/check1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/MyCheckBox"/>
+
+        <ImageView
+            android:layout_marginLeft="@dimen/x7"
+            android:scaleType="fitXY"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20"
+            android:src="@mipmap/user_wallet_qian"/>
+
+        <TextView
+            android:layout_marginLeft="@dimen/x8"
+            android:textColor="@color/font_black2"
+            style="@style/font_ww_14"
+            android:text="@string/pay_choice3"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/select2"
+        android:paddingLeft="@dimen/x100"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/x1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x38"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <CheckBox
+            android:enabled="false"
+            android:checked="true"
+            android:id="@+id/check2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/MyCheckBox"/>
+
+        <ImageView
+            android:layout_marginLeft="@dimen/x8"
+            android:scaleType="fitXY"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20"
+            android:src="@mipmap/icon_pay_zhifubao"/>
+
+        <TextView
+            android:layout_marginLeft="@dimen/x7"
+            android:textColor="@color/font_black2"
+            style="@style/font_ww_14"
+            android:text="@string/pay_choice4"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/select3"
+        android:paddingLeft="@dimen/x100"
+        android:layout_marginTop="@dimen/x1"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x38"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <CheckBox
+            android:enabled="false"
+            android:id="@+id/check3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/MyCheckBox"/>
+
+        <ImageView
+            android:layout_marginLeft="@dimen/x7"
+            android:scaleType="fitXY"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20"
+            android:src="@mipmap/icon_pay_yinlian"/>
+
+        <TextView
+            android:layout_marginLeft="@dimen/x8"
+            android:textColor="@color/font_black2"
+            style="@style/font_ww_14"
+            android:text="@string/pay_choice5"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/money"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/x1"
+        android:textColor="@color/font_black2"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x38"/>
+
+    <Button
+        android:id="@+id/zhifu"
+        android:layout_marginTop="@dimen/x20"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="@dimen/x150"
+        android:layout_height="@dimen/x30"
+        android:background="@drawable/background_submit_yuan"
+        android:text="@string/fukuan"/>
+
+</LinearLayout>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/main_header_goods" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x30">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x30"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/paixu1"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:orientation="horizontal"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/paixu1_tv"
+                    style="@style/font_ww_14"
+                    android:gravity="center"
+                    android:text="@string/zonghe"
+                    android:textColor="@color/base_bar"/>
+
+                <ImageView
+                    android:id="@+id/paixu1_iv"
+                    android:layout_marginLeft="@dimen/x3"
+                    android:layout_width="@dimen/x6"
+                    android:layout_height="@dimen/x12"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/paixu_1"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/paixu2"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:orientation="horizontal"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/paixu2_tv"
+                    style="@style/font_ww_14"
+                    android:gravity="center"
+                    android:text="@string/xiaoliang"
+                    android:textColor="@color/font_black1"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/paixu3"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:orientation="horizontal"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/paixu3_tv"
+                    style="@style/font_ww_14"
+                    android:gravity="center"
+                    android:text="@string/jiage"
+                    android:textColor="@color/font_black2"/>
+
+                <ImageView
+                    android:id="@+id/paixu3_iv"
+                    android:layout_marginLeft="@dimen/x3"
+                    android:layout_width="@dimen/x6"
+                    android:layout_height="@dimen/x12"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/paixu_3"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/paixu4"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:orientation="horizontal"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/paixu4_tv"
+                    style="@style/font_ww_14"
+                    android:gravity="center"
+                    android:text="@string/pingjia"
+                    android:textColor="@color/font_black1"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_alignParentBottom="true"
+            android:background="@color/basebackground" />
+
+        <View
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="0.5px"
+            android:background="#88000000" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:background="@color/basebackground"
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

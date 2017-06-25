@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/address"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x80"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/x10"
+        android:paddingRight="@dimen/x10"
+        android:paddingTop="@dimen/x10">
+
+        <ImageView
+            android:id="@+id/shouhuo_img"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_dizhi"/>
+
+        <TextView
+            android:id="@+id/shouhou_tv"
+            style="@style/font_ww_14"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_toRightOf="@+id/shouhuo_img"
+            android:text="收货人:"
+            android:textColor="@color/font_black2"/>
+
+        <TextView
+            android:id="@+id/name"
+            style="@style/font_ww_14"
+            android:layout_toRightOf="@+id/shouhou_tv"
+            android:textColor="@color/font_black2"/>
+
+        <TextView
+            android:id="@+id/phone"
+            style="@style/font_ww_14"
+            android:layout_marginRight="@dimen/x8"
+            android:layout_toLeftOf="@+id/jiantou"
+            android:textColor="@color/font_black2"/>
+
+        <TextView
+            android:id="@+id/shouhuo_dizhi"
+            style="@style/font_ww_14"
+            android:layout_alignLeft="@+id/shouhou_tv"
+            android:layout_below="@+id/shouhou_tv"
+            android:layout_marginBottom="@dimen/x15"
+            android:layout_marginRight="@dimen/x8"
+            android:layout_marginTop="@dimen/x7"
+            android:layout_toLeftOf="@+id/jiantou"
+            android:ellipsize="end"
+            android:lineSpacingExtra="@dimen/x2"
+            android:maxLines="2"
+            android:textColor="@color/font_black2"/>
+
+        <ImageView
+            android:id="@+id/jiantou"
+            android:layout_width="@dimen/x13"
+            android:layout_height="@dimen/x15"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/jiantou_you_hui"/>
+
+        <ImageView
+            android:id="@+id/caitiao"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x3"
+            android:layout_alignParentBottom="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/caitiao"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x10"
+        android:background="@color/basebackground"/>
+
+</LinearLayout>

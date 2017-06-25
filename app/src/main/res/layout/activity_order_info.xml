@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/main_header_return" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/footer"
+        android:layout_below="@+id/header"
+        android:background="@color/basebackground"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/images"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x90"
+                android:scaleType="fitXY"/>
+
+            <include layout="@layout/item_order_submit_address"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x30"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/x16"
+                    android:layout_height="@dimen/x16"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/icon_dianpu" />
+
+                <TextView
+                    android:id="@+id/dianpu"
+                    style="@style/font_ww_14"
+                    android:layout_marginLeft="@dimen/x7"
+                    android:textColor="@color/font_black2" />
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/reclcyer"
+                android:overScrollMode="never">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="@dimen/x10">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:text="@string/order_zongjia"
+                        android:textColor="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/shangp_z"
+                        style="@style/font_ww_14"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/gray" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/x4">
+
+                <TextView
+                    style="@style/font_ww_14"
+                    android:text="@string/order_yunfei"
+                    android:textColor="@color/gray" />
+
+                <TextView
+                    android:id="@+id/yunfei"
+                    style="@style/font_ww_14"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/gray" />
+
+            </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/x4"
+                    android:layout_marginTop="@dimen/x4">
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:text="@string/order_dikou"
+                        android:textColor="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/jifen_d"
+                        style="@style/font_ww_14"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/gray" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_marginBottom="@dimen/x4"
+                    android:layout_marginTop="@dimen/x4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textStyle="bold"
+                        style="@style/font_ww_14"
+                        android:text="@string/order_dingdan"
+                        android:textColor="@color/font_black2" />
+
+                    <TextView
+                        android:id="@+id/zongjia"
+                        style="@style/font_ww_16"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/base_bar" />
+
+                </RelativeLayout>
+
+                <!--
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x1"
+                    android:layout_marginBottom="@dimen/x8"
+                    android:layout_marginTop="@dimen/x8"
+                    android:background="@color/gray1" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/font_ww_16"
+                        android:text="@string/order_xufu"
+                        android:textColor="@color/font_black2" />
+
+                    <TextView
+                        style="@style/font_ww_16"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/meiqian"
+                        android:textColor="@color/base_bar" />
+
+                </RelativeLayout>
+                -->
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/x7"
+                android:layout_marginTop="@dimen/x7"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="@dimen/x6">
+
+                <!--
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:text="@string/order_fanjifen"
+                        android:textColor="@color/gray" />
+
+                    <TextView
+                        style="@style/font_ww_16"
+                        android:text="15"
+                        android:textColor="@color/base_bar" />
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:text="@string/dian"
+                        android:textColor="@color/gray" />
+
+                </LinearLayout>
+                -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/lianxi"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/x3"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_text_button_gray"
+                        android:gravity="center"
+                        android:padding="@dimen/x5"
+                        android:text="@string/order_lianxi1" />
+
+                    <TextView
+                        android:id="@+id/boda"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x3"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_text_button_gray"
+                        android:gravity="center"
+                        android:padding="@dimen/x5"
+                        android:text="@string/order_lianxi2" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="@dimen/x10">
+
+                <TextView
+                    android:id="@+id/dingdan"
+                    style="@style/font_ww_14"
+                    android:textColor="@color/font_black2" />
+
+                <TextView
+                    android:id="@+id/dingdan1"
+                    style="@style/font_ww_14"
+                    android:layout_marginTop="@dimen/x7"
+                    android:textColor="@color/font_black2" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/dingdan2"
+                    style="@style/font_ww_14"
+                    android:layout_marginTop="@dimen/x7"
+                    android:textColor="@color/font_black2" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/fapiao"
+                    style="@style/font_ww_14"
+                    android:layout_marginTop="@dimen/x7"
+                    android:textColor="@color/font_black2" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tuijian_ll"
+                android:layout_marginTop="@dimen/x10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/x10">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x40"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/hengxian"
+                        android:textColor="@color/base_bar"
+                        android:textSize="@dimen/x14" />
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:layout_marginLeft="@dimen/x10"
+                        android:layout_marginRight="@dimen/x10"
+                        android:text="@string/tuijian_cai"
+                        android:textColor="@color/font_black1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/hengxian"
+                        android:textColor="@color/base_bar"
+                        android:textSize="@dimen/x14" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x1"
+                    android:background="@color/gray" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:descendantFocusability="blocksDescendants">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/tuijian"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x35"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:background="@color/gray1" />
+
+        <TextView
+            android:id="@+id/order_fuwu"
+            style="@style/font_ww_14"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x10"
+            android:background="@drawable/background_text_button"
+            android:padding="@dimen/x5"
+            android:text="@string/shouhou_shenqing"
+            android:textColor="@color/base_bar" />
+
+        <TextView
+            android:id="@+id/order_quxiao"
+            style="@style/font_ww_14"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x6"
+            android:layout_toLeftOf="@+id/order_fuwu"
+            android:background="@drawable/background_text_button"
+            android:padding="@dimen/x5"
+            android:text="@string/order_pingjia"
+            android:textColor="@color/base_bar" />
+
+        <TextView
+            android:id="@+id/order_wuliu"
+            style="@style/font_ww_14"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x6"
+            android:layout_toLeftOf="@+id/order_quxiao"
+            android:background="@drawable/background_text_button"
+            android:padding="@dimen/x5"
+            android:text="@string/wuliu_chakan"
+            android:textColor="@color/base_bar" />
+
+        <TextView
+            android:id="@+id/order_shanchu"
+            style="@style/font_ww_14"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x6"
+            android:layout_toLeftOf="@+id/order_wuliu"
+            android:background="@drawable/background_text_button"
+            android:padding="@dimen/x5"
+            android:text="@string/order_shanchu"
+            android:textColor="@color/base_bar"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

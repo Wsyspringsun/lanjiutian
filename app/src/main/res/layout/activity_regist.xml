@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/basebackground"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@mipmap/denglubeijing"/>
+
+    <LinearLayout
+        android:layout_alignParentTop="true"
+        android:id="@+id/llHeadr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/main_header_return"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/x40"
+        android:layout_alignBottom="@+id/next"
+        style="@style/font_ww_14"
+        android:textColor="@color/gray"
+        android:text="@string/yanzhengma"/>
+
+
+    <LinearLayout
+        android:id="@+id/zhanghao"
+        android:layout_below="@+id/guanbi"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x35"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/x153">
+
+        <TextView
+            android:layout_marginLeft="@dimen/x10"
+            style="@style/font_ww_14"
+            android:text="@string/phone_number"
+            android:textColor="@color/font_black1"/>
+
+        <EditText
+            android:inputType="phone"
+            android:id="@+id/ed_phone"
+            android:background="@null"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginRight="@dimen/x10"
+            android:hint="@string/phone_number1"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_marginRight="@dimen/x10"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_below="@+id/zhanghao"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:background="@color/basebackground"/>
+
+    <Button
+        android:layout_below="@+id/zhanghao"
+        android:id="@+id/next"
+        android:textSize="18sp"
+        android:text="@string/alert_queding"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/x40"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x35"
+        android:layout_marginLeft="@dimen/x15"
+        android:layout_marginRight="@dimen/x15"
+        android:background="@drawable/background_submit_yuan_lan"/>
+
+</RelativeLayout>
