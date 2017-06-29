@@ -99,6 +99,7 @@
             android:text="@string/shouhou_jine"/>
 
         <TextView
+            android:id="@+id/money"
             android:layout_marginRight="@dimen/x5"
             android:layout_marginLeft="@dimen/x15"
             android:textSize="14sp"

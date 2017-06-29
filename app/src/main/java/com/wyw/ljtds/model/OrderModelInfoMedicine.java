@@ -208,6 +208,10 @@ public class OrderModelInfoMedicine extends BaseModel {
         private int EXCHANGE_QUANLITY;
         private BigDecimal COST_MONEY;
         private String IMG_PATH;
+        //商品订单号
+        private String COMMODITY_ORDER_ID;
+        //商品订单状态
+        private String ORDER_STATUS;
 
         public String getIMG_PATH() {
             return IMG_PATH;
@@ -263,6 +267,22 @@ public class OrderModelInfoMedicine extends BaseModel {
 
         public void setCOST_MONEY(BigDecimal COST_MONEY) {
             this.COST_MONEY = COST_MONEY;
+        }
+
+        public String getCOMMODITY_ORDER_ID() {
+            return COMMODITY_ORDER_ID;
+        }
+
+        public void setCOMMODITY_ORDER_ID(String COMMODITY_ORDER_ID) {
+            this.COMMODITY_ORDER_ID = COMMODITY_ORDER_ID;
+        }
+
+        public String getORDER_STATUS() {
+            return ORDER_STATUS;
+        }
+
+        public void setORDER_STATUS(String ORDER_STATUS) {
+            this.ORDER_STATUS = ORDER_STATUS;
         }
     }
 

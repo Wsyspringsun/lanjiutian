@@ -448,11 +448,11 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
     //商品adapter
     private class MyAdapter extends BaseQuickAdapter<OrderModelInfoMedicine.Goods> {
         public MyAdapter() {
-            super( R.layout.item_order_submit_goods, list );
+            super( R.layout.item_orderinfor_goods, list );
         }
 
         @Override
-        protected void convert(BaseViewHolder baseViewHolder, OrderModelInfoMedicine.Goods goods) {
+        protected void convert(BaseViewHolder baseViewHolder, final OrderModelInfoMedicine.Goods goods) {
             if (StringUtils.isEmpty( goods.getCOMMODITY_COLOR() )) {
                 baseViewHolder.setText( R.id.size, " 规格：" + goods.getCOMMODITY_SIZE() );
             } else {
@@ -460,7 +460,16 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
             }
             baseViewHolder.setText( R.id.title, StringUtils.deletaFirst( goods.getCOMMODITY_NAME() ) )
                     .setText( R.id.money, "￥" + goods.getCOST_MONEY() )
-                    .setText( R.id.number, "X" + goods.getEXCHANGE_QUANLITY() );
+                    .setText( R.id.number, "X" + goods.getEXCHANGE_QUANLITY() )
+                    .setOnClickListener(R.id.shouhou, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent it=new Intent(ActivityOrderInfo.this,ActivityAfterMarket.class);
+                            it.putExtra("good_id",goods.getCOMMODITY_ORDER_ID());
+                            it.putExtra("good_money",goods.getCOST_MONEY()+"");
+                            startActivity(it);
+                        }
+                    });
 
             SimpleDraweeView simpleDraweeView = baseViewHolder.getView( R.id.iv_adapter_list_pic );
             if (!StringUtils.isEmpty( goods.getIMG_PATH() )) {

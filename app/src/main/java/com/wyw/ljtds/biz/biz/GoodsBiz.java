@@ -319,4 +319,14 @@ public class GoodsBiz extends BaseBiz {
 
         return ksoap.request().getAsInt();
     }
+
+
+    public static Object returnGoodsHanding(String data,String op)throws BizFailure, ZYException {
+        SoapProcessor ksoap = new SoapProcessor("Service", "returnGoodsHanding", true);
+
+        ksoap.setProperty("op", op, SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("data", data, SoapProcessor.PropertyType.TYPE_STRING);
+
+        return ksoap.request();
+    }
 }
