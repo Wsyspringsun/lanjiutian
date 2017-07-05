@@ -48,21 +48,4 @@ public class MyApplication extends Application {
         return mAppContext;
     }
 
-    static class CustomEventListener implements CustomActivityOnCrash.EventListener {
-        @Override
-        public void onLaunchErrorActivity() {
-            Log.i(TAG, "onLaunchErrorActivity()");
-        }
-
-        @Override
-        public void onRestartAppFromErrorActivity() {
-            Log.i(TAG, "onRestartAppFromErrorActivity()");
-        }
-
-        @Override
-        public void onCloseAppFromErrorActivity() {
-            Log.i(TAG, "onCloseAppFromErrorActivity()");
-        }
-    }
-
 }

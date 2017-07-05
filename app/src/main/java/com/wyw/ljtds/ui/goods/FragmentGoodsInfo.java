@@ -728,28 +728,18 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
             ArrayList arrayList = new ArrayList();
             if (!StringUtils.isEmpty(models.getIMG_PATH1())) {
                 arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH1());
-            } else {
-                arrayList.add("1");
             }
             if (!StringUtils.isEmpty(models.getIMG_PATH2())) {
                 arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH2());
-            } else {
-                arrayList.add("1");
             }
             if (!StringUtils.isEmpty(models.getIMG_PATH3())) {
                 arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH3());
-            } else {
-                arrayList.add("1");
             }
             if (!StringUtils.isEmpty(models.getIMG_PATH4())) {
                 arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH4());
-            } else {
-                arrayList.add("1");
             }
             if (!StringUtils.isEmpty(models.getIMG_PATH5())) {
-                arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH4());
-            } else {
-                arrayList.add("1");
+                arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH5());
             }
             Log.e("size****", arrayList.size() + "");
             final BGANinePhotoLayout mCurrentClickNpl = baseViewHolder.getView(R.id.item_moment_photos);

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basebackground">
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/main_header_return_red" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/header"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="@dimen/x8">
+
+                <TextView
+                    style="@style/font_ww_14"
+                    android:text="订单编号：20170703171328094"
+                    android:textColor="@color/font_black2" />
+
+                <TextView
+                    style="@style/font_ww_14"
+                    android:layout_marginTop="@dimen/x6"
+                    android:text="订单生成时间：2017-7-1 10:12:10"
+                    android:textColor="@color/font_black2" />
+
+                <TextView
+                    style="@style/font_ww_14"
+                    android:layout_marginTop="@dimen/x6"
+                    android:text="订单完成时间："
+                    android:textColor="@color/font_black2" />
+
+                <TextView
+                    style="@style/font_ww_14"
+                    android:layout_marginTop="@dimen/x6"
+                    android:text="订单状态：已发货"
+                    android:textColor="@color/font_black2" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/x6"
+                android:descendantFocusability="blocksDescendants">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/x6"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="@dimen/x8">
+
+                <TextView
+                    style="@style/font_ww_14"
+                    android:text="支付方式：在线支付（已付款）"
+                    android:textColor="@color/font_black2" />
+
+                <TextView
+                    style="@style/font_ww_14"
+                    android:layout_marginTop="@dimen/x6"
+                    android:text="物流发货时间：2017-7-2 08:00:12"
+                    android:textColor="@color/font_black2" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/x6"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:text="快递员：张三"
+                        android:textColor="@color/font_black2" />
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:layout_marginLeft="@dimen/x8"
+                        android:text="电话："
+                        android:textColor="@color/font_black2" />
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:text="13903561234"
+                        android:textColor="@color/recommend_bar_text"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/x6"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="@dimen/x8">
+
+                <TextView
+                    style="@style/font_ww_14"
+                    android:text="收货人：李四"
+                    android:textColor="@color/font_black2" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/x6"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:text="电话："
+                        android:textColor="@color/font_black2" />
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:text="13906659456"
+                        android:textColor="@color/recommend_bar_text"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/x6"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:text="地址："
+                        android:textColor="@color/font_black2" />
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:text="山西省晋城市城区文昌西街 文华苑12号楼4单元1201室"
+                        android:textColor="@color/font_black2" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/whitesmoke"
+            android:text="@string/fahuo"
+            android:textColor="@color/font_black2" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x5"
+            android:background="@color/whitesmoke"
+            android:text="@string/order_del"
+            android:textColor="@color/font_black2" />
+
+    </LinearLayout>
+
+</RelativeLayout>

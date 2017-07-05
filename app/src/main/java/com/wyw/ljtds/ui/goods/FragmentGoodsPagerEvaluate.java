@@ -203,7 +203,7 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
                 arrayList.add( AppConfig.IMAGE_PATH + models.getIMG_PATH4() );
             }
             if (!StringUtils.isEmpty( models.getIMG_PATH5() )) {
-                arrayList.add( AppConfig.IMAGE_PATH + models.getIMG_PATH4() );
+                arrayList.add( AppConfig.IMAGE_PATH + models.getIMG_PATH5() );
             }
             final BGANinePhotoLayout mCurrentClickNpl = baseViewHolder.getView( R.id.item_moment_photos );
             mCurrentClickNpl.setData( arrayList );
