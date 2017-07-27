@@ -55,94 +55,106 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
     private String fapiao4 = "";
     private String lll = "0";
 
-    @Event(value = {R.id.queding, R.id.header_return, R.id.fapiao_rb2, R.id.fapiao_rb1})
+    @Event(value = {R.id.queding, R.id.header_return, R.id.fapiao_rb2})
     private void onClick(View v) {
         switch (v.getId()) {
             case R.id.header_return:
             case R.id.queding:
                 Intent mIntent = new Intent();
-                mIntent.putExtra( "possition", getIntent().getIntExtra( "possition", 0 ) );
+                mIntent.putExtra("possition", getIntent().getIntExtra("possition", 0));
 
-                if (radioGroup1.getCheckedRadioButtonId() == R.id.peisong_rb1) {
-                    mIntent.putExtra( "peisong", "0" );
+                mIntent.putExtra("peisong", "0");
+//                if (radioGroup1.getCheckedRadioButtonId() == R.id.peisong_rb1) {
+//                    mIntent.putExtra( "peisong", "0" );
+//                } else {
+//                    mIntent.putExtra( "peisong", "1" );
+//                }
+
+//                if (radioGroup2.getCheckedRadioButtonId() == R.id.fapiao_rb1) {
+//                    mIntent.putExtra( "fapiao_flg1", "0" );
+//                    setResult( AppConfig.IntentExtraKey.RESULT_OK, mIntent );
+//                    finish();
+//                } else {
+//                    mIntent.putExtra( "fapiao_flg1", "1" );
+//                    mIntent.putExtra( "fapiao_flg2","0" );
+//                    mIntent.putExtra( "fapiao_flg4",fapiao4 );
+//                    mIntent.putExtra( "fapiao_flg3",editText.getText().toString().trim() );
+//
+//                    if (StringUtils.isEmpty( editText.getText().toString().trim() )) {
+//                        ToastUtil.show( this, "请填写发票抬头信息" );
+//                    } else {
+//                        setResult( AppConfig.IntentExtraKey.RESULT_OK, mIntent );
+//                        finish();
+//                    }
+//                }
+
+                mIntent.putExtra("fapiao_flg1", "1");
+                mIntent.putExtra("fapiao_flg2", "0");
+                mIntent.putExtra("fapiao_flg4", fapiao4);
+                mIntent.putExtra("fapiao_flg3", editText.getText().toString().trim());
+
+                if (StringUtils.isEmpty(editText.getText().toString().trim())) {
+                    ToastUtil.show(this, "请填写发票抬头信息");
                 } else {
-                    mIntent.putExtra( "peisong", "1" );
-                }
-
-                if (radioGroup2.getCheckedRadioButtonId() == R.id.fapiao_rb1) {
-                    mIntent.putExtra( "fapiao_flg1", "0" );
-                    setResult( AppConfig.IntentExtraKey.RESULT_OK, mIntent );
+                    setResult(AppConfig.IntentExtraKey.RESULT_OK, mIntent);
                     finish();
-                } else {
-                    mIntent.putExtra( "fapiao_flg1", "1" );
-                    mIntent.putExtra( "fapiao_flg2","0" );
-                    mIntent.putExtra( "fapiao_flg4",fapiao4 );
-                    mIntent.putExtra( "fapiao_flg3",editText.getText().toString().trim() );
-
-                    if (StringUtils.isEmpty( editText.getText().toString().trim() )) {
-                        ToastUtil.show( this, "请填写发票抬头信息" );
-                    } else {
-                        setResult( AppConfig.IntentExtraKey.RESULT_OK, mIntent );
-                        finish();
-                    }
                 }
-
                 break;
 
-            case R.id.fapiao_rb1:
-                tv1.setText( R.string.fapiao_yes );
-                xiangqing.setVisibility( View.INVISIBLE );
-                break;
+//            case R.id.fapiao_rb1:
+//                tv1.setText(R.string.fapiao_yes);
+//                xiangqing.setVisibility(View.INVISIBLE);
+//                break;
 
             case R.id.fapiao_rb2:
-                View view = LayoutInflater.from( ActivityGoodsSubmitBill.this ).inflate( R.layout.dialog_pay_bill_select, null );
-                final BottomDialog dialog = new BottomDialog( ActivityGoodsSubmitBill.this, view ).setCancelable( false ).show();
-                final RadioGroup radioGroup2 = (RadioGroup) view.findViewById( R.id.fapiao_rg2 );
-                final RadioGroup radioGroup1 = (RadioGroup) view.findViewById( R.id.fapiao_rg1 );
-                RadioButton rb1 = (RadioButton) view.findViewById( R.id.fapiao_rb1 );
-                RadioButton rb2 = (RadioButton) view.findViewById( R.id.fapiao_rb2 );
-                RadioButton rb3 = (RadioButton) view.findViewById( R.id.fapiao_rb3 );
-                RadioButton rb4 = (RadioButton) view.findViewById( R.id.fapiao_rb4 );
-                RadioButton rb5 = (RadioButton) view.findViewById( R.id.fapiao_rb5 );
+                View view = LayoutInflater.from(ActivityGoodsSubmitBill.this).inflate(R.layout.dialog_pay_bill_select, null);
+                final BottomDialog dialog = new BottomDialog(ActivityGoodsSubmitBill.this, view).setCancelable(false).show();
+                final RadioGroup radioGroup2 = (RadioGroup) view.findViewById(R.id.fapiao_rg2);
+                final RadioGroup radioGroup1 = (RadioGroup) view.findViewById(R.id.fapiao_rg1);
+                RadioButton rb1 = (RadioButton) view.findViewById(R.id.fapiao_rb1);
+                RadioButton rb2 = (RadioButton) view.findViewById(R.id.fapiao_rb2);
+                RadioButton rb3 = (RadioButton) view.findViewById(R.id.fapiao_rb3);
+                RadioButton rb4 = (RadioButton) view.findViewById(R.id.fapiao_rb4);
+                RadioButton rb5 = (RadioButton) view.findViewById(R.id.fapiao_rb5);
 
-                ImageView quxiao = (ImageView) view.findViewById( R.id.quxiao );
-                quxiao.setOnClickListener( new View.OnClickListener() {
+                ImageView quxiao = (ImageView) view.findViewById(R.id.quxiao);
+                quxiao.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         dialog.dissmiss();
                         String str = "";
-                        if (fapiao4.equals( "0" )) {
-                            str = getResources().getString( R.string.fapiao_mx );
-                        } else if (fapiao4.equals( "1" )) {
-                            str = getResources().getString( R.string.fapiao_bg );
-                        } else if (fapiao4.equals( "2" )) {
-                            str = getResources().getString( R.string.fapiao_jj );
-                        } else if (fapiao4.equals( "3" )) {
-                            str = getResources().getString( R.string.fapiao_yy );
-                        } else if (fapiao4.equals( "4" )) {
-                            str = getResources().getString( R.string.fapiao_hc );
+                        if (fapiao4.equals("0")) {
+                            str = getResources().getString(R.string.fapiao_mx);
+                        } else if (fapiao4.equals("1")) {
+                            str = getResources().getString(R.string.fapiao_bg);
+                        } else if (fapiao4.equals("2")) {
+                            str = getResources().getString(R.string.fapiao_jj);
+                        } else if (fapiao4.equals("3")) {
+                            str = getResources().getString(R.string.fapiao_yy);
+                        } else if (fapiao4.equals("4")) {
+                            str = getResources().getString(R.string.fapiao_hc);
                         }
-                        tv1.setText( str );
+                        tv1.setText(str);
                     }
-                } );
-                if (fapiao4.equals( "0" )) {
-                    radioGroup1.check( R.id.fapiao_rb1 );
+                });
+                if (fapiao4.equals("0")) {
+                    radioGroup1.check(R.id.fapiao_rb1);
                     radioGroup2.clearCheck();
-                } else if (fapiao4.equals( "1" )) {
-                    radioGroup1.check( R.id.fapiao_rb2 );
+                } else if (fapiao4.equals("1")) {
+                    radioGroup1.check(R.id.fapiao_rb2);
                     radioGroup2.clearCheck();
-                } else if (fapiao4.equals( "2" )) {
-                    radioGroup1.check( R.id.fapiao_rb3 );
+                } else if (fapiao4.equals("2")) {
+                    radioGroup1.check(R.id.fapiao_rb3);
                     radioGroup2.clearCheck();
-                } else if (fapiao4.equals( "3" )) {
-                    radioGroup2.check( R.id.fapiao_rb4 );
+                } else if (fapiao4.equals("3")) {
+                    radioGroup2.check(R.id.fapiao_rb4);
                     radioGroup1.clearCheck();
-                } else if (fapiao4.equals( "4" )) {
-                    radioGroup2.check( R.id.fapiao_rb5 );
+                } else if (fapiao4.equals("4")) {
+                    radioGroup2.check(R.id.fapiao_rb5);
                     radioGroup1.clearCheck();
                 }
 
-                rb1.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+                rb1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         if (b) {
@@ -151,8 +163,8 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
 //                            tv1.setText( R.string.fapiao_mx );
                         }
                     }
-                } );
-                rb2.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+                });
+                rb2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         if (b) {
@@ -161,8 +173,8 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
 //                            tv1.setText( R.string.fapiao_bg );
                         }
                     }
-                } );
-                rb3.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+                });
+                rb3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         if (b) {
@@ -171,8 +183,8 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
 //                            tv1.setText( R.string.fapiao_jj );
                         }
                     }
-                } );
-                rb4.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+                });
+                rb4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         if (b) {
@@ -180,8 +192,8 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
                             fapiao4 = "3";
                         }
                     }
-                } );
-                rb5.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+                });
+                rb5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         if (b) {
@@ -190,29 +202,29 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
 //                            tv1.setText( R.string.fapiao_yy );
                         }
                     }
-                } );
-                Button button = (Button) view.findViewById( R.id.queding );
-                button.setOnClickListener( new View.OnClickListener() {
+                });
+                Button button = (Button) view.findViewById(R.id.queding);
+                button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         dialog.dissmiss();
                         String str = "";
-                        if (fapiao4.equals( "0" )) {
-                            str = getResources().getString( R.string.fapiao_mx );
-                        } else if (fapiao4.equals( "1" )) {
-                            str = getResources().getString( R.string.fapiao_bg );
-                        } else if (fapiao4.equals( "2" )) {
-                            str = getResources().getString( R.string.fapiao_jj );
-                        } else if (fapiao4.equals( "3" )) {
-                            str = getResources().getString( R.string.fapiao_yy );
-                        } else if (fapiao4.equals( "4" )) {
-                            str = getResources().getString( R.string.fapiao_hc );
+                        if (fapiao4.equals("0")) {
+                            str = getResources().getString(R.string.fapiao_mx);
+                        } else if (fapiao4.equals("1")) {
+                            str = getResources().getString(R.string.fapiao_bg);
+                        } else if (fapiao4.equals("2")) {
+                            str = getResources().getString(R.string.fapiao_jj);
+                        } else if (fapiao4.equals("3")) {
+                            str = getResources().getString(R.string.fapiao_yy);
+                        } else if (fapiao4.equals("4")) {
+                            str = getResources().getString(R.string.fapiao_hc);
                         }
-                        tv1.setText( str );
+                        tv1.setText(str);
                     }
-                } );
+                });
 
-                xiangqing.setVisibility( View.VISIBLE );
+                xiangqing.setVisibility(View.VISIBLE);
 
                 break;
         }
@@ -234,44 +246,44 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
-        title.setText( "选择配送方式及发票" );
+        title.setText("选择配送方式及发票");
 
-        fapiao1 = getIntent().getStringExtra( "fapiao_flg1" );
-        fapiao2 = getIntent().getStringExtra( "fapiao_flg2" );
-        fapiao3 = getIntent().getStringExtra( "fapiao_flg3" );
-        fapiao4 = getIntent().getStringExtra( "fapiao_flg4" );
-        peisong = getIntent().getStringExtra( "peisong" );
+        fapiao1 = getIntent().getStringExtra("fapiao_flg1");
+        fapiao2 = getIntent().getStringExtra("fapiao_flg2");
+        fapiao3 = getIntent().getStringExtra("fapiao_flg3");
+        fapiao4 = getIntent().getStringExtra("fapiao_flg4");
+        peisong = getIntent().getStringExtra("peisong");
 
-        Log.e( "ppppp", fapiao1 + "; " +fapiao2+"; "+fapiao3+"; "+fapiao4+"; "+ peisong );
+        Log.e("ppppp", fapiao1 + "; " + fapiao2 + "; " + fapiao3 + "; " + fapiao4 + "; " + peisong);
 
-        if (peisong.equals( "0" )) {
-            radioGroup1.check( R.id.peisong_rb1 );
+        if (peisong.equals("0")) {
+            radioGroup1.check(R.id.peisong_rb1);
         } else {
-            radioGroup1.check( R.id.peisong_rb2 );
+            radioGroup1.check(R.id.peisong_rb2);
         }
 
-        if (fapiao1.equals( "0" )) {
-            xiangqing.setVisibility( View.INVISIBLE );
-            radioGroup2.check( R.id.fapiao_rb1 );
+        if (fapiao1.equals("0")) {
+            xiangqing.setVisibility(View.INVISIBLE);
+            radioGroup2.check(R.id.fapiao_rb1);
         } else {
-            xiangqing.setVisibility( View.VISIBLE );
-            radioGroup2.check( R.id.fapiao_rb2 );
-            if (fapiao4.equals( "0" )){
-                tv1.setText( R.string.fapiao_mx );
-            }else if (fapiao4.equals( "1" )){
-                tv1.setText( R.string.fapiao_bg );
-            }else if (fapiao4.equals( "2" )){
-                tv1.setText( R.string.fapiao_jj );
-            }else if (fapiao4.equals( "3" )){
-                tv1.setText( R.string.fapiao_yy );
-            }else if (fapiao4.equals( "4" )){
-                tv1.setText( R.string.fapiao_hc );
+            xiangqing.setVisibility(View.VISIBLE);
+            radioGroup2.check(R.id.fapiao_rb2);
+            if (fapiao4.equals("0")) {
+                tv1.setText(R.string.fapiao_mx);
+            } else if (fapiao4.equals("1")) {
+                tv1.setText(R.string.fapiao_bg);
+            } else if (fapiao4.equals("2")) {
+                tv1.setText(R.string.fapiao_jj);
+            } else if (fapiao4.equals("3")) {
+                tv1.setText(R.string.fapiao_yy);
+            } else if (fapiao4.equals("4")) {
+                tv1.setText(R.string.fapiao_hc);
             }
 
-            if (!StringUtils.isEmpty( fapiao3 )){
-                editText.setText( fapiao3 );
+            if (!StringUtils.isEmpty(fapiao3)) {
+                editText.setText(fapiao3);
             }
 
         }

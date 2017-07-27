@@ -30,11 +30,15 @@ public class ActivityBigImage extends BaseActivity implements PhotoViewAttacher.
 
     private BGAPhotoPageAdapter mPhotoPageAdapter;
 
-    @Event(value = R.id.bga_viewpager)
+    @Event(value = {R.id.bga_viewpager,R.id.fanhui})
     private void onClick(View view) {
         switch (view.getId()) {
             case R.id.bga_viewpager:
 
+                finish();
+                break;
+
+            case R.id.fanhui:
                 finish();
                 break;
         }

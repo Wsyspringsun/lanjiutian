@@ -92,7 +92,7 @@ public class FragmentCart extends BaseFragment {
 
             case R.id.tv_go_to_pay:
                 if (totalCount == 0) {
-                    ToastUtil.show( getActivity(), "请选择要支付的商品" );
+                    ToastUtil.show(getActivity(), "请选择要支付的商品");
                     return;
                 }
 
@@ -100,79 +100,79 @@ public class FragmentCart extends BaseFragment {
                 List<GoodSubmitModel2> groupList = new ArrayList<>();
 
                 for (int i = 0; i < adapter.getItemCount(); i++) {
-                    Group group = adapter.getItem( i );
+                    Group group = adapter.getItem(i);
                     GoodSubmitModel2 goodSubmitModel2 = new GoodSubmitModel2();
                     List<Goods> childs = group.getGoodses();
                     List<GoodSubmitModel3> goodList = new ArrayList<>();
                     for (int j = 0; j < childs.size(); j++) {
-                        Goods goods1 = childs.get( j );
+                        Goods goods1 = childs.get(j);
                         GoodSubmitModel3 goods = new GoodSubmitModel3();
                         if (goods1.isChoosed()) {
-                            goods.setEXCHANGE_QUANLITY( goods1.getNumber() );
-                            goods.setCOMMODITY_COLOR( goods1.getColor() );
-                            goods.setCOMMODITY_ID( goods1.getId() );
-                            goods.setCOMMODITY_NAME( goods1.getName() );
-                            goods.setCOMMODITY_SIZE( goods1.getSize() );
-                            goods.setCOMMODITY_ORDER_ID( goods1.getOrder_id() );
+                            goods.setEXCHANGE_QUANLITY(goods1.getNumber());
+                            goods.setCOMMODITY_COLOR(goods1.getColor());
+                            goods.setCOMMODITY_ID(goods1.getId());
+                            goods.setCOMMODITY_NAME(goods1.getName());
+                            goods.setCOMMODITY_SIZE(goods1.getSize());
+                            goods.setCOMMODITY_ORDER_ID(goods1.getOrder_id());
 //                            goods.setCOST_MONEY( goods1.getMoney()+"" );
 
-                            goodList.add( goods );
+                            goodList.add(goods);
 
                         }
                     }
-                    goodSubmitModel2.setDETAILS( goodList );
-                    goodSubmitModel2.setOID_GROUP_ID( group.getId() );
-                    goodSubmitModel2.setOID_GROUP_NAME( group.getName() );
+                    goodSubmitModel2.setDETAILS(goodList);
+                    goodSubmitModel2.setOID_GROUP_ID(group.getId());
+                    goodSubmitModel2.setOID_GROUP_NAME(group.getName());
                     if (!goodSubmitModel2.getDETAILS().isEmpty()) {
-                        groupList.add( goodSubmitModel2 );
+                        groupList.add(goodSubmitModel2);
                     }
 
 
                 }
 
                 if (groupList.size() > 1) {
-                    alert = new AlertDialog.Builder( getActivity() ).create();
-                    alert.setTitle( getResources().getString( R.string.alert_tishi ) );
-                    alert.setMessage( "暂不支持多店铺合并结算" );
-                    alert.setButton( DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+                    alert = new AlertDialog.Builder(getActivity()).create();
+                    alert.setTitle(getResources().getString(R.string.alert_tishi));
+                    alert.setMessage("暂不支持多店铺合并结算");
+                    alert.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
-                    } );
+                    });
                     alert.show();
                 } else {
-                    goodSubmitModel.setDETAILS( groupList );
-                    Intent it = new Intent( getActivity(), ActivityGoodsSubmit.class );
-                    it.putExtra( "data", GsonUtils.Bean2Json( goodSubmitModel ) );
-                    startActivity( it );
+                    goodSubmitModel.setDETAILS(groupList);
+                    Intent it = new Intent(getActivity(), ActivityGoodsSubmit.class);
+                    it.putExtra("data", GsonUtils.Bean2Json(goodSubmitModel));
+                    startActivity(it);
                 }
 
-                Log.e( "*********", GsonUtils.Bean2Json( goodSubmitModel ) );
+                Log.e("*********", GsonUtils.Bean2Json(goodSubmitModel));
 
 
                 break;
 
             case R.id.tv_delete:
                 if (totalCount == 0) {
-                    ToastUtil.show( getActivity(), "请选择要移除的商品" );
+                    ToastUtil.show(getActivity(), "请选择要移除的商品");
                     return;
                 }
-                alert = new AlertDialog.Builder( getActivity() ).create();
-                alert.setTitle( "操作提示" );
-                alert.setMessage( "您确定要将这些商品从购物车中移除吗？" );
-                alert.setButton( DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+                alert = new AlertDialog.Builder(getActivity()).create();
+                alert.setTitle("操作提示");
+                alert.setMessage("您确定要将这些商品从购物车中移除吗？");
+                alert.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         return;
                     }
-                } );
-                alert.setButton( DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+                });
+                alert.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         doDelete();
                     }
-                } );
+                });
                 alert.show();
                 break;
         }
@@ -181,20 +181,19 @@ public class FragmentCart extends BaseFragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated( savedInstanceState );
+        super.onActivityCreated(savedInstanceState);
 //        x = 0;
-        back.setVisibility( View.GONE );
+        back.setVisibility(View.GONE);
 //        title.setText( "购物车（" + x + "）" );
-        title.setText( "购物车" );
+        title.setText("购物车");
 
-        setLoding( getActivity(), false );
         showCart();
 
-        recyclerView.setLayoutManager( new LinearLayoutManager( getActivity() ) );
-        recyclerView.setItemAnimator( new DefaultItemAnimator() );
-        noData = getActivity().getLayoutInflater().inflate( R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false );
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        noData = getActivity().getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
         adapter = new MyAdapter();
-        recyclerView.setAdapter( adapter );
+        recyclerView.setAdapter(adapter);
 //        recyclerView.addOnItemTouchListener( new OnItemChildClickListener() {
 //            @Override
 //            public void SimpleOnItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
@@ -214,22 +213,21 @@ public class FragmentCart extends BaseFragment {
 //                }
 //            }
 //        } );
-        adapter.setEmptyView( noData );
+        adapter.setEmptyView(noData);
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged( hidden );
+        super.onHiddenChanged(hidden);
         //购物车隐藏时   清除数据   显现时重新加载数据
         if (hidden) {
             adapter.getData().clear();
 //            x = 0;
 //            cb_check_all.setChecked( false );
-            tv_total_price.setText( "￥0.00" );
-            tv_go_to_pay.setText( "结算(0)" );
+            tv_total_price.setText("￥0.00");
+            tv_go_to_pay.setText("结算(0)");
         } else {
             if (AppConfig.currSel == 3) {
-                setLoding( getActivity(), false );
                 showCart();
             }
         }
@@ -238,86 +236,86 @@ public class FragmentCart extends BaseFragment {
     private class MyAdapter extends BaseQuickAdapter<Group> {
 
         public MyAdapter() {
-            super( R.layout.item_shopcart_group, list );
+            super(R.layout.item_shopcart_group, list);
         }
 
         @Override
         protected void convert(final BaseViewHolder baseViewHolder, final Group group) {
-            final CheckBox checkBox = baseViewHolder.getView( R.id.determine_chekbox );
-            baseViewHolder.setText( R.id.tv_source_name, group.getName() )
-                    .setChecked( R.id.determine_chekbox, group.isChoosed() )
-                    .setOnClickListener( R.id.determine_chekbox, new View.OnClickListener() {
+            final CheckBox checkBox = baseViewHolder.getView(R.id.determine_chekbox);
+            baseViewHolder.setText(R.id.tv_source_name, group.getName())
+                    .setChecked(R.id.determine_chekbox, group.isChoosed())
+                    .setOnClickListener(R.id.determine_chekbox, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             rest();
-                            group.setChoosed( checkBox.isChecked() );
+                            group.setChoosed(checkBox.isChecked());
                             for (int j = 0; j < group.getGoodses().size(); j++) {
-                                group.getGoodses().get( j ).setChoosed( group.isChoosed );
+                                group.getGoodses().get(j).setChoosed(group.isChoosed);
                             }
                             adapter.notifyDataSetChanged();
                             calculate();
                         }
-                    } );
+                    });
 
-            RecyclerView goods = baseViewHolder.getView( R.id.reclcyer );
-            goods.setLayoutManager( new LinearLayoutManager( getActivity() ) );
-            goods.setItemAnimator( new DefaultItemAnimator() );
-            goods.setAdapter( new MyAdapter1( group.getGoodses(), baseViewHolder.getPosition() ) );
+            RecyclerView goods = baseViewHolder.getView(R.id.reclcyer);
+            goods.setLayoutManager(new LinearLayoutManager(getActivity()));
+            goods.setItemAnimator(new DefaultItemAnimator());
+            goods.setAdapter(new MyAdapter1(group.getGoodses(), baseViewHolder.getPosition()));
 
         }
     }
 
     private class MyAdapter1 extends BaseQuickAdapter<Goods> {
         public MyAdapter1(List<Goods> list, int index) {
-            super( R.layout.item_shopcart_product, list );
+            super(R.layout.item_shopcart_product, list);
         }
 
         @Override
         protected void convert(final BaseViewHolder baseViewHolder, final Goods goods) {
-            final CheckBox checkBox = baseViewHolder.getView( R.id.check_box );
-            if (goods.getIns_user_id().equals( "sxljt" )) {
-                baseViewHolder.setText( R.id.size, "规格：" + goods.getSize() )
-                        .setText( R.id.size1, "规格：" + goods.getSize() );
+            final CheckBox checkBox = baseViewHolder.getView(R.id.check_box);
+            if (goods.getIns_user_id().equals("sxljt")) {
+                baseViewHolder.setText(R.id.size, "规格：" + goods.getSize())
+                        .setText(R.id.size1, "规格：" + goods.getSize());
             } else {
-                baseViewHolder.setText( R.id.size, "颜色：" + goods.getColor() + "   规格：" + goods.getSize() )
-                        .setText( R.id.size1, "颜色：" + goods.getColor() + "   规格：" + goods.getSize() );
+                baseViewHolder.setText(R.id.size, "颜色：" + goods.getColor() + "   规格：" + goods.getSize())
+                        .setText(R.id.size1, "颜色：" + goods.getColor() + "   规格：" + goods.getSize());
             }
-            baseViewHolder.setText( R.id.tv_intro, StringUtils.deletaFirst( goods.getName() ) )
-                    .setText( R.id.tv_price, "￥" + goods.getMoney() + "" )
-                    .setText( R.id.tv_num, goods.getNumber() + "" )
-                    .setChecked( R.id.check_box, goods.isChoosed() )
-                    .setOnClickListener( R.id.check_box, new View.OnClickListener() {
+            baseViewHolder.setText(R.id.tv_intro, StringUtils.deletaFirst(goods.getName()))
+                    .setText(R.id.tv_price, "￥" + goods.getMoney() + "")
+                    .setText(R.id.tv_num, goods.getNumber() + "")
+                    .setChecked(R.id.check_box, goods.isChoosed())
+                    .setOnClickListener(R.id.check_box, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            goods.setChoosed( checkBox.isChecked() );
-                            Log.e( "inddddddd", adapter.getItem( index ).isChoosed() + "" );
+                            goods.setChoosed(checkBox.isChecked());
+                            Log.e("inddddddd", adapter.getItem(index).isChoosed() + "");
                             adapter.notifyDataSetChanged();
                             calculate();
                         }
-                    } )
-                    .setOnClickListener( R.id.all_ll, new View.OnClickListener() {
+                    })
+                    .setOnClickListener(R.id.all_ll, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             if (!goods.isChoosed()) {
-                                if (goods.getIns_user_id().equals( "sxljt" )) {
-                                    Intent it = new Intent( getActivity(), ActivityMedicinesInfo.class );
-                                    it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID, goods.getId() );
-                                    startActivity( it );
+                                if (goods.getIns_user_id().equals("sxljt")) {
+                                    Intent it = new Intent(getActivity(), ActivityMedicinesInfo.class);
+                                    it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, goods.getId());
+                                    startActivity(it);
                                 } else {
-                                    Intent it = new Intent( getActivity(), ActivityGoodsInfo.class );
-                                    it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID, goods.getId() );
-                                    startActivity( it );
+                                    Intent it = new Intent(getActivity(), ActivityGoodsInfo.class);
+                                    it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, goods.getId());
+                                    startActivity(it);
                                 }
                             }
                         }
-                    } );
+                    });
 
             //判断是否为处方药
-            if (goods.getType().equals( "1" )) {
-                baseViewHolder.setVisible( R.id.tv_add, false )
-                        .setVisible( R.id.tv_reduce, false );
+            if (goods.getType().equals("1")) {
+                baseViewHolder.setVisible(R.id.tv_add, false)
+                        .setVisible(R.id.tv_reduce, false);
             } else {
-                baseViewHolder.setOnClickListener( R.id.tv_add, new View.OnClickListener() {
+                baseViewHolder.setOnClickListener(R.id.tv_add, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         int num = goods.getNumber();
@@ -326,16 +324,16 @@ public class FragmentCart extends BaseFragment {
                         } else {
                             num = 999;
                         }
-                        goods.setNumber( num );
+                        goods.setNumber(num);
                         List<UpdateCart> list = new ArrayList<UpdateCart>();
-                        UpdateCart updateCart = new UpdateCart( goods.getOrder_id(), String.valueOf( goods.getNumber() ), new BigDecimal( goods.getMoney() ) );
-                        list.add( updateCart );
-                        updateCart( GsonUtils.List2Json( list ), "update" );
+                        UpdateCart updateCart = new UpdateCart(goods.getOrder_id(), String.valueOf(goods.getNumber()), new BigDecimal(goods.getMoney()));
+                        list.add(updateCart);
+                        updateCart(GsonUtils.List2Json(list), "update");
 
                         calculate();
                     }
-                } )
-                        .setOnClickListener( R.id.tv_reduce, new View.OnClickListener() {
+                })
+                        .setOnClickListener(R.id.tv_reduce, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 int num = goods.getNumber();
@@ -345,22 +343,22 @@ public class FragmentCart extends BaseFragment {
                                     num = 1;
                                 }
 
-                                goods.setNumber( num );
+                                goods.setNumber(num);
                                 List<UpdateCart> list = new ArrayList<UpdateCart>();
-                                UpdateCart updateCart = new UpdateCart( goods.getOrder_id(), String.valueOf( goods.getNumber() ), new BigDecimal( goods.getMoney() ) );
-                                list.add( updateCart );
-                                updateCart( GsonUtils.List2Json( list ), "update" );
+                                UpdateCart updateCart = new UpdateCart(goods.getOrder_id(), String.valueOf(goods.getNumber()), new BigDecimal(goods.getMoney()));
+                                list.add(updateCart);
+                                updateCart(GsonUtils.List2Json(list), "update");
 
                                 calculate();
                             }
-                        } );
+                        });
             }
 
-            SimpleDraweeView simpleDraweeView = baseViewHolder.getView( R.id.iv_adapter_list_pic );
-            if (StringUtils.isEmpty( goods.getImg() )) {
-                simpleDraweeView.setImageURI( Uri.parse( "" ) );
+            SimpleDraweeView simpleDraweeView = baseViewHolder.getView(R.id.iv_adapter_list_pic);
+            if (StringUtils.isEmpty(goods.getImg())) {
+                simpleDraweeView.setImageURI(Uri.parse(""));
             } else {
-                simpleDraweeView.setImageURI( Uri.parse( goods.getImg() ) );
+                simpleDraweeView.setImageURI(Uri.parse(goods.getImg()));
             }
 
         }
@@ -380,19 +378,18 @@ public class FragmentCart extends BaseFragment {
 //        }
 
         for (int i = 0; i < adapter.getItemCount(); i++) {
-            Group group = adapter.getItem( i );
+            Group group = adapter.getItem(i);
             List<Goods> childs = group.getGoodses();
             for (int j = 0; j < childs.size(); j++) {
-                Goods goods = childs.get( j );
+                Goods goods = childs.get(j);
                 if (goods.isChoosed()) {
-                    toBeDeleteProducts.add( goods.getOrder_id() );
+                    toBeDeleteProducts.add(goods.getOrder_id());
                 }
             }
 
         }
-        String str = GsonUtils.List2Json( toBeDeleteProducts );
-        setLoding( getActivity(), false );
-        updateCart( str, "delete" );
+        String str = GsonUtils.List2Json(toBeDeleteProducts);
+        updateCart(str, "delete");
 
         calculate();
     }
@@ -406,21 +403,21 @@ public class FragmentCart extends BaseFragment {
     private void calculate() {
         totalCount = 0;
         totalPrice = 0.00;
-        DecimalFormat df = new DecimalFormat( "######0.00" );
+        DecimalFormat df = new DecimalFormat("######0.00");
 
         for (int i = 0; i < adapter.getItemCount(); i++) {
-            Group group = adapter.getItem( i );
+            Group group = adapter.getItem(i);
             List<Goods> childs = group.getGoodses();
             for (int j = 0; j < childs.size(); j++) {
-                Goods goods = childs.get( j );
+                Goods goods = childs.get(j);
                 if (goods.isChoosed()) {
                     totalCount++;
                     totalPrice += goods.getNumber() * goods.getMoney();
                 }
             }
         }
-        tv_total_price.setText( "￥" + df.format( totalPrice ) );
-        tv_go_to_pay.setText( "结算(" + totalCount + ")" );
+        tv_total_price.setText("￥" + df.format(totalPrice));
+        tv_go_to_pay.setText("结算(" + totalCount + ")");
     }
 
     /**
@@ -429,7 +426,7 @@ public class FragmentCart extends BaseFragment {
     private void doCheckAll() {
         for (int i = 0; i < adapter.getItemCount(); i++) {
 //            list.get( i ).setChoosed( cb_check_all.isChecked() );
-            Group group = adapter.getItem( i );
+            Group group = adapter.getItem(i);
             List<Goods> childs = group.getGoodses();
             for (int j = 0; j < childs.size(); j++) {
 //                childs.get( j ).setChoosed( cb_check_all.isChecked() );
@@ -441,11 +438,11 @@ public class FragmentCart extends BaseFragment {
 
     private void rest() {
         for (int i = 0; i < adapter.getItemCount(); i++) {
-            adapter.getData().get( i ).setChoosed( false );
-            Group group = adapter.getItem( i );
+            adapter.getData().get(i).setChoosed(false);
+            Group group = adapter.getItem(i);
             List<Goods> childs = group.getGoodses();
             for (int j = 0; j < childs.size(); j++) {
-                childs.get( j ).setChoosed( false );
+                childs.get(j).setChoosed(false);
             }
         }
 
@@ -457,78 +454,75 @@ public class FragmentCart extends BaseFragment {
         showCartTask = new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
-                Page page = new Page( "0", AppConfig.DEFAULT_PAGE_COUNT + "" );
-                String data = GsonUtils.Bean2Json( page );
-                Log.e( "dasdasdasd", data );
-                return GoodsBiz.showCart( data, "read" );
+                Page page = new Page("0", AppConfig.DEFAULT_PAGE_COUNT + "");
+                String data = GsonUtils.Bean2Json(page);
+                return GoodsBiz.showCart(data, "read");
             }
 
             @Override
             protected void onExecuteSucceeded(String s) {
-                Log.e( "****", s.length() + "" );
+                closeLoding();
 
-                if (s.contains( "用户名密码" ) || s.contains( "新旧Token不一致" )) {//未登陆跳转
-                    Toast.makeText( MyApplication.getAppContext(), R.string.auth_expire,
-                            Toast.LENGTH_LONG ).show();
-                    Intent i = new Intent( AppConfig.AppAction.ACTION_TOKEN_EXPIRE );
-                    MyApplication.getAppContext().sendBroadcast( i );
-                    PreferenceCache.putToken( "" );
-                    PreferenceCache.putUsername( "" );
-                    PreferenceCache.putPhoneNum( "" );
+                if (s.contains("用户名密码") || s.contains("Token不一致")) {//未登陆跳转
+                    Toast.makeText(MyApplication.getAppContext(), R.string.auth_expire,
+                            Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(AppConfig.AppAction.ACTION_TOKEN_EXPIRE);
+                    MyApplication.getAppContext().sendBroadcast(i);
+                    PreferenceCache.putToken("");
+                    PreferenceCache.putUsername("");
+                    PreferenceCache.putPhoneNum("");
                 }
 
                 if (s.length() < 80) {//没有数据
-                    adapter.getData().removeAll( list );
-                    adapter.getEmptyView().setVisibility( View.VISIBLE );
+                    adapter.getData().removeAll(list);
+                    adapter.getEmptyView().setVisibility(View.VISIBLE);
 //                    cb_check_all.setEnabled( false );//全选不可点击
                     adapter.notifyDataSetChanged();
-                    closeLoding();
                 } else {
-                    adapter.getEmptyView().setVisibility( View.GONE );
+                    adapter.getEmptyView().setVisibility(View.GONE);
 
 //                    cb_check_all.setEnabled( true );
 
-                    BaseModelResult baseModelResult = GsonUtils.Json2Bean( s, BaseModelResult.class );
-                    ShoppingCartModel shoppingCartModel = GsonUtils.Json2Bean( baseModelResult.getResult().toString(), ShoppingCartModel.class );
+                    BaseModelResult baseModelResult = GsonUtils.Json2Bean(s, BaseModelResult.class);
+                    ShoppingCartModel shoppingCartModel = GsonUtils.Json2Bean(baseModelResult.getResult().toString(), ShoppingCartModel.class);
 
                     list = new ArrayList<>();
                     List<Goods> itme;
                     for (int i = 0; i < shoppingCartModel.getDETAILS().size(); i++) {
                         Group group = new Group();
-                        group.setName( shoppingCartModel.getDETAILS().get( i ).getOID_GROUP_NAME() );
-                        group.setId( shoppingCartModel.getDETAILS().get( i ).getOID_GROUP_ID() );
-                        group.setChoosed( false );
+                        group.setName(shoppingCartModel.getDETAILS().get(i).getOID_GROUP_NAME());
+                        group.setId(shoppingCartModel.getDETAILS().get(i).getOID_GROUP_ID());
+                        group.setChoosed(false);
                         itme = new ArrayList<>();
-                        List<ShoppingCartModel.Goods> lists = shoppingCartModel.getDETAILS().get( i ).getDETAILS();
+                        List<ShoppingCartModel.Goods> lists = shoppingCartModel.getDETAILS().get(i).getDETAILS();
                         for (int j = 0; j < lists.size(); j++) {
                             Goods goods = new Goods();
-                            goods.setNumber( lists.get( j ).getEXCHANGE_QUANLITY() );
-                            goods.setId( lists.get( j ).getCOMMODITY_ID() );
-                            goods.setSize( lists.get( j ).getCOMMODITY_SIZE() );
-                            goods.setColor( lists.get( j ).getCOMMODITY_COLOR() );
-                            goods.setMoney( lists.get( j ).getCOST_MONEY() );
-                            goods.setName( lists.get( j ).getCOMMODITY_NAME() );
-                            goods.setOrder_id( lists.get( j ).getCOMMODITY_ORDER_ID() );
-                            goods.setImg( lists.get( j ).getIMG_PATH() );
-                            goods.setType( lists.get( j ).getPRESCRIPTION_FLG() );
-                            goods.setIns_user_id( lists.get( j ).getINS_USER_ID() );
-                            goods.setGroup_name( lists.get( j ).getGROUPNAME() );
-                            goods.setChoosed( false );
-                            itme.add( goods );
+                            goods.setNumber(lists.get(j).getEXCHANGE_QUANLITY());
+                            goods.setId(lists.get(j).getCOMMODITY_ID());
+                            goods.setSize(lists.get(j).getCOMMODITY_SIZE());
+                            goods.setColor(lists.get(j).getCOMMODITY_COLOR());
+                            goods.setMoney(lists.get(j).getCOST_MONEY());
+                            goods.setName(lists.get(j).getCOMMODITY_NAME());
+                            goods.setOrder_id(lists.get(j).getCOMMODITY_ORDER_ID());
+                            goods.setImg(lists.get(j).getIMG_PATH());
+                            goods.setType(lists.get(j).getPRESCRIPTION_FLG());
+                            goods.setIns_user_id(lists.get(j).getINS_USER_ID());
+                            goods.setGroup_name(lists.get(j).getGROUPNAME());
+                            goods.setChoosed(false);
+                            itme.add(goods);
 
 //                            x++;
                         }
 
-                        group.setGoodses( itme );
-                        list.add( group );
+                        group.setGoodses(itme);
+                        list.add(group);
 
                     }
 
-                    adapter.setNewData( list );
+                    adapter.setNewData(list);
 //                    title.setText( "购物车（" + x + "）" );
                     adapter.notifyDataSetChanged();
 
-                    closeLoding();
                 }
             }
 
@@ -537,6 +531,7 @@ public class FragmentCart extends BaseFragment {
                 closeLoding();
             }
         };
+        setLoding(getActivity(), false);
         showCartTask.execute();
     }
 
@@ -547,22 +542,21 @@ public class FragmentCart extends BaseFragment {
         updateTask = new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
-                Log.e( "data", str );
-                return GoodsBiz.shoppingCart( str, op );
+                Log.e("data", str);
+                return GoodsBiz.shoppingCart(str, op);
             }
 
             @Override
             protected void onExecuteSucceeded(String s) {
-                if (s.equals( "ok" )) {
+                closeLoding();
+                if (s.equals("ok")) {
 //                    x = 0;
 //                    cb_check_all.setChecked( false );
-                    tv_total_price.setText( "￥0.00" );
-                    tv_go_to_pay.setText( "结算(0)" );
+                    tv_total_price.setText("￥0.00");
+                    tv_go_to_pay.setText("结算(0)");
                     showCart();
-                    closeLoding();
                 } else {
                     adapter.notifyDataSetChanged();
-                    closeLoding();
                 }
             }
 
@@ -571,6 +565,7 @@ public class FragmentCart extends BaseFragment {
                 closeLoding();
             }
         };
+        setLoding(getActivity(), false);
         updateTask.execute();
     }
 

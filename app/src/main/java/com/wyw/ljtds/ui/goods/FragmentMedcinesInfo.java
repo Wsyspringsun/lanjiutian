@@ -98,10 +98,8 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
     public TextView tv_goods_title;
     @ViewInject(R.id.tv_new_price)
     private TextView tv_new_price;
-    @ViewInject(R.id.tv_comment_count)
-    private TextView tv_comment_count;
-    @ViewInject(R.id.tv_good_comment)
-    private TextView tv_good_comment;
+    @ViewInject(R.id.tv_goods_info_evaluate_cnt)
+    private TextView tv_goods_info_evaluate_cnt;
     @ViewInject(R.id.goods_shuoming)
     private TextView goods_shuoming;
     @ViewInject(R.id.number_button)
@@ -138,20 +136,20 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
         switch (v.getId()) {
             case R.id.ll_pull_up:
                 //上拉查看图文详情
-                sv_switch.smoothOpen( true );
+                sv_switch.smoothOpen(true);
                 break;
 
             case R.id.fab_up_slide:
                 //点击滑动到顶部
-                sv_goods_info.smoothScrollTo( 0, 0 );
-                sv_switch.smoothClose( true );
+                sv_goods_info.smoothScrollTo(0, 0);
+                sv_switch.smoothClose(true);
                 break;
 
             case R.id.ll_goods_detail:
                 //商品详情tab
                 nowIndex = 0;
                 scrollCursor();
-                switchFragment( nowFragment, fragmentGoodsDetails );
+                switchFragment(nowFragment, fragmentGoodsDetails);
                 nowFragment = fragmentGoodsDetails;
                 break;
 
@@ -159,16 +157,16 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
                 //规格参数tab
                 nowIndex = 1;
                 scrollCursor();
-                switchFragment( nowFragment, fragmentGoodsParameter );
+                switchFragment(nowFragment, fragmentGoodsParameter);
                 nowFragment = fragmentGoodsParameter;
                 break;
 
             case R.id.shoucang:
-                setLoding( getActivity(), false );
-                if (model.getFavorited().equals( "0" )) {
-                    Favorites( model.getWAREID(), "1", "add" );
+                setLoding(getActivity(), false);
+                if (model.getFavorited().equals("0")) {
+                    Favorites(model.getWAREID(), "1", "add");
                 } else {
-                    Favorites( model.getWAREID(), "1", "del" );
+                    Favorites(model.getWAREID(), "1", "del");
                 }
                 break;
 
@@ -179,7 +177,7 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach( context );
+        super.onAttach(context);
         activity = (ActivityMedicinesInfo) context;
     }
 
@@ -188,7 +186,7 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
     public void onResume() {
         super.onResume();
         //开始自动翻页
-        vp_item_goods_img.startTurning( 3000 );
+        vp_item_goods_img.startTurning(3000);
     }
 
     // 停止自动翻页
@@ -201,31 +199,31 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated( savedInstanceState );
+        super.onActivityCreated(savedInstanceState);
 
         fragmentGoodsDetails = new FragmentGoodsDetails();
         fragmentGoodsParameter = new FragmentGoodsParameter();
-        fragmentList.add( fragmentGoodsParameter );
-        fragmentList.add( fragmentGoodsDetails );
+        fragmentList.add(fragmentGoodsParameter);
+        fragmentList.add(fragmentGoodsDetails);
 
         nowFragment = fragmentGoodsDetails;
         fragmentManager = getChildFragmentManager();
         //默认显示商品详情tab
-        fragmentManager.beginTransaction().replace( R.id.fl_content, nowFragment ).commitAllowingStateLoss();
+        fragmentManager.beginTransaction().replace(R.id.fl_content, nowFragment).commitAllowingStateLoss();
 
-        sv_switch.setOnSlideDetailsListener( this );
+        sv_switch.setOnSlideDetailsListener(this);
 
         //ScrollView和edittext焦点冲突问题
-        sv_goods_info.setDescendantFocusability( ViewGroup.FOCUS_BEFORE_DESCENDANTS );
-        sv_goods_info.setFocusable( true );
-        sv_goods_info.setFocusableInTouchMode( true );
-        sv_goods_info.setOnTouchListener( new View.OnTouchListener() {
+        sv_goods_info.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
+        sv_goods_info.setFocusable(true);
+        sv_goods_info.setFocusableInTouchMode(true);
+        sv_goods_info.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 v.requestFocusFromTouch();
                 return false;
             }
-        } );
+        });
 
         //设置文字中间一条横线
 //        tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
@@ -241,15 +239,15 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
 
 
         //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
-        vp_item_goods_img.setPageIndicator( new int[]{R.mipmap.index_white, R.mipmap.index_red} );
-        vp_item_goods_img.setPageIndicatorAlign( ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL );
+        vp_item_goods_img.setPageIndicator(new int[]{R.mipmap.index_white, R.mipmap.index_red});
+        vp_item_goods_img.setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL);
 //        vp_recommend.setPageIndicator( new int[]{R.drawable.shape_item_index_white, R.drawable.shape_item_index_red} );
 //        vp_recommend.setPageIndicatorAlign( ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL );
 
         fragmentList = new ArrayList<>();
         tabTextList = new ArrayList<>();
-        tabTextList.add( tv_goods_detail );
-        tabTextList.add( tv_goods_config );
+        tabTextList.add(tv_goods_detail);
+        tabTextList.add(tv_goods_config);
 
 
     }
@@ -260,36 +258,36 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
     public void setLoopView(String[] images) {
         final ArrayList<String> imgUrls = new ArrayList<>();
         if (images.length == 0 || images == null) {
-            imgUrls.add( "" );
-            imgUrls.add( "" );
-            imgUrls.add( "" );
-            imgUrls.add( "" );
-            imgUrls.add( "" );
+            imgUrls.add("");
+            imgUrls.add("");
+            imgUrls.add("");
+            imgUrls.add("");
+            imgUrls.add("");
         } else {
             for (int i = 0; i < images.length; i++) {
-                imgUrls.add( images[i] );
+                imgUrls.add(images[i]);
             }
         }
 
 
         //初始化商品图片轮播
-        vp_item_goods_img.setPages( new CBViewHolderCreator() {
+        vp_item_goods_img.setPages(new CBViewHolderCreator() {
             @Override
             public Object createHolder() {
-                return new NetworkImageHolderView( imgUrls );
+                return new NetworkImageHolderView(imgUrls);
             }
-        }, imgUrls );
+        }, imgUrls);
 
 
         List<RecommendGoodsBean> data = new ArrayList<>();
-        data.add( new RecommendGoodsBean( "Letv/乐视 LETV体感-超级枪王 乐视TV超级电视产品玩具 体感游戏枪 电玩道具 黑色",
-                "http://img4.hqbcdn.com/product/79/f3/79f3ef1b0b2283def1f01e12f21606d4.jpg", new BigDecimal( 599 ), "799" ) );
-        data.add( new RecommendGoodsBean( "IPEGA/艾派格 幽灵之子 无线蓝牙游戏枪 游戏体感枪 苹果安卓智能游戏手柄 标配",
-                "http://img2.hqbcdn.com/product/00/76/0076cedb0a7d728ec1c8ec149cff0d16.jpg", new BigDecimal( 199 ), "399" ) );
-        data.add( new RecommendGoodsBean( "Letv/乐视 LETV体感-超级枪王 乐视TV超级电视产品玩具 体感游戏枪 电玩道具 黑色",
-                "http://img4.hqbcdn.com/product/79/f3/79f3ef1b0b2283def1f01e12f21606d4.jpg", new BigDecimal( 599.5 ), "799" ) );
-        data.add( new RecommendGoodsBean( "IPEGA/艾派格 幽灵之子 无线蓝牙游戏枪 游戏体感枪 苹果安卓智能游戏手柄 标配",
-                "http://img2.hqbcdn.com/product/00/76/0076cedb0a7d728ec1c8ec149cff0d16.jpg", new BigDecimal( "299.9" ), "399" ) );
+        data.add(new RecommendGoodsBean("Letv/乐视 LETV体感-超级枪王 乐视TV超级电视产品玩具 体感游戏枪 电玩道具 黑色",
+                "http://img4.hqbcdn.com/product/79/f3/79f3ef1b0b2283def1f01e12f21606d4.jpg", new BigDecimal(599), "799"));
+        data.add(new RecommendGoodsBean("IPEGA/艾派格 幽灵之子 无线蓝牙游戏枪 游戏体感枪 苹果安卓智能游戏手柄 标配",
+                "http://img2.hqbcdn.com/product/00/76/0076cedb0a7d728ec1c8ec149cff0d16.jpg", new BigDecimal(199), "399"));
+        data.add(new RecommendGoodsBean("Letv/乐视 LETV体感-超级枪王 乐视TV超级电视产品玩具 体感游戏枪 电玩道具 黑色",
+                "http://img4.hqbcdn.com/product/79/f3/79f3ef1b0b2283def1f01e12f21606d4.jpg", new BigDecimal(599.5), "799"));
+        data.add(new RecommendGoodsBean("IPEGA/艾派格 幽灵之子 无线蓝牙游戏枪 游戏体感枪 苹果安卓智能游戏手柄 标配",
+                "http://img2.hqbcdn.com/product/00/76/0076cedb0a7d728ec1c8ec149cff0d16.jpg", new BigDecimal("299.9"), "399"));
 //        List<List<RecommendGoodsBean>> handledData = handleRecommendGoods( data );
 //        //设置如果只有一组数据时不能滑动
 //        vp_recommend.setManualPageable( handledData.size() == 1 ? false : true );
@@ -306,28 +304,31 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
     public void updeta(MedicineDetailsModel medicineDetailsModel) {
         model = medicineDetailsModel;
         //处方和非处方
-        if (model.getPRESCRIPTION_FLG() != null && model.getPRESCRIPTION_FLG().equals( "1" )) {
-            flag_otc.setImageDrawable( getResources().getDrawable( R.mipmap.chufang ) );
+        if (model.getPRESCRIPTION_FLG() != null && model.getPRESCRIPTION_FLG().equals("1")) {
+            flag_otc.setImageDrawable(getResources().getDrawable(R.mipmap.chufang));
         } else {
-            flag_otc.setImageDrawable( getResources().getDrawable( R.mipmap.feichufang ) );
+            flag_otc.setImageDrawable(getResources().getDrawable(R.mipmap.feichufang));
         }
 
-        tv_goods_title.setText( StringUtils.deletaFirst( model.getWARENAME() ) + " " + model.getWARESPEC() );
-        goods_changjia.setText( getResources().getString( R.string.changjia ) + model.getPRODUCER() );
-        tv_new_price.setText( model.getSALEPRICE() + "" );
-        if (!StringUtils.isEmpty( model.getTREATMENT() )) {
-            goods_shuoming.setVisibility( View.VISIBLE );
-            goods_shuoming.setText( model.getTREATMENT() );
+
+        tv_goods_info_evaluate_cnt.setText("(" + model.getEVALUATE_CNT() + ")");
+
+        tv_goods_title.setText(StringUtils.deletaFirst(model.getWARENAME()) + " " + model.getWARESPEC());
+        goods_changjia.setText(getResources().getString(R.string.changjia) + model.getPRODUCER());
+        tv_new_price.setText(model.getSALEPRICE() + "");
+        if (!StringUtils.isEmpty(model.getTREATMENT())) {
+            goods_shuoming.setVisibility(View.VISIBLE);
+            goods_shuoming.setText(model.getTREATMENT());
         } else {
-            goods_shuoming.setVisibility( View.GONE );
+            goods_shuoming.setVisibility(View.GONE);
         }
 
-        setLoopView( model.getIMAGES() );
+        setLoopView(model.getIMAGES());
 
         b1 = model.getSALEPRICE();
 
-        numberButton.setBuyMax( 999 ).setInventory( 999 ).setCurrentNumber( 1 )
-                .setOnWarnListener( new NumberButton.OnWarnListener() {
+        numberButton.setBuyMax(999).setInventory(999).setCurrentNumber(1)
+                .setOnWarnListener(new NumberButton.OnWarnListener() {
 
                     @Override
                     public void onWarningForInventory(int inventory) {//超过库存
@@ -338,41 +339,41 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
                     public void onWarningForBuyMax(int max) {//超过最大可购买数量
 
                     }
-                } )
-                .setOnNumberListener( new NumberButton.OnNumberListener() {
+                })
+                .setOnNumberListener(new NumberButton.OnNumberListener() {
                     @Override
                     public void OnNumberChange(int num) {
 //                        BigDecimal b1=new BigDecimal( "11.11" );
-                        BigDecimal b2 = new BigDecimal( num );
-                        goods_heji.setText( b1.multiply( b2 ) + "" );
+                        BigDecimal b2 = new BigDecimal(num);
+                        goods_heji.setText(b1.multiply(b2) + "");
                     }
-                } );
+                });
 
-        goods_heji.setText( b1.multiply( new BigDecimal( "1" ) ) + "" );
+        goods_heji.setText(b1.multiply(new BigDecimal("1")) + "");
 
 
         //评价信息
         if (!model.getEVALUATE().isEmpty() && model.getEVALUATE() != null) {
-            no_eva.setVisibility( View.GONE );
-            eva_list.setVisibility( View.VISIBLE );
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager( getActivity() );//必须有
-            linearLayoutManager.setOrientation( LinearLayoutManager.VERTICAL );//设置方向滑动
-            eva_list.setLayoutManager( linearLayoutManager );
-            eva_list.setItemAnimator( new DefaultItemAnimator() );
-            eva_list.addItemDecoration( new RecycleViewDivider( getActivity(), LinearLayoutManager.VERTICAL, 10, getResources().getColor( R.color.font_black2 ) ) );
+            no_eva.setVisibility(View.GONE);
+            eva_list.setVisibility(View.VISIBLE);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());//必须有
+            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动
+            eva_list.setLayoutManager(linearLayoutManager);
+            eva_list.setItemAnimator(new DefaultItemAnimator());
+            eva_list.addItemDecoration(new RecycleViewDivider(getActivity(), LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.font_black2)));
 
-            eva_list.setAdapter( new MyAdapter( model.getEVALUATE() ) );
+            eva_list.setAdapter(new MyAdapter(model.getEVALUATE()));
         } else {
-            no_eva.setVisibility( View.VISIBLE );
-            eva_list.setVisibility( View.GONE );
+            no_eva.setVisibility(View.VISIBLE);
+            eva_list.setVisibility(View.GONE);
         }
 
 
         //是否收藏
-        if (model.getFavorited().equals( "1" )) {
-            shoucang_img.setImageDrawable( getResources().getDrawable( R.mipmap.icon_shoucang_xuanzhong ) );
+        if (model.getFavorited().equals("1")) {
+            shoucang_img.setImageDrawable(getResources().getDrawable(R.mipmap.icon_shoucang_xuanzhong));
         } else {
-            shoucang_img.setImageDrawable( getResources().getDrawable( R.mipmap.icon_shoucang_weixuan ) );
+            shoucang_img.setImageDrawable(getResources().getDrawable(R.mipmap.icon_shoucang_weixuan));
         }
 //        DbManager dbManager = x.getDb( SqlUtils.getDaoConfig() );
 //        List<SqlFavoritesModel> sqlFavoritesModels = new ArrayList<>();
@@ -414,9 +415,9 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
         for (int i = 0; i < length; i++) {
             List<RecommendGoodsBean> recommendGoods = new ArrayList<>();
             for (int j = 0; j < (i * 2 + j == data.size() ? 1 : 2); j++) {
-                recommendGoods.add( data.get( i * 2 + j ) );
+                recommendGoods.add(data.get(i * 2 + j));
             }
-            handleData.add( recommendGoods );
+            handleData.add(recommendGoods);
         }
         return handleData;
     }
@@ -424,21 +425,21 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
     //状态改变
     @Override
     public void onStatucChanged(SlideDetailsLayout.Status status) {
-        Log.e( "****", status + "" );
-        fragmentGoodsDetails.getmodel( model );
-        fragmentGoodsParameter.getmodel( model );
+        Log.e("****", status + "");
+        fragmentGoodsDetails.getmodel(model);
+        fragmentGoodsParameter.getmodel(model);
         if (status == SlideDetailsLayout.Status.OPEN) {
             //当前为图文详情页
             fab_up_slide.show();
-            activity.vp_content.setNoScroll( true );
-            activity.tv_title.setVisibility( View.VISIBLE );
-            activity.psts_tabs.setVisibility( View.GONE );
+            activity.vp_content.setNoScroll(true);
+            activity.tv_title.setVisibility(View.VISIBLE);
+            activity.psts_tabs.setVisibility(View.GONE);
         } else {
             //当前为商品详情页
             fab_up_slide.hide();
-            activity.vp_content.setNoScroll( false );
-            activity.tv_title.setVisibility( View.GONE );
-            activity.psts_tabs.setVisibility( View.VISIBLE );
+            activity.vp_content.setNoScroll(false);
+            activity.tv_title.setVisibility(View.GONE);
+            activity.psts_tabs.setVisibility(View.VISIBLE);
         }
     }
 
@@ -446,16 +447,16 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
      * 滑动游标
      */
     private void scrollCursor() {
-        TranslateAnimation anim = new TranslateAnimation( fromX, nowIndex * v_tab_cursor.getWidth(), 0, 0 );
-        anim.setFillAfter( true );//设置动画结束时停在动画结束的位置
-        anim.setDuration( 50 );
+        TranslateAnimation anim = new TranslateAnimation(fromX, nowIndex * v_tab_cursor.getWidth(), 0, 0);
+        anim.setFillAfter(true);//设置动画结束时停在动画结束的位置
+        anim.setDuration(50);
         //保存动画结束时游标的位置,作为下次滑动的起点
         fromX = nowIndex * v_tab_cursor.getWidth();
-        v_tab_cursor.startAnimation( anim );
+        v_tab_cursor.startAnimation(anim);
 
         //设置Tab切换颜色
         for (int i = 0; i < tabTextList.size(); i++) {
-            tabTextList.get( i ).setTextColor( i == nowIndex ? getResources().getColor( R.color.base_bar ) : getResources().getColor( R.color.font_black2 ) );
+            tabTextList.get(i).setTextColor(i == nowIndex ? getResources().getColor(R.color.base_bar) : getResources().getColor(R.color.font_black2));
         }
     }
 
@@ -470,9 +471,9 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
         if (nowFragment != toFragment) {
             fragmentTransaction = fragmentManager.beginTransaction();
             if (!toFragment.isAdded()) {    // 先判断是否被add过
-                fragmentTransaction.hide( fromFragment ).add( R.id.fl_content, toFragment ).commitAllowingStateLoss(); // 隐藏当前的fragment，add下一个到activity中
+                fragmentTransaction.hide(fromFragment).add(R.id.fl_content, toFragment).commitAllowingStateLoss(); // 隐藏当前的fragment，add下一个到activity中
             } else {
-                fragmentTransaction.hide( fromFragment ).show( toFragment ).commitAllowingStateLoss(); // 隐藏当前的fragment，显示下一个
+                fragmentTransaction.hide(fromFragment).show(toFragment).commitAllowingStateLoss(); // 隐藏当前的fragment，显示下一个
             }
         }
     }
@@ -485,10 +486,10 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
         addTask = new BizDataAsyncTask<Boolean>() {
             @Override
             protected Boolean doExecute() throws ZYException, BizFailure {
-                if (type.equals( "add" )) {
-                    return UserBiz.addFavoritesGoods( id, flg );
+                if (type.equals("add")) {
+                    return UserBiz.addFavoritesGoods(id, flg);
                 } else {
-                    return UserBiz.deleteFavoritesGoods( id );
+                    return UserBiz.deleteFavoritesGoods(id);
                 }
 
             }
@@ -496,10 +497,10 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
             @Override
             protected void onExecuteSucceeded(Boolean aBoolean) {
                 if (aBoolean) {
-                    if (type.equals( "add" )) {
-                        shoucang_img.setImageDrawable( getResources().getDrawable( R.mipmap.icon_shoucang_xuanzhong ) );
+                    if (type.equals("add")) {
+                        shoucang_img.setImageDrawable(getResources().getDrawable(R.mipmap.icon_shoucang_xuanzhong));
                     } else {
-                        shoucang_img.setImageDrawable( getResources().getDrawable( R.mipmap.icon_shoucang_weixuan ) );
+                        shoucang_img.setImageDrawable(getResources().getDrawable(R.mipmap.icon_shoucang_weixuan));
                     }
                 }
                 closeLoding();
@@ -549,23 +550,23 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
 
         @Override
         public View createView(Context context) {
-            rootview = ((LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE )).inflate( R.layout.goods_item_head_img1, null );
-            imageView = (SimpleDraweeView) rootview.findViewById( R.id.sdv_item_head_img );
-            imageView.setOnClickListener( new View.OnClickListener() {
+            rootview = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.goods_item_head_img1, null);
+            imageView = (SimpleDraweeView) rootview.findViewById(R.id.sdv_item_head_img);
+            imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent it = new Intent( getActivity(), ActivityGoodsImages.class );
-                    it.putStringArrayListExtra( "imgs", imgs );
-                    startActivity( it );
+                    Intent it = new Intent(getActivity(), ActivityGoodsImages.class);
+                    it.putStringArrayListExtra("imgs", imgs);
+                    startActivity(it);
                 }
-            } );
+            });
             return rootview;
         }
 
         @Override
         public void UpdateUI(Context context, int position, final String data) {
 //        if (!StringUtils.isEmpty( data )){
-            imageView.setImageURI( Uri.parse( data ) );
+            imageView.setImageURI(Uri.parse(data));
 
 //        }
 
@@ -626,56 +627,56 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
     private class MyAdapter extends BaseQuickAdapter<MedicineDetailsEvaluateModel> {
 
         public MyAdapter(List<MedicineDetailsEvaluateModel> list_eva) {
-            super( R.layout.item_goods_evaluate, list_eva );
+            super(R.layout.item_goods_evaluate, list_eva);
         }
 
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, MedicineDetailsEvaluateModel models) {
             String str = models.getMOBILE();
-            Log.e( "+++++++++++", str );
-            baseViewHolder.setText( R.id.time, DateUtils.parseTime( models.getINS_DATE() + "" ) )
-                    .setText( R.id.name, str.substring( 0, str.length() - (str.substring( 3 )).length() ) + "****" + str.substring( 7 ) )
-                    .setText( R.id.context, models.getEVALUATE_CONTGENT() );
+            Log.e("+++++++++++", str);
+            baseViewHolder.setText(R.id.time, DateUtils.parseTime(models.getINS_DATE() + ""))
+                    .setText(R.id.name, str.substring(0, str.length() - (str.substring(3)).length()) + "****" + str.substring(7))
+                    .setText(R.id.context, models.getEVALUATE_CONTGENT());
 
-            SimpleDraweeView user_img = baseViewHolder.getView( R.id.user_img );
-            if (StringUtils.isEmpty( models.getUSER_ICON_FILE_ID() )) {
-                user_img.setImageURI( Uri.parse( "" ) );
+            SimpleDraweeView user_img = baseViewHolder.getView(R.id.user_img);
+            if (StringUtils.isEmpty(models.getUSER_ICON_FILE_ID())) {
+                user_img.setImageURI(Uri.parse(""));
             } else {
-                user_img.setImageURI( Uri.parse( AppConfig.IMAGE_PATH + models.getUSER_ICON_FILE_ID() ) );
+                user_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH + models.getUSER_ICON_FILE_ID()));
             }
 
 
             ArrayList arrayList = new ArrayList();
-            if (!StringUtils.isEmpty( models.getIMG_PATH1() )) {
-                arrayList.add( AppConfig.IMAGE_PATH + models.getIMG_PATH1() );
+            if (!StringUtils.isEmpty(models.getIMG_PATH1())) {
+                arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH1());
             }
-            if (!StringUtils.isEmpty( models.getIMG_PATH2() )) {
-                arrayList.add( AppConfig.IMAGE_PATH + models.getIMG_PATH2() );
+            if (!StringUtils.isEmpty(models.getIMG_PATH2())) {
+                arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH2());
             }
-            if (!StringUtils.isEmpty( models.getIMG_PATH3() )) {
-                arrayList.add( AppConfig.IMAGE_PATH + models.getIMG_PATH3() );
+            if (!StringUtils.isEmpty(models.getIMG_PATH3())) {
+                arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH3());
             }
-            if (!StringUtils.isEmpty( models.getIMG_PATH4() )) {
-                arrayList.add( AppConfig.IMAGE_PATH + models.getIMG_PATH4() );
+            if (!StringUtils.isEmpty(models.getIMG_PATH4())) {
+                arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH4());
             }
-            if (!StringUtils.isEmpty( models.getIMG_PATH5() )) {
-                arrayList.add( AppConfig.IMAGE_PATH + models.getIMG_PATH4() );
+            if (!StringUtils.isEmpty(models.getIMG_PATH5())) {
+                arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH4());
             }
-            final BGANinePhotoLayout mCurrentClickNpl = baseViewHolder.getView( R.id.item_moment_photos );
-            mCurrentClickNpl.setData( arrayList );
-            mCurrentClickNpl.setDelegate( new BGANinePhotoLayout.Delegate() {
+            final BGANinePhotoLayout mCurrentClickNpl = baseViewHolder.getView(R.id.item_moment_photos);
+            mCurrentClickNpl.setData(arrayList);
+            mCurrentClickNpl.setDelegate(new BGANinePhotoLayout.Delegate() {
                 @Override
                 public void onClickNinePhotoItem(BGANinePhotoLayout ninePhotoLayout, View view, int position, String model, List<String> models) {
                     if (mCurrentClickNpl.getItemCount() == 1) {
                         // 预览单张图片
-                        startActivity( BGAPhotoPreviewActivity.newIntent( getActivity(), null, mCurrentClickNpl.getCurrentClickItem() ) );
+                        startActivity(BGAPhotoPreviewActivity.newIntent(getActivity(), null, mCurrentClickNpl.getCurrentClickItem()));
                     } else if (mCurrentClickNpl.getItemCount() > 1) {
                         // 预览多张图片
-                        startActivity( BGAPhotoPreviewActivity.newIntent( getActivity(), null, mCurrentClickNpl.getData(), mCurrentClickNpl.getCurrentClickItemPosition() ) );
+                        startActivity(BGAPhotoPreviewActivity.newIntent(getActivity(), null, mCurrentClickNpl.getData(), mCurrentClickNpl.getCurrentClickItemPosition()));
                     }
                 }
-            } );
+            });
 
         }
     }

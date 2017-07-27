@@ -1,19 +1,20 @@
 package com.wyw.ljtds.widget.body.region;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsoluteLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import com.wyw.ljtds.R;
+import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.widget.body.WaveEffectLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by angelo on 2015/2/26.
@@ -59,6 +60,7 @@ public class RegionView {
         }
 
         regionViews.add(getItem(Region.SKIN));
+        Log.e(AppConfig.ERR_TAG,"region type:"+regionType);
         refresh();
     }
 
@@ -70,7 +72,9 @@ public class RegionView {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e(AppConfig.ERR_TAG,"click "+region.getName());
                 Toast.makeText(mContext, "You click " + region.getName(), Toast.LENGTH_SHORT);
+
             }
         });
         return itemView;

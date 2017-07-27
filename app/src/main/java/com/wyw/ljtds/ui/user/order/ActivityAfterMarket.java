@@ -133,7 +133,7 @@ public class ActivityAfterMarket extends BaseActivity implements BGASortableNine
 
     @AfterPermissionGranted(REQUEST_CODE_PERMISSION_PHOTO_PICKER)
     private void choicePhotoWrapper() {
-        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, "_" + Manifest.permission.CAMERA};
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE,  Manifest.permission.CAMERA};
         Log.e("-------",EasyPermissions.hasPermissions(this, perms)+"");
         if (EasyPermissions.hasPermissions(this, perms)) {
         //拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话就没有拍照功能

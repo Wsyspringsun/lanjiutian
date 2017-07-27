@@ -37,6 +37,7 @@ import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
+
 /**
  * Created by Administrator on 2016/12/8 0008.
  */
@@ -63,6 +64,7 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
             }
         }
     };
+    protected boolean loading = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -178,6 +180,7 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     }
 
     public void setLoding(Context context, boolean settime) {
+        loading = true;
         if (settime) {
             mDialog = LoadingDialogUtils.createLoadingDialog( context, "加载中..." );
             mHandler.sendEmptyMessageDelayed( AppConfig.IntentExtraKey.LODING_CONTEXT, 1500 );
@@ -187,6 +190,7 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     }
 
     public void closeLoding() {
+        loading = false;
         LoadingDialogUtils.closeDialog( mDialog );
     }
 

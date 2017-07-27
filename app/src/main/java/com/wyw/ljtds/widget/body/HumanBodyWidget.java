@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.wyw.ljtds.R;
+import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.widget.body.region.Region;
 import com.wyw.ljtds.widget.body.region.RegionPathView;
 
@@ -26,7 +28,6 @@ import com.wyw.ljtds.widget.body.region.RegionPathView;
  */
 
 public class HumanBodyWidget {
-
     static public boolean isAPI11 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
     public static boolean mShowingBack = false;
     public static boolean isMan = true;
@@ -36,7 +37,7 @@ public class HumanBodyWidget {
 //    private FragmentManager.OnBackStackChangedListener onBackStackChangedListener;
 
     private AppCompatActivity activity;
-    private WaveEffectLayout container;
+    private static WaveEffectLayout container;
 
     // api < 11
     private LayoutInflater inflater;
@@ -101,7 +102,6 @@ public class HumanBodyWidget {
             performFragmentFlipAnimation();
 
         } else {
-
             container.removeAllViews();
             if (mShowingBack) {
                 container.addView(frontView);
@@ -182,6 +182,12 @@ public class HumanBodyWidget {
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
             bodyImageView = (ImageView) view.findViewById(R.id.body_front);
+            bodyImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e(AppConfig.ERR_TAG,container.mTag);
+                }
+            });
         }
 
         @Override
@@ -233,5 +239,4 @@ public class HumanBodyWidget {
         leftRegionLayout.removeAllViews();
         rightRegionLayout.removeAllViews();
     }
-
 }

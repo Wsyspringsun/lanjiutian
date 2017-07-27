@@ -5,7 +5,7 @@ android {
         lanjiutian_sp {
             keyAlias 'lanjiutian'
             keyPassword 'ljtds123'
-            storeFile file('F:/MyApplication/keystore/ljt_sp.jks')
+            storeFile file('/home/wsy/AndroidStudioProjects/androidproject/keystore/ljt_sp.jks')
             storePassword 'ljtds123'
         }
     }
@@ -69,5 +69,4 @@ dependencies {
     compile project(':easypermissions')
     //图片加载
     compile 'com.facebook.fresco:fresco:0.9.0'
-
 }

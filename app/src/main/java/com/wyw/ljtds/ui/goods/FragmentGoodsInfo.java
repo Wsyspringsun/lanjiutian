@@ -23,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.holder.Holder;
@@ -55,21 +54,17 @@ import com.wyw.ljtds.widget.RecycleViewDivider;
 import com.wyw.ljtds.widget.commodity.CheckInchModel;
 import com.wyw.ljtds.widget.commodity.CheckInchPopWindow;
 import com.wyw.ljtds.widget.goodsinfo.SlideDetailsLayout;
-
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPreviewActivity;
 import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
-
 /**
  * Created by Administrator on 2017/3/12 0012.
  */
@@ -114,10 +109,8 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
     private TextView tv_new_price;
     @ViewInject(R.id.tv_old_price)
     private TextView tv_old_price;
-    @ViewInject(R.id.tv_comment_count)
-    private TextView tv_comment_count;
-    @ViewInject(R.id.tv_good_comment)
-    private TextView tv_good_comment;
+    @ViewInject(R.id.tv_goods_info_evaluate_cnt)
+    private TextView tv_goods_info_evaluate_cnt;
     @ViewInject(R.id.goods_shuoming)
     private TextView goods_shuoming;
     @ViewInject(R.id.shoucang_img)
@@ -130,6 +123,8 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
     private TextView tv_current_goods;
     @ViewInject(R.id.no_eva)
     private TextView no_eva;
+    @ViewInject(R.id.tv_good_info_comment)
+    private TextView tvGoodInfoComment;
     @ViewInject(R.id.eva_list)
     private RecyclerView eva_list;
 
@@ -450,6 +445,9 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
         //轮播
         setLoopView(images);
 
+        //评论数量
+        Log.e(AppConfig.ERR_TAG, "eva count:" + model.getEVALUATE_CNT() + "");
+        tvGoodInfoComment.setText(model.getEVALUATE_CNT() + "");
         //评价信息
         if (!model.getEvaluateList().isEmpty() && model.getEvaluateList() != null) {
             no_eva.setVisibility(View.GONE);

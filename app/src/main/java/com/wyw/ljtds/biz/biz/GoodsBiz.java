@@ -276,8 +276,9 @@ public class GoodsBiz extends BaseBiz {
 
         ksoap.setProperty("op", op, SoapProcessor.PropertyType.TYPE_STRING);
         ksoap.setProperty("data", data, SoapProcessor.PropertyType.TYPE_STRING);
-
-        return ksoap.requestStr();
+        JsonElement req = ksoap.request();
+        Gson gson = new GsonBuilder().create();
+        return gson.fromJson(req, String.class);
     }
 
 

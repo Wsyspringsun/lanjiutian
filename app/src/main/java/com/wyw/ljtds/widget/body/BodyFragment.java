@@ -2,10 +2,13 @@ package com.wyw.ljtds.widget.body;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
+import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.ui.find.ActivityBody;
+import com.wyw.ljtds.widget.body.region.Region;
 
 
 /**
@@ -18,7 +21,7 @@ public abstract class BodyFragment extends Fragment implements ActivityBody.MyTo
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((ActivityBody)activity).registerTouchListener(this);
+        ((ActivityBody) activity).registerTouchListener(this);
     }
 
     @Override
@@ -29,8 +32,13 @@ public abstract class BodyFragment extends Fragment implements ActivityBody.MyTo
 
     @Override
     public void onTouchEvent(MotionEvent event) {
-        if(event.getAction() == MotionEvent.ACTION_UP){
+//        Log.e(AppConfig.ERR_TAG, event.getAction() + "");
+//        Log.e(AppConfig.ERR_TAG, event.getX() + "/" + event.getY());
+//        Log.e(AppConfig.ERR_TAG, "head:" + Region.HEAD.getDestinationY()+"/"+Region.HEAD.getOffsetSY());
+
+        if (event.getAction() == MotionEvent.ACTION_UP) {
             //逻辑处理
+
         }
     }
 

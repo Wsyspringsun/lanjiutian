@@ -1,12 +1,17 @@
 package com.wyw.ljtds.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/4/13 0013.
  */
 
-public class CreatOrderModel extends BaseModel {
+public class CreatOrderModel extends BaseModel implements Serializable{
+    //配送时间 起始
+    private String DISTRIBUTION_DATE_START;
+    //配送时间 截止
+    private String DISTRIBUTION_DATE_END;
     //花费积分数
     private String COST_POINT;
     //支付方式
@@ -88,7 +93,23 @@ public class CreatOrderModel extends BaseModel {
         this.USER_ADDRESS = USER_ADDRESS;
     }
 
-    public class USER_ADDRESS{
+    public String getDISTRIBUTION_DATE_START() {
+        return DISTRIBUTION_DATE_START;
+    }
+
+    public void setDISTRIBUTION_DATE_START(String DISTRIBUTION_DATE_START) {
+        this.DISTRIBUTION_DATE_START = DISTRIBUTION_DATE_START;
+    }
+
+    public String getDISTRIBUTION_DATE_END() {
+        return DISTRIBUTION_DATE_END;
+    }
+
+    public void setDISTRIBUTION_DATE_END(String DISTRIBUTION_DATE_END) {
+        this.DISTRIBUTION_DATE_END = DISTRIBUTION_DATE_END;
+    }
+
+    public class USER_ADDRESS {
         private String ADDRESS_DETAIL;
         private int ADDRESS_ID;
         private String CONSIGNEE_MOBILE;
@@ -170,5 +191,10 @@ public class CreatOrderModel extends BaseModel {
         public void setCONSIGNEE_CITY(int CONSIGNEE_CITY) {
             this.CONSIGNEE_CITY = CONSIGNEE_CITY;
         }
+
+
+
+
+
     }
 }

@@ -61,11 +61,13 @@ public class ActivitySearch extends BaseActivity {
                     it.putExtra( "search", edHeader.getText().toString().trim() );
                     it.putExtra( "typeid", "" );
                     startActivity( it );
+                    finish();;
                 } else {
                     it = new Intent( ActivitySearch.this, ActivityMedicineList.class );
                     it.putExtra( "search", edHeader.getText().toString().trim() );
                     it.putExtra( "typeid", "" );
                     startActivity( it );
+                    finish();;
                 }
                 break;
         }

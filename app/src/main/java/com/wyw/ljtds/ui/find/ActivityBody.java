@@ -38,7 +38,7 @@ public class ActivityBody extends BaseActivity {
     }
 
     public void initViews(Bundle savedInstanceState){
-        setContentView(R.layout.activity_body);
+        setContentView(R.layout.activity_body_old);
         container = (WaveEffectLayout) findViewById(R.id.container);
         manIv = (ImageView) findViewById(R.id.man_icon);
         manTv = (TextView) findViewById(R.id.man_text);
@@ -47,7 +47,9 @@ public class ActivityBody extends BaseActivity {
         flipFrontTv = (TextView) findViewById(R.id.flipFront);
         flipBackTv = (TextView) findViewById(R.id.flipBack);
 
+        //显示人体图
         bodyWidget = new HumanBodyWidget(this, container, savedInstanceState);
+        //添加人体部位
         container.setRegionView(new RegionView(container, this));
 
     }

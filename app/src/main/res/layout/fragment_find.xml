@@ -22,7 +22,7 @@
             <com.bigkoo.convenientbanner.ConvenientBanner
                 android:id="@+id/banner"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/x170"
+                android:layout_height="@dimen/x150"
                 app:canLoop="true">
 
             </com.bigkoo.convenientbanner.ConvenientBanner>
@@ -329,7 +329,7 @@
             <android.support.v7.widget.RecyclerView
                 android:overScrollMode="never"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/qianggou_rv"/>
             
             <com.facebook.drawee.view.SimpleDraweeView
@@ -353,39 +353,17 @@
                 android:orientation="horizontal">
 
                 <RelativeLayout
+                    android:id="@+id/sel_yigan"
                     android:padding="@dimen/x10"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
-
                     <ImageView
                         android:layout_centerVertical="true"
-                        android:layout_width="@dimen/x50"
-                        android:layout_height="@dimen/x50"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:scaleType="fitCenter"
-                        android:src="@mipmap/yigan"/>
-
-                    <LinearLayout
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="right">
-
-                        <TextView
-                            android:textColor="@color/font_black2"
-                            style="@style/font_ww_14"
-                            android:text="乙肝"/>
-
-                        <TextView
-                            android:layout_marginTop="@dimen/x4"
-                            style="@style/font_ww_12"
-                            android:text="关爱乙肝患者"
-                            android:textColor="@color/gray"/>
-
-                    </LinearLayout>
-
+                        android:src="@mipmap/icon_qf_yigan"/>
                 </RelativeLayout>
 
                 <View
@@ -394,6 +372,7 @@
                     android:background="@color/basebackground" />
 
                 <RelativeLayout
+                    android:id="@+id/sel_yangwei"
                     android:padding="@dimen/x10"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -401,32 +380,10 @@
 
                     <ImageView
                         android:layout_centerVertical="true"
-                        android:layout_width="@dimen/x50"
-                        android:layout_height="@dimen/x50"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:scaleType="fitCenter"
-                        android:src="@mipmap/fengshi"/>
-
-                    <LinearLayout
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="right">
-
-                        <TextView
-                            android:textColor="@color/font_black2"
-                            style="@style/font_ww_14"
-                            android:text="风湿"/>
-
-                        <TextView
-                            android:layout_marginTop="@dimen/x4"
-                            style="@style/font_ww_12"
-                            android:text="关爱风湿患者"
-                            android:textColor="@color/gray"/>
-
-                    </LinearLayout>
-
+                        android:src="@mipmap/icon_qf_yangwei"/>
                 </RelativeLayout>
 
             </LinearLayout>
@@ -442,50 +399,58 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/sel_fengshi"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
-                    
-                    <TextView
-                        style="@style/font_ww_14"
-                        android:textColor="@color/font_black2"
-                        android:text="抑郁症"/>
-                    
                     <ImageView
                         android:layout_marginTop="@dimen/x5"
-                        android:layout_width="@dimen/x45"
-                        android:layout_height="@dimen/x45"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:scaleType="fitCenter"
-                        android:src="@mipmap/yiyuzheng"/>
-                    
+                        android:src="@mipmap/icon_qf_fengshi"/>
                 </LinearLayout>
                 
                 <View
                     android:layout_width="@dimen/x3"
                     android:layout_height="match_parent"
                     android:background="@color/basebackground"/>
-
                 <LinearLayout
+                    android:id="@+id/sel_yiyu"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
-
-                    <TextView
-                        style="@style/font_ww_14"
-                        android:textColor="@color/font_black2"
-                        android:text="抑郁症"/>
-
                     <ImageView
                         android:layout_marginTop="@dimen/x5"
-                        android:layout_width="@dimen/x45"
-                        android:layout_height="@dimen/x45"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:scaleType="fitCenter"
-                        android:src="@mipmap/yiyuzheng"/>
+                        android:src="@mipmap/icon_qf_yiyu"/>
 
+                </LinearLayout>
+
+                 <View
+                    android:layout_width="@dimen/x3"
+                    android:layout_height="match_parent"
+                    android:background="@color/basebackground"/>
+
+                <LinearLayout
+                    android:id="@+id/sel_tuofa"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <ImageView
+                        android:layout_marginTop="@dimen/x5"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitCenter"
+                        android:src="@mipmap/icon_qf_tuofa"/>
                 </LinearLayout>
 
                 <View
@@ -494,51 +459,23 @@
                     android:background="@color/basebackground"/>
 
                 <LinearLayout
+                    android:id="@+id/sel_xiaochuan"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
-
-                    <TextView
-                        style="@style/font_ww_14"
-                        android:textColor="@color/font_black2"
-                        android:text="抑郁症"/>
-
                     <ImageView
                         android:layout_marginTop="@dimen/x5"
-                        android:layout_width="@dimen/x45"
-                        android:layout_height="@dimen/x45"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:scaleType="fitCenter"
-                        android:src="@mipmap/yiyuzheng"/>
+                        android:src="@mipmap/icon_qf_xiaochuan"/>
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="@dimen/x3"
-                    android:layout_height="match_parent"
-                    android:background="@color/basebackground"/>
 
-                <LinearLayout
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
 
-                    <TextView
-                        style="@style/font_ww_14"
-                        android:textColor="@color/font_black2"
-                        android:text="抑郁症"/>
-
-                    <ImageView
-                        android:layout_marginTop="@dimen/x5"
-                        android:layout_width="@dimen/x45"
-                        android:layout_height="@dimen/x45"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/yiyuzheng"/>
-
-                </LinearLayout>
 
             </LinearLayout>
 

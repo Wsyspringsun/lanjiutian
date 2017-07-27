@@ -10,8 +10,10 @@ import java.io.File;
 public class AppConfig {
     public static final String ERR_TAG = "www.ljt.com.err";
     //是否测试环境
+//    private static boolean test = true;
     private static boolean test = false;
     public static final String WS_BASE_URL = test ? "http://192.168.2.110:8080/e-commerce_platform_WebService/services/" : "http://www.lanjiutian.com/WebService/services/";
+    public static final String WS_BASE_HTML_URL = test ? "http://192.168.2.110:8080/e-commerce_platform_WebService/html/" : "http://www.lanjiutian.com/WebService/html/";
     public static final String IMAGE_PATH = test ? "http://192.168.2.110:8080/upload/images" : "http://www.lanjiutian.com/upload/images";
     public static final String IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";
     // 命名空间
@@ -47,7 +49,7 @@ public class AppConfig {
     /**
      * 选中哪个主菜单
      */
-    public static int currSel = 0;
+    public static int currSel = 2;
 
     /**
      * 默认加载数量

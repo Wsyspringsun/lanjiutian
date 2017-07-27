@@ -42,40 +42,39 @@ public class FragmentMedicine extends BaseFragment {
     private Recycler_rightAdapter2 recycler_rightAdapter;
     private List<MedicineTypeFirstModel> data;//一级菜单所需
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated( savedInstanceState );
-        mAdapter = new MyListAdapter2( getActivity() );
-        mListView.setAdapter( mAdapter );
-        mListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+        super.onActivityCreated(savedInstanceState);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                mAdapter.setCurPositon( position );
+                mAdapter.setCurPositon(position);
                 mAdapter.notifyDataSetChanged();
-
-                setLoding( getActivity(), false );
                 getChildren();
-                mListView.smoothScrollToPositionFromTop( position, (parent.getHeight() - view.getHeight()) / 2 );
+                mListView.smoothScrollToPositionFromTop(position, (parent.getHeight() - view.getHeight()) / 2);
 
             }
-        } );
+        });
+
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint( isVisibleToUser );
-        if (isVisibleToUser){
-            getType();
-        }else {
+        Log.e(AppConfig.ERR_TAG, "setUserVisibleHint");
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if(mAdapter == null || mAdapter.getCount() <= 0 ){
+                getType();
+            }
+        } else {
 
         }
     }
 
 
-    BizDataAsyncTask<List<MedicineTypeFirstModel>> getTypeTask;
-
-    private void getType() {
-        getTypeTask = new BizDataAsyncTask<List<MedicineTypeFirstModel>>() {
+    private  void getType() {
+        BizDataAsyncTask<List<MedicineTypeFirstModel>> getTypeTask = new BizDataAsyncTask<List<MedicineTypeFirstModel>>() {
             @Override
             protected List<MedicineTypeFirstModel> doExecute() throws ZYException, BizFailure {
                 return CategoryBiz.getMedicineType();
@@ -83,11 +82,11 @@ public class FragmentMedicine extends BaseFragment {
 
             @Override
             protected void onExecuteSucceeded(List<MedicineTypeFirstModel> medicineTypeFirstModels) {
+                mAdapter = new MyListAdapter2(getActivity());
                 data = medicineTypeFirstModels;
-                mAdapter.addItems( data );
+                mAdapter.addItems(medicineTypeFirstModels);
                 mAdapter.notifyDataSetChanged();
-
-
+                mListView.setAdapter(mAdapter);
                 getChildren();
             }
 
@@ -106,15 +105,15 @@ public class FragmentMedicine extends BaseFragment {
         getchildrenTask = new BizDataAsyncTask<List<MedicineTypeSecondModel>>() {
             @Override
             protected List<MedicineTypeSecondModel> doExecute() throws ZYException, BizFailure {
-                Log.e(AppConfig.ERR_TAG,data.size()+"/"+mAdapter.getCurPositon());
-                return CategoryBiz.getMedicineTypeList( data.get( mAdapter.getCurPositon() ).getCLASSCODE(), "1" );
+                if (data == null) return null;
+                return CategoryBiz.getMedicineTypeList(data.get(mAdapter.getCurPositon()).getCLASSCODE(), "1");
             }
 
             @Override
             protected void onExecuteSucceeded(List<MedicineTypeSecondModel> medicineTypeSecondModels) {
-                recycler_rightAdapter = new Recycler_rightAdapter2( getActivity(), medicineTypeSecondModels );
-                mRight_recycler.setLayoutManager( new LinearLayoutManager( getActivity() ) );
-                mRight_recycler.setAdapter( recycler_rightAdapter );
+                recycler_rightAdapter = new Recycler_rightAdapter2(getActivity(), medicineTypeSecondModels);
+                mRight_recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                mRight_recycler.setAdapter(recycler_rightAdapter);
                 recycler_rightAdapter.notifyDataSetChanged();
 
                 closeLoding();
@@ -124,6 +123,7 @@ public class FragmentMedicine extends BaseFragment {
             protected void OnExecuteFailed() {
             }
         };
+        setLoding(getActivity(), false);
         getchildrenTask.execute();
     }
 }

@@ -109,27 +109,27 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_marginTop="@dimen/x2"
         android:id="@+id/bangzhu4"
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x40">
+        android:layout_height="@dimen/x40"
+        android:layout_marginTop="@dimen/x2"
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/bangzhu_kefu_img"
-            android:src="@mipmap/bangzhu_kefu"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x15"
-            android:layout_width="@dimen/x20"
-            android:layout_height="@dimen/x20" />
+            android:src="@mipmap/bangzhu_kefu" />
 
         <TextView
-            android:textColor="@color/font_black2"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/bangzhu_kefu_img"
-            android:layout_marginLeft="@dimen/x8"
             style="@style/font_ww_14"
-            android:text="@string/bangzhu_kefu"/>
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x8"
+            android:layout_toRightOf="@+id/bangzhu_kefu_img"
+            android:text="@string/bangzhu_kefu"
+            android:textColor="@color/font_black2" />
 
     </RelativeLayout>
 

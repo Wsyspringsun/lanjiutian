@@ -88,46 +88,46 @@ public class ActivityGoodsInfo extends BaseActivity {
 
             case R.id.goumai:
                 if (model != null) {
-                it = new Intent( this, ActivityGoodsSubmit.class );
+                    it = new Intent(this, ActivityGoodsSubmit.class);
 
-                GoodSubmitModel1 goodSubmitModel = new GoodSubmitModel1();
-                GoodSubmitModel2 goodSubmitModel2 = new GoodSubmitModel2();
-                List<GoodSubmitModel3> goodList = new ArrayList<>();
-                List<GoodSubmitModel2> groupList = new ArrayList<>();
-                GoodSubmitModel3 goods = new GoodSubmitModel3();
-                goods.setEXCHANGE_QUANLITY( goodsInfo.checkInchModel.getNum() );
-                goods.setCOMMODITY_COLOR( goodsInfo.checkInchModel.getCololr() );
-                goods.setCOMMODITY_SIZE( goodsInfo.checkInchModel.getSize() );
-                goods.setCOMMODITY_COLOR_ID( goodsInfo.checkInchModel.getColor_id() );
-                goods.setCOMMODITY_SIZE_ID( goodsInfo.checkInchModel.getSize_id() );
-                goods.setCOMMODITY_ID( model.getCommodityId() );
-                goods.setCOMMODITY_NAME( model.getTitle() );
-                goodList.add( goods );
+                    GoodSubmitModel1 goodSubmitModel = new GoodSubmitModel1();
+                    GoodSubmitModel2 goodSubmitModel2 = new GoodSubmitModel2();
+                    List<GoodSubmitModel3> goodList = new ArrayList<>();
+                    List<GoodSubmitModel2> groupList = new ArrayList<>();
+                    GoodSubmitModel3 goods = new GoodSubmitModel3();
+                    goods.setEXCHANGE_QUANLITY(goodsInfo.checkInchModel.getNum());
+                    goods.setCOMMODITY_COLOR(goodsInfo.checkInchModel.getCololr());
+                    goods.setCOMMODITY_SIZE(goodsInfo.checkInchModel.getSize());
+                    goods.setCOMMODITY_COLOR_ID(goodsInfo.checkInchModel.getColor_id());
+                    goods.setCOMMODITY_SIZE_ID(goodsInfo.checkInchModel.getSize_id());
+                    goods.setCOMMODITY_ID(model.getCommodityId());
+                    goods.setCOMMODITY_NAME(model.getTitle());
+                    goodList.add(goods);
 
-                goodSubmitModel2.setDETAILS( goodList );
-                goodSubmitModel2.setOID_GROUP_ID( model.getOidGroupId() );
-                goodSubmitModel2.setOID_GROUP_NAME( model.getGroupName() );
+                    goodSubmitModel2.setDETAILS(goodList);
+                    goodSubmitModel2.setOID_GROUP_ID(model.getOidGroupId());
+                    goodSubmitModel2.setOID_GROUP_NAME(model.getGroupName());
 
-                groupList.add( goodSubmitModel2 );
-                goodSubmitModel.setDETAILS( groupList );
+                    groupList.add(goodSubmitModel2);
+                    goodSubmitModel.setDETAILS(groupList);
 
-                it.putExtra( "data", GsonUtils.Bean2Json( goodSubmitModel ) );
-                startActivity( it );
+                    it.putExtra("data", GsonUtils.Bean2Json(goodSubmitModel));
+                    startActivity(it);
                 }
                 break;
 
             case R.id.add_cart:
-                if (model!=null){
+                if (model != null) {
                     ShoppingCartAddModel shoppingCartAddModel = new ShoppingCartAddModel();
-                    shoppingCartAddModel.setCOMMODITY_ID( model.getCommodityId() );
-                    shoppingCartAddModel.setCOMMODITY_SIZE( goodsInfo.checkInchModel.getSize() );
-                    shoppingCartAddModel.setCOMMODITY_COLOR( goodsInfo.checkInchModel.getCololr() );
-                    shoppingCartAddModel.setEXCHANGE_QUANLITY( goodsInfo.checkInchModel.getNum() + "" );
-                    shoppingCartAddModel.setINS_USER_ID( model.getOidGroupId() );
-                    shoppingCartAddModel.setCOMMODITY_COLOR_ID( goodsInfo.checkInchModel.getColor_id() );
-                    shoppingCartAddModel.setCOMMODITY_SIZE_ID( goodsInfo.checkInchModel.getSize_id() );
-                    String str = GsonUtils.Bean2Json( shoppingCartAddModel );
-                    addCart( str );
+                    shoppingCartAddModel.setCOMMODITY_ID(model.getCommodityId());
+                    shoppingCartAddModel.setCOMMODITY_SIZE(goodsInfo.checkInchModel.getSize());
+                    shoppingCartAddModel.setCOMMODITY_COLOR(goodsInfo.checkInchModel.getCololr());
+                    shoppingCartAddModel.setEXCHANGE_QUANLITY(goodsInfo.checkInchModel.getNum() + "");
+                    shoppingCartAddModel.setINS_USER_ID(model.getOidGroupId());
+                    shoppingCartAddModel.setCOMMODITY_COLOR_ID(goodsInfo.checkInchModel.getColor_id());
+                    shoppingCartAddModel.setCOMMODITY_SIZE_ID(goodsInfo.checkInchModel.getSize_id());
+                    String str = GsonUtils.Bean2Json(shoppingCartAddModel);
+                    addCart(str);
                 }
 
                 break;
@@ -141,17 +141,17 @@ public class ActivityGoodsInfo extends BaseActivity {
             case R.id.kefu_call:
 
 //                addDb();
-                openChat( model.getTitle(), "", settingid1, groupName, true, model.getCommodityId() );
+                openChat(model.getTitle(), "", settingid1, groupName, true, model.getCommodityId());
 
 
                 break;
 
             case R.id.shopping_cart:
-                it = new Intent( this, MainActivity.class );
+                it = new Intent(this, MainActivity.class);
                 AppConfig.currSel = 3;
-                it.putExtra( AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel );
+                it.putExtra(AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel);
                 finish();
-                startActivity( it );
+                startActivity(it);
                 break;
 
 //            case R.id.yao_ll:
@@ -164,22 +164,22 @@ public class ActivityGoodsInfo extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
         goodsInfo = new FragmentGoodsInfo();
         goodsDetail = new FragmentGoodsPagerDetails();
         goodsEvaluate = new FragmentGoodsPagerEvaluate();
-        fragmentList.add( goodsInfo );
-        fragmentList.add( goodsDetail );
-        fragmentList.add( goodsEvaluate );
+        fragmentList.add(goodsInfo);
+        fragmentList.add(goodsDetail);
+        fragmentList.add(goodsEvaluate);
 
-        vp_content.setAdapter( new ItemTitlePagerAdapter( getSupportFragmentManager(),
-                fragmentList, new String[]{"商品", "详情", "评价"} ) );
-        vp_content.setOffscreenPageLimit( 3 );
-        psts_tabs.setViewPager( vp_content );
+        vp_content.setAdapter(new ItemTitlePagerAdapter(getSupportFragmentManager(),
+                fragmentList, new String[]{"商品", "详情", "评价"}));
+        vp_content.setOffscreenPageLimit(3);
+        psts_tabs.setViewPager(vp_content);
 
 
-        setLoding( this, false );
+        setLoding(this, false);
         getGoods();
 
 
@@ -192,8 +192,8 @@ public class ActivityGoodsInfo extends BaseActivity {
         medicineTask = new BizDataAsyncTask<CommodityDetailsModel>() {
             @Override
             protected CommodityDetailsModel doExecute() throws ZYException, BizFailure {
-                Log.e( "goods_id=", getIntent().getStringExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID ) );
-                return GoodsBiz.getGoods( getIntent().getStringExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID ) );
+                Log.e("goods_id=", getIntent().getStringExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID));
+                return GoodsBiz.getGoods(getIntent().getStringExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID));
 //                return GoodsBiz.getMedicine( "000000" );
             }
 
@@ -201,10 +201,10 @@ public class ActivityGoodsInfo extends BaseActivity {
             protected void onExecuteSucceeded(CommodityDetailsModel commodityDetailsModel) {
 
                 model = commodityDetailsModel;
-                goodsInfo.updeta( model );
-                goodsEvaluate.update( model );
-                goodsDetail.fragmentGoodsParameter.getmodel( model );
-                goodsDetail.fragmentGoodsDetails.getmodel( model );
+                goodsInfo.updeta(model);
+                goodsEvaluate.update(model);
+                goodsDetail.fragmentGoodsParameter.getmodel(model);
+                goodsDetail.fragmentGoodsDetails.getmodel(model);
 
 
                 //------商品浏览轨迹
@@ -264,12 +264,12 @@ public class ActivityGoodsInfo extends BaseActivity {
         cartTask = new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
-                return GoodsBiz.shoppingCart( str, "create" );
+                return GoodsBiz.shoppingCart(str, "create");
             }
 
             @Override
             protected void onExecuteSucceeded(String s) {
-                ToastUtil.show( ActivityGoodsInfo.this, "添加购物车成功！" );
+                ToastUtil.show(ActivityGoodsInfo.this, "添加购物车成功！");
             }
 
             @Override

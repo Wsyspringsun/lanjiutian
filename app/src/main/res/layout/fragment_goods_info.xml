@@ -221,7 +221,7 @@
                         android:layout_height="44dp"
                         android:layout_gravity="center_horizontal"
                         android:scaleType="fitXY"
-                        android:src="@mipmap/item_goods_ensure"/>
+                        android:src="@mipmap/medicine_info"/>
 
                     <!-- 当前已选的商品 -->
 
@@ -363,7 +363,7 @@
                                 android:textSize="13dp"/>
 
                             <TextView
-                                android:id="@+id/tv_comment_count"
+                                android:id="@+id/tv_goods_info_evaluate_cnt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
@@ -386,7 +386,7 @@
                                 android:textSize="13dp"/>
 
                             <TextView
-                                android:id="@+id/tv_good_comment"
+                                android:id="@+id/tv_good_info_comment"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/x1"

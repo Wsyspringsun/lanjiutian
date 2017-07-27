@@ -1,7 +1,7 @@
 <resources>
     <!-- main -->
     <string name="app_name">蓝九天</string>
-    <string name="home">首页</string>
+    <string name="home">生活馆</string>
     <string name="category">分类</string>
     <string name="find">医药馆</string>
     <string name="shopping_cart">购物车</string>
@@ -11,7 +11,7 @@
 
     <!-- 首页 -->
     <string name="saoma">扫一扫</string>
-    <string name="sousuo">请输入关键词，如：板蓝根...</string>
+    <string name="sousuo">请输入关键词.</string>
     <string name="sousuo2">请输入关键字</string>
     <string name="home_button1">医药</string>
     <string name="home_button2">特产</string>
@@ -87,7 +87,6 @@
     <string name="changjia">厂家:</string>
 
 
-
     <!-- 购物车 -->
     <string name="add_gouwu">加入购物车</string>
     <string name="goumai">立即购买</string>
@@ -108,7 +107,7 @@
     <string name="fapiao">发票信息</string>
     <string name="fapiao_xuanze">发票选择</string>
     <string name="fapiao_leixing">发票类型</string>
-    <string name="fapiao_yes">开发票</string>
+    <string name="fapiao_yes">发票明细</string>
     <string name="fapiao_mx">明细</string>
     <string name="fapiao_bg">办公用品</string>
     <string name="fapiao_yy">药品</string>
@@ -306,5 +305,10 @@
     <string name="error_app">APP出现未知错误，需重启！</string>
     <string name="double_tap_to_exit">再按一次退出程序</string>
     <string name="exit_account">退出当前用户</string>
+    <string name="order_info">市区两小时内送达，县城两日内到货。详情请见帮助中心的区域划分。</string>
+    <string name="order_point_info">。邮费：市区3元,县区5元；医药馆不包邮;生活馆市区满38元包邮，县区满58元包邮。\n消费1元送1积分，300积分抵1元，消费可用600积分。</string>
+    <!-- 物流 -->
+    <string name="logistic_null">没有获取物流信息</string>
+    <string name="title_activity_web_show">WebShowActivity</string>
 
 </resources>

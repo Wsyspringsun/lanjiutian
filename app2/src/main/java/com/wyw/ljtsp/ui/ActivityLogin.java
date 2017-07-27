@@ -3,7 +3,6 @@ package com.wyw.ljtsp.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -12,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wyw.ljtsp.R;
+import com.wyw.ljtsp.config.MyApplication;
 import com.wyw.ljtsp.utils.InputMethodUtils;
 
 import org.xutils.view.annotation.ContentView;

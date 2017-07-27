@@ -50,6 +50,8 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by Administrator on 2017/1/10 0010.
+ * ding dan xiangqing
+ * order details
  */
 
 @ContentView(R.layout.activity_order_info)
@@ -90,7 +92,7 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
     private TextView order_quxiao;
     @ViewInject(R.id.tuijian)
     private RecyclerView tuijian;
-    @ViewInject( R.id.tuijian_ll )
+    @ViewInject(R.id.tuijian_ll)
     private LinearLayout tuijian_ll;
 
     private List<OrderModelInfoMedicine.Goods> list;
@@ -99,15 +101,15 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
     private MyAdapter1 adapter1;
     private String orderId = "";
     private String name = "";
-    private String image="";
+    private String image = "";
     private String trade_id = "";
-    private String group_id="";
+    private String group_id = "";
     private static final int REQUEST_CODE_PERMISSION_CALL_PHONE = 1;
     private String order_status = "";
     private String phone = "";
     //客服
     String settingid0 = "lj_1000_1493167191869";
-    String settingid1="lj_1001_1496308413541";
+    String settingid1 = "lj_1001_1496308413541";
     String groupName = "蓝九天";// 客服组默认名称
 
     @Event(value = {R.id.header_return, R.id.order_quxiao, R.id.order_fuwu, R.id.order_wuliu, R.id.lianxi, R.id.boda,
@@ -120,41 +122,41 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 break;
 
             case R.id.order_quxiao:
-                if (order_status.equals( "D" )) {
-                    it = new Intent( ActivityOrderInfo.this, ActivityEvaluate.class );
-                    it.putExtra( "order_id", orderId );
-                    it.putExtra( "name", name );
-                    it.putExtra( "image", image );
-                    startActivity( it );
+                if (order_status.equals("D")) {
+                    it = new Intent(ActivityOrderInfo.this, ActivityEvaluate.class);
+                    it.putExtra("order_id", orderId);
+                    it.putExtra("name", name);
+                    it.putExtra("image", image);
+                    startActivity(it);
                 }
 
                 break;
 
             case R.id.order_fuwu:
-                startActivity( new Intent( ActivityOrderInfo.this, ActivityAfterMarket.class ) );
+                startActivity(new Intent(ActivityOrderInfo.this, ActivityAfterMarket.class));
                 break;
 
             case R.id.order_wuliu:
-                if (order_status.equals( "C" ) || order_status.equals( "D" ) || order_status.equals( "S" )) {
-                    it = new Intent( ActivityOrderInfo.this, ActivityLogistics.class );
-                    it.putExtra( "order_id", orderId );
-                    startActivity( it );
+                if (order_status.equals("C") || order_status.equals("D") || order_status.equals("S")) {
+                    it = new Intent(ActivityOrderInfo.this, ActivityLogistics.class);
+                    it.putExtra("order_id", orderId);
+                    startActivity(it);
                 }
 
                 break;
 
             case R.id.lianxi:
 //                openChat( model.getTitle(), "", settingid1, groupName, true, model.getCommodityId() );
-                if (!StringUtils.isEmpty( group_id )&&group_id.equals( "sxljt" )){
-                    openChat( "交易订单号：" + trade_id, "", settingid0, groupName, false, "" );
-                }else if (!StringUtils.isEmpty( group_id )){
-                    openChat( "交易订单号：" + trade_id, "", settingid1, groupName, false, "" );
+                if (!StringUtils.isEmpty(group_id) && group_id.equals("sxljt")) {
+                    openChat("交易订单号：" + trade_id, "", settingid0, groupName, false, "");
+                } else if (!StringUtils.isEmpty(group_id)) {
+                    openChat("交易订单号：" + trade_id, "", settingid1, groupName, false, "");
                 }
 
                 break;
 
             case R.id.boda:
-                if (StringUtils.isEmpty( phone )) {
+                if (StringUtils.isEmpty(phone)) {
 
                 } else {
                     call();
@@ -164,8 +166,8 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 break;
 
             case R.id.order_shanchu:
-                if (!StringUtils.isEmpty( trade_id )) {
-                    delete( trade_id );
+                if (!StringUtils.isEmpty(trade_id)) {
+                    delete(trade_id);
                 }
                 break;
         }
@@ -173,34 +175,34 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
-        title.setText( R.string.order_xiangqing );
+        title.setText(R.string.order_xiangqing);
 
-        tuijian_ll.setVisibility( View.GONE );
+        tuijian_ll.setVisibility(View.GONE);
 
-        setLoding( this, false );
-        getInfo( getIntent().getStringExtra( "id" ), "orderDetail" );
+        setLoding(this, false);
+        getInfo(getIntent().getStringExtra("id"), "orderDetail");
 
         adapter = new MyAdapter();
-        recyclerView.setLayoutManager( new LinearLayoutManager( this ) );
-        recyclerView.setItemAnimator( new DefaultItemAnimator() );
-        recyclerView.setAdapter( adapter );
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
 
-        tuijian.setLayoutManager( new GridLayoutManager( this, 2 ) );
-        tuijian.setItemAnimator( new DefaultItemAnimator() );
-        tuijian.addItemDecoration( new DividerGridItemDecoration( this ) );
+        tuijian.setLayoutManager(new GridLayoutManager(this, 2));
+        tuijian.setItemAnimator(new DefaultItemAnimator());
+        tuijian.addItemDecoration(new DividerGridItemDecoration(this));
 
         adapter1 = new MyAdapter1();
-        tuijian.addOnItemTouchListener( new OnItemClickListener() {
+        tuijian.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                Intent it = new Intent( ActivityOrderInfo.this, ActivityMedicinesInfo.class );
-                it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter1.getData().get( i ).getWAREID() );
-                startActivity( it );
+                Intent it = new Intent(ActivityOrderInfo.this, ActivityMedicinesInfo.class);
+                it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter1.getData().get(i).getWAREID());
+                startActivity(it);
             }
-        } );
-        tuijian.setAdapter( adapter1 );
+        });
+        tuijian.setAdapter(adapter1);
 
     }
 
@@ -211,67 +213,83 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
         infoTask = new BizDataAsyncTask<OrderModelInfoMedicine>() {
             @Override
             protected OrderModelInfoMedicine doExecute() throws ZYException, BizFailure {
-                Log.e( "****", data );
-                return GoodsBiz.getOrderInfo( data, op );
+                Log.e("****", data);
+                return GoodsBiz.getOrderInfo(data, op);
             }
 
             @Override
             protected void onExecuteSucceeded(OrderModelInfoMedicine orderModelInfoMedicine) {
-                address_name.setText( orderModelInfoMedicine.getUSER_ADDRESS().getCONSIGNEE_NAME() );
-                address_phone.setText( orderModelInfoMedicine.getUSER_ADDRESS().getCONSIGNEE_MOBILE() );
-                address_dizhi.setText( orderModelInfoMedicine.getUSER_ADDRESS_ID() );
-
-                dianpu.setText( orderModelInfoMedicine.getOID_GROUP_NAME() );
-                yunfei.setText( "￥" + orderModelInfoMedicine.getPOSTAGE() + "" );
-                dingdan.setText( "订单号：" + orderModelInfoMedicine.getORDER_TRADE_ID() );
-                dingdan1.setText( "创建时间：" + DateUtils.parseTime( orderModelInfoMedicine.getCREATE_DATE() + "" ) );
-                shangp_z.setText( "￥" + orderModelInfoMedicine.getGROUP_MONEY_ALL() + "" );
-                zongjia.setText( "￥" + orderModelInfoMedicine.getPAY_AMOUNT() );
-                jifen_d.setText( "￥" + orderModelInfoMedicine.getPOINT_MONEY() );
-                if (orderModelInfoMedicine.getCOMPLETE_DATE() != null) {
-                    dingdan2.setVisibility( View.VISIBLE );
-                    dingdan2.setText( "完成时间：" + DateUtils.parseTime( orderModelInfoMedicine.getCOMPLETE_DATE() + "" ) );
-                } else {
-                    dingdan2.setVisibility( View.GONE );
+                String userAddressId = orderModelInfoMedicine.getUSER_ADDRESS_ID();
+                String addr = "", uname = "", phone = "";
+                //分别显示 地址信息
+                if (userAddressId != null) {
+                    String[] addrInfo = userAddressId.split(" ");
+                    int len = addrInfo.length;
+                    if (len > 2) {
+                        phone = addrInfo[2] == null ? "" : addrInfo[2];
+                    }
+                    if (len > 1) {
+                        uname = addrInfo[1] == null ? "" : addrInfo[1];
+                    }
+                    if (len > 0) {
+                        addr = addrInfo[0] == null ? "" : addrInfo[0];
+                    }
                 }
-                if (!StringUtils.isEmpty( orderModelInfoMedicine.getINVOICE_TITLE() )) {
-                    fapiao.setVisibility( View.VISIBLE );
-                    fapiao.setText( "发票抬头：" + orderModelInfoMedicine.getINVOICE_TITLE() );
+                address_name.setText(uname);
+                address_phone.setText(phone);
+                address_dizhi.setText(addr);
+
+                dianpu.setText(orderModelInfoMedicine.getOID_GROUP_NAME());
+                yunfei.setText("￥" + orderModelInfoMedicine.getPOSTAGE() + "");
+                dingdan.setText("订单号：" + orderModelInfoMedicine.getORDER_TRADE_ID());
+                dingdan1.setText("创建时间：" + DateUtils.parseTime(orderModelInfoMedicine.getCREATE_DATE() + ""));
+                shangp_z.setText("￥" + orderModelInfoMedicine.getGROUP_MONEY_ALL() + "");
+                zongjia.setText("￥" + orderModelInfoMedicine.getPAY_AMOUNT());
+                jifen_d.setText("￥" + orderModelInfoMedicine.getPOINT_MONEY());
+                if (orderModelInfoMedicine.getCOMPLETE_DATE() != null) {
+                    dingdan2.setVisibility(View.VISIBLE);
+                    dingdan2.setText("完成时间：" + DateUtils.parseTime(orderModelInfoMedicine.getCOMPLETE_DATE() + ""));
                 } else {
-                    fapiao.setVisibility( View.GONE );
+                    dingdan2.setVisibility(View.GONE);
+                }
+                if (!StringUtils.isEmpty(orderModelInfoMedicine.getINVOICE_TITLE())) {
+                    fapiao.setVisibility(View.VISIBLE);
+                    fapiao.setText("发票抬头：" + orderModelInfoMedicine.getINVOICE_TITLE());
+                } else {
+                    fapiao.setVisibility(View.GONE);
                 }
 
                 switch (orderModelInfoMedicine.getSTATUS()) {
                     case "A":
-                        images.setImageDrawable( getResources().getDrawable( R.mipmap.daifukuan ) );
-                        order_wuliu.setVisibility( View.GONE );
+                        images.setImageDrawable(getResources().getDrawable(R.mipmap.daifukuan));
+                        order_wuliu.setVisibility(View.GONE);
                         break;
 
                     case "B":
-                        images.setImageDrawable( getResources().getDrawable( R.mipmap.daifahuo ) );
-                        order_wuliu.setVisibility( View.GONE );
+                        images.setImageDrawable(getResources().getDrawable(R.mipmap.daifahuo));
+                        order_wuliu.setVisibility(View.GONE);
                         break;
 
                     case "C":
-                        images.setImageDrawable( getResources().getDrawable( R.mipmap.daishouhuo ) );
+                        images.setImageDrawable(getResources().getDrawable(R.mipmap.daishouhuo));
                         break;
 
                     case "S":
-                        images.setImageDrawable( getResources().getDrawable( R.mipmap.daipingjia ) );
-                        order_quxiao.setVisibility( View.GONE );
+                        images.setImageDrawable(getResources().getDrawable(R.mipmap.daipingjia));
+                        order_quxiao.setVisibility(View.GONE);
                         break;
                     case "D":
-                        images.setImageDrawable( getResources().getDrawable( R.mipmap.daipingjia ) );
+                        images.setImageDrawable(getResources().getDrawable(R.mipmap.daipingjia));
                         break;
 
                     case "E":
-                        images.setImageDrawable( getResources().getDrawable( R.mipmap.guanbi ) );
+                        images.setImageDrawable(getResources().getDrawable(R.mipmap.guanbi));
                         break;
 
                 }
 
                 list = orderModelInfoMedicine.getDETAILS();
-                adapter.setNewData( list );
+                adapter.setNewData(list);
                 adapter.notifyDataSetChanged();
 
                 closeLoding();
@@ -282,8 +300,8 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 trade_id = orderModelInfoMedicine.getORDER_TRADE_ID();
                 order_status = orderModelInfoMedicine.getSTATUS();
                 phone = orderModelInfoMedicine.getCONTACT_TEL();
-                image=orderModelInfoMedicine.getDETAILS().get( 0 ).getIMG_PATH();
-                group_id=orderModelInfoMedicine.getORDER_GROUP_ID();
+                image = orderModelInfoMedicine.getDETAILS().get(0).getIMG_PATH();
+                group_id = orderModelInfoMedicine.getORDER_GROUP_ID();
 
 //                getrecommend( PreferenceCache.getToken(), trade_id );
 
@@ -303,30 +321,30 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
         deleteTask = new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                Log.e( "trade_id", data );
-                return GoodsBiz.orderOperation( data, "delOrder" );
+                Log.e("trade_id", data);
+                return GoodsBiz.orderOperation(data, "delOrder");
             }
 
             @Override
             protected void onExecuteSucceeded(Integer integer) {
                 if (integer == 3) {
-                    ToastUtil.show( ActivityOrderInfo.this, getResources().getString( R.string.delete_succeed ) );
-                    Intent it = new Intent( ActivityOrderInfo.this, ActivityOrder.class );
-                    if (order_status.equals( "A" )) {
-                        it.putExtra( "index", 1 );
-                    } else if (order_status.equals( "B" )) {
-                        it.putExtra( "index", 2 );
-                    } else if (order_status.equals( "C" )) {
-                        it.putExtra( "index", 3 );
-                    } else if (order_status.equals( "D" )) {
-                        it.putExtra( "index", 4 );
+                    ToastUtil.show(ActivityOrderInfo.this, getResources().getString(R.string.delete_succeed));
+                    Intent it = new Intent(ActivityOrderInfo.this, ActivityOrder.class);
+                    if (order_status.equals("A")) {
+                        it.putExtra("index", 1);
+                    } else if (order_status.equals("B")) {
+                        it.putExtra("index", 2);
+                    } else if (order_status.equals("C")) {
+                        it.putExtra("index", 3);
+                    } else if (order_status.equals("D")) {
+                        it.putExtra("index", 4);
                     } else {
-                        it.putExtra( "index", 0 );
+                        it.putExtra("index", 0);
                     }
-                    Log.e( "asdasdasda", order_status );
+                    Log.e("asdasdasda", order_status);
                     finish();
-                    AppManager.destoryActivity( "order" );
-                    startActivity( it );
+                    AppManager.destoryActivity("order");
+                    startActivity(it);
                 }
             }
 
@@ -367,20 +385,20 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
     private class MyAdapter1 extends BaseQuickAdapter<RecommendModel> {
 
         public MyAdapter1() {
-            super( R.layout.item_goods_grid, recommends );
+            super(R.layout.item_goods_grid, recommends);
         }
 
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, RecommendModel recommendModel) {
-            baseViewHolder.setText( R.id.goods_title, StringUtils.deletaFirst( recommendModel.getWARENAME() ) )
-                    .setText( R.id.money, recommendModel.getSALEPRICE() + "" );
+            baseViewHolder.setText(R.id.goods_title, StringUtils.deletaFirst(recommendModel.getWARENAME()))
+                    .setText(R.id.money, recommendModel.getSALEPRICE() + "");
 
-            SimpleDraweeView goods_img = baseViewHolder.getView( R.id.item_head_img );
-            if (StringUtils.isEmpty( recommendModel.getIMG_PATH() )) {
-                goods_img.setImageURI( Uri.parse( "" ) );
+            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_head_img);
+            if (StringUtils.isEmpty(recommendModel.getIMG_PATH())) {
+                goods_img.setImageURI(Uri.parse(""));
             } else {
-                goods_img.setImageURI( Uri.parse( recommendModel.getIMG_PATH() ) );
+                goods_img.setImageURI(Uri.parse(recommendModel.getIMG_PATH()));
             }
 
         }
@@ -388,26 +406,26 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult( requestCode, permissions, grantResults );
-        EasyPermissions.onRequestPermissionsResult( requestCode, permissions, grantResults, this );
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     //权限成功
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-        Log.e( "camera", "成功获取权限" );
+        Log.e("camera", "成功获取权限");
     }
 
     //权限失败
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
 
-        if (EasyPermissions.somePermissionPermanentlyDenied( this, perms )) {
-            new AppSettingsDialog.Builder( this, "需要开启此权限" )
-                    .setTitle( getString( R.string.alert_tishi ) )
-                    .setPositiveButton( "设置" )
-                    .setNegativeButton( "取消", null )
-                    .setRequestCode( 100 )
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this, "需要开启此权限")
+                    .setTitle(getString(R.string.alert_tishi))
+                    .setPositiveButton("设置")
+                    .setNegativeButton("取消", null)
+                    .setRequestCode(100)
                     .build()
                     .show();
         }
@@ -415,65 +433,65 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult( requestCode, resultCode, data );
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
-            Log.e( "*****", "权限获得" );
+            Log.e("*****", "权限获得");
         }
     }
 
 
     @AfterPermissionGranted(REQUEST_CODE_PERMISSION_CALL_PHONE)
     private void call() {
-        if (EasyPermissions.hasPermissions( this, Manifest.permission.CALL_PHONE )) {
-            Log.e( "****", "是否有权限" + EasyPermissions.hasPermissions( this, Manifest.permission.CALL_PHONE ) + "" );
-            AlertDialog.Builder builder = new AlertDialog.Builder( ActivityOrderInfo.this );
-            builder.setMessage( "是否拨打电话：" + phone );
-            builder.setNegativeButton( "取消", null );
-            builder.setPositiveButton( "确定", new DialogInterface.OnClickListener() {
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.CALL_PHONE)) {
+            Log.e("****", "是否有权限" + EasyPermissions.hasPermissions(this, Manifest.permission.CALL_PHONE) + "");
+            AlertDialog.Builder builder = new AlertDialog.Builder(ActivityOrderInfo.this);
+            builder.setMessage("是否拨打电话：" + phone);
+            builder.setNegativeButton("取消", null);
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     Intent intent = new Intent();
-                    intent.setAction( Intent.ACTION_CALL );
-                    intent.setData( Uri.parse( "tel:" + phone ) );
+                    intent.setAction(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:" + phone));
                     //开启系统拨号器
-                    startActivity( intent );
+                    startActivity(intent);
                 }
-            } );
+            });
             builder.create().show();
         } else {
-            EasyPermissions.requestPermissions( this, "需要以下权限:拨打电话。", REQUEST_CODE_PERMISSION_CALL_PHONE, Manifest.permission.CALL_PHONE );
+            EasyPermissions.requestPermissions(this, "需要以下权限:拨打电话。", REQUEST_CODE_PERMISSION_CALL_PHONE, Manifest.permission.CALL_PHONE);
         }
     }
 
     //商品adapter
     private class MyAdapter extends BaseQuickAdapter<OrderModelInfoMedicine.Goods> {
         public MyAdapter() {
-            super( R.layout.item_orderinfor_goods, list );
+            super(R.layout.item_orderinfor_goods, list);
         }
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, final OrderModelInfoMedicine.Goods goods) {
-            if (StringUtils.isEmpty( goods.getCOMMODITY_COLOR() )) {
-                baseViewHolder.setText( R.id.size, " 规格：" + goods.getCOMMODITY_SIZE() );
+            if (StringUtils.isEmpty(goods.getCOMMODITY_COLOR())) {
+                baseViewHolder.setText(R.id.size, " 规格：" + goods.getCOMMODITY_SIZE());
             } else {
-                baseViewHolder.setText( R.id.size, "产地：" + goods.getCOMMODITY_COLOR() + " ;规格：" + goods.getCOMMODITY_SIZE() );
+                baseViewHolder.setText(R.id.size, "产地：" + goods.getCOMMODITY_COLOR() + " ;规格：" + goods.getCOMMODITY_SIZE());
             }
-            baseViewHolder.setText( R.id.title, StringUtils.deletaFirst( goods.getCOMMODITY_NAME() ) )
-                    .setText( R.id.money, "￥" + goods.getCOST_MONEY() )
-                    .setText( R.id.number, "X" + goods.getEXCHANGE_QUANLITY() )
+            baseViewHolder.setText(R.id.title, StringUtils.deletaFirst(goods.getCOMMODITY_NAME()))
+                    .setText(R.id.money, "￥" + goods.getCOST_MONEY())
+                    .setText(R.id.number, "X" + goods.getEXCHANGE_QUANLITY())
                     .setOnClickListener(R.id.shouhou, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent it=new Intent(ActivityOrderInfo.this,ActivityAfterMarket.class);
-                            it.putExtra("good_id",goods.getCOMMODITY_ORDER_ID());
-                            it.putExtra("good_money",goods.getCOST_MONEY()+"");
+                            Intent it = new Intent(ActivityOrderInfo.this, ActivityAfterMarket.class);
+                            it.putExtra("good_id", goods.getCOMMODITY_ORDER_ID());
+                            it.putExtra("good_money", goods.getCOST_MONEY() + "");
                             startActivity(it);
                         }
                     });
 
-            SimpleDraweeView simpleDraweeView = baseViewHolder.getView( R.id.iv_adapter_list_pic );
-            if (!StringUtils.isEmpty( goods.getIMG_PATH() )) {
-                simpleDraweeView.setImageURI( Uri.parse( goods.getIMG_PATH() ) );
+            SimpleDraweeView simpleDraweeView = baseViewHolder.getView(R.id.iv_adapter_list_pic);
+            if (!StringUtils.isEmpty(goods.getIMG_PATH())) {
+                simpleDraweeView.setImageURI(Uri.parse(goods.getIMG_PATH()));
             }
         }
     }

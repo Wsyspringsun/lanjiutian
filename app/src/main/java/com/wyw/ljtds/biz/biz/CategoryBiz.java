@@ -20,6 +20,8 @@ import com.wyw.ljtds.model.MedicineTypeSecondModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.xiaoneng.uiutils.XNUIUtils;
+
 /**
  * Created by Administrator on 2017/3/1 0001.
  */
@@ -34,18 +36,18 @@ public class CategoryBiz extends BaseBiz {
      */
     public static List<CommodityTypeFirstModel> getCommodityType() throws BizFailure, ZYException {
 
-        SoapProcessor ksoap2 = new SoapProcessor( "Service", "getCommodityTypeList", false );
-        ksoap2.setProperty( "parentId", "0", PropertyType.TYPE_STRING );
-        ksoap2.setProperty( "parentLvl", "1", PropertyType.TYPE_STRING );
+        SoapProcessor ksoap2 = new SoapProcessor("Service", "getCommodityTypeList", false);
+        ksoap2.setProperty("parentId", "0", PropertyType.TYPE_STRING);
+        ksoap2.setProperty("parentLvl", "1", PropertyType.TYPE_STRING);
 
         JsonElement element = ksoap2.request();
         Gson gson = new GsonBuilder().create();
 
         TypeToken<List<CommodityTypeFirstModel>> tt = new TypeToken<List<CommodityTypeFirstModel>>() {
         };
-        List<CommodityTypeFirstModel> fs1 = gson.fromJson( element, tt.getType() );
+        List<CommodityTypeFirstModel> fs1 = gson.fromJson(element, tt.getType());
         List<CommodityTypeFirstModel> bms1 = new ArrayList<CommodityTypeFirstModel>();
-        bms1.addAll( fs1 );
+        bms1.addAll(fs1);
         return bms1;
 
     }
@@ -60,16 +62,16 @@ public class CategoryBiz extends BaseBiz {
      */
     public static List<MedicineTypeFirstModel> getMedicineType() throws BizFailure, ZYException {
 
-        SoapProcessor ksoap2 = new SoapProcessor( "Service", "getRootMedicineType", false );
+        SoapProcessor ksoap2 = new SoapProcessor("Service", "getRootMedicineType", false);
 
         JsonElement element = ksoap2.request();
         Gson gson = new GsonBuilder().create();
 
         TypeToken<List<MedicineTypeFirstModel>> tt = new TypeToken<List<MedicineTypeFirstModel>>() {
         };
-        List<MedicineTypeFirstModel> fs = gson.fromJson( element, tt.getType() );
+        List<MedicineTypeFirstModel> fs = gson.fromJson(element, tt.getType());
         List<MedicineTypeFirstModel> bms = new ArrayList<MedicineTypeFirstModel>();
-        bms.addAll( fs );
+        bms.addAll(fs);
         return bms;
 
     }
@@ -85,19 +87,19 @@ public class CategoryBiz extends BaseBiz {
      */
     public static List<CommodityTypeSecondModel> getCommodityTypeList(String parentId) throws BizFailure, ZYException {
 
-        SoapProcessor ksoap = new SoapProcessor( "Service", "getCommodityTypeList", false );
+        SoapProcessor ksoap = new SoapProcessor("Service", "getCommodityTypeList", false);
 
-        ksoap.setProperty( "parentId", parentId, PropertyType.TYPE_STRING );
-        ksoap.setProperty( "parentLvl", "2", PropertyType.TYPE_STRING );
+        ksoap.setProperty("parentId", parentId, PropertyType.TYPE_STRING);
+        ksoap.setProperty("parentLvl", "2", PropertyType.TYPE_STRING);
 
         JsonElement element = ksoap.request();
         Gson gson = new GsonBuilder().create();
 
         TypeToken<List<CommodityTypeSecondModel>> tt = new TypeToken<List<CommodityTypeSecondModel>>() {
         };
-        List<CommodityTypeSecondModel> fs = gson.fromJson( element, tt.getType() );
+        List<CommodityTypeSecondModel> fs = gson.fromJson(element, tt.getType());
         List<CommodityTypeSecondModel> bms = new ArrayList<CommodityTypeSecondModel>();
-        bms.addAll( fs );
+        bms.addAll(fs);
         return bms;
     }
 
@@ -114,19 +116,19 @@ public class CategoryBiz extends BaseBiz {
     public static List<MedicineTypeSecondModel> getMedicineTypeList(String parentId, String parentLvl)
             throws BizFailure, ZYException {
 
-        SoapProcessor ksoap = new SoapProcessor( "Service", "getChildrenMedicineType", false );
+        SoapProcessor ksoap = new SoapProcessor("Service", "getChildrenMedicineType", false);
 
-        ksoap.setProperty( "parentId", parentId, PropertyType.TYPE_STRING );
-        ksoap.setProperty( "parentLvl", parentLvl, PropertyType.TYPE_STRING );
+        ksoap.setProperty("parentId", parentId, PropertyType.TYPE_STRING);
+        ksoap.setProperty("parentLvl", parentLvl, PropertyType.TYPE_STRING);
 
         JsonElement element = ksoap.request();
         Gson gson = new GsonBuilder().create();
 
         TypeToken<List<MedicineTypeSecondModel>> tt = new TypeToken<List<MedicineTypeSecondModel>>() {
         };
-        List<MedicineTypeSecondModel> fs = gson.fromJson( element, tt.getType() );
+        List<MedicineTypeSecondModel> fs = gson.fromJson(element, tt.getType());
         List<MedicineTypeSecondModel> bms = new ArrayList<MedicineTypeSecondModel>();
-        bms.addAll( fs );
+        bms.addAll(fs);
 //        Log.i(AppConfig.ERR_TAG, );
         return bms;
     }
@@ -147,21 +149,21 @@ public class CategoryBiz extends BaseBiz {
     public static List<CommodityListModel> getCommodityList(String classId, String orderby, String keyword, String startIdx, String pageSize)
             throws BizFailure, ZYException {
 
-        SoapProcessor ksoap2 = new SoapProcessor( "Service", "getCommodityList", false );
-        ksoap2.setProperty( "classId", classId, PropertyType.TYPE_STRING );
-        ksoap2.setProperty( "orderby", orderby, PropertyType.TYPE_STRING );
-        ksoap2.setProperty( "keyword", keyword, PropertyType.TYPE_STRING );
-        ksoap2.setProperty( "startIdx", startIdx, PropertyType.TYPE_STRING );
-        ksoap2.setProperty( "pageSize", pageSize, PropertyType.TYPE_STRING );
+        SoapProcessor ksoap2 = new SoapProcessor("Service", "getCommodityList", false);
+        ksoap2.setProperty("classId", classId, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("orderby", orderby, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("keyword", keyword, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("startIdx", startIdx, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("pageSize", pageSize, PropertyType.TYPE_STRING);
 
         JsonElement element = ksoap2.request();
         Gson gson = new GsonBuilder().create();
 
         TypeToken<List<CommodityListModel>> tt = new TypeToken<List<CommodityListModel>>() {
         };
-        List<CommodityListModel> fs = gson.fromJson( element, tt.getType() );
+        List<CommodityListModel> fs = gson.fromJson(element, tt.getType());
         List<CommodityListModel> bms = new ArrayList<CommodityListModel>();
-        bms.addAll( fs );
+        bms.addAll(fs);
         return bms;
 
     }
@@ -181,22 +183,42 @@ public class CategoryBiz extends BaseBiz {
      */
     public static List<MedicineListModel> getMedicineList(String classId, String orderby, String keyword, String startIdx, String pageSize)
             throws BizFailure, ZYException {
-
-        SoapProcessor ksoap2 = new SoapProcessor( "Service", "getMedicineList", false );
-        ksoap2.setProperty( "classId", classId, PropertyType.TYPE_STRING );
-        ksoap2.setProperty( "orderby", orderby, PropertyType.TYPE_STRING );
-        ksoap2.setProperty( "keyword", keyword, PropertyType.TYPE_STRING );
-        ksoap2.setProperty( "startIdx", startIdx, PropertyType.TYPE_STRING );
-        ksoap2.setProperty( "pageSize", pageSize, PropertyType.TYPE_STRING );
+        SoapProcessor ksoap2 = new SoapProcessor("Service", "getMedicineList", false);
+        ksoap2.setProperty("classId", classId, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("orderby", orderby, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("keyword", keyword, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("startIdx", startIdx, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("pageSize", pageSize, PropertyType.TYPE_STRING);
 
         JsonElement element = ksoap2.request();
         Gson gson = new GsonBuilder().create();
 
         TypeToken<List<MedicineListModel>> tt = new TypeToken<List<MedicineListModel>>() {
         };
-        List<MedicineListModel> fs = gson.fromJson( element, tt.getType() );
+        List<MedicineListModel> fs = gson.fromJson(element, tt.getType());
         List<MedicineListModel> bms = new ArrayList<MedicineListModel>();
-        bms.addAll( fs );
+        bms.addAll(fs);
+        return bms;
+    }
+
+
+    public static List<MedicineListModel> findMedicineList(String classId, String orderby, String startIdx, String pageSize)
+            throws BizFailure, ZYException {
+
+        SoapProcessor ksoap2 = new SoapProcessor("Service", "findMedicine", false);
+        ksoap2.setProperty("classId", classId, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("orderby", orderby, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("firstIdx", startIdx, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("maxCount", pageSize, PropertyType.TYPE_STRING);
+
+        JsonElement element = ksoap2.request();
+        Gson gson = new GsonBuilder().create();
+
+        TypeToken<List<MedicineListModel>> tt = new TypeToken<List<MedicineListModel>>() {
+        };
+        List<MedicineListModel> fs = gson.fromJson(element, tt.getType());
+        List<MedicineListModel> bms = new ArrayList<MedicineListModel>();
+        bms.addAll(fs);
         return bms;
     }
 

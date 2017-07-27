@@ -42,29 +42,32 @@ public class FragmentLife extends BaseFragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated( savedInstanceState );
-        mAdapter = new MyListAdapter( getActivity() );
-        mListView.setAdapter( mAdapter );
-        mListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+        super.onActivityCreated(savedInstanceState);
+
+
+        mAdapter = new MyListAdapter(getActivity());
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                mAdapter.setCurPositon( position );
+                mAdapter.setCurPositon(position);
                 mAdapter.notifyDataSetChanged();
 
-                setLoding( getActivity(), false );
                 getCommodity();
-                mListView.smoothScrollToPositionFromTop( position, (parent.getHeight() - view.getHeight()) / 2 );
+                mListView.smoothScrollToPositionFromTop(position, (parent.getHeight() - view.getHeight()) / 2);
 
             }
-        } );
+        });
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint( isVisibleToUser );
-        if (isVisibleToUser){
-            getType();
-        }else {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (mAdapter.isEmpty())
+                getType();
+        } else {
+
 
         }
     }
@@ -82,9 +85,8 @@ public class FragmentLife extends BaseFragment {
             protected void onExecuteSucceeded(List<CommodityTypeFirstModel> commodityTypeFirstModels) {
                 data = new ArrayList<>();
                 data = commodityTypeFirstModels;
-                mAdapter.addItems( data );
+                mAdapter.addItems(data);
                 mAdapter.notifyDataSetChanged();
-
 
                 getCommodity();
             }
@@ -104,14 +106,15 @@ public class FragmentLife extends BaseFragment {
         getCommidityTask = new BizDataAsyncTask<List<CommodityTypeSecondModel>>() {
             @Override
             protected List<CommodityTypeSecondModel> doExecute() throws ZYException, BizFailure {
-                return CategoryBiz.getCommodityTypeList( data.get( mAdapter.getCurPositon() ).getCommodityTypeId() );
+                if (data == null) return null;
+                return CategoryBiz.getCommodityTypeList(data.get(mAdapter.getCurPositon()).getCommodityTypeId());
             }
 
             @Override
             protected void onExecuteSucceeded(List<CommodityTypeSecondModel> commodityTypeSecondModels) {
-                recycler_rightAdapter = new Recycler_rightAdapter( getActivity(), commodityTypeSecondModels );
-                mRight_recycler.setLayoutManager( new LinearLayoutManager( getActivity() ) );
-                mRight_recycler.setAdapter( recycler_rightAdapter );
+                recycler_rightAdapter = new Recycler_rightAdapter(getActivity(), commodityTypeSecondModels);
+                mRight_recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                mRight_recycler.setAdapter(recycler_rightAdapter);
                 recycler_rightAdapter.notifyDataSetChanged();
 
                 closeLoding();
@@ -122,6 +125,7 @@ public class FragmentLife extends BaseFragment {
                 closeLoding();
             }
         };
+        setLoding(getActivity(), false);
         getCommidityTask.execute();
     }
 }

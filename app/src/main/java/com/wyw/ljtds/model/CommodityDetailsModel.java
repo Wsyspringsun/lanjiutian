@@ -19,6 +19,8 @@ public class CommodityDetailsModel extends BaseModel {
     private String title;
     //点击量
     private int clickNum;
+    //评价数量
+    private int EVALUATE_CNT;
     //品牌
     private String commodityBrand;
     //商品概述
@@ -160,6 +162,14 @@ public class CommodityDetailsModel extends BaseModel {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public int getEVALUATE_CNT() {
+        return EVALUATE_CNT;
+    }
+
+    public void setEVALUATE_CNT(int EVALUATE_CNT) {
+        this.EVALUATE_CNT = EVALUATE_CNT;
     }
 
     public class ColorList{

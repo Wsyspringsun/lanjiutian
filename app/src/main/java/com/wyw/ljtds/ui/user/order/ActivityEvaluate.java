@@ -77,7 +77,7 @@ public class ActivityEvaluate extends BaseActivity implements BGASortableNinePho
     private StarBarView starBarView4;
     @ViewInject(R.id.star5)
     private StarBarView starBarView5;
-    @ViewInject( R.id.iv_adapter_list_pic)
+    @ViewInject(R.id.iv_adapter_list_pic)
     private SimpleDraweeView iv_adapter_list_pic;
 
 
@@ -99,7 +99,6 @@ public class ActivityEvaluate extends BaseActivity implements BGASortableNinePho
                 break;
 
             case R.id.header_edit:
-
                 ArrayList list = mPhotosSnpl.getData();
 //                for (int i = 0; i < list.size(); i++) {
 //                    Log.e( "***", list.get( i ).toString() );
@@ -107,26 +106,26 @@ public class ActivityEvaluate extends BaseActivity implements BGASortableNinePho
 
                 image = new String[list.size()];
                 for (int i = 0; i < list.size(); i++) {
-                    Bitmap bitmap = Utils.getSmallBitmap( list.get( i ).toString() );
+                    Bitmap bitmap = Utils.getSmallBitmap(list.get(i).toString());
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    bitmap.compress( Bitmap.CompressFormat.JPEG, 40, outputStream );
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 40, outputStream);
                     byte[] b = outputStream.toByteArray();
-                    String str = new String( Base64.encode( b ) );  //进行Base64编码
+                    String str = new String(Base64.encode(b));  //进行Base64编码
                     image[i] = str;
                 }
 
-                model.setBUSINESS_DELIVERY( (int)starBarView4.getStarRating()+"" );
-                model.setBUSINESS_SERVE( (int)starBarView3.getStarRating() + "" );
-                model.setDESCRIBE_IDENTICAL( (int)starBarView1.getStarRating() + "" );
-                model.setEVALUATE_GRADE( index + "" );
-                model.setLOGISTICS_DELIVERY( (int)starBarView5.getStarRating() + "" );
-                model.setLOGISTICS_SERVE( (int)starBarView2.getStarRating() + "" );
-                model.setVALID_FLG( "0" );
-                model.setEVALUATE_CONTGENT( mContentEt.getText().toString().trim() );
-                model.setIMG( image );
-                String json = GsonUtils.Bean2Json( model );
+                model.setBUSINESS_DELIVERY((int) starBarView4.getStarRating() + "");
+                model.setBUSINESS_SERVE((int) starBarView3.getStarRating() + "");
+                model.setDESCRIBE_IDENTICAL((int) starBarView1.getStarRating() + "");
+                model.setEVALUATE_GRADE(index + "");
+                model.setLOGISTICS_DELIVERY((int) starBarView5.getStarRating() + "");
+                model.setLOGISTICS_SERVE((int) starBarView2.getStarRating() + "");
+                model.setVALID_FLG("0");
+                model.setEVALUATE_CONTGENT(mContentEt.getText().toString().trim());
+                model.setIMG(image);
+                String json = GsonUtils.Bean2Json(model);
 
-                writeEvaluate( json, "create" );
+                writeEvaluate(json, "create");
 
 
                 break;
@@ -147,29 +146,29 @@ public class ActivityEvaluate extends BaseActivity implements BGASortableNinePho
                 break;
         }
 
-        select( index );
+        select(index);
     }
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
-        title.setText( "商品评价" );
-        submit.setText( getString( R.string.tijiao ) );
-        submit.setTextColor( getResources().getColor( R.color.base_bar ) );
+        title.setText("商品评价");
+        submit.setText(getString(R.string.tijiao));
+        submit.setTextColor(getResources().getColor(R.color.base_bar));
 
 
         // 设置拖拽排序控件的代理
-        mPhotosSnpl.setDelegate( this );
+        mPhotosSnpl.setDelegate(this);
 
         model = new WriteEvaluateModel();
-        model.setCOMMODITY_ORDER_ID( getIntent().getStringExtra( "order_id" ) );
-        if (!StringUtils.isEmpty( getIntent().getStringExtra( "name" ) )){
-            group_name.setText( getIntent().getStringExtra( "name" ) );
+        model.setCOMMODITY_ORDER_ID(getIntent().getStringExtra(FragmentOrderList.TAG_GROUP_ORDER_ID));
+        if (!StringUtils.isEmpty(getIntent().getStringExtra("name"))) {
+            group_name.setText(getIntent().getStringExtra("name"));
         }
-        if (!StringUtils.isEmpty( getIntent().getStringExtra( "image" ) )){
-            iv_adapter_list_pic.setImageURI( Uri.parse(getIntent().getStringExtra( "image" )  ) );
+        if (!StringUtils.isEmpty(getIntent().getStringExtra("image"))) {
+            iv_adapter_list_pic.setImageURI(Uri.parse(getIntent().getStringExtra("image")));
         }
 
 
@@ -185,34 +184,34 @@ public class ActivityEvaluate extends BaseActivity implements BGASortableNinePho
     //删除照片
     @Override
     public void onClickDeleteNinePhotoItem(BGASortableNinePhotoLayout sortableNinePhotoLayout, View view, int position, String model, ArrayList<String> models) {
-        mPhotosSnpl.removeItem( position );
+        mPhotosSnpl.removeItem(position);
     }
 
     @Override
     public void onClickNinePhotoItem(BGASortableNinePhotoLayout sortableNinePhotoLayout, View view, int position, String model, ArrayList<String> models) {
-        startActivityForResult( BGAPhotoPickerPreviewActivity.newIntent( this, mPhotosSnpl.getMaxItemCount(), models, models, position, false ), REQUEST_CODE_PHOTO_PREVIEW );
+        startActivityForResult(BGAPhotoPickerPreviewActivity.newIntent(this, mPhotosSnpl.getMaxItemCount(), models, models, position, false), REQUEST_CODE_PHOTO_PREVIEW);
     }
 
 
     private void choicePhotoWrapper() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-        Log.e( "***", "是否有权限"+EasyPermissions.hasPermissions( this, perms ) );
-        if (EasyPermissions.hasPermissions( this, perms )) {
+        Log.e("***", "是否有权限" + EasyPermissions.hasPermissions(this, perms));
+        if (EasyPermissions.hasPermissions(this, perms)) {
             //拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话就没有拍照功能
-            File takePhotoDir = new File( AppConfig.EXT_STORAGE_ROOT, AppConfig.CACHE_PIC_ROOT_NAME );
-            startActivityForResult( BGAPhotoPickerActivity.newIntent( this, takePhotoDir, mPhotosSnpl.getMaxItemCount() - mPhotosSnpl.getItemCount(), null, false ), REQUEST_CODE_CHOOSE_PHOTO );
+            File takePhotoDir = new File(AppConfig.EXT_STORAGE_ROOT, AppConfig.CACHE_PIC_ROOT_NAME);
+            startActivityForResult(BGAPhotoPickerActivity.newIntent(this, takePhotoDir, mPhotosSnpl.getMaxItemCount() - mPhotosSnpl.getItemCount(), null, false), REQUEST_CODE_CHOOSE_PHOTO);
         } else {
-            EasyPermissions.requestPermissions( this, "图片选择需要以下权限:拍照,浏览本地图片。", REQUEST_CODE_PERMISSION_PHOTO_PICKER, perms );
+            EasyPermissions.requestPermissions(this, "图片选择需要以下权限:拍照,浏览本地图片。", REQUEST_CODE_PERMISSION_PHOTO_PICKER, perms);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult( requestCode, resultCode, data );
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CHOOSE_PHOTO) {
-            mPhotosSnpl.addMoreData( BGAPhotoPickerActivity.getSelectedImages( data ) );
+            mPhotosSnpl.addMoreData(BGAPhotoPickerActivity.getSelectedImages(data));
         } else if (requestCode == REQUEST_CODE_PHOTO_PREVIEW) {
-            mPhotosSnpl.setData( BGAPhotoPickerPreviewActivity.getSelectedImages( data ) );
+            mPhotosSnpl.setData(BGAPhotoPickerPreviewActivity.getSelectedImages(data));
         }
     }
 
@@ -221,36 +220,36 @@ public class ActivityEvaluate extends BaseActivity implements BGASortableNinePho
      */
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-        Log.e( "camera", "成功获取权限" );
+        Log.e("camera", "成功获取权限");
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         if (requestCode == REQUEST_CODE_PERMISSION_PHOTO_PICKER) {
-            ToastUtil.show( this, "您拒绝了「图片选择」所需要的相关权限!");
-            Log.e( "*********",perms.toString()  );
+            ToastUtil.show(this, "您拒绝了「图片选择」所需要的相关权限!");
+            Log.e("*********", perms.toString());
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult( requestCode, permissions, grantResults );
-        EasyPermissions.onRequestPermissionsResult( requestCode, permissions, grantResults, this );
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
 
     private void select(int index) {
         switch (index) {
             case 1:
-                haoping.setImageDrawable( getResources().getDrawable( R.mipmap.pingjia_hao1 ) );
+                haoping.setImageDrawable(getResources().getDrawable(R.mipmap.pingjia_hao1));
                 break;
 
             case 2:
-                zhongping.setImageDrawable( getResources().getDrawable( R.mipmap.pingjia_zhong1 ) );
+                zhongping.setImageDrawable(getResources().getDrawable(R.mipmap.pingjia_zhong1));
                 break;
 
             case 3:
-                chaping.setImageDrawable( getResources().getDrawable( R.mipmap.pingjia_cha1 ) );
+                chaping.setImageDrawable(getResources().getDrawable(R.mipmap.pingjia_cha1));
                 break;
         }
     }
@@ -258,9 +257,9 @@ public class ActivityEvaluate extends BaseActivity implements BGASortableNinePho
 
     //重置
     private void rest() {
-        haoping.setImageDrawable( getResources().getDrawable( R.mipmap.pingjia_hao2 ) );
-        zhongping.setImageDrawable( getResources().getDrawable( R.mipmap.pingjia_zhong2 ) );
-        chaping.setImageDrawable( getResources().getDrawable( R.mipmap.pingjia_cha2 ) );
+        haoping.setImageDrawable(getResources().getDrawable(R.mipmap.pingjia_hao2));
+        zhongping.setImageDrawable(getResources().getDrawable(R.mipmap.pingjia_zhong2));
+        chaping.setImageDrawable(getResources().getDrawable(R.mipmap.pingjia_cha2));
     }
 
     BizDataAsyncTask<String> writeTask;
@@ -269,16 +268,18 @@ public class ActivityEvaluate extends BaseActivity implements BGASortableNinePho
         writeTask = new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
-                Log.e( "*****", data );
-                return GoodsBiz.writeEvaluate( data, op );
+                Log.e(AppConfig.ERR_TAG, data + ":" + op);
+                return GoodsBiz.writeEvaluate(data, op);
             }
 
             @Override
             protected void onExecuteSucceeded(String s) {
-                Intent intent = new Intent(ActivityEvaluate.this,ActivityOrder.class);
-                intent.putExtra( "index", 0 );
+                Log.e(AppConfig.ERR_TAG, "onExecuteSucceeded:" + s);
+//                Intent intent = new Intent(ActivityEvaluate.this,ActivityOrder.class);
+//                intent.putExtra( "index", 0 );
+                ToastUtil.show(ActivityEvaluate.this,"评价成功");
                 finish();
-                startActivity( intent );
+//                startActivity( intent );
             }
 
             @Override

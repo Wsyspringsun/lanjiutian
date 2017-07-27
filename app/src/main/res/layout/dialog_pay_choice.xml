@@ -192,7 +192,7 @@
                 android:layout_marginTop="@dimen/x10"
                 android:background="@drawable/pay_choice_text_background"
                 android:padding="@dimen/x8"
-                android:text="市区两小时内送达，县城两日内到货。详情请见帮助中心的区域划分。"
+                android:text="@string/order_info"
                 android:textColor="@color/font_black2"
                 android:textSize="12sp"/>
 

@@ -9,10 +9,12 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.wyw.ljtds.R;
+import com.wyw.ljtds.config.AppConfig;
 
 
 /**

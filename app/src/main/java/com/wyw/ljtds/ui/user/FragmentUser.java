@@ -30,7 +30,9 @@ import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.RecommendModel;
 import com.wyw.ljtds.model.UserGridleModel;
 import com.wyw.ljtds.model.UserModel;
+import com.wyw.ljtds.ui.base.ActivityWebView;
 import com.wyw.ljtds.ui.base.BaseFragment;
+import com.wyw.ljtds.ui.base.LazyLoadFragment;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.ui.user.help.ActivityHelp;
 import com.wyw.ljtds.ui.user.manage.ActivityManage;
@@ -53,7 +55,7 @@ import java.util.List;
  */
 
 @ContentView(R.layout.fragment_user)
-public class FragmentUser extends BaseFragment {
+public class FragmentUser extends LazyLoadFragment {
     @ViewInject(R.id.gridview)
     private MyGridView gridView;
     @ViewInject(R.id.name)
@@ -82,53 +84,53 @@ public class FragmentUser extends BaseFragment {
             R.id.order_daiping, R.id.order_shouhou, R.id.zhanghuguanli, R.id.user_xiaoxi, R.id.user_shezhi,
             R.id.all_order})
     private void onclick(View view) {
-        if (user!=null){
+        if (user != null) {
             Intent it = null;
             switch (view.getId()) {
                 case R.id.all_order://所有订单
-                    it = new Intent( getActivity(), ActivityOrder.class );
-                    it.putExtra( "index", 0 );
-                    startActivity( it );
+                    it = new Intent(getActivity(), ActivityOrder.class);
+                    it.putExtra("index", 0);
+                    startActivity(it);
                     break;
 
                 case R.id.order_all://待付
-                    it = new Intent( getActivity(), ActivityOrder.class );
-                    it.putExtra( "index", 1 );
-                    startActivity( it );
+                    it = new Intent(getActivity(), ActivityOrder.class);
+                    it.putExtra("index", 1);
+                    startActivity(it);
                     break;
 
                 case R.id.order_daifu://待发
-                    it = new Intent( getActivity(), ActivityOrder.class );
-                    it.putExtra( "index", 2 );
-                    startActivity( it );
+                    it = new Intent(getActivity(), ActivityOrder.class);
+                    it.putExtra("index", 2);
+                    startActivity(it);
                     break;
 
                 case R.id.order_daishou://待收
-                    it = new Intent( getActivity(), ActivityOrder.class );
-                    it.putExtra( "index", 3 );
-                    startActivity( it );
+                    it = new Intent(getActivity(), ActivityOrder.class);
+                    it.putExtra("index", 3);
+                    startActivity(it);
                     break;
                 case R.id.order_daiping://待评
-                    it = new Intent( getActivity(), ActivityOrder.class );
-                    it.putExtra( "index", 4 );
-                    startActivity( it );
+                    it = new Intent(getActivity(), ActivityOrder.class);
+                    it.putExtra("index", 4);
+                    startActivity(it);
                     break;
 
                 case R.id.order_shouhou://售后
-                    it = new Intent( getActivity(), ActivityAfterMarket.class );
-                    startActivity( it );
+                    it = new Intent(getActivity(), ActivityAfterMarket.class);
+                    startActivity(it);
                     break;
 
                 case R.id.user_img://用户头像
                 case R.id.user_shezhi://设置
                 case R.id.zhanghuguanli://账户管理
-                    it = new Intent( getActivity(), ActivityManage.class );
-                    it.putExtra( "user", user );
-                    startActivity( it );
+                    it = new Intent(getActivity(), ActivityManage.class);
+                    it.putExtra("user", user);
+                    startActivity(it);
                     break;
 
                 case R.id.user_xiaoxi://消息中心
-                    startActivity( new Intent( getActivity(), ActivityMessage.class ) );
+                    startActivity(new Intent(getActivity(), ActivityMessage.class));
                     break;
 
 
@@ -138,44 +140,35 @@ public class FragmentUser extends BaseFragment {
         }
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated( savedInstanceState );
-
-        setLoding( getActivity(), false );
-        getUser();
-
+    private void initGridView() {
         List<UserGridleModel> list = new ArrayList<UserGridleModel>();
-        for (int i = 0; i < 6; i++) {
-
-        }
-        list.add( new UserGridleModel( R.mipmap.icon_user_shoucang, R.string.user_shoucang ) );
-        list.add( new UserGridleModel( R.mipmap.icon_user_zuji, R.string.user_zuji ) );
+        list.add(new UserGridleModel(R.mipmap.icon_user_shoucang, R.string.user_shoucang));
+        list.add(new UserGridleModel(R.mipmap.icon_user_zuji, R.string.user_zuji));
         //list.add(new UserGridleModel(R.mipmap.icon_user_shoucang,R.string.user_dizhi));
-        list.add( new UserGridleModel( R.mipmap.icon_user_qianbao, R.string.user_qianbao ) );
+        list.add(new UserGridleModel(R.mipmap.icon_user_qianbao, R.string.user_qianbao));
         //list.add(new UserGridleModel(R.mipmap.icon_user_shoucang,R.string.user_jifen));
-        list.add( new UserGridleModel( R.mipmap.icon_user_bangzhu, R.string.user_bangzhu ) );
+        list.add(new UserGridleModel(R.mipmap.icon_user_bangzhu, R.string.user_bangzhu));
 
-        adapter = new AbstractListViewAdapter<UserGridleModel>( getActivity(), R.layout.fragment_user_gridview ) {
+        adapter = new AbstractListViewAdapter<UserGridleModel>(getActivity(), R.layout.fragment_user_gridview) {
             @Override
             public void initListViewItem(AbstractViewHolder viewHolder, UserGridleModel item) {
-                TextView tv = viewHolder.getView( R.id.title );
-                tv.setText( item.getStr() );
-                ImageView img = viewHolder.getView( R.id.img );
-                img.setImageResource( item.getImgId() );
+                TextView tv = viewHolder.getView(R.id.title);
+                tv.setText(item.getStr());
+                ImageView img = viewHolder.getView(R.id.img);
+                img.setImageResource(item.getImgId());
 
             }
         };
-        adapter.addItems( list );
-        gridView.setAdapter( adapter );
-        gridView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+        adapter.addItems(list);
+        gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent it;
                 switch (i) {
                     case 0://我的收藏
-                        it = new Intent( getActivity(), ActivityCollect.class );
-                        startActivity( it );
+                        it = new Intent(getActivity(), ActivityCollect.class);
+                        startActivity(it);
                         break;
 
                     case 1://足迹
@@ -184,38 +177,60 @@ public class FragmentUser extends BaseFragment {
                         break;
 
                     case 2://我的钱包
-                        it = new Intent( getActivity(), ActivityWallet.class );
-                        startActivity( it );
+                        it = new Intent(getActivity(), ActivityWallet.class);
+                        startActivity(it);
                         break;
 
                     case 3://帮助中心
-                        it = new Intent( getActivity(), ActivityHelp.class );
-                        startActivity( it );
+//                        it = new Intent(getActivity(), ActivityHelp.class);
+                        it = new Intent(getActivity(), ActivityWebView.class);
+                        startActivity(it);
                         break;
                 }
             }
-        } );
+        });
 
-        tuijian.setLayoutManager( new GridLayoutManager( getActivity(), 2 ) );
-        tuijian.setItemAnimator( new DefaultItemAnimator() );
-        tuijian.addItemDecoration( new DividerGridItemDecoration( getActivity() ) );
+        getUser();
+    }
 
-        myAdapter = new MyAdapter();
-        tuijian.addOnItemTouchListener( new OnItemClickListener() {
+    private void initTuijian() {
+        tuijian.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        tuijian.setItemAnimator(new DefaultItemAnimator());
+        tuijian.addItemDecoration(new DividerGridItemDecoration(getActivity()));
+
+        tuijian.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                Intent it = new Intent( getActivity(), ActivityMedicinesInfo.class );
-                it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID, myAdapter.getData().get( i ).getWAREID() );
-                startActivity( it );
+                Intent it = new Intent(getActivity(), ActivityMedicinesInfo.class);
+                it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, myAdapter.getData().get(i).getWAREID());
+                startActivity(it);
             }
-        } );
-        tuijian.setAdapter( myAdapter );
+        });
+
+        myAdapter = new MyAdapter();
+        myAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+        tuijian.setAdapter(myAdapter);
+        tuijian.setVisibility(View.VISIBLE);
+
+        getrecommend(PreferenceCache.getToken(), "");
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initGridView();
+        initTuijian();
+
+    }
+
+    @Override
+    protected void lazyLoad() {
 
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged( hidden );
+        super.onHiddenChanged(hidden);
         if (hidden) {
 
         } else {
@@ -236,24 +251,22 @@ public class FragmentUser extends BaseFragment {
 
             @Override
             protected void onExecuteSucceeded(UserModel userModel) {
+                closeLoding();
                 user = userModel;
 
-                jifen.setText( "积分：" + userModel.getUSER_POINT() + "分" );
-                name.setText( userModel.getMOBILE() );
-                if (StringUtils.isEmpty( userModel.getUSER_ICON_FILE_ID() )) {
-                    user_img.setImageURI( Uri.parse( "" ) );
-                    user.setUSER_ICON_FILE_ID( "" );
+                jifen.setText("积分：" + userModel.getUSER_POINT() + "分");
+                name.setText(userModel.getMOBILE());
+                if (StringUtils.isEmpty(userModel.getUSER_ICON_FILE_ID())) {
+                    user_img.setImageURI(Uri.parse(""));
+                    user.setUSER_ICON_FILE_ID("");
                 } else {
-                    user_img.setImageURI( Uri.parse( AppConfig.IMAGE_PATH + userModel.getUSER_ICON_FILE_ID() ) );
-                    user.setUSER_ICON_FILE_ID( userModel.getUSER_ICON_FILE_ID() );
+                    user_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH + userModel.getUSER_ICON_FILE_ID()));
+                    user.setUSER_ICON_FILE_ID(userModel.getUSER_ICON_FILE_ID());
                 }
 
 
-                getrecommend( PreferenceCache.getToken(), "" );
-                closeLoding();
-
-                if (user.getBIRTHDAY()==null){
-                    user.setBIRTHDAY( new Long( 0 ) );
+                if (user.getBIRTHDAY() == null) {
+                    user.setBIRTHDAY(new Long(0));
                 }
             }
 
@@ -262,6 +275,7 @@ public class FragmentUser extends BaseFragment {
                 closeLoding();
             }
         };
+        setLoding(getActivity(), false);
         userTask.execute();
     }
 
@@ -271,13 +285,13 @@ public class FragmentUser extends BaseFragment {
         recTask = new BizDataAsyncTask<List<RecommendModel>>() {
             @Override
             protected List<RecommendModel> doExecute() throws ZYException, BizFailure {
-                return HomeBiz.getRecommend( token, orderid );
+                return HomeBiz.getRecommend(token, orderid);
             }
 
             @Override
             protected void onExecuteSucceeded(List<RecommendModel> recommendModels) {
                 list = recommendModels;
-                myAdapter.setNewData( list );
+                myAdapter.setNewData(list);
                 myAdapter.notifyDataSetChanged();
             }
 
@@ -293,20 +307,20 @@ public class FragmentUser extends BaseFragment {
     private class MyAdapter extends BaseQuickAdapter<RecommendModel> {
 
         public MyAdapter() {
-            super( R.layout.item_goods_grid, list );
+            super(R.layout.item_goods_grid, list);
         }
 
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, RecommendModel recommendModel) {
-            baseViewHolder.setText( R.id.goods_title, StringUtils.deletaFirst( recommendModel.getWARENAME() ) )
-                    .setText( R.id.money, recommendModel.getSALEPRICE() + "" );
+            baseViewHolder.setText(R.id.goods_title, StringUtils.deletaFirst(recommendModel.getWARENAME()))
+                    .setText(R.id.money, recommendModel.getSALEPRICE() + "");
 
-            SimpleDraweeView goods_img = baseViewHolder.getView( R.id.item_head_img );
-            if (StringUtils.isEmpty( recommendModel.getIMG_PATH() )) {
-                goods_img.setImageURI( Uri.parse( "" ) );
+            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_head_img);
+            if (StringUtils.isEmpty(recommendModel.getIMG_PATH())) {
+                goods_img.setImageURI(Uri.parse(""));
             } else {
-                goods_img.setImageURI( Uri.parse( recommendModel.getIMG_PATH() ) );
+                goods_img.setImageURI(Uri.parse(recommendModel.getIMG_PATH()));
             }
 
         }

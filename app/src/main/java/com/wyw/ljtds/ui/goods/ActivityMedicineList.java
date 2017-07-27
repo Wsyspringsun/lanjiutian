@@ -25,8 +25,10 @@ import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.MedicineListModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.ui.find.FragmentFind;
 import com.wyw.ljtds.ui.home.ActivitySearch;
 import com.wyw.ljtds.ui.user.ActivityMessage;
+import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.widget.DividerGridItemDecoration;
 import com.wyw.ljtds.widget.SpaceItemDecoration;
@@ -35,6 +37,7 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -64,18 +67,21 @@ public class ActivityMedicineList extends BaseActivity {
     @ViewInject(R.id.paixu4_tv)
     private TextView paixu4_tv;
 
-
     //无数据时的界面
     private View noData;
     private boolean isRise = true;
     private List<MedicineListModel> list;
     private MyAdapter adapter;
-    private int pageIndex = 1;
     private boolean end = false;
+    private String mtd_find = "";
+
+    /*8
+    params for load data
+     */
     private String keyword = "";//搜索的关键字
     private String classId = "";//分类的typeid
     private String orderby = "";
-
+    private int pageIndex = 1;
 
     @Event(value = {R.id.back, R.id.edHeader, R.id.xiaoxi, R.id.paixu1, R.id.paixu2, R.id.paixu3, R.id.paixu4})
     private void onclick(View view) {
@@ -86,170 +92,211 @@ public class ActivityMedicineList extends BaseActivity {
                 break;
 
             case R.id.edHeader:
-                it = new Intent( this, ActivitySearch.class );
-                it.putExtra( "from", 0 );
+                it = new Intent(this, ActivitySearch.class);
+                it.putExtra("from", 0);
                 finish();
-                startActivity( it );
+                startActivity(it);
                 break;
 
             case R.id.xiaoxi:
-                it = new Intent( this, ActivityMessage.class );
-                startActivity( it );
+                it = new Intent(this, ActivityMessage.class);
+                startActivity(it);
                 break;
 
             case R.id.paixu1:
                 reset();
-                paixu1_tv.setTextColor( getResources().getColor( R.color.base_bar ) );
-                paixu1_iv.setImageDrawable( getResources().getDrawable( R.mipmap.paixu_1 ) );
-                pageIndex = 1;
-                getlist( classId, true, true, "", keyword );
+                paixu1_tv.setTextColor(getResources().getColor(R.color.base_bar));
+                paixu1_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_1));
                 orderby = "";
+                sortData();
                 break;
-
             case R.id.paixu2:
                 reset();
-                paixu2_tv.setTextColor( getResources().getColor( R.color.base_bar ) );
-                pageIndex = 1;
-                getlist( classId, true, true, "SALE_NUM", keyword );
+                paixu2_tv.setTextColor(getResources().getColor(R.color.base_bar));
                 orderby = "SALE_NUM";
+                sortData();
                 break;
-
             case R.id.paixu3:
+                reset();
                 if (isRise) {
-                    reset();
-                    paixu3_tv.setTextColor( getResources().getColor( R.color.base_bar ) );
-                    paixu3_iv.setImageDrawable( getResources().getDrawable( R.mipmap.paixu_4 ) );
+                    paixu3_tv.setTextColor(getResources().getColor(R.color.base_bar));
+                    paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_4));
                     isRise = false;
-                    pageIndex = 1;
-                    getlist( classId, true, true, "SALEPRICE", keyword );
                     orderby = "SALEPRICE";
                 } else {
-                    reset();
-                    paixu3_tv.setTextColor( getResources().getColor( R.color.base_bar ) );
-                    paixu3_iv.setImageDrawable( getResources().getDrawable( R.mipmap.paixu_5 ) );
+                    paixu3_tv.setTextColor(getResources().getColor(R.color.base_bar));
+                    paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_5));
                     isRise = true;
-                    pageIndex = 1;
-                    getlist( classId, true, true, "SALEPRICE desc", keyword );
                     orderby = "SALEPRICE desc";
                 }
+                sortData();
                 break;
-
             case R.id.paixu4:
                 reset();
-                paixu4_tv.setTextColor( getResources().getColor( R.color.base_bar ) );
-                pageIndex = 1;
-                getlist( classId, true, true, "EVALUATE", keyword );
-                orderby = "EVALUATE";
+                paixu4_tv.setTextColor(getResources().getColor(R.color.base_bar));
+                orderby = "EVALUATE_CNT";
+                sortData();
                 break;
         }
     }
 
+    private void sortData() {
+        Log.e(AppConfig.ERR_TAG,"sortData");
+        adapter = new MyAdapter();
+        adapter.setNewData(new ArrayList<MedicineListModel>());
+        adapter.notifyDataSetChanged();
+        Log.e(AppConfig.ERR_TAG,"new adapter:"+adapter.getItemCount());
+        recyclerView.setAdapter(adapter);
+        Log.e(AppConfig.ERR_TAG,"setAdapter adapter:"+adapter.getItemCount());
+        pageIndex = 1;
+        loadData();
+    }
+
+    private void loadData() {
+        if (FragmentFind.FIND_MTD_QUICK.equals(mtd_find)) {
+            findlist();
+        } else {
+            getlist();
+        }
+    }
+
+    void initParams() {
+        this.mtd_find = getIntent().getStringExtra(FragmentFind.TAG_FIND_MTD);
+        Log.e(AppConfig.ERR_TAG, "find data mtd:" + mtd_find);
+        if (FragmentFind.FIND_MTD_QUICK.equals(mtd_find)) {
+            classId = getIntent().getStringExtra(FragmentFind.TAG_MTD_QUICK_PARAM);
+        } else if (FragmentFind.FIND_MTD_QUICK2.equals(mtd_find)) {
+            classId = getIntent().getStringExtra(FragmentFind.TAG_MTD_QUICK_PARAM);
+        } else {
+            keyword = getIntent().getStringExtra("search");
+            classId = getIntent().getStringExtra("typeid");
+        }
+        Log.e(AppConfig.ERR_TAG, "params:[" + classId + "," + keyword + "]");
+        pageIndex = 1;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
-
-        keyword = getIntent().getStringExtra( "search" );
-        classId = getIntent().getStringExtra( "typeid" );
-        if (StringUtils.isEmpty( keyword )) {
-            setLoding( this, false );
-            getlist( classId, true, true, "", keyword );
-        } else {
-            setLoding( this, false );
-            getlist( classId, true, true, "", keyword );
-        }
-
-
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有
-//        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动
-        recyclerView.setLayoutManager( new GridLayoutManager( this, 2 ) );
-        recyclerView.setItemAnimator( new DefaultItemAnimator() );
-        noData = getLayoutInflater().inflate( R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false );
-        recyclerView.addItemDecoration( new SpaceItemDecoration( 10 ) );
-
-        adapter = new MyAdapter();
-        adapter.setOnLoadMoreListener( new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                getlist( classId, true, false, orderby, keyword );
-            }
-        } );
-        recyclerView.addOnItemTouchListener( new OnItemClickListener() {
+        super.onCreate(savedInstanceState);
+        final GridLayoutManager glm = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(glm);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new SpaceItemDecoration(10));
+        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                Intent it = new Intent( ActivityMedicineList.this, ActivityMedicinesInfo.class );
-                it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getData().get( i ).getWAREID() );
-                startActivity( it );
+                Intent it = new Intent(ActivityMedicineList.this, ActivityMedicinesInfo.class);
+                it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getData().get(i).getWAREID());
+                startActivity(it);
             }
-        } );
-        recyclerView.setAdapter( adapter );
+        });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int cnt = adapter.getItemCount();
+                int totalItemCount = glm.getItemCount();
+                int lastVisibleItem = glm.findLastVisibleItemPosition();
+                Log.e(AppConfig.ERR_TAG, "itemCnt:" + cnt + "loadMore:[" + totalItemCount + "," + lastVisibleItem + "]");
+                if (!end && !loading && (lastVisibleItem ) >= cnt) {
+                    pageIndex = pageIndex + 1;
+                    loadData();
+                }
+            }
+        });
+        adapter = new MyAdapter();
+        recyclerView.setAdapter(adapter);
+
+        noData = getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
+
+        initParams();
+        loadData();
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有
+//        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动
+
+//        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+//            @Override
+//            public void onLoadMoreRequested() {
+//                getlist(classId, true, false, orderby, keyword);
+//            }
+//        });
 
     }
 
     BizDataAsyncTask<List<MedicineListModel>> getListTask;
 
-    private void getlist(final String classid, final boolean loadmore, final boolean refresh, final String orderby, final String keyword) {
+    private void getlist() {
         getListTask = new BizDataAsyncTask<List<MedicineListModel>>() {
             @Override
             protected List<MedicineListModel> doExecute() throws ZYException, BizFailure {
-                Log.e( "*****", classid + "; " + keyword + "; " + orderby + "; " + loadmore );
-                if (refresh) {
-                    return CategoryBiz.getMedicineList( classid, orderby, keyword, "0", AppConfig.DEFAULT_PAGE_COUNT + "" );
-                } else {
-                    return CategoryBiz.getMedicineList( classid, orderby, keyword, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "" );
-                }
+                return CategoryBiz.getMedicineList(classId, orderby, keyword, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "");
             }
 
             @Override
             protected void onExecuteSucceeded(List<MedicineListModel> medicineListModel) {
-                if (medicineListModel.size() < AppConfig.DEFAULT_PAGE_COUNT) {
+                Log.e(AppConfig.ERR_TAG, "get data success");
+                closeLoding();
+                if (medicineListModel == null || medicineListModel.size() <= 0) {
                     end = true;
-                    //可以加入emptyview
-                    if (loadmore && medicineListModel.size() == 0) {
-                        adapter.setEmptyView( noData );
-                    }
-                } else {
-                    end = false;
-
+                    adapter.setEmptyView(noData);
                 }
 
                 list = medicineListModel;
-                if (loadmore) {
-                    adapter.addData( list );
-                    adapter.notifyDataSetChanged();
-                }
-                if (refresh) {
-                    adapter.setNewData( list );
-                    adapter.notifyDataSetChanged();
-                }
-
-
-                if (end) {
-                    adapter.addFooterView( getFooterView() );
-                    adapter.notifyDataSetChanged();
-                } else {
-                    adapter.removeAllFooterView();
-                    adapter.notifyDataSetChanged();
-                }
-
-                Log.e( "****", medicineListModel.size() + ";    " + pageIndex + ";  " + adapter.getData().size() + "" );
-
-                pageIndex++;
-                closeLoding();
+                Log.e(AppConfig.ERR_TAG,"before load adapter:"+adapter.getItemCount());
+                adapter.addData(list);
+                adapter.notifyDataSetChanged();
+                Log.e(AppConfig.ERR_TAG,"load adapter:"+adapter.getItemCount());
             }
 
             @Override
             protected void OnExecuteFailed() {
-                adapter.setEmptyView( noData );
                 closeLoding();
+                adapter.setEmptyView(noData);
             }
         };
+        setLoding(this, false);
         getListTask.execute();
     }
 
-    private View getFooterView() {
-        View view = getLayoutInflater().inflate( R.layout.main_end_view, (ViewGroup) recyclerView.getParent(), false );
 
+    private void findlist() {
+        BizDataAsyncTask<List<MedicineListModel>> findListTask = new BizDataAsyncTask<List<MedicineListModel>>() {
+            @Override
+            protected List<MedicineListModel> doExecute() throws ZYException, BizFailure {
+                Log.e(AppConfig.ERR_TAG, classId + "/" + orderby + pageIndex);
+                return CategoryBiz.findMedicineList(classId, orderby, pageIndex + "", "" + AppConfig.DEFAULT_PAGE_COUNT);
+            }
+
+            @Override
+            protected void onExecuteSucceeded(List<MedicineListModel> medicineListModel) {
+                Log.e(AppConfig.ERR_TAG, "find data success");
+                closeLoding();
+                Log.e(AppConfig.ERR_TAG, GsonUtils.Bean2Json(medicineListModel));
+                if (medicineListModel == null || medicineListModel.size() <= 0) {
+                    end = true;
+                    adapter.setEmptyView(noData);
+                }
+                adapter.addData(medicineListModel);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            protected void OnExecuteFailed() {
+                adapter.setEmptyView(noData);
+                closeLoding();
+            }
+        };
+        setLoding(this, false);
+        findListTask.execute();
+    }
+
+    private View getFooterView() {
+        View view = getLayoutInflater().inflate(R.layout.main_end_view, (ViewGroup) recyclerView.getParent(), false);
         return view;
     }
 
@@ -257,20 +304,20 @@ public class ActivityMedicineList extends BaseActivity {
     private class MyAdapter extends BaseQuickAdapter<MedicineListModel> {
 
         public MyAdapter() {
-            super( R.layout.item_goods_grid, list );
+            super(R.layout.item_goods_grid, list);
         }
 
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, MedicineListModel medicineListModel) {
-            baseViewHolder.setText( R.id.goods_title, StringUtils.deletaFirst( medicineListModel.getWARENAME() ) )
-                    .setText( R.id.money, medicineListModel.getSALEPRICE() );
+            baseViewHolder.setText(R.id.goods_title, StringUtils.deletaFirst(medicineListModel.getWARENAME()))
+                    .setText(R.id.money, medicineListModel.getSALEPRICE());
 
-            SimpleDraweeView goods_img = baseViewHolder.getView( R.id.item_head_img );
-            if (StringUtils.isEmpty( medicineListModel.getIMG_PATH() )) {
-                goods_img.setImageURI( Uri.parse( "" ) );
+            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_head_img);
+            if (StringUtils.isEmpty(medicineListModel.getIMG_PATH())) {
+                goods_img.setImageURI(Uri.parse(""));
             } else {
-                goods_img.setImageURI( Uri.parse( medicineListModel.getIMG_PATH() ) );
+                goods_img.setImageURI(Uri.parse(medicineListModel.getIMG_PATH()));
             }
 
         }
@@ -278,13 +325,13 @@ public class ActivityMedicineList extends BaseActivity {
 
 
     private void reset() {
-        paixu1_tv.setTextColor( getResources().getColor( R.color.font_black2 ) );
-        paixu1_iv.setImageDrawable( getResources().getDrawable( R.mipmap.paixu_2 ) );
-        paixu2_tv.setTextColor( getResources().getColor( R.color.font_black2 ) );
-        paixu3_tv.setTextColor( getResources().getColor( R.color.font_black2 ) );
-        paixu3_iv.setImageDrawable( getResources().getDrawable( R.mipmap.paixu_3 ) );
-        paixu4_tv.setTextColor( getResources().getColor( R.color.font_black2 ) );
-        isRise = true;
+        paixu1_tv.setTextColor(getResources().getColor(R.color.font_black2));
+        paixu1_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_2));
+        paixu2_tv.setTextColor(getResources().getColor(R.color.font_black2));
+        paixu3_tv.setTextColor(getResources().getColor(R.color.font_black2));
+        paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_3));
+        paixu4_tv.setTextColor(getResources().getColor(R.color.font_black2));
+//        isRise = true;
     }
 
 }

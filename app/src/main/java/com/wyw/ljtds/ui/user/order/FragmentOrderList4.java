@@ -56,41 +56,28 @@ public class FragmentOrderList4 extends LazyLoadFragment {
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach( context );
+        super.onAttach(context);
         activityOrder = (ActivityOrder) context;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());//必须有
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置水平方向滑动
+        recyclerView.setLayoutManager(linearLayoutManager);
 
-    }
-
-    @Override
-    protected void lazyLoad() {
-        setLoding( getActivity(), false );
-        getOrder( "C", "myOrders" );
-
-        recyclerView.setVisibility( View.VISIBLE );
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager( getActivity() );//必须有
-        linearLayoutManager.setOrientation( LinearLayoutManager.VERTICAL );//设置水平方向滑动
-        recyclerView.setLayoutManager( linearLayoutManager );
-
-        noData = getActivity().getLayoutInflater().inflate( R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false );
-        ImageView imageView_nodata = (ImageView) noData.findViewById( R.id.empty_img );
-        imageView_nodata.setImageDrawable( getResources().getDrawable( R.mipmap.dingdan_kong ) );
-        TextView textView_nodata = (TextView) noData.findViewById( R.id.empty_text );
-        textView_nodata.setText( R.string.empty_order );
-
-        adapter1 = new MyAdapter1();
-        adapter1.openLoadAnimation( BaseQuickAdapter.ALPHAIN );
-        recyclerView.addOnItemTouchListener( new SimpleClickListener() {
+        noData = getActivity().getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
+        ImageView imageView_nodata = (ImageView) noData.findViewById(R.id.empty_img);
+        imageView_nodata.setImageDrawable(getResources().getDrawable(R.mipmap.dingdan_kong));
+        TextView textView_nodata = (TextView) noData.findViewById(R.id.empty_text);
+        textView_nodata.setText(R.string.empty_order);
+        recyclerView.addOnItemTouchListener(new SimpleClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                Intent it = new Intent( getActivity(), ActivityOrderInfo.class );
-                it.putExtra( "id", adapter1.getItem( i ).getORDER_GROUP_ID() );
-                startActivity( it );
+                Intent it = new Intent(getActivity(), ActivityOrderInfo.class);
+                it.putExtra("id", adapter1.getItem(i).getORDER_GROUP_ID());
+                startActivity(it);
             }
 
             @Override
@@ -102,17 +89,17 @@ public class FragmentOrderList4 extends LazyLoadFragment {
             public void onItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
                 switch (view.getId()) {
                     case R.id.button1:
-                        getSignFor(adapter1.getData().get( i ).getORDER_GROUP_ID());
+                        getSignFor(adapter1.getData().get(i).getORDER_GROUP_ID());
                         break;
 
                     case R.id.button2:
-                        Intent it = new Intent( getActivity(), ActivityLogistics.class );
-                        it.putExtra( "order_id", adapter1.getData().get( i ).getORDER_GROUP_ID() );
-                        startActivity( it );
+                        Intent it = new Intent(getActivity(), ActivityLogistics.class);
+                        it.putExtra("order_id", adapter1.getData().get(i).getORDER_GROUP_ID());
+                        startActivity(it);
                         break;
 
                     case R.id.button3:
-                        activityOrder.openChat( "交易订单号：" + adapter1.getData().get( i ).getORDER_TRADE_ID(), "", settingid1, groupName, false, "" );
+                        activityOrder.openChat("交易订单号：" + adapter1.getData().get(i).getORDER_TRADE_ID(), "", settingid1, groupName, false, "");
                         break;
                 }
             }
@@ -121,48 +108,57 @@ public class FragmentOrderList4 extends LazyLoadFragment {
             public void onItemChildLongClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
 
             }
-        } );
-        recyclerView.setAdapter( adapter1 );
+        });
+    }
+
+    @Override
+    protected void lazyLoad() {
+        adapter1 = new MyAdapter1();
+        adapter1.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+        recyclerView.setAdapter(adapter1);
+        recyclerView.setVisibility(View.VISIBLE);
+
+        getOrder("C", "myOrders");
     }
 
     @Override
     protected void stopLoad() {
         super.stopLoad();
         adapter1 = null;
-        recyclerView.setVisibility( View.GONE );
+        recyclerView.setVisibility(View.GONE);
     }
 
 
     private class MyAdapter1 extends BaseQuickAdapter<OrderModelMedicine> {
 
         public MyAdapter1() {
-            super( R.layout.item_order_submit_group, list );
+            super(R.layout.item_order_submit_group, list);
         }
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, OrderModelMedicine orderModelMedicine) {
 
-            baseViewHolder.setVisible( R.id.select, false )
-                    .setVisible( R.id.style_order, true )
-                    .setVisible( R.id.anniu, true )
-                    .setText( R.id.textView3, orderModelMedicine.getOID_GROUP_NAME() )
-                    .setText( R.id.shuliang, "共计" + orderModelMedicine.getGROUP_EXCHANGE_QUANLITY() + "件商品" )
-                    .setText( R.id.xiaoji_money, "￥" + orderModelMedicine.getPAY_AMOUNT() )
-                    .setText( R.id.style_order, getResources().getString( R.string.daishou ) )
-                    .setVisible( R.id.button1, true )
-                    .setVisible( R.id.button2, true )
-                    .setVisible( R.id.button3, true )
-                    .setText( R.id.button1, R.string.querenshou )
-                    .setText( R.id.button2, R.string.wuliu_chakan )
-                    .setText( R.id.button3, R.string.order_lianxi1 )
-                    .addOnClickListener( R.id.button1 )
-                    .addOnClickListener( R.id.button2 )
-                    .addOnClickListener( R.id.button3 );
+            baseViewHolder.setVisible(R.id.select, false)
+                    .setVisible(R.id.style_order, true)
+                    .setVisible(R.id.anniu, true)
+                    .setText(R.id.textView3, orderModelMedicine.getOID_GROUP_NAME())
+                    .setText(R.id.shuliang, "共计" + orderModelMedicine.getGROUP_EXCHANGE_QUANLITY() + "件商品")
+                    .setText(R.id.xiaoji_money, "￥" + orderModelMedicine.getPAY_AMOUNT())
+                    .setText(R.id.style_order, getResources().getString(R.string.daishou))
+                    .setVisible(R.id.button1, true)
+                    .setVisible(R.id.button2, true)
+                    .setVisible(R.id.button3, true)
+                    .setText(R.id.button1, R.string.querenshou)
+                    .setText(R.id.button2, R.string.wuliu_chakan)
+                    .setText(R.id.button3, R.string.order_lianxi1)
+                    .addOnClickListener(R.id.button1)
+                    .addOnClickListener(R.id.button2)
+                    .addOnClickListener(R.id.button3);
 
-            RecyclerView goods = baseViewHolder.getView( R.id.goods );
-            goods.setLayoutManager( new LinearLayoutManager( getActivity() ) );
-            goods.setItemAnimator( new DefaultItemAnimator() );
-            goods.setAdapter( new MyAdapter2( orderModelMedicine.getDETAILS() ) );
+            RecyclerView goods = baseViewHolder.getView(R.id.goods);
+            goods.setLayoutManager(new LinearLayoutManager(getActivity()));
+            goods.setItemAnimator(new DefaultItemAnimator());
+            goods.setAdapter(new MyAdapter2(orderModelMedicine.getDETAILS()));
 
         }
     }
@@ -170,51 +166,53 @@ public class FragmentOrderList4 extends LazyLoadFragment {
     //商品adapter
     private class MyAdapter2 extends BaseQuickAdapter<OrderModelMedicine.Goods> {
         public MyAdapter2(List<OrderModelMedicine.Goods> lists) {
-            super( R.layout.item_order_submit_goods, lists );
+            super(R.layout.item_order_submit_goods, lists);
         }
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, OrderModelMedicine.Goods goods) {
-            if (StringUtils.isEmpty( goods.getCOMMODITY_COLOR() )) {
-                baseViewHolder.setText( R.id.size, " 规格：" + goods.getCOMMODITY_SIZE() );
+            if (StringUtils.isEmpty(goods.getCOMMODITY_COLOR())) {
+                baseViewHolder.setText(R.id.size, " 规格：" + goods.getCOMMODITY_SIZE());
             } else {
-                baseViewHolder.setText( R.id.size, "产地：" + goods.getCOMMODITY_COLOR() + " ;规格：" + goods.getCOMMODITY_SIZE() );
+                baseViewHolder.setText(R.id.size, "产地：" + goods.getCOMMODITY_COLOR() + " ;规格：" + goods.getCOMMODITY_SIZE());
             }
-            baseViewHolder.setText( R.id.title, StringUtils.deletaFirst( goods.getCOMMODITY_NAME()  ))
-                    .setText( R.id.money, "￥" + goods.getCOST_MONEY() )
-                    .setText( R.id.number, "X" + goods.getEXCHANGE_QUANLITY() );
+            baseViewHolder.setText(R.id.title, StringUtils.deletaFirst(goods.getCOMMODITY_NAME()))
+                    .setText(R.id.money, "￥" + goods.getCOST_MONEY())
+                    .setText(R.id.number, "X" + goods.getEXCHANGE_QUANLITY());
 
-            SimpleDraweeView simpleDraweeView = baseViewHolder.getView( R.id.iv_adapter_list_pic );
-            if (!StringUtils.isEmpty( goods.getIMG_PATH() )) {
-                simpleDraweeView.setImageURI( Uri.parse( goods.getIMG_PATH() ) );
+            SimpleDraweeView simpleDraweeView = baseViewHolder.getView(R.id.iv_adapter_list_pic);
+            if (!StringUtils.isEmpty(goods.getIMG_PATH())) {
+                simpleDraweeView.setImageURI(Uri.parse(goods.getIMG_PATH()));
             }
         }
     }
 
     //订单签收
     BizDataAsyncTask<Integer> signTask;
-    private void getSignFor(final String data){
-        signTask=new BizDataAsyncTask<Integer>() {
+
+    private void getSignFor(final String data) {
+        signTask = new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                return GoodsBiz.orderOperation( data,"checkinOrder" );
+                return GoodsBiz.orderOperation(data, "checkinOrder");
             }
 
             @Override
             protected void onExecuteSucceeded(Integer integer) {
-                if (integer!=0){
-                    ToastUtil.show( getActivity(),"签收成功" );
-                    setLoding( getActivity(), false );
-                    getOrder( "C", "myOrders" );
+                closeLoding();
+                if (integer != 0) {
+                    ToastUtil.show(getActivity(), "签收成功");
+                    getOrder("C", "myOrders");
                 }
             }
 
             @Override
             protected void OnExecuteFailed() {
-
+                closeLoding();
             }
         };
-        signTask.execute(  );
+        setLoding(getActivity(), false);
+        signTask.execute();
     }
 
     BizDataAsyncTask<List<OrderModelMedicine>> orderTask;
@@ -223,19 +221,20 @@ public class FragmentOrderList4 extends LazyLoadFragment {
         orderTask = new BizDataAsyncTask<List<OrderModelMedicine>>() {
             @Override
             protected List<OrderModelMedicine> doExecute() throws ZYException, BizFailure {
-                return GoodsBiz.getUserOrder( data, op );
+                return GoodsBiz.getUserOrder(data, op);
             }
 
             @Override
             protected void onExecuteSucceeded(List<OrderModelMedicine> orderModelMedicines) {
-                if (orderModelMedicines.size() < 1) {
-                    adapter1.setEmptyView( noData );
-                }
-
-                list = orderModelMedicines;
-                adapter1.setNewData( list );
-                adapter1.notifyDataSetChanged();
                 closeLoding();
+                if (orderModelMedicines.size() < 1) {
+                    adapter1.setEmptyView(noData);
+                }else{
+                    list = orderModelMedicines;
+                    adapter1.setNewData(list);
+                }
+                adapter1.notifyDataSetChanged();
+
             }
 
             @Override
@@ -243,6 +242,7 @@ public class FragmentOrderList4 extends LazyLoadFragment {
                 closeLoding();
             }
         };
+        setLoding(getActivity(), false);
         orderTask.execute();
     }
 

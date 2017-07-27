@@ -67,6 +67,7 @@ public class MedicineDetailsModel extends BaseModel {
     private String DESCRIPTION;
     //0没有收藏 1 是收藏
     private String favorited;
+    private int EVALUATE_CNT;
     //评论
     private List<MedicineDetailsEvaluateModel> EVALUATE;
 
@@ -325,5 +326,13 @@ public class MedicineDetailsModel extends BaseModel {
 
     public void setEVALUATE(List<MedicineDetailsEvaluateModel> EVALUATE) {
         this.EVALUATE = EVALUATE;
+    }
+
+    public int getEVALUATE_CNT() {
+        return EVALUATE_CNT;
+    }
+
+    public void setEVALUATE_CNT(int EVALUATE_CNT) {
+        this.EVALUATE_CNT = EVALUATE_CNT;
     }
 }

@@ -52,4 +52,5 @@ public class ActivityFindCategort extends BaseActivity {
 
         title.setText( R.string.find_button1 );
     }
+
 }

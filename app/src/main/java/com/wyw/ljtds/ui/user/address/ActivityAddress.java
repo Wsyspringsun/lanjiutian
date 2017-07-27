@@ -106,24 +106,24 @@ public class ActivityAddress extends BaseActivity {
 
             @Override
             public void onItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                switch (view.getId()){
+                switch (view.getId()) {
                     case R.id.bianji:
                         Intent it = new Intent(ActivityAddress.this, ActivityAddressEdit.class);
-                        it.putExtra("address_id",adapter.getData().get(i).getADDRESS_ID()+"");
+                        it.putExtra("address_id", adapter.getData().get(i).getADDRESS_ID() + "");
                         it.putExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, 2);
-                        Bundle bundle=new Bundle();
-                        bundle.putString("name",adapter.getData().get(i).getCONSIGNEE_NAME());
-                        bundle.putString("phone",adapter.getData().get(i).getCONSIGNEE_MOBILE());
-                        bundle.putString("xiangxi",adapter.getData().get(i).getCONSIGNEE_ADDRESS());
-                        bundle.putString("shengshi",adapter.getData().get(i).getPROVINCE()+adapter.getData().get(i).getCITY());
-                        it.putExtra("bundle",bundle);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("name", adapter.getData().get(i).getCONSIGNEE_NAME());
+                        bundle.putString("phone", adapter.getData().get(i).getCONSIGNEE_MOBILE());
+                        bundle.putString("xiangxi", adapter.getData().get(i).getCONSIGNEE_ADDRESS());
+                        bundle.putString("shengshi", adapter.getData().get(i).getPROVINCE() + adapter.getData().get(i).getCITY());
+                        it.putExtra("bundle", bundle);
                         startActivity(it);
                         break;
 
                     case R.id.shanchu:
-                        delete(adapter.getData().get(i).getADDRESS_ID()+"");
+                        delete(adapter.getData().get(i).getADDRESS_ID() + "");
                         finish();
-                        startActivity(new Intent(ActivityAddress.this,ActivityAddress.class));
+                        startActivity(new Intent(ActivityAddress.this, ActivityAddress.class));
                         break;
                 }
             }
@@ -164,7 +164,10 @@ public class ActivityAddress extends BaseActivity {
                 adapter.setNewData(addressModels);
                 adapter.notifyDataSetChanged();
 
-                add.setVisibility(View.GONE);
+                if (addressModels != null && addressModels.size() > 0)
+                    add.setVisibility(View.GONE);
+                else
+                    add.setVisibility(View.VISIBLE);
 
                 closeLoding();
             }

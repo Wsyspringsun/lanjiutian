@@ -20,6 +20,7 @@ import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.UserModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.user.address.ActivityAddress;
+import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 
 import org.xutils.view.annotation.ContentView;
@@ -144,7 +145,7 @@ public class ActivityManage extends BaseActivity {
         if (StringUtils.isEmpty( user.getID_CARD() ) || StringUtils.isEmpty( user.getUSER_NAME() )) {
             shiming_xin.setText( "" );
         }else {
-            shiming_xin.setText( "以实名认证" );
+            shiming_xin.setText( "已实名认证" );
         }
     }
 
@@ -153,6 +154,7 @@ public class ActivityManage extends BaseActivity {
         super.onActivityResult( requestCode, resultCode, data );
         if (requestCode == 1 && resultCode == AppConfig.IntentExtraKey.RESULT_OK) {
             user = data.getParcelableExtra( "user" );
+            Log.e(AppConfig.ERR_TAG, GsonUtils.Bean2Json(user));
             name.setText( "用户名：" + user.getMOBILE().substring( 0, user.getMOBILE().length() - (user.getMOBILE().substring( 3 )).length() ) + "****" + user.getMOBILE().substring( 7 ) );
             sdv_item_head_img.setImageURI( Uri.parse( AppConfig.IMAGE_PATH + user.getUSER_ICON_FILE_ID() ) );
             if (StringUtils.isEmpty( user.getNICKNAME() )) {

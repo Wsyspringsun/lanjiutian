@@ -44,6 +44,7 @@ public class ActivityMessage extends BaseActivity implements SwipeRefreshLayout.
     @ViewInject(R.id.swipeLayout)
     private SwipeRefreshLayout swipeLayout;
 
+    private TextView viewEnd;
     //无数据时的界面
     private View noData;
     private List<MessageModel> list = new ArrayList<>();
@@ -196,11 +197,11 @@ public class ActivityMessage extends BaseActivity implements SwipeRefreshLayout.
     }
 
     private TextView getFooterView() {
-        TextView view = new TextView(this);
-        view.setText("end");
-        view.setGravity(Gravity.CENTER);
-
-        return view;
+        if(viewEnd ==null){
+            viewEnd = new TextView(this);
+            viewEnd.setGravity(Gravity.CENTER);
+        }
+        return viewEnd;
     }
 
 
