@@ -40,6 +40,7 @@ public class BaseFragment extends Fragment {
             }
         }
     };
+    protected boolean loading;
 
     @Nullable
     @Override
@@ -61,6 +62,7 @@ public class BaseFragment extends Fragment {
     }
 
     public void setLoding(Context context, boolean settime){
+        loading = true;
         if(settime){
             mDialog = LoadingDialogUtils.createLoadingDialog(context, "加载中...");
             mHandler.sendEmptyMessageDelayed(AppConfig.IntentExtraKey.LODING_CONTEXT, 2000);
@@ -70,6 +72,7 @@ public class BaseFragment extends Fragment {
     }
 
     public void closeLoding(){
+        loading = false;
         LoadingDialogUtils.closeDialog(mDialog);
     }
 

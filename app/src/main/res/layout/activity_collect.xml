@@ -41,22 +41,22 @@
         </LinearLayout>
 
         <TextView
-            android:text="@string/user_shoucang"
             android:layout_centerInParent="true"
             style="@style/font_ww_16_black"
             android:id="@+id/header_title"/>
 
         <TextView
-            android:layout_toLeftOf="@+id/header_image_right"
             android:textColor="@color/font_black2"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x10"
+            android:layout_alignParentRight="true"
             style="@style/font_ww_14"
             android:text="@string/bianji"
             android:id="@+id/header_edit"/>
 
         <ImageView
             android:id="@+id/header_image_right"
+            android:visibility="gone"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x10"
             android:layout_width="@dimen/x18"

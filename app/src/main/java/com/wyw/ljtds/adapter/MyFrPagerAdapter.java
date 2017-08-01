@@ -4,6 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
+
+import com.gxz.PagerSlidingTabStrip;
+import com.wyw.ljtds.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +19,7 @@ import java.util.List;
  * @date 15/11/29
  * @time 下午12:53
  */
-public class MyFrPagerAdapter extends FragmentPagerAdapter {
-
+public class MyFrPagerAdapter extends FragmentPagerAdapter  {
     private ArrayList<String> titles;
 
     private List<Fragment> fragments;

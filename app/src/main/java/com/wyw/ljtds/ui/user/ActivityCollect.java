@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,6 +30,7 @@ import com.wyw.ljtds.model.FavoriteModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.goods.ActivityGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
+import com.wyw.ljtds.ui.goods.FragmentGoodsDetails;
 import com.wyw.ljtds.utils.GsonUtils;
 
 import org.xutils.view.annotation.ContentView;
@@ -62,31 +64,32 @@ public class ActivityCollect extends BaseActivity {
     private int index = 0;
     private List<String> date;
 
+    private String tagMy;
 
-    @Event(value = {R.id.header_edit, R.id.header_return, R.id.shanchu,R.id.add_car})
+    @Event(value = {R.id.header_edit, R.id.header_return, R.id.shanchu, R.id.add_car})
     private void onClick(View view) {
         switch (view.getId()) {
             case R.id.header_edit:
                 if (index == 0) {
-                    jianTou.setVisibility( View.GONE );
-                    title.setText( "编辑" );
-                    header_image.setVisibility( View.GONE );
-                    header_edit.setText( "完成" );
+                    jianTou.setVisibility(View.GONE);
+                    title.setText("编辑");
+                    header_image.setVisibility(View.GONE);
+                    header_edit.setText("完成");
                     RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) header_edit.getLayoutParams();
-                    params.addRule( RelativeLayout.ALIGN_PARENT_RIGHT, 1 );//0为true,1为维false
-                    header_edit.setLayoutParams( params );
-                    footer.setVisibility( View.VISIBLE );
+                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);//0为true,1为维false
+                    header_edit.setLayoutParams(params);
+                    footer.setVisibility(View.VISIBLE);
                     index = 1;
                 } else {
-                    jianTou.setVisibility( View.VISIBLE );
-                    title.setText( R.string.user_shoucang );
-                    header_image.setVisibility( View.VISIBLE );
-                    header_edit.setText( R.string.bianji );
+                    jianTou.setVisibility(View.VISIBLE);
+                    title.setText(R.string.user_shoucang);
+                    header_image.setVisibility(View.VISIBLE);
+                    header_edit.setText(R.string.bianji);
                     RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) header_edit.getLayoutParams();
-                    params.addRule( RelativeLayout.ALIGN_PARENT_RIGHT, 0 );
-                    params.addRule( RelativeLayout.LEFT_OF, R.id.header_image_right );//相当于xml中的to_left_of
-                    header_edit.setLayoutParams( params );
-                    footer.setVisibility( View.GONE );
+                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+                    params.addRule(RelativeLayout.LEFT_OF, R.id.header_image_right);//相当于xml中的to_left_of
+                    header_edit.setLayoutParams(params);
+                    footer.setVisibility(View.GONE);
                     index = 0;
                 }
                 adapter.notifyDataSetChanged();
@@ -100,18 +103,18 @@ public class ActivityCollect extends BaseActivity {
                 date = new ArrayList<>();
 
                 for (int i = 0; i < adapter.getData().size(); i++) {
-                    if (adapter.getData().get( i ).isCheck()) {
-                        date.add( adapter.getData().get( i ).getFavoritesGoodsId() );
+                    if (adapter.getData().get(i).isCheck()) {
+                        date.add(adapter.getData().get(i).getFavoritesGoodsId());
                     }
                 }
 
                 String[] ids = new String[date.size()];
                 for (int j = 0; j < date.size(); j++) {
-                    ids[j] = date.get( j );
+                    ids[j] = date.get(j);
                 }
                 deleteall d = new deleteall();
-                d.setIds( ids );
-                delete( GsonUtils.Bean2Json( d ) );
+                d.setIds(ids);
+                delete(GsonUtils.Bean2Json(d));
                 break;
 
             case R.id.add_car:
@@ -122,35 +125,56 @@ public class ActivityCollect extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        tagMy = intent.getStringExtra(FragmentUser.TAG_MY);
+        if (FragmentUser.TAG_MY_SHOUCANG.equals(tagMy)) {
+            header_edit.setVisibility(View.VISIBLE);
+            title.setText(getResources().getString(R.string.user_shoucang));
+            getFavorite();
+        } else if (FragmentUser.TAG_MY_ZUJI.equals(tagMy)) {
+            header_edit.setVisibility(View.GONE);
+            title.setText(getResources().getString(R.string.user_zuji));
+            getHistory();
+        }
 
-        setLoding( this, false );
-        getFavorite();
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager( this );//必须有
-        linearLayoutManager.setOrientation( LinearLayoutManager.VERTICAL );//设置方向滑动
-        recyclerView.setLayoutManager( linearLayoutManager );
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         adapter = new MyAdapter();
-        adapter.openLoadAnimation( BaseQuickAdapter.ALPHAIN );
-        recyclerView.setAdapter( adapter );
-        recyclerView.addOnItemTouchListener( new OnItemClickListener() {
+        adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
                 if (index == 0) {
-                    if (adapter.getItem( i ).getGoodsFlg().equals( "1" )) {
-                        Intent it = new Intent( ActivityCollect.this, ActivityMedicinesInfo.class );
-                        it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem( i ).getCommodityId() );
-                        startActivity( it );
-                    } else {
-                        Intent it = new Intent( ActivityCollect.this, ActivityGoodsInfo.class );
-                        it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem( i ).getCommodityId() );
-                        startActivity( it );
+                    if (FragmentUser.TAG_MY_ZUJI.equals(tagMy)) {
+                        if (adapter.getItem(i).getGoodsFlg().equals("0")) {
+                            Intent it = new Intent(ActivityCollect.this, ActivityMedicinesInfo.class);
+                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
+                            startActivity(it);
+                        } else {
+                            Intent it = new Intent(ActivityCollect.this, ActivityGoodsInfo.class);
+                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
+                            startActivity(it);
+                        }
+                    } else if (FragmentUser.TAG_MY_SHOUCANG.equals(tagMy)) {
+                        if (adapter.getItem(i).getGoodsFlg().equals("1")) {
+                            Intent it = new Intent(ActivityCollect.this, ActivityMedicinesInfo.class);
+                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
+                            startActivity(it);
+                        } else {
+                            Intent it = new Intent(ActivityCollect.this, ActivityGoodsInfo.class);
+                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
+                            startActivity(it);
+                        }
                     }
+
 
                 }
             }
-        } );
+        });
 
     }
 
@@ -158,6 +182,7 @@ public class ActivityCollect extends BaseActivity {
     BizDataAsyncTask<List<FavoriteModel>> favoriteTask;
 
     private void getFavorite() {
+        setLoding(this, false);
         favoriteTask = new BizDataAsyncTask<List<FavoriteModel>>() {
             @Override
             protected List<FavoriteModel> doExecute() throws ZYException, BizFailure {
@@ -168,9 +193,9 @@ public class ActivityCollect extends BaseActivity {
             protected void onExecuteSucceeded(List<FavoriteModel> favoriteModels) {
                 list = favoriteModels;
                 for (int i = 0; i < list.size(); i++) {
-                    list.get( i ).setCheck( false );
+                    list.get(i).setCheck(false);
                 }
-                adapter.setNewData( list );
+                adapter.setNewData(list);
                 closeLoding();
             }
 
@@ -179,7 +204,33 @@ public class ActivityCollect extends BaseActivity {
                 closeLoding();
             }
         };
+
         favoriteTask.execute();
+    }
+
+    private void getHistory() {
+        setLoding(this, false);
+        new BizDataAsyncTask<List<FavoriteModel>>() {
+            @Override
+            protected List<FavoriteModel> doExecute() throws ZYException, BizFailure {
+                return UserBiz.getHistory(1);
+            }
+
+            @Override
+            protected void onExecuteSucceeded(List<FavoriteModel> favoriteModels) {
+                list = favoriteModels;
+                for (int i = 0; i < list.size(); i++) {
+                    list.get(i).setCheck(false);
+                }
+                adapter.setNewData(list);
+                closeLoding();
+            }
+
+            @Override
+            protected void OnExecuteFailed() {
+                closeLoding();
+            }
+        }.execute();
     }
 
 
@@ -189,15 +240,15 @@ public class ActivityCollect extends BaseActivity {
         deleteTask = new BizDataAsyncTask<Boolean>() {
             @Override
             protected Boolean doExecute() throws ZYException, BizFailure {
-                Log.e( "*****", ids );
-                return UserBiz.mulDelFavoritesGoods( ids );
+                Log.e("*****", ids);
+                return UserBiz.mulDelFavoritesGoods(ids);
             }
 
             @Override
             protected void onExecuteSucceeded(Boolean isfl) {
                 if (isfl) {
                     finish();
-                    startActivity( new Intent( ActivityCollect.this, ActivityCollect.class ) );
+                    startActivity(new Intent(ActivityCollect.this, ActivityCollect.class));
                 }
             }
 
@@ -211,7 +262,7 @@ public class ActivityCollect extends BaseActivity {
 
     private class MyAdapter extends BaseQuickAdapter<FavoriteModel> {
         public MyAdapter() {
-            super( R.layout.item_user_collect, list );
+            super(R.layout.item_user_collect, list);
         }
 
         @Override
@@ -219,29 +270,29 @@ public class ActivityCollect extends BaseActivity {
 //            final CheckBox checkBox = baseViewHolder.getView( R.id.check );
 //            adapter.getData().get( baseViewHolder.getPosition() ).setCheck( checkBox.isChecked() );
             if (index == 0) {
-                baseViewHolder.setVisible( R.id.check, false )
-                        .setChecked( R.id.check, false );
+                baseViewHolder.setVisible(R.id.check, false)
+                        .setChecked(R.id.check, false);
                 for (int i = 0; i < adapter.getData().size(); i++) {
-                    adapter.getData().get( i ).setCheck( false );
+                    adapter.getData().get(i).setCheck(false);
                 }
             } else {
 
-                baseViewHolder.setVisible( R.id.check, true );
+                baseViewHolder.setVisible(R.id.check, true);
             }
 
 
             //加载图片
-            SimpleDraweeView imageView = baseViewHolder.getView( R.id.goods_img );
-            imageView.setImageURI( Uri.parse( "http://www.lanjiutian.com/upload/images" + messageModel.getImgPath() ) );
+            SimpleDraweeView imageView = baseViewHolder.getView(R.id.goods_img);
+            imageView.setImageURI(Uri.parse("http://www.lanjiutian.com/upload/images" + messageModel.getImgPath()));
 
-            baseViewHolder.setText( R.id.goods_title, messageModel.getTitle() )
-                    .setText( R.id.money, "￥" + messageModel.getCostMoney() + "" )
-                    .setOnCheckedChangeListener( R.id.check, new CompoundButton.OnCheckedChangeListener() {
+            baseViewHolder.setText(R.id.goods_title, messageModel.getTitle())
+                    .setText(R.id.money, "￥" + messageModel.getCostMoney() + "")
+                    .setOnCheckedChangeListener(R.id.check, new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            adapter.getData().get( baseViewHolder.getPosition() ).setCheck( b );
+                            adapter.getData().get(baseViewHolder.getPosition()).setCheck(b);
                         }
-                    } );
+                    });
         }
     }
 

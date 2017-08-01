@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -38,6 +39,7 @@ import com.wyw.ljtds.ui.user.help.ActivityHelp;
 import com.wyw.ljtds.ui.user.manage.ActivityManage;
 import com.wyw.ljtds.ui.user.order.ActivityAfterMarket;
 import com.wyw.ljtds.ui.user.order.ActivityOrder;
+import com.wyw.ljtds.ui.user.wallet.BalanceActivity;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.widget.DividerGridItemDecoration;
 import com.wyw.ljtds.widget.MyGridView;
@@ -49,6 +51,8 @@ import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.wyw.ljtds.ui.user.FragmentUser.TAG_MY_ZUJI;
 
 /**
  * Created by Administrator on 2016/12/9 0009.
@@ -70,8 +74,11 @@ public class FragmentUser extends LazyLoadFragment {
     private MyScrollView scroll_view;
     @ViewInject(R.id.ll_sc)
     private LinearLayout ll_sc;
-//    @ViewInject( R.id.user )
+    //    @ViewInject( R.id.user )
 //    private RecyclerView user_rec;
+    public static String TAG_MY = "com.wyw.ljtds.ui.user.FragmentUser.tag_my";
+    public static String TAG_MY_SHOUCANG = "tag_shoucang";
+    public static String TAG_MY_ZUJI = "tag_zuji";
 
     private AbstractListViewAdapter<UserGridleModel> adapter;
     private UserModel user;
@@ -132,8 +139,6 @@ public class FragmentUser extends LazyLoadFragment {
                 case R.id.user_xiaoxi://消息中心
                     startActivity(new Intent(getActivity(), ActivityMessage.class));
                     break;
-
-
                 default:
                     break;
             }
@@ -168,15 +173,17 @@ public class FragmentUser extends LazyLoadFragment {
                 switch (i) {
                     case 0://我的收藏
                         it = new Intent(getActivity(), ActivityCollect.class);
+                        it.putExtra(TAG_MY, TAG_MY_SHOUCANG);
                         startActivity(it);
                         break;
 
                     case 1://足迹
-//                        it = new Intent( getActivity(), ActivityCollect.class );
-//                        startActivity( it );
+                        it = new Intent(getActivity(), ActivityCollect.class);
+                        it.putExtra(TAG_MY, TAG_MY_ZUJI);
+                        startActivity(it);
                         break;
 
-                    case 2://我的钱包
+                    case 2://我的钱包 qianbao
                         it = new Intent(getActivity(), ActivityWallet.class);
                         startActivity(it);
                         break;
@@ -190,7 +197,6 @@ public class FragmentUser extends LazyLoadFragment {
             }
         });
 
-        getUser();
     }
 
     private void initTuijian() {
@@ -208,11 +214,9 @@ public class FragmentUser extends LazyLoadFragment {
         });
 
         myAdapter = new MyAdapter();
-        myAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+//        myAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         tuijian.setAdapter(myAdapter);
         tuijian.setVisibility(View.VISIBLE);
-
-        getrecommend(PreferenceCache.getToken(), "");
     }
 
     @Override
@@ -220,7 +224,16 @@ public class FragmentUser extends LazyLoadFragment {
         super.onActivityCreated(savedInstanceState);
         initGridView();
         initTuijian();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (user == null)
+            getUser();
+        if (list == null)
+            getrecommend(PreferenceCache.getToken(), "");
     }
 
     @Override

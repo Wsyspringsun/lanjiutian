@@ -89,6 +89,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/sel_wallet_yue"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x42"
         android:background="@color/white"
@@ -111,7 +112,7 @@
             <TextView
                 style="@style/font_ww_14"
                 android:layout_marginLeft="@dimen/x5"
-                android:text="充值余额"
+                android:text="@string/user_yue"
                 android:textColor="@color/font_black2" />
 
         </LinearLayout>
@@ -128,6 +129,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/sel_wallet_jifen"
         android:layout_marginTop="@dimen/x10"
         android:background="@color/white"
         android:layout_width="match_parent"
@@ -168,6 +170,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/sel_wallet_youhuiquan"
         android:layout_marginTop="@dimen/x10"
         android:background="@color/white"
         android:layout_width="match_parent"
@@ -191,7 +194,7 @@
             <TextView
                 android:layout_marginLeft="@dimen/x5"
                 style="@style/font_ww_14"
-                android:text="我的优惠券"
+                android:text="@string/user_youhuiquan"
                 android:textColor="@color/font_black2"/>
 
         </LinearLayout>

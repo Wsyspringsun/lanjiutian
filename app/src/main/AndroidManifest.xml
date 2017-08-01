@@ -66,7 +66,8 @@
             android:name=".ui.home.ActivitySplash"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeSplash">
-            <!--<intent-filter></intent-filter>-->
+
+            <!-- <intent-filter></intent-filter> -->
         </activity>
         <activity
             android:name=".MainActivity"
@@ -90,190 +91,184 @@
         <activity
             android:name=".ui.base.ActivityWebView"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
 
         <!-- 登陆注册 -->
         <activity
             android:name=".ui.user.ActivityRegist"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
         <activity
             android:name=".ui.user.ActivityRegist1"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.ActivityLogin"
             android:screenOrientation="portrait"
             android:theme="@style/Login"
-            android:windowSoftInputMode="stateVisible|adjustPan"></activity>
+            android:windowSoftInputMode="stateVisible|adjustPan" />
 
         <!-- 首页 -->
         <activity
             android:name=".ui.home.ActivitySearch"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.category.ActivityScan"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.home.ActivityHomeWeb"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <!-- 医药馆 -->
         <activity
             android:name=".ui.find.ActivityMapLocation"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
         <activity
             android:name=".ui.find.RoutePlanDemo"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.find.ActivityBody"
             android:screenOrientation="portrait"
-            android:theme="@style/Login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Login" />
         <activity
             android:name=".widget.bodypart.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Login">
-        </activity>
+            android:theme="@style/Login" />
         <activity
             android:name=".ui.find.ActivityFindCategort"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <!-- 商品 -->
         <activity
             android:name=".ui.goods.ActivityMedicinesInfo"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.goods.ActivityGoodsInfo"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.goods.ActivityGoodsList"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.goods.ActivityMedicineList"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.goods.ActivityGoodsSubmit"
             android:screenOrientation="portrait"
             android:theme="@style/Login"
-            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.goods.ActivityGoodsSubmitBill"
             android:screenOrientation="portrait"
             android:theme="@style/Login"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.goods.ActivityGoodsSubmitChoice"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
         <activity
             android:name=".ui.goods.ActivityGoodsImages"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
 
         <!-- 订单 -->
         <activity
             android:name=".ui.user.order.ActivityOrder"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.order.ActivityOrderInfo"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
         <activity
             android:name=".ui.user.order.ActivityEvaluate"
             android:screenOrientation="portrait"
             android:theme="@style/Login"
-            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.user.order.ActivityAfterMarket"
             android:screenOrientation="portrait"
             android:theme="@style/Login"
-            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.user.order.ActivityLogistics"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
 
         <!-- 账户管理 -->
         <activity
             android:name=".ui.user.manage.ActivityManage"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.manage.ActivityInformation"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.address.ActivityAddress"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
         <activity
             android:name=".ui.user.address.ActivityAddressEdit"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
         <activity
             android:name=".ui.user.address.ActivityProvince"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
         <activity
             android:name=".ui.user.address.ActivityCity"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
         <activity
             android:name=".ui.user.manage.ActivityRealName"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible|adjustResize"></activity>
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".ui.user.manage.ActivityUpdate"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.manage.ActivitySecurity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.manage.ActivityAmendPassword"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.user.manage.ActivityAmendPassword1"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.user.manage.ActivityBigImage"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <!-- 我的 -->
         <activity
             android:name=".ui.user.ActivityCollect"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
         <activity
             android:name=".ui.user.ActivityRanking"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
         <activity
             android:name=".ui.user.ActivityFavorite"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
         <activity
             android:name=".ui.user.ActivityWallet"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.ActivityMessage"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.help.ActivityHelp"
             android:screenOrientation="portrait"
-            android:theme="@style/Login"></activity>
+            android:theme="@style/Login" />
 
         <!-- 百度地图所需 -->
         <meta-data
@@ -295,7 +290,7 @@
             android:configChanges="orientation|keyboardHidden|fontScale"
             android:screenOrientation="portrait"
             android:theme="@style/Login"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.unionpay.uppay.PayActivity"
             android:configChanges="orientation|keyboardHidden|keyboard"
@@ -303,26 +298,26 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Login"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- 支付宝所需 -->
         <activity
             android:name="com.alipay.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind" />
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name="com.alipay.sdk.app.H5AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <!-- 小能所需 -->
         <activity
@@ -361,7 +356,20 @@
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
             android:name=".ui.user.help.WebShowActivity"
-            android:label="@string/title_activity_web_show"></activity>
+            android:label="@string/title_activity_web_show" />
+        <activity
+            android:name=".ui.user.wallet.BalanceActivity"
+            android:label="@string/title_activity_balance"></activity>
+        <activity
+            android:name=".ui.user.wallet.PointRecordActivity"
+            android:label="@string/title_activity_point">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

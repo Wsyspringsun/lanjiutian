@@ -59,6 +59,7 @@
 
             <LinearLayout
                 android:id="@+id/woman_btn"
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="38dp"
                 android:layout_weight="1"

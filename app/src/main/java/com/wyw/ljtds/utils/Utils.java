@@ -13,17 +13,18 @@ import java.text.DecimalFormat;
 public class Utils {
     /**
      * 保留后两位小数点
+     *
      * @param number
-     * @param style 1：直接去掉  2：四舍五入
+     * @param style  1：直接去掉  2：四舍五入
      * @return
      */
-    public static BigDecimal DoubleFormat(String number,int style) {
+    public static BigDecimal DoubleFormat(String number, int style) {
 
-        BigDecimal bigDecimal=new BigDecimal( number );
-        if (style==1){
-            bigDecimal.setScale(2,BigDecimal.ROUND_DOWN);
-        }else if (style==2){
-            bigDecimal.setScale(2,BigDecimal.ROUND_HALF_UP);
+        BigDecimal bigDecimal = new BigDecimal(number);
+        if (style == 1) {
+            bigDecimal.setScale(2, BigDecimal.ROUND_DOWN);
+        } else if (style == 2) {
+            bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP);
         }
 
         return bigDecimal;
@@ -42,8 +43,8 @@ public class Utils {
         int inSampleSize = 1;
 
         if (height > reqHeight || width > reqWidth) {
-            final int heightRatio = Math.round( (float) height / (float) reqHeight );
-            final int widthRatio = Math.round( (float) width / (float) reqWidth );
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
             inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
         }
         return inSampleSize;
@@ -53,13 +54,21 @@ public class Utils {
     public static Bitmap getSmallBitmap(String filePath) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile( filePath, options );
+        BitmapFactory.decodeFile(filePath, options);
 
         // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize( options, 480, 480 );
+        options.inSampleSize = calculateInSampleSize(options, 480, 480);
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
 
-        return BitmapFactory.decodeFile( filePath, options );
+        return BitmapFactory.decodeFile(filePath, options);
+    }
+
+    public static String formatFee(String val) {
+        if (StringUtils.isEmpty(val))
+            return "";
+        DecimalFormat df = new DecimalFormat("0.00");
+        BigDecimal bVal = new BigDecimal(val);
+        return df.format(bVal);
     }
 }

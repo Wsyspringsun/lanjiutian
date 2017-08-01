@@ -35,7 +35,6 @@ import com.wyw.ljtds.model.OnlinePayModel;
 import com.wyw.ljtds.model.OrderModelMedicine;
 import com.wyw.ljtds.model.OrderTrade;
 import com.wyw.ljtds.ui.base.BaseFragment;
-import com.wyw.ljtds.ui.base.LazyLoadFragment;
 import com.wyw.ljtds.ui.goods.ActivityGoodsSubmit;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;

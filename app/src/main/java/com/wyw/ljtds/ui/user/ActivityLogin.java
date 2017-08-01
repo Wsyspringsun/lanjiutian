@@ -64,7 +64,6 @@ public class ActivityLogin extends BaseActivity {
                 break;
 
             case R.id.next:
-                setLoding( this, false );
                 doLogin();
                 break;
 
@@ -107,10 +106,12 @@ public class ActivityLogin extends BaseActivity {
     BizDataAsyncTask<String> loginTask;
 
     private void doLogin() {
+        setLoding( this, false );
         loginTask = new BizDataAsyncTask<String>() {
 
             @Override
             protected void onExecuteSucceeded(String result) {
+                closeLoding();
                 PreferenceCache.putToken( result ); // 持久化缓存token
                 PreferenceCache.putAutoLogin( true );// 记录是否自动登录
                 PreferenceCache.putUsername( ed_phone.getText().toString().trim() );
@@ -119,7 +120,6 @@ public class ActivityLogin extends BaseActivity {
                     PreferenceCache.putPhoneNum( ed_phone.getText().toString().trim() );
                 }
 
-                closeLoding();
 
                 ActivityLogin.this.finish();
                 AppManager.destoryActivity( "submit" );//处理订单页未登录状态
@@ -136,7 +136,6 @@ public class ActivityLogin extends BaseActivity {
 
             @Override
             protected void OnExecuteFailed() {
-                // TODO Auto-generated method stub
                 closeLoding();
             }
         };

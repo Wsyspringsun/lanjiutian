@@ -16,7 +16,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -41,11 +40,9 @@ import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
-
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
-
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -91,7 +88,7 @@ public class FragmentCart extends BaseFragment {
 //                break;
 
             case R.id.tv_go_to_pay:
-                if (totalCount == 0) {
+                if (totalCount <= 0) {
                     ToastUtil.show(getActivity(), "请选择要支付的商品");
                     return;
                 }
@@ -154,7 +151,8 @@ public class FragmentCart extends BaseFragment {
                 break;
 
             case R.id.tv_delete:
-                if (totalCount == 0) {
+                calculate();
+                if (totalCount <= 0) {
                     ToastUtil.show(getActivity(), "请选择要移除的商品");
                     return;
                 }
@@ -183,7 +181,7 @@ public class FragmentCart extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 //        x = 0;
-        back.setVisibility(View.GONE);
+//        back.setVisibility(View.GONE);
 //        title.setText( "购物车（" + x + "）" );
         title.setText("购物车");
 
@@ -404,8 +402,11 @@ public class FragmentCart extends BaseFragment {
         totalCount = 0;
         totalPrice = 0.00;
         DecimalFormat df = new DecimalFormat("######0.00");
-
-        for (int i = 0; i < adapter.getItemCount(); i++) {
+        Log.e(AppConfig.ERR_TAG, "adapter.getItemCount:" + adapter.getItemCount());
+        if (adapter.getData() == null)
+            return;
+        for (int i = 0; i < adapter.getData().size(); i++) {
+            Log.e(AppConfig.ERR_TAG, "item:" + i + "/" + adapter.getData().size());
             Group group = adapter.getItem(i);
             List<Goods> childs = group.getGoodses();
             for (int j = 0; j < childs.size(); j++) {

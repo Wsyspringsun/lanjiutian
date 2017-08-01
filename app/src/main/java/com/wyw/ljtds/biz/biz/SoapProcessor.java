@@ -102,7 +102,7 @@ public class SoapProcessor {
             androidHttpTransport.call(null, envelope);
             if (envelope.bodyIn instanceof SoapFault) {
 
-                Log.e("", envelope.bodyIn.toString());
+                Log.e(AppConfig.ERR_TAG, envelope.bodyIn.toString());
             }
 
             response = (SoapObject) (envelope.bodyIn);
@@ -120,23 +120,22 @@ public class SoapProcessor {
         String result = response.getProperty("return").toString();
 
         // LogUtil.e(result);
-        Log.e("SoapProcessor:request()", result);
+        Log.e(AppConfig.ERR_TAG, result);
 
         return result;
     }
 
 
     public JsonElement request() throws BizFailure, ZYException {
-
         if (!NetworkDetector.isNetworkAvailable(MyApplication.getAppContext())) {
             throw new NetWorkNotAvailableException();
         }
-
+        Log.e(AppConfig.ERR_TAG, "response 1:" );
         HttpTransportSE androidHttpTransport = new HttpTransportSE(mUrl, 10000);
-
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
                 SoapEnvelope.VER11);
 
+        Log.e(AppConfig.ERR_TAG, "response 2:" );
         envelope.bodyOut = mRequest;
         envelope.dotNet = true;
         envelope.setOutputSoapObject(mRequest);
@@ -154,11 +153,11 @@ public class SoapProcessor {
         try {
             androidHttpTransport.call(null, envelope);
             if (envelope.bodyIn instanceof SoapFault) {
-
                 Log.e(AppConfig.ERR_TAG, envelope.bodyIn.toString());
             }
 
             response = (SoapObject) (envelope.bodyIn);
+            Log.e(AppConfig.ERR_TAG, "response 3:" );
         } catch (IOException e) {
             if (e instanceof SocketTimeoutException) {
                 throw new OperationTimeOutException(e);

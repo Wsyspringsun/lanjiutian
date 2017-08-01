@@ -1,7 +1,9 @@
 package com.wyw.ljtds.ui.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -10,8 +12,11 @@ import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
+import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.WalletModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.ui.user.wallet.BalanceActivity;
+import com.wyw.ljtds.ui.user.wallet.PointRecordActivity;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -32,11 +37,24 @@ public class ActivityWallet extends BaseActivity {
     @ViewInject(R.id.money)
     private TextView money;
 
-    @Event(value = {R.id.header_return})
-    private void onClick(View view){
-        switch (view.getId()){
+    @Event(value = {R.id.header_return, R.id.sel_wallet_jifen, R.id.sel_wallet_youhuiquan, R.id.sel_wallet_yue})
+    private void onClick(View view) {
+        Intent it = null;
+        switch (view.getId()) {
             case R.id.header_return:
                 finish();
+                break;
+            case R.id.sel_wallet_jifen:
+                it = new Intent(this, PointRecordActivity.class);
+                startActivity(it);
+                break;
+            case R.id.sel_wallet_youhuiquan:
+                break;
+            case R.id.sel_wallet_yue:
+                it = new Intent(this, BalanceActivity.class);
+                startActivity(it);
+                break;
+            default:
                 break;
         }
     }
@@ -47,13 +65,12 @@ public class ActivityWallet extends BaseActivity {
 
         title.setText("我的钱包");
 
-        setLoding(this,false);
-        getPoin();
+//        getPoin();
     }
 
-    BizDataAsyncTask<List<WalletModel>> pointTask;
-    private void getPoin(){
-        pointTask=new BizDataAsyncTask<List<WalletModel>>() {
+    private void getPoin() {
+        setLoding(this, false);
+        BizDataAsyncTask<List<WalletModel>> pointTask = new BizDataAsyncTask<List<WalletModel>>() {
             @Override
             protected List<WalletModel> doExecute() throws ZYException, BizFailure {
                 return UserBiz.getWallet();
@@ -61,9 +78,9 @@ public class ActivityWallet extends BaseActivity {
 
             @Override
             protected void onExecuteSucceeded(List<WalletModel> model) {
-                for (int i=0;i<model.size();i++){
-                    jifen.setText(model.get(i).getUSABLE_POINT()+"");
-                    money.setText("￥"+model.get(i).getUSABLE_AMOUNT()+"");
+                for (int i = 0; i < model.size(); i++) {
+                    jifen.setText(model.get(i).getUSABLE_POINT() + "");
+                    money.setText("￥" + model.get(i).getUSABLE_AMOUNT() + "");
                 }
 
                 closeLoding();

@@ -1,6 +1,7 @@
 package com.wyw.ljtds.widget.body.region;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,13 +9,24 @@ import android.view.ViewGroup;
 import android.widget.AbsoluteLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.ui.find.FragmentFind;
+import com.wyw.ljtds.ui.goods.ActivityMedicineList;
 import com.wyw.ljtds.widget.body.WaveEffectLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static com.wyw.ljtds.widget.body.region.Region.EAR;
+import static com.wyw.ljtds.widget.body.region.Region.EYE;
+import static com.wyw.ljtds.widget.body.region.Region.FACE;
+import static com.wyw.ljtds.widget.body.region.Region.HEAD;
+import static com.wyw.ljtds.widget.body.region.Region.NOSEMOUTH;
+import static com.wyw.ljtds.widget.body.region.Region.THROAT;
 
 /**
  * Created by angelo on 2015/2/26.
@@ -28,6 +40,32 @@ public class RegionView {
     private LayoutInflater layoutInflater;
     private Region[] regions;
     private List<View> regionViews = new ArrayList<>();
+    private static Map<Region, String> classIdMap = new HashMap<Region, String>();
+
+    static {
+        classIdMap.put(HEAD, "2738");
+        classIdMap.put(Region.EYE, "2739");
+        classIdMap.put(Region.FACE, "2740");
+        classIdMap.put(Region.NOSEMOUTH, "2743");
+        classIdMap.put(Region.EAR, "2742");
+        classIdMap.put(Region.THROAT, "2741");
+        classIdMap.put(Region.NECK, "2744");
+        classIdMap.put(Region.SKIN, "2745");
+
+        classIdMap.put(Region.CHEST, "2748");
+        classIdMap.put(Region.ABDOMEN, "2749");
+        classIdMap.put(Region.WAIST, "2750");
+        classIdMap.put(Region.SHOULDER, "2746");
+        classIdMap.put(Region.BACKBACK, "2763");
+        classIdMap.put(Region.BACKANUSRECTUM, "2765");
+        classIdMap.put(Region.PELVIC, "2761");
+
+        classIdMap.put(Region.HAND, "2752");
+        classIdMap.put(Region.FOOT, "2754");
+        classIdMap.put(Region.LEG, "2753");
+        classIdMap.put(Region.OTHER, "766");
+
+    }
 
     public RegionView(WaveEffectLayout container, Context context) {
         this.container = container;
@@ -60,7 +98,6 @@ public class RegionView {
         }
 
         regionViews.add(getItem(Region.SKIN));
-        Log.e(AppConfig.ERR_TAG,"region type:"+regionType);
         refresh();
     }
 
@@ -72,9 +109,12 @@ public class RegionView {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e(AppConfig.ERR_TAG,"click "+region.getName());
-                Toast.makeText(mContext, "You click " + region.getName(), Toast.LENGTH_SHORT);
-
+                String classId = classIdMap.get(region);
+                Intent it = new Intent(mContext, ActivityMedicineList.class);
+                it.putExtra(FragmentFind.TAG_FIND_MTD,FragmentFind. FIND_MTD_QUICK);
+                it.putExtra(FragmentFind.TAG_MTD_QUICK_PARAM, classId);
+                mContext.startActivity(it);
+//                Log.e(AppConfig.ERR_TAG, "click " + classId);
             }
         });
         return itemView;

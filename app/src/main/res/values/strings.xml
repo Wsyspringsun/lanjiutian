@@ -310,5 +310,14 @@
     <!-- 物流 -->
     <string name="logistic_null">没有获取物流信息</string>
     <string name="title_activity_web_show">WebShowActivity</string>
+    <string name="user_yue">我的余额</string>
+    <string name="user_youhuiquan">我的优惠券</string>
+    <string name="title_activity_balance">BalanceActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="balance_in">充值记录</string>
+    <string name="balance_out">消费记录</string>
+    <string name="title_activity_point">PointRecordActivity</string>
 
 </resources>
