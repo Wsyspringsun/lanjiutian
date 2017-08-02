@@ -66,6 +66,8 @@ import java.util.Map;
 
 @ContentView(R.layout.activity_order_submit)
 public class ActivityGoodsSubmit extends BaseActivity {
+    public static final String TAG_INFO_SOURCE = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmit.TAG_INFO_SOURCE";
+    private String flgInfoSrc = "";
     private String PAYMTD_C = "C";
 
     @ViewInject(R.id.header_return_text)
@@ -126,7 +128,10 @@ public class ActivityGoodsSubmit extends BaseActivity {
 
         title.setText(R.string.order_queren);
 
-        data = getIntent().getStringExtra("data");
+        Intent it = getIntent();
+
+        flgInfoSrc = it.getStringExtra(TAG_INFO_SOURCE);
+        data = it.getStringExtra("data");
 
 
         if (!StringUtils.isEmpty(data)) {
@@ -157,6 +162,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
             public void onClick(View view) {
                 Intent it = new Intent(ActivityGoodsSubmit.this, ActivityGoodsSubmitChoice.class);
                 String json = GsonUtils.Bean2Json(cOrderModel);
+                it.putExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE,ActivityGoodsSubmit.this.flgInfoSrc);
                 it.putExtra(ActivityGoodsSubmitChoice.TAG_CREATE_ORDER_MODEL, json);
 //                it.putExtra("pay", zhifu_s);
 //                it.putExtra("jifen_money", jifen_money);
@@ -282,6 +288,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
 
             @Override
             protected void onExecuteSucceeded(CreatOrderModel creatOrderModel) {
+                Log.e(AppConfig.ERR_TAG,"server:"+GsonUtils.Bean2Json(creatOrderModel));
                 ActivityGoodsSubmit.this.cOrderModel = creatOrderModel;
                 list_business = new ArrayList<>();
                 model = new GoodCreatModel1();
@@ -544,7 +551,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
                     }
 
                     String strCOrderModel = data.getStringExtra(ActivityGoodsSubmitChoice.TAG_CREATE_ORDER_MODEL);
-                    cOrderModel = GsonUtils.Json2Bean(strCOrderModel,CreatOrderModel.class);
+                    cOrderModel = GsonUtils.Json2Bean(strCOrderModel, CreatOrderModel.class);
                     model.setDISTRIBUTION_DATE_START(cOrderModel.getDISTRIBUTION_DATE_START());
                     model.setDISTRIBUTION_DATE_END(cOrderModel.getDISTRIBUTION_DATE_END());
                     String str = GsonUtils.Bean2Json(model);

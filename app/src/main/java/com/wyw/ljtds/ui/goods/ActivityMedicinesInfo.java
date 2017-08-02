@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.gxz.PagerSlidingTabStrip;
 import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
@@ -30,15 +29,12 @@ import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.widget.goodsinfo.NoScrollViewPager;
-
 import org.json.JSONObject;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import cn.xiaoneng.coreapi.TrailActionBody;
 import cn.xiaoneng.uiapi.Ntalker;
 import cn.xiaoneng.utils.MyUtil;
@@ -48,6 +44,7 @@ import cn.xiaoneng.utils.MyUtil;
  */
 @ContentView(R.layout.activity_goods_info)
 public class ActivityMedicinesInfo extends BaseActivity {
+    public static String VAL_INFO_SOURCE="ActivityMedicinesInfo";
     @ViewInject(R.id.psts_tabs)
     public PagerSlidingTabStrip psts_tabs;
     @ViewInject(R.id.vp_content)
@@ -94,6 +91,8 @@ public class ActivityMedicinesInfo extends BaseActivity {
             case R.id.goumai:
                 if (model != null && !model.getPRESCRIPTION_FLG().equals( "1" )) {
                     it = new Intent( this, ActivityGoodsSubmit.class );
+
+                    it.putExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE,ActivityMedicinesInfo.VAL_INFO_SOURCE);
 
                     GoodSubmitModel1 goodSubmitModel = new GoodSubmitModel1();
                     GoodSubmitModel2 goodSubmitModel2 = new GoodSubmitModel2();

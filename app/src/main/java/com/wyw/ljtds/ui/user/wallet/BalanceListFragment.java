@@ -18,6 +18,7 @@ import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.BalanceRecord;
 import com.wyw.ljtds.ui.base.BaseFragment;
+import com.wyw.ljtds.utils.DateUtils;
 import com.wyw.ljtds.utils.Utils;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -175,12 +176,12 @@ public class BalanceListFragment extends BaseFragment {
                 baseViewHolder.setText(R.id.balance_item_addmoney_notes, s.getADDMONEY_NOTES())
                         .setText(R.id.balance_item_addamount, Utils.formatFee(s.getADDAMOUNT()))
                         .setText(R.id.balance_item_addmoney_cardbalance, Utils.formatFee(s.getADDMONEY_CARDBALANCE()))
-                        .setText(R.id.balance_item_cardinvalidate, s.getCARDINVALIDATE());
+                        .setText(R.id.balance_item_cardinvalidate, DateUtils.parseTime(s.getCARDINVALIDATE()));
             } else {
                 baseViewHolder.setText(R.id.balance_item_addmoney_notes, s.getSALE_NOTES())
                         .setText(R.id.balance_item_addamount, Utils.formatFee(s.getSALEAMOUNT()))
                         .setText(R.id.balance_item_addmoney_cardbalance, Utils.formatFee(s.getSALE_CARDBALANCE()))
-                        .setText(R.id.balance_item_cardinvalidate, s.getSALE_CREATETIME());
+                        .setText(R.id.balance_item_cardinvalidate, DateUtils.parseTime(s.getSALE_CREATETIME()));
             }
 
         }

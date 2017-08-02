@@ -6,10 +6,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.gxz.PagerSlidingTabStrip;
 import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
@@ -28,14 +28,11 @@ import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.widget.goodsinfo.NoScrollViewPager;
-
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import cn.xiaoneng.coreapi.TrailActionBody;
 
 /**
@@ -55,8 +52,11 @@ public class ActivityGoodsInfo extends BaseActivity {
     private LinearLayout shang_ll;
     @ViewInject(R.id.kefu_call)
     private RelativeLayout kefu_call;
+    @ViewInject(R.id.goumai)
+    private TextView tvGoumai;
 
 
+    public static final String VAL_INFO_SOURCE="ActivityGoodsInfo";
     //客服
     String settingid1 = "lj_1001_1496308413541";
     String groupName = "蓝九天商户平台";// 客服组默认名称
@@ -78,6 +78,7 @@ public class ActivityGoodsInfo extends BaseActivity {
     private FragmentGoodsPagerDetails goodsDetail;
     private FragmentGoodsPagerEvaluate goodsEvaluate;
 
+
     @Event(value = {R.id.goumai, R.id.add_cart, R.id.yao_ll, R.id.shopping_cart, R.id.kefu_call, R.id.ll_back,})
     private void onClick(View v) {
         Intent it;
@@ -89,6 +90,7 @@ public class ActivityGoodsInfo extends BaseActivity {
             case R.id.goumai:
                 if (model != null) {
                     it = new Intent(this, ActivityGoodsSubmit.class);
+                    it.putExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE,ActivityGoodsInfo.VAL_INFO_SOURCE);
 
                     GoodSubmitModel1 goodSubmitModel = new GoodSubmitModel1();
                     GoodSubmitModel2 goodSubmitModel2 = new GoodSubmitModel2();
@@ -165,6 +167,7 @@ public class ActivityGoodsInfo extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tvGoumai.setText(R.string.goumai);
 
         goodsInfo = new FragmentGoodsInfo();
         goodsDetail = new FragmentGoodsPagerDetails();
@@ -178,8 +181,6 @@ public class ActivityGoodsInfo extends BaseActivity {
         vp_content.setOffscreenPageLimit(3);
         psts_tabs.setViewPager(vp_content);
 
-
-        setLoding(this, false);
         getGoods();
 
 
@@ -189,18 +190,19 @@ public class ActivityGoodsInfo extends BaseActivity {
     BizDataAsyncTask<CommodityDetailsModel> medicineTask;
 
     private void getGoods() {
+        setLoding(this, false);
         medicineTask = new BizDataAsyncTask<CommodityDetailsModel>() {
             @Override
             protected CommodityDetailsModel doExecute() throws ZYException, BizFailure {
-                Log.e("goods_id=", getIntent().getStringExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID));
                 return GoodsBiz.getGoods(getIntent().getStringExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID));
-//                return GoodsBiz.getMedicine( "000000" );
             }
 
             @Override
             protected void onExecuteSucceeded(CommodityDetailsModel commodityDetailsModel) {
-
                 model = commodityDetailsModel;
+
+                Log.e(AppConfig.ERR_TAG, "model:" + GsonUtils.Bean2Json(model));
+
                 goodsInfo.updeta(model);
                 goodsEvaluate.update(model);
                 goodsDetail.fragmentGoodsParameter.getmodel(model);

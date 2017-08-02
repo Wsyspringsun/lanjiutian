@@ -17,6 +17,7 @@ import com.wyw.ljtds.model.WalletModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.user.wallet.BalanceActivity;
 import com.wyw.ljtds.ui.user.wallet.PointRecordActivity;
+import com.wyw.ljtds.utils.GsonUtils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -68,30 +69,35 @@ public class ActivityWallet extends BaseActivity {
 //        getPoin();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getPoin();
+    }
+
     private void getPoin() {
         setLoding(this, false);
-        BizDataAsyncTask<List<WalletModel>> pointTask = new BizDataAsyncTask<List<WalletModel>>() {
+        new BizDataAsyncTask<WalletModel>() {
             @Override
-            protected List<WalletModel> doExecute() throws ZYException, BizFailure {
-                return UserBiz.getWallet();
+            protected WalletModel doExecute() throws ZYException, BizFailure {
+                WalletModel data = UserBiz.getWallet();
+                return data;
             }
 
             @Override
-            protected void onExecuteSucceeded(List<WalletModel> model) {
-                for (int i = 0; i < model.size(); i++) {
-                    jifen.setText(model.get(i).getUSABLE_POINT() + "");
-                    money.setText("￥" + model.get(i).getUSABLE_AMOUNT() + "");
-                }
-
+            protected void onExecuteSucceeded(WalletModel model) {
                 closeLoding();
+                jifen.setText(model.getUsablePoint() + "");
+                money.setText("￥" + model.getCardbalance() + "");
+//                for (int i = 0; i < model.size(); i++) {
+//                }
+
             }
 
             @Override
             protected void OnExecuteFailed() {
-
-//                closeLoding();
+                closeLoding();
             }
-        };
-        pointTask.execute();
+        }.execute();
     }
 }

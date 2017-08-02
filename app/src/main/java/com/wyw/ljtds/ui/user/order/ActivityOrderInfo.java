@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,8 +33,10 @@ import com.wyw.ljtds.config.AppManager;
 import com.wyw.ljtds.model.OrderModelInfoMedicine;
 import com.wyw.ljtds.model.RecommendModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.ui.goods.ActivityGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.utils.DateUtils;
+import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.widget.DividerGridItemDecoration;
@@ -56,10 +59,16 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 @ContentView(R.layout.activity_order_info)
 public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.PermissionCallbacks {
+    @ViewInject(R.id.jiantou)
+    ImageView ivJianTou;
     @ViewInject(R.id.header_return_text)
     private TextView title;
     @ViewInject(R.id.reclcyer)
     private RecyclerView recyclerView;
+    @ViewInject(R.id.tv_order_info_tousu)
+    private TextView tvTousu;
+    @ViewInject(R.id.order_fuwu)
+    private TextView tvShouhou;
     @ViewInject(R.id.name)
     private TextView address_name;
     @ViewInject(R.id.phone)
@@ -146,6 +155,7 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 break;
 
             case R.id.lianxi:
+                Log.e(AppConfig.ERR_TAG, "group_id:" + group_id);
 //                openChat( model.getTitle(), "", settingid1, groupName, true, model.getCommodityId() );
                 if (!StringUtils.isEmpty(group_id) && group_id.equals("sxljt")) {
                     openChat("交易订单号：" + trade_id, "", settingid0, groupName, false, "");
@@ -156,6 +166,7 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 break;
 
             case R.id.boda:
+                Log.e(AppConfig.ERR_TAG, "phone:" + phone);
                 if (StringUtils.isEmpty(phone)) {
 
                 } else {
@@ -179,6 +190,8 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
 
         title.setText(R.string.order_xiangqing);
 
+
+        ivJianTou.setVisibility(View.GONE);
         tuijian_ll.setVisibility(View.GONE);
 
         setLoding(this, false);
@@ -188,6 +201,20 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+                Log.e(AppConfig.ERR_TAG, "itemClick:" + GsonUtils.Bean2Json(adapter.getData().get(i)));
+                Intent it;
+                if (AppConfig.GROUP_LJT.equals(group_id)) {
+                    it = new Intent(ActivityOrderInfo.this, ActivityMedicinesInfo.class);
+                } else {
+                    it = new Intent(ActivityOrderInfo.this, ActivityGoodsInfo.class);
+                }
+                it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getData().get(i).getCOMMODITY_ID());
+                startActivity(it);
+            }
+        });
 
         tuijian.setLayoutManager(new GridLayoutManager(this, 2));
         tuijian.setItemAnimator(new DefaultItemAnimator());
@@ -219,6 +246,8 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
 
             @Override
             protected void onExecuteSucceeded(OrderModelInfoMedicine orderModelInfoMedicine) {
+                closeLoding();
+                Log.e(AppConfig.ERR_TAG, "response:" + GsonUtils.Bean2Json(orderModelInfoMedicine));
                 String userAddressId = orderModelInfoMedicine.getUSER_ADDRESS_ID();
                 String addr = "", uname = "", phone = "";
                 //分别显示 地址信息
@@ -292,16 +321,21 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 adapter.setNewData(list);
                 adapter.notifyDataSetChanged();
 
-                closeLoding();
-
 
                 orderId = orderModelInfoMedicine.getORDER_GROUP_ID();
                 name = orderModelInfoMedicine.getOID_GROUP_NAME();
                 trade_id = orderModelInfoMedicine.getORDER_TRADE_ID();
                 order_status = orderModelInfoMedicine.getSTATUS();
-                phone = orderModelInfoMedicine.getCONTACT_TEL();
+                ActivityOrderInfo.this.phone = orderModelInfoMedicine.getCONTACT_TEL();
                 image = orderModelInfoMedicine.getDETAILS().get(0).getIMG_PATH();
-                group_id = orderModelInfoMedicine.getORDER_GROUP_ID();
+                group_id = orderModelInfoMedicine.getOID_GROUP_ID();
+                if (AppConfig.GROUP_LJT.equals(group_id)) {
+                    tvTousu.setVisibility(View.VISIBLE);
+                    tvShouhou.setVisibility(View.GONE);
+                } else {
+                    tvTousu.setVisibility(View.GONE);
+                    tvShouhou.setVisibility(View.VISIBLE);
+                }
 
 //                getrecommend( PreferenceCache.getToken(), trade_id );
 
@@ -443,7 +477,7 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
     @AfterPermissionGranted(REQUEST_CODE_PERMISSION_CALL_PHONE)
     private void call() {
         if (EasyPermissions.hasPermissions(this, Manifest.permission.CALL_PHONE)) {
-            Log.e("****", "是否有权限" + EasyPermissions.hasPermissions(this, Manifest.permission.CALL_PHONE) + "");
+            Log.e(AppConfig.ERR_TAG, "是否有权限" + EasyPermissions.hasPermissions(this, Manifest.permission.CALL_PHONE) + "");
             AlertDialog.Builder builder = new AlertDialog.Builder(ActivityOrderInfo.this);
             builder.setMessage("是否拨打电话：" + phone);
             builder.setNegativeButton("取消", null);

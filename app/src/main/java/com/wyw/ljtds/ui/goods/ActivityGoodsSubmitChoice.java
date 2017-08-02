@@ -82,7 +82,7 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
         }
         cOrderModel.setDISTRIBUTION_DATE_START(spinner1.getSelectedItem().toString());
         cOrderModel.setDISTRIBUTION_DATE_END(spinner2.getSelectedItem().toString());
-        mIntent.putExtra(TAG_CREATE_ORDER_MODEL,GsonUtils.Bean2Json(cOrderModel ));
+        mIntent.putExtra(TAG_CREATE_ORDER_MODEL, GsonUtils.Bean2Json(cOrderModel));
 
         setResult(AppConfig.IntentExtraKey.RESULT_OK, mIntent);
         finish();
@@ -121,6 +121,7 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
             zhifu_s = "货到付款";
         }
 
+
         jifen = cOrderModel.getUSER_POINT();
         jifen_money = cOrderModel.getPOINT_MONEY();
         BigDecimal dou1 = Utils.DoubleFormat(jifen, 1);
@@ -152,6 +153,13 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
 
         shuoming.setText("当前积分：" + jifen + "" + getResources().getString(R.string.order_point_info));
 //        spinner选中值
-
+        String flgInfoSrc = getIntent().getStringExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE);
+        if (ActivityMedicinesInfo.VAL_INFO_SOURCE.equals(flgInfoSrc)) {
+            View rdZFOnline = findViewById(R.id.zhifu_rb1);
+            rdZFOnline.setVisibility(View.GONE);
+            radioGroup1.check(R.id.zhifu_rb2);
+        }
     }
+
+
 }

@@ -110,6 +110,8 @@ public class PointRecordListFragment extends BaseFragment {
             adapter1 = new MyAdapter1();
             View noData = getActivity().getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
             adapter1.setEmptyView(noData);
+//            View header = getActivity().getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
+//            adapter1.addHeaderView(header);
             recyclerView.setAdapter(adapter1);
         }
         if (list == null || list.size() <= 0) {

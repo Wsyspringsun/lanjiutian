@@ -17,6 +17,9 @@ public class WalletModel extends BaseModel {
     private BigDecimal FROZE_POINT;
     private BigDecimal CONVERTED_POINT;
 
+    private String cardbalance;
+    private String usablePoint;
+
     public BigDecimal getUSABLE_POINT() {
         return USABLE_POINT;
     }
@@ -87,5 +90,21 @@ public class WalletModel extends BaseModel {
 
     public void setRISK_FROZE_AMOUNT(BigDecimal RISK_FROZE_AMOUNT) {
         this.RISK_FROZE_AMOUNT = RISK_FROZE_AMOUNT;
+    }
+
+    public String getCardbalance() {
+        return cardbalance;
+    }
+
+    public void setCardbalance(String cardbalance) {
+        this.cardbalance = cardbalance;
+    }
+
+    public String getUsablePoint() {
+        return usablePoint;
+    }
+
+    public void setUsablePoint(String usablePoint) {
+        this.usablePoint = usablePoint;
     }
 }

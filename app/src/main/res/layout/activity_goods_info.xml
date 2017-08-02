@@ -175,7 +175,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="2"
                     android:layout_height="match_parent"
-                    android:text="@string/goumai"
+                    android:text="@string/xuqiu"
                     android:textColor="@color/white"
                     android:textSize="16sp"/>
 

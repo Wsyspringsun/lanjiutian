@@ -15,8 +15,8 @@ android {
         applicationId "com.wyw.ljtds"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 4
-        versionName "1.0.4"
+        versionCode 5
+        versionName "1.0.5"
         multiDexEnabled = true
     }
     buildTypes {

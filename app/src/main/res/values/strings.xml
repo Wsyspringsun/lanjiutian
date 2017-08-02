@@ -90,6 +90,7 @@
     <!-- 购物车 -->
     <string name="add_gouwu">加入购物车</string>
     <string name="goumai">立即购买</string>
+    <string name="xuqiu">提交需求</string>
     <string name="gouwuche">购物车（1）</string>
     <string name="heji">合计:￥</string>
     <string name="heji1">合计</string>
@@ -319,5 +320,6 @@
     <string name="balance_in">充值记录</string>
     <string name="balance_out">消费记录</string>
     <string name="title_activity_point">PointRecordActivity</string>
+    <string name="order_info_tousu">投诉建议</string>
 
 </resources>
