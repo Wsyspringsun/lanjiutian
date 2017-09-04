@@ -14,6 +14,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.alipay.PayResult;
@@ -55,6 +57,7 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -103,6 +106,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
     private String upJson = null;
     private String jsonUnionOrder;
     private CreatOrderModel cOrderModel;
+    private boolean isUpdFooter;
 
 
     @Event(value = {R.id.header_return, R.id.submit})
@@ -128,16 +132,6 @@ public class ActivityGoodsSubmit extends BaseActivity {
 
         title.setText(R.string.order_queren);
 
-        Intent it = getIntent();
-
-        flgInfoSrc = it.getStringExtra(TAG_INFO_SOURCE);
-        data = it.getStringExtra("data");
-
-
-        if (!StringUtils.isEmpty(data)) {
-            showOrder(data, "showOrder");
-        }
-
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -160,15 +154,22 @@ public class ActivityGoodsSubmit extends BaseActivity {
         adapter.addFooterView(getFooterView(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(ActivityGoodsSubmit.this, ActivityGoodsSubmitChoice.class);
-                String json = GsonUtils.Bean2Json(cOrderModel);
-                it.putExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE,ActivityGoodsSubmit.this.flgInfoSrc);
-                it.putExtra(ActivityGoodsSubmitChoice.TAG_CREATE_ORDER_MODEL, json);
+                switch (view.getId()) {
+                    case R.id.zzhifu:
+                        Intent it = new Intent(ActivityGoodsSubmit.this, ActivityGoodsSubmitChoice.class);
+                        String json = GsonUtils.Bean2Json(cOrderModel);
+                        it.putExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE, ActivityGoodsSubmit.this.flgInfoSrc);
+                        it.putExtra(ActivityGoodsSubmitChoice.TAG_CREATE_ORDER_MODEL, json);
 //                it.putExtra("pay", zhifu_s);
 //                it.putExtra("jifen_money", jifen_money);
 //                it.putExtra("jifen", jifen);
 
-                startActivityForResult(it, 0);
+                        startActivityForResult(it, 0);
+                        break;
+                    default:
+                        break;
+                }
+
             }
         }));
         recyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
@@ -197,12 +198,19 @@ public class ActivityGoodsSubmit extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
+        Log.e(AppConfig.ERR_TAG, ".......onResume");
+        Intent it = getIntent();
+        flgInfoSrc = it.getStringExtra(TAG_INFO_SOURCE);
+        data = it.getStringExtra("data");
+        if (!StringUtils.isEmpty(data)) {
+            showOrder(data, "showOrder");
+        }
     }
 
-    @Override
-    protected void resumeFromOther() {
-        showOrder(data, "showOrder");
-    }
+//    @Override
+//    protected void resumeFromOther() {
+//        showOrder(data, "showOrder");
+//    }
 
     private View getHeaderView(View.OnClickListener listener) {
         View view = getLayoutInflater().inflate(R.layout.item_order_submit_address, (ViewGroup) recyclerView.getParent(), false);
@@ -213,9 +221,52 @@ public class ActivityGoodsSubmit extends BaseActivity {
     }
 
     private View getFooterView(View.OnClickListener listener) {
+        Log.e(AppConfig.ERR_TAG, "getFooterView");
         View view = getLayoutInflater().inflate(R.layout.item_order_submit_bottom, (ViewGroup) recyclerView.getParent(), false);
 
-        view.setOnClickListener(listener);
+
+        View zzhifu = view.findViewById(R.id.zzhifu);
+
+        zzhifu.setOnClickListener(listener);
+
+        CheckBox tbDianZiBi = (CheckBox) view.findViewById(R.id.chk_use_dianzibi);
+        final TextView tvDianzibi = (TextView) view.findViewById(R.id.tv_dianzibi_show);
+        tvDianzibi.setText("");
+        tvDianzibi.setVisibility(View.GONE);
+        tbDianZiBi.setChecked(false);
+        tbDianZiBi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.e(AppConfig.ERR_TAG, "chkDianzibi....." + isChecked);
+
+                if (!isUpdFooter) {
+                    String pf = isChecked ? "1" : "0";
+                    model.setCOIN_FLG(pf);
+                    String str = GsonUtils.Bean2Json(model);
+                    showOrder(str, "changeOrder");
+                }
+
+            }
+        });
+
+        CheckBox tbYouFeiQuan = (CheckBox) view.findViewById(R.id.chk_use_youfeiquan);
+        final TextView tvYoufei = (TextView) view.findViewById(R.id.tv_youfeiquan_show);
+        tbYouFeiQuan.setChecked(false);
+        if (cOrderModel != null && "1".equals(cOrderModel.getPOSTAGE_FLG())) {
+            tbYouFeiQuan.setChecked(true);
+        }
+        tbYouFeiQuan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isUpdFooter) {
+                    String pf = isChecked ? "1" : "0";
+                    model.setPOSTAGE_FLG(pf);
+                    String str = GsonUtils.Bean2Json(model);
+                    showOrder(str, "changeOrder");
+
+                }
+            }
+        });
 
         return view;
     }
@@ -223,6 +274,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
     private BizDataAsyncTask<String> submitTask;
 
     private void submitOrder(final String str, final String op) {
+        Log.e(AppConfig.ERR_TAG, "order create..." + str);
         submitTask = new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
@@ -279,19 +331,24 @@ public class ActivityGoodsSubmit extends BaseActivity {
     private BizDataAsyncTask<CreatOrderModel> orderTask;
 
     private void showOrder(final String str, final String op) {
+        Log.e(AppConfig.ERR_TAG,"showOrder........");
         orderTask = new BizDataAsyncTask<CreatOrderModel>() {
 
             @Override
             protected CreatOrderModel doExecute() throws ZYException, BizFailure {
-                return GoodsBiz.getOrderShow(str, op);
+                CreatOrderModel rlt = GoodsBiz.getOrderShow(str, op);
+                return rlt;
             }
 
             @Override
             protected void onExecuteSucceeded(CreatOrderModel creatOrderModel) {
-                Log.e(AppConfig.ERR_TAG,"server:"+GsonUtils.Bean2Json(creatOrderModel));
+                closeLoding();
+                Log.e(AppConfig.ERR_TAG, "server:" + GsonUtils.Bean2Json(creatOrderModel));
                 ActivityGoodsSubmit.this.cOrderModel = creatOrderModel;
                 list_business = new ArrayList<>();
                 model = new GoodCreatModel1();
+                model.setCOIN_FLG(creatOrderModel.getCOIN_FLG());
+                model.setPOSTAGE_FLG(creatOrderModel.getPOSTAGE_FLG());
                 model.setCOST_POINT(creatOrderModel.getCOST_POINT());
                 model.setPAYMENT_METHOD(creatOrderModel.getPAYMENT_METHOD());
                 model.setDISTRIBUTION_DATE_START(creatOrderModel.getDISTRIBUTION_DATE_START());
@@ -309,6 +366,10 @@ public class ActivityGoodsSubmit extends BaseActivity {
                     goodCreatModel2.setINVOICE_FLG(business.getINVOICE_FLG());
                     goodCreatModel2.setINVOICE_TITLE(business.getINVOICE_TITLE());
                     goodCreatModel2.setINVOICE_TYPE(business.getINVOICE_TYPE());
+                    goodCreatModel2.setPOSTAGE(business.getPOSTAGE());
+                    goodCreatModel2.setPOST_NUM(business.getPOST_NUM());
+                    goodCreatModel2.setELECTRONIC_MONEY(business.getELECTRONIC_MONEY());
+                    goodCreatModel2.setELECTRONIC_USEABLE_MONEY(business.getELECTRONIC_USEABLE_MONEY());
 
                     List<GoodCreatModel3> lists_good = new ArrayList<>();
                     List<Good> goods = business.getDETAILS();
@@ -352,8 +413,9 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 bundle.putString("phone", creatOrderModel.getUSER_ADDRESS().getCONSIGNEE_MOBILE());
                 bundle.putString("xiangxi", creatOrderModel.getUSER_ADDRESS().getCONSIGNEE_ADDRESS());
                 bundle.putString("shengshi", creatOrderModel.getUSER_ADDRESS().getPROVINCE() + creatOrderModel.getUSER_ADDRESS().getCITY());
-                //--
 
+
+                updFooter();
 
                 ((TextView) adapter.getHeaderLayout().findViewById(R.id.name)).setText(creatOrderModel.getUSER_ADDRESS().getCONSIGNEE_NAME());
                 ((TextView) adapter.getHeaderLayout().findViewById(R.id.phone)).setText(creatOrderModel.getUSER_ADDRESS().getCONSIGNEE_MOBILE());
@@ -365,7 +427,6 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 adapter.setNewData(list_business);
                 adapter.notifyDataSetChanged();
 
-                closeLoding();
             }
 
             @Override
@@ -376,6 +437,51 @@ public class ActivityGoodsSubmit extends BaseActivity {
         };
         setLoding(this, false);
         orderTask.execute();
+    }
+
+    private void updFooter() {
+        isUpdFooter = true;
+        Log.e(AppConfig.ERR_TAG, "updFooter");
+        if (model == null) return;
+        if (model.getDETAILS() == null) return;
+        if (model.getDETAILS().size() <= 0) return;
+        GoodCreatModel2 firstGroupOrder = model.getDETAILS().get(0);
+        String ELECTRONIC_MONEY = firstGroupOrder.getELECTRONIC_MONEY();
+        String ELECTRONIC_USEABLE_MONEY = firstGroupOrder.getELECTRONIC_USEABLE_MONEY();
+        String postage = firstGroupOrder.getPOSTAGE();
+        BigDecimal iPostage = new BigDecimal("0");
+        if (!StringUtils.isEmpty(postage)) {
+            iPostage = new BigDecimal(postage);
+        }
+        CheckBox tbDianZiBi = (CheckBox) adapter.getFooterLayout().findViewById(R.id.chk_use_dianzibi);
+        TextView tvDianzibi = (TextView) adapter.getFooterLayout().findViewById(R.id.tv_dianzibi_show);
+        tvDianzibi.setVisibility(View.VISIBLE);
+        tvDianzibi.setText(ELECTRONIC_MONEY + "/" + ELECTRONIC_USEABLE_MONEY);
+        if ("0".equals(ELECTRONIC_USEABLE_MONEY)) {
+            tbDianZiBi.setEnabled(false);
+        }
+        if ("1".equals(model.getCOIN_FLG())) {
+            tbDianZiBi.setChecked(true);
+            if ("0".equals(ELECTRONIC_MONEY)) {
+                tbDianZiBi.setEnabled(false);
+            }
+        }
+
+
+        String postnum = firstGroupOrder.getPOST_NUM();
+        BigDecimal iPostnum = new BigDecimal(postnum);
+        CheckBox tbYoufeiquan = (CheckBox) adapter.getFooterLayout().findViewById(R.id.chk_use_youfeiquan);
+        TextView tvYoufeiquan = (TextView) adapter.getFooterLayout().findViewById(R.id.tv_youfeiquan_show);
+        tvYoufeiquan.setText("可用:" + postnum);
+        Log.e(AppConfig.ERR_TAG, "iPostage" + iPostage + "/" + iPostnum);
+        if (BigDecimal.ZERO.compareTo(iPostage) >= 0 || BigDecimal.ZERO.compareTo(iPostnum) >= 0) {
+            tbYoufeiquan.setEnabled(false);
+        }
+
+        if ("1".equals(model.getPOSTAGE_FLG())) {
+            tbYoufeiquan.setChecked(true);
+        }
+        isUpdFooter = false;
     }
 
     //店铺adapter
@@ -470,7 +576,6 @@ public class ActivityGoodsSubmit extends BaseActivity {
             @Override
             protected void onExecuteSucceeded(OnlinePayModel aliPay) {
                 final String orderInfo = aliPay.getPay();
-                Log.e("****", orderInfo);
                 if (payModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_ALI)) {
                     //支付宝
                     if (!StringUtils.isEmpty(orderInfo)) {
@@ -520,6 +625,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
 //
 //                    Thread payThread = new Thread( payRunnable );
 //                    payThread.start();
+                } else {
                 }
 
             }
@@ -534,7 +640,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
     //更改数据  刷新页面
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e(AppConfig.ERR_TAG, requestCode + "/" + resultCode);
+        Log.e(AppConfig.ERR_TAG, "onActivityResult..:" + requestCode + "/" + resultCode);
         if (resultCode == AppConfig.IntentExtraKey.RESULT_OK) {
             switch (requestCode) {
                 case 0:
@@ -589,6 +695,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
             }
         } else {
             if (requestCode == 10) {
+                Log.e(AppConfig.ERR_TAG, "requestCode.......10");
                 String pay_result = data.getExtras().getString("pay_result");
                 if (pay_result.equalsIgnoreCase("success")) {
                     // 支付成功后，extra中如果存在result_data，取出校验
@@ -608,6 +715,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
                             // 此处的verify，商户需送去商户后台做验签
                             boolean ret = Utils.verify(dataOrg, sign, AppConfig.UPPAY_MODE);
                             if (ret) {
+                                Log.e(AppConfig.ERR_TAG, "payresult .....1:");
                                 // 验证通过后，显示支付结果
                                 ToastUtil.show(ActivityGoodsSubmit.this, getResources().getString(R.string.pay_success));
                             } else {
@@ -616,10 +724,12 @@ public class ActivityGoodsSubmit extends BaseActivity {
                                 ToastUtil.show(ActivityGoodsSubmit.this, getResources().getString(R.string.pay_fail));
                             }
                         } catch (JSONException e) {
+                            Log.e(AppConfig.ERR_TAG, "payresult:" + e.getMessage());
                         }
                     } else {
                         // 未收到签名信息
                         // 建议通过商户后台查询支付结果
+                        Log.e(AppConfig.ERR_TAG, "payresult .....2:" );
                         ToastUtil.show(ActivityGoodsSubmit.this, getResources().getString(R.string.pay_success));
                     }
 
@@ -660,7 +770,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                         ToastUtil.show(ActivityGoodsSubmit.this, getResources().getString(R.string.pay_success));
-                        Log.e("reslut", resultInfo);
+                        Log.e(AppConfig.ERR_TAG, "alipay result....:" + resultInfo);
                         if (!StringUtils.isEmpty(resultInfo)) {
                             AliResult aliResult = GsonUtils.Json2Bean(resultInfo, AliResult.class);
                             aliResult.setORDER_TRADE_ID(payModel.getORDER_TRADE_ID());
@@ -692,7 +802,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
         payResultTask = new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
-                Log.e("*****", data);
+                Log.e(AppConfig.ERR_TAG, "alipay send result....:" + data);
                 return GoodsBiz.onlinePayResult(data);
             }
 
@@ -735,6 +845,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
 
     //跳转到我的订单
     private void toOrder() {
+        Log.e(AppConfig.ERR_TAG, ".........toOrder");
         Intent it = new Intent(ActivityGoodsSubmit.this, ActivityOrder.class);
         finish();
         startActivity(it);

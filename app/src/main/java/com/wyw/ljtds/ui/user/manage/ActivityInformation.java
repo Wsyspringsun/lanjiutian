@@ -55,6 +55,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 @ContentView(R.layout.activity_user_information)
 public class ActivityInformation extends BaseActivity implements EasyPermissions.PermissionCallbacks {
+    private static final String BIRTHDAY_TIP = "点击设置生日";
     @ViewInject(R.id.birthday_tv)
     private TextView birthday_tv;
     @ViewInject(R.id.sdv_item_head_img)
@@ -77,18 +78,19 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
 
     @Event(value = {R.id.birthday, R.id.touxiang, R.id.nicheng, R.id.header_return, R.id.sex})
     private void onClick(View view) {
+
         switch (view.getId()) {
             case R.id.header_return:
                 Intent it = new Intent();
-                it.putExtra( "user", user );
-                setResult( AppConfig.IntentExtraKey.RESULT_OK, it );
+                it.putExtra(ActivityManage.TAG_USER, user);
+                setResult(AppConfig.IntentExtraKey.RESULT_OK, it);
                 finish();
 
                 break;
 
             case R.id.birthday:
-                final TimePickerDialog time_Dialog = new TimePickerDialog( this );
-                time_Dialog.setCallback( new TimePickerDialog.OnClickCallback() {
+                final TimePickerDialog time_Dialog = new TimePickerDialog(this);
+                time_Dialog.setCallback(new TimePickerDialog.OnClickCallback() {
                     @Override
                     public void onCancel() {
                         time_Dialog.dismiss();
@@ -96,13 +98,13 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
 
                     @Override
                     public void onSure(int year, int month, int day, long time) {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
-                        String date = dateFormat.format( time );
-                        birthday_tv.setText( date );
-                        setLoding( ActivityInformation.this, false );
-                        add( nicheng_tv.getText().toString().trim(), birthday_tv.getText().toString().trim(), sex_tv.getText().toString().trim() );
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        String date = dateFormat.format(time);
+                        birthday_tv.setText(date);
+                        setLoding(ActivityInformation.this, false);
+                        add(nicheng_tv.getText().toString().trim(), birthday_tv.getText().toString().trim(), sex_tv.getText().toString().trim());
                     }
-                } );
+                });
                 time_Dialog.show();
                 break;
 
@@ -111,37 +113,41 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
                 break;
 
             case R.id.nicheng:
-                et = new EditText( this );
+                et = new EditText(this);
 
-                new AlertDialog.Builder( this ).setTitle( "请输入昵称" )
-                        .setView( et ).setPositiveButton( "确定", new DialogInterface.OnClickListener() {
+                new AlertDialog.Builder(this).setTitle("请输入昵称")
+                        .setView(et).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (StringUtils.isEmpty( et.getText().toString().trim() )) {
-                            ToastUtil.show( ActivityInformation.this, "昵称不能为空" );
+                        if (StringUtils.isEmpty(et.getText().toString().trim())) {
+                            ToastUtil.show(ActivityInformation.this, "昵称不能为空");
                         } else {
-                            nicheng_tv.setText( et.getText() );
-                            setLoding( ActivityInformation.this, false );
-                            add( nicheng_tv.getText().toString().trim(), birthday_tv.getText().toString(), sex_tv.getText().toString() );
+                            nicheng_tv.setText(et.getText());
+                            String birthdayVal = "";
+                            if (!BIRTHDAY_TIP.equals(birthday_tv.getText().toString())) {
+                                birthdayVal = birthday_tv.getText().toString();
+                            }
+                            setLoding(ActivityInformation.this, false);
+                            add(nicheng_tv.getText().toString().trim(), birthdayVal, sex_tv.getText().toString());
                         }
 
                     }
-                } ).setNegativeButton( "取消", null ).show();
+                }).setNegativeButton("取消", null).show();
                 break;
 
             case R.id.sex:
                 final String[] items = {"男", "女"};
-                new AlertDialog.Builder( this ).setTitle( "请选择性别" )
-                        .setSingleChoiceItems( items, index, new DialogInterface.OnClickListener() {
+                new AlertDialog.Builder(this).setTitle("请选择性别")
+                        .setSingleChoiceItems(items, index, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
                                 index = i;
-                                sex_tv.setText( items[i] );
-                                setLoding( ActivityInformation.this, false );
-                                add( nicheng_tv.getText().toString().trim(), birthday_tv.getText().toString(), sex_tv.getText().toString() );
+                                sex_tv.setText(items[i]);
+                                setLoding(ActivityInformation.this, false);
+                                add(nicheng_tv.getText().toString().trim(), birthday_tv.getText().toString(), sex_tv.getText().toString());
                             }
-                        } ).show();
+                        }).show();
 
 
         }
@@ -149,29 +155,29 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
-        title.setText( R.string.gerenxinxi );
-        cutImage = new CutImage( this );
+        title.setText(R.string.gerenxinxi);
+        cutImage = new CutImage(this);
 
-        user = getIntent().getParcelableExtra( "user" );
-        name.setText( user.getMOBILE() );
-        sdv_item_head_img.setImageURI( Uri.parse( AppConfig.IMAGE_PATH + user.getUSER_ICON_FILE_ID() ) );
-        nicheng_tv.setText( user.getNICKNAME() );
+        user = getIntent().getParcelableExtra(ActivityManage.TAG_USER);
+        name.setText(user.getMOBILE());
+        sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH + user.getUSER_ICON_FILE_ID()));
+        nicheng_tv.setText(user.getNICKNAME());
         if (user.getBIRTHDAY() != 0) {
-            birthday_tv.setText( DateUtils.parseTime( user.getBIRTHDAY() + "" ) );
+            birthday_tv.setText(DateUtils.parseTime(user.getBIRTHDAY() + ""));
         } else {
-            birthday_tv.setText( "点击设置生日" );
+            birthday_tv.setText(BIRTHDAY_TIP);
         }
-        if (StringUtils.isEmpty( user.getSEX() )) {
-            sex_tv.setText( "保密" );
+        if (StringUtils.isEmpty(user.getSEX())) {
+            sex_tv.setText("保密");
             index = 0;
         } else {
-            if (user.getSEX().equals( "男" ) || user.getSEX().equals( "0" )) {
-                sex_tv.setText( "男" );
+            if (user.getSEX().equals("男") || user.getSEX().equals("0")) {
+                sex_tv.setText("男");
                 index = 0;
             } else {
-                sex_tv.setText( "女" );
+                sex_tv.setText("女");
                 index = 1;
             }
         }
@@ -181,27 +187,27 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
     @AfterPermissionGranted(REQUEST_CODE_PERMISSION_CAMERA)
     private void camera() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-        if (EasyPermissions.hasPermissions( this, perms )) {
+        if (EasyPermissions.hasPermissions(this, perms)) {
             opimgs();
         } else {
-            EasyPermissions.requestPermissions( this, "图片选择需要以下权限:拍照,浏览本地图片。", REQUEST_CODE_PERMISSION_CAMERA, perms );
+            EasyPermissions.requestPermissions(this, "图片选择需要以下权限:拍照,浏览本地图片。", REQUEST_CODE_PERMISSION_CAMERA, perms);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult( requestCode, resultCode, data );
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
-            Log.e( "****", "****" );
+            Log.e("****", "****");
         }
-        bitmap = cutImage.onResult( requestCode, resultCode, data );
+        bitmap = cutImage.onResult(requestCode, resultCode, data);
         if (bitmap != null) {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            bitmap.compress( Bitmap.CompressFormat.JPEG, 75, outputStream );
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream);
             byte[] b = outputStream.toByteArray();
-            String str = new String( Base64.encode( b ) );  //进行Base64编码
-            setLoding( this, false );
-            puticon( str );
+            String str = new String(Base64.encode(b));  //进行Base64编码
+            setLoding(this, false);
+            puticon(str);
         }
 
 
@@ -213,13 +219,13 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
         addTask = new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                return UserBiz.addPerInfomation( nc, sr, xb );
+                return UserBiz.addPerInfomation(nc, sr, xb);
             }
 
             @Override
             protected void onExecuteSucceeded(Integer s) {
                 if (s == 1) {
-                    user.setNICKNAME( nicheng_tv.getText().toString() );
+                    user.setNICKNAME(nicheng_tv.getText().toString());
                 }
                 closeLoding();
             }
@@ -240,23 +246,23 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult( requestCode, permissions, grantResults );
-        EasyPermissions.onRequestPermissionsResult( requestCode, permissions, grantResults, this );
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-        Log.e( "camera", "成功获取权限" );
+        Log.e("camera", "成功获取权限");
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        if (EasyPermissions.somePermissionPermanentlyDenied( this, perms )) {
-            new AppSettingsDialog.Builder( this, "需要开启此权限" )
-                    .setTitle( getString( R.string.alert_tishi ) )
-                    .setPositiveButton( "设置" )
-                    .setNegativeButton( "取消", null )
-                    .setRequestCode( 100 )
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this, "需要开启此权限")
+                    .setTitle(getString(R.string.alert_tishi))
+                    .setPositiveButton("设置")
+                    .setNegativeButton("取消", null)
+                    .setRequestCode(100)
                     .build()
                     .show();
         }
@@ -269,13 +275,13 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
         writeTask = new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
-                return UserBiz.putIcon( data );
+                return UserBiz.putIcon(data);
             }
 
             @Override
             protected void onExecuteSucceeded(final String s) {
-                user.setUSER_ICON_FILE_ID( s );
-                sdv_item_head_img.setImageURI( Uri.parse( AppConfig.IMAGE_PATH + s ) );
+                user.setUSER_ICON_FILE_ID(s);
+                sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH + s));
                 closeLoding();
             }
 
@@ -287,17 +293,17 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
         writeTask.execute();
     }
 
-    private void opimgs(){
+    private void opimgs() {
         final String[] items = {"打开相机", "本地相册"};
-        new CircleDialog.Builder( this )
-                .configDialog( new ConfigDialog() {
+        new CircleDialog.Builder(this)
+                .configDialog(new ConfigDialog() {
                     @Override
                     public void onConfig(DialogParams params) {
                         //增加弹出动画
                         params.animStyle = R.style.popWindow_anim_style;
                     }
-                } )
-                .setItems( items, new AdapterView.OnItemClickListener() {
+                })
+                .setItems(items, new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         if (position == 0) {
@@ -307,15 +313,15 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
                         }
 
                     }
-                } )
-                .setNegative( "取消", null )
-                .configNegative( new ConfigButton() {
+                })
+                .setNegative("取消", null)
+                .configNegative(new ConfigButton() {
                     @Override
                     public void onConfig(ButtonParams params) {
                         //取消按钮字体颜色
-                        params.textColor = getResources().getColor( R.color.base_bar );
+                        params.textColor = getResources().getColor(R.color.base_bar);
                     }
-                } )
+                })
                 .show();
     }
 
@@ -323,11 +329,11 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == event.KEYCODE_BACK) {
             Intent it = new Intent();
-            it.putExtra( "user", user );
-            setResult( AppConfig.IntentExtraKey.RESULT_OK, it );
+            it.putExtra(ActivityManage.TAG_USER, user);
+            setResult(AppConfig.IntentExtraKey.RESULT_OK, it);
             finish();
 
         }
-        return super.onKeyDown( keyCode, event );
+        return super.onKeyDown(keyCode, event);
     }
 }

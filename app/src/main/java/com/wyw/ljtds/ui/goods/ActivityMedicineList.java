@@ -46,6 +46,7 @@ import java.util.List;
 
 @ContentView(R.layout.activity_goods_list)
 public class ActivityMedicineList extends BaseActivity {
+    public static final String TAG_LIST_FROM = "com.wyw.ljtds.ui.goods.ActivityMedicineList.tag_list_from";
     @ViewInject(R.id.recyclerView)
     private RecyclerView recyclerView;
     @ViewInject(R.id.back)
@@ -73,7 +74,7 @@ public class ActivityMedicineList extends BaseActivity {
     private List<MedicineListModel> list;
     private MyAdapter adapter;
     private boolean end = false;
-    private String mtd_find = "";
+    private String listFrom = "";
 
     /*8
     params for load data
@@ -82,6 +83,7 @@ public class ActivityMedicineList extends BaseActivity {
     private String classId = "";//分类的typeid
     private String orderby = "";
     private int pageIndex = 1;
+    private String topFlg = "";
 
     @Event(value = {R.id.back, R.id.edHeader, R.id.xiaoxi, R.id.paixu1, R.id.paixu2, R.id.paixu3, R.id.paixu4})
     private void onclick(View view) {
@@ -141,19 +143,19 @@ public class ActivityMedicineList extends BaseActivity {
     }
 
     private void sortData() {
-        Log.e(AppConfig.ERR_TAG,"sortData");
+        Log.e(AppConfig.ERR_TAG, "sortData");
         adapter = new MyAdapter();
         adapter.setNewData(new ArrayList<MedicineListModel>());
         adapter.notifyDataSetChanged();
-        Log.e(AppConfig.ERR_TAG,"new adapter:"+adapter.getItemCount());
+        Log.e(AppConfig.ERR_TAG, "new adapter:" + adapter.getItemCount());
         recyclerView.setAdapter(adapter);
-        Log.e(AppConfig.ERR_TAG,"setAdapter adapter:"+adapter.getItemCount());
+        Log.e(AppConfig.ERR_TAG, "setAdapter adapter:" + adapter.getItemCount());
         pageIndex = 1;
         loadData();
     }
 
     private void loadData() {
-        if (FragmentFind.FIND_MTD_QUICK.equals(mtd_find)) {
+        if (FragmentFind.FIND_MTD_QUICK.equals(listFrom)) {
             findlist();
         } else {
             getlist();
@@ -161,13 +163,16 @@ public class ActivityMedicineList extends BaseActivity {
     }
 
     void initParams() {
-        this.mtd_find = getIntent().getStringExtra(FragmentFind.TAG_FIND_MTD);
-        Log.e(AppConfig.ERR_TAG, "find data mtd:" + mtd_find);
-        if (FragmentFind.FIND_MTD_QUICK.equals(mtd_find)) {
+//        this.listFrom = getIntent().getStringExtra(FragmentFind.TAG_FIND_MTD);
+        this.listFrom = getIntent().getStringExtra(TAG_LIST_FROM);
+        Log.e(AppConfig.ERR_TAG, "find data mtd:" + listFrom);
+        if (FragmentFind.FIND_MTD_QUICK.equals(listFrom)) {
             classId = getIntent().getStringExtra(FragmentFind.TAG_MTD_QUICK_PARAM);
-        } else if (FragmentFind.FIND_MTD_QUICK2.equals(mtd_find)) {
+        } else if (FragmentFind.FIND_MTD_QUICK2.equals(listFrom)) {
             classId = getIntent().getStringExtra(FragmentFind.TAG_MTD_QUICK_PARAM);
-        } else {
+        } else if(FragmentFind.FIND_MTD_QUICK3.equals(listFrom)){
+            topFlg = getIntent().getStringExtra(FragmentFind.TAG_MTD_QUICK_PARAM);
+        }else {
             keyword = getIntent().getStringExtra("search");
             classId = getIntent().getStringExtra("typeid");
         }
@@ -203,7 +208,7 @@ public class ActivityMedicineList extends BaseActivity {
                 int totalItemCount = glm.getItemCount();
                 int lastVisibleItem = glm.findLastVisibleItemPosition();
                 Log.e(AppConfig.ERR_TAG, "itemCnt:" + cnt + "loadMore:[" + totalItemCount + "," + lastVisibleItem + "]");
-                if (!end && !loading && (lastVisibleItem ) >= cnt) {
+                if (!end && !loading && (lastVisibleItem) >= cnt) {
                     pageIndex = pageIndex + 1;
                     loadData();
                 }
@@ -234,7 +239,7 @@ public class ActivityMedicineList extends BaseActivity {
         getListTask = new BizDataAsyncTask<List<MedicineListModel>>() {
             @Override
             protected List<MedicineListModel> doExecute() throws ZYException, BizFailure {
-                return CategoryBiz.getMedicineList(classId, orderby, keyword, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "");
+                return CategoryBiz.getMedicineList(topFlg, classId, orderby, keyword, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "");
             }
 
             @Override
@@ -247,10 +252,10 @@ public class ActivityMedicineList extends BaseActivity {
                 }
 
                 list = medicineListModel;
-                Log.e(AppConfig.ERR_TAG,"before load adapter:"+adapter.getItemCount());
+                Log.e(AppConfig.ERR_TAG, "before load adapter:" + adapter.getItemCount());
                 adapter.addData(list);
                 adapter.notifyDataSetChanged();
-                Log.e(AppConfig.ERR_TAG,"load adapter:"+adapter.getItemCount());
+                Log.e(AppConfig.ERR_TAG, "load adapter:" + adapter.getItemCount());
             }
 
             @Override

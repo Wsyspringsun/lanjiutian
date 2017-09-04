@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/item_dianzibi_electronic_money"
+        style="@style/font_ww_14"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="@dimen/x5"
+        android:paddingTop="@dimen/x5"
+        android:text="@string/holder"
+        android:textColor="@color/font_black2" />
+
+    <TextView
+        android:id="@+id/item_dianzibi_electronic_useable_money"
+        style="@style/font_ww_12"
+        android:text="@string/holder"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@id/item_dianzibi_electronic_money"
+        android:paddingLeft="@dimen/x15"
+        android:paddingTop="@dimen/x5" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black" />
+</RelativeLayout>
+

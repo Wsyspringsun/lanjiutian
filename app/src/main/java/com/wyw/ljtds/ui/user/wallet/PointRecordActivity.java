@@ -1,5 +1,6 @@
 package com.wyw.ljtds.ui.user.wallet;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.ui.user.ActivityMessage;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -31,6 +33,9 @@ public class PointRecordActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.back:
                 finish();
+                break;
+            case R.id.message:
+                startActivity(new Intent(this, ActivityMessage.class));
                 break;
             default:
                 break;

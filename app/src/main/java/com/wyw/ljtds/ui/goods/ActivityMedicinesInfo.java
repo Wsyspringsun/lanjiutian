@@ -1,5 +1,6 @@
 package com.wyw.ljtds.ui.goods;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.gxz.PagerSlidingTabStrip;
 import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
@@ -25,16 +27,20 @@ import com.wyw.ljtds.model.GoodSubmitModel3;
 import com.wyw.ljtds.model.MedicineDetailsModel;
 import com.wyw.ljtds.model.ShoppingCartAddModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.ui.cart.CartActivity;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.widget.goodsinfo.NoScrollViewPager;
+
 import org.json.JSONObject;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import cn.xiaoneng.coreapi.TrailActionBody;
 import cn.xiaoneng.uiapi.Ntalker;
 import cn.xiaoneng.utils.MyUtil;
@@ -44,7 +50,7 @@ import cn.xiaoneng.utils.MyUtil;
  */
 @ContentView(R.layout.activity_goods_info)
 public class ActivityMedicinesInfo extends BaseActivity {
-    public static String VAL_INFO_SOURCE="ActivityMedicinesInfo";
+    public static String VAL_INFO_SOURCE = "ActivityMedicinesInfo";
     @ViewInject(R.id.psts_tabs)
     public PagerSlidingTabStrip psts_tabs;
     @ViewInject(R.id.vp_content)
@@ -57,6 +63,8 @@ public class ActivityMedicinesInfo extends BaseActivity {
     private LinearLayout shang_ll;
     @ViewInject(R.id.kefu_call)
     private RelativeLayout kefu_call;
+    @ViewInject(R.id.activity_goods_info_shop)
+    private RelativeLayout rlShop;
 
 
     //客服
@@ -80,7 +88,12 @@ public class ActivityMedicinesInfo extends BaseActivity {
     private FragmentGoodsPagerDetails goodsDetail;
     private FragmentGoodsPagerEvaluate goodsEvaluate;
 
-    @Event(value = {R.id.goumai, R.id.add_cart, R.id.yao_ll, R.id.shopping_cart, R.id.kefu_call, R.id.ll_back,})
+    public static Intent getIntent(Context ctx, String commId){
+        Intent it = new Intent(ctx, ActivityMedicinesInfo.class);
+        it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID,commId);
+        return it;
+    }
+    @Event(value = {R.id.activity_goods_info_shop, R.id.goumai, R.id.add_cart, R.id.yao_ll, R.id.shopping_cart, R.id.kefu_call, R.id.ll_back,})
     private void onClick(View v) {
         Intent it;
         switch (v.getId()) {
@@ -89,70 +102,80 @@ public class ActivityMedicinesInfo extends BaseActivity {
                 break;
 
             case R.id.goumai:
-                if (model != null && !model.getPRESCRIPTION_FLG().equals( "1" )) {
-                    it = new Intent( this, ActivityGoodsSubmit.class );
+                if (model != null && !model.getPRESCRIPTION_FLG().equals("1")) {
+                    it = new Intent(this, ActivityGoodsSubmit.class);
 
-                    it.putExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE,ActivityMedicinesInfo.VAL_INFO_SOURCE);
+                    it.putExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE, ActivityMedicinesInfo.VAL_INFO_SOURCE);
 
                     GoodSubmitModel1 goodSubmitModel = new GoodSubmitModel1();
                     GoodSubmitModel2 goodSubmitModel2 = new GoodSubmitModel2();
                     List<GoodSubmitModel3> goodList = new ArrayList<>();
                     List<GoodSubmitModel2> groupList = new ArrayList<>();
                     GoodSubmitModel3 goods = new GoodSubmitModel3();
-                    goods.setEXCHANGE_QUANLITY( goodsInfo.numberButton.getNumber() );
-                    goods.setCOMMODITY_COLOR( model.getPROD_ADD() );
-                    goods.setCOMMODITY_SIZE( model.getWARESPEC() );
-                    goods.setCOMMODITY_ID( model.getWAREID() );
-                    goods.setCOMMODITY_NAME( model.getWARENAME() );
-                    goodList.add( goods );
+                    goods.setEXCHANGE_QUANLITY(goodsInfo.numberButton.getNumber());
+                    goods.setCOMMODITY_COLOR(model.getPROD_ADD());
+                    goods.setCOMMODITY_SIZE(model.getWARESPEC());
+                    goods.setCOMMODITY_ID(model.getWAREID());
+                    goods.setCOMMODITY_NAME(model.getWARENAME());
+                    goodList.add(goods);
 
-                    goodSubmitModel2.setDETAILS( goodList );
-                    goodSubmitModel2.setOID_GROUP_ID( model.getGROUPID() );
-                    goodSubmitModel2.setOID_GROUP_NAME( model.getGROUPNAME() );
+                    goodSubmitModel2.setDETAILS(goodList);
+                    goodSubmitModel2.setOID_GROUP_ID(model.getGROUPID());
+                    goodSubmitModel2.setOID_GROUP_NAME(model.getGROUPNAME());
 
-                    groupList.add( goodSubmitModel2 );
-                    goodSubmitModel.setDETAILS( groupList );
+                    groupList.add(goodSubmitModel2);
+                    goodSubmitModel.setDETAILS(groupList);
 
-                    it.putExtra( "data", GsonUtils.Bean2Json( goodSubmitModel ) );
-                    startActivity( it );
+                    it.putExtra("data", GsonUtils.Bean2Json(goodSubmitModel));
+                    startActivity(it);
                 }
                 break;
 
             case R.id.add_cart:
-                if (model != null && !model.getPRESCRIPTION_FLG().equals( "1" )) {
+                if (model != null && !model.getPRESCRIPTION_FLG().equals("1")) {
                     ShoppingCartAddModel shoppingCartAddModel = new ShoppingCartAddModel();
-                    shoppingCartAddModel.setCOMMODITY_ID( model.getWAREID() );
-                    shoppingCartAddModel.setCOMMODITY_SIZE( model.getWARESPEC() );
-                    shoppingCartAddModel.setCOMMODITY_COLOR( model.getPROD_ADD() );
-                    shoppingCartAddModel.setEXCHANGE_QUANLITY( goodsInfo.numberButton.getNumber() + "" );
-                    shoppingCartAddModel.setINS_USER_ID( model.getGROUPID() );
-                    String str = GsonUtils.Bean2Json( shoppingCartAddModel );
-                    addCart( str );
+                    shoppingCartAddModel.setCOMMODITY_ID(model.getWAREID());
+                    shoppingCartAddModel.setCOMMODITY_SIZE(model.getWARESPEC());
+                    shoppingCartAddModel.setCOMMODITY_COLOR(model.getPROD_ADD());
+                    shoppingCartAddModel.setEXCHANGE_QUANLITY(goodsInfo.numberButton.getNumber() + "");
+                    shoppingCartAddModel.setINS_USER_ID(model.getGROUPID());
+                    String str = GsonUtils.Bean2Json(shoppingCartAddModel);
+                    addCart(str);
                 }
                 break;
 
             case R.id.yao_ll:
-                if (model != null && model.getPRESCRIPTION_FLG().equals( "1" )) {
-                    openChat( model.getWARENAME(), "", settingid2, groupName, true, model.getWAREID() );
+                if (model != null && model.getPRESCRIPTION_FLG().equals("1")) {
+                    openChat(model.getWARENAME(), "", settingid2, groupName, true, model.getWAREID());
                 }
                 break;
 
             case R.id.kefu_call:
 
 //                addDb();
-                if (model != null && !model.getPRESCRIPTION_FLG().equals( "1" )) {
-                    openChat( model.getWARENAME(), "", settingid2, groupName, true, model.getWAREID() );
+                if (model != null && !model.getPRESCRIPTION_FLG().equals("1")) {
+                    openChat(model.getWARENAME(), "", settingid2, groupName, true, model.getWAREID());
                 }
 
 
                 break;
 
+            case R.id.activity_goods_info_shop:
+                if (model == null) return;
+                String groupId = model.getGROUPID();
+                if (StringUtils.isEmpty(groupId)) {
+                    ToastUtil.show(this, "对不起，漂亮商铺页面还没完工。给程序员哥哥加油！");
+                }
+                it = ShopActivity.getIntent(this, groupId);
+                startActivity(it);
+                break;
+
             case R.id.shopping_cart:
-                it = new Intent( this, MainActivity.class );
+//                it = new Intent( this, MainActivity.class );
+                it = new Intent(this, CartActivity.class);
                 AppConfig.currSel = 3;
-                it.putExtra( AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel );
-                finish();
-                startActivity( it );
+                it.putExtra(AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel);
+                startActivity(it);
                 break;
 
 //            case R.id.yao_ll:
@@ -165,22 +188,22 @@ public class ActivityMedicinesInfo extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
         goodsInfo = new FragmentMedcinesInfo();
         goodsDetail = new FragmentGoodsPagerDetails();
         goodsEvaluate = new FragmentGoodsPagerEvaluate();
-        fragmentList.add( goodsInfo );
-        fragmentList.add( goodsDetail );
-        fragmentList.add( goodsEvaluate );
+        fragmentList.add(goodsInfo);
+        fragmentList.add(goodsDetail);
+        fragmentList.add(goodsEvaluate);
 
-        vp_content.setAdapter( new ItemTitlePagerAdapter( getSupportFragmentManager(),
-                fragmentList, new String[]{"商品", "详情", "评价"} ) );
-        vp_content.setOffscreenPageLimit( 3 );
-        psts_tabs.setViewPager( vp_content );
+        vp_content.setAdapter(new ItemTitlePagerAdapter(getSupportFragmentManager(),
+                fragmentList, new String[]{"商品", "详情", "评价"}));
+        vp_content.setOffscreenPageLimit(3);
+        psts_tabs.setViewPager(vp_content);
 
 
-        setLoding( this, false );
+        setLoding(this, false);
 //        getDeatlis();
         getMedicine();
 
@@ -194,8 +217,8 @@ public class ActivityMedicinesInfo extends BaseActivity {
         medicineTask = new BizDataAsyncTask<MedicineDetailsModel>() {
             @Override
             protected MedicineDetailsModel doExecute() throws ZYException, BizFailure {
-                Log.e( "goods_id=", getIntent().getStringExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID ) );
-                return GoodsBiz.getMedicine( getIntent().getStringExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID ) );
+                Log.e("goods_id=", getIntent().getStringExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID));
+                return GoodsBiz.getMedicine(getIntent().getStringExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID));
 //                return GoodsBiz.getMedicine( "000000" );
             }
 
@@ -203,18 +226,18 @@ public class ActivityMedicinesInfo extends BaseActivity {
             protected void onExecuteSucceeded(MedicineDetailsModel medicineDetailsModel) {
 
                 model = medicineDetailsModel;
-                goodsInfo.updeta( model );
-                goodsEvaluate.update( model );
-                goodsDetail.fragmentGoodsParameter.getmodel( model );
-                goodsDetail.fragmentGoodsDetails.getmodel( model );
-                if (model.getPRESCRIPTION_FLG().equals( "1" )) {
-                    yao_ll.setVisibility( View.VISIBLE );
-                    shang_ll.setVisibility( View.GONE );
-                    kefu_call.setVisibility( View.GONE );
+                goodsInfo.updeta(model);
+                goodsEvaluate.update(model);
+                goodsDetail.fragmentGoodsParameter.getmodel(model);
+                goodsDetail.fragmentGoodsDetails.getmodel(model);
+                if (model.getPRESCRIPTION_FLG().equals("1")) {
+                    yao_ll.setVisibility(View.VISIBLE);
+                    shang_ll.setVisibility(View.GONE);
+                    kefu_call.setVisibility(View.GONE);
                 } else {
-                    yao_ll.setVisibility( View.GONE );
-                    shang_ll.setVisibility( View.VISIBLE );
-                    kefu_call.setVisibility( View.VISIBLE );
+                    yao_ll.setVisibility(View.GONE);
+                    shang_ll.setVisibility(View.VISIBLE);
+                    kefu_call.setVisibility(View.VISIBLE);
                 }
 
 
@@ -227,7 +250,7 @@ public class ActivityMedicinesInfo extends BaseActivity {
                 trailparams.ref = "";
                 trailparams.orderid = orderid;
                 trailparams.orderprice = orderprice;
-                if (StringUtils.isEmpty( PreferenceCache.getToken() )) {//是否登陆来判断会员vip
+                if (StringUtils.isEmpty(PreferenceCache.getToken())) {//是否登陆来判断会员vip
                     isvip = 0;
                     userlevel = 0;
                 } else {
@@ -237,18 +260,18 @@ public class ActivityMedicinesInfo extends BaseActivity {
                 trailparams.isvip = isvip;
                 trailparams.userlevel = userlevel;
 
-                JSONObject item = MyUtil.getRequiredNtalkerParams( sellerid, medicineDetailsModel.getWAREID(), medicineDetailsModel.getWARENAME(),
-                        "", "" );
+                JSONObject item = MyUtil.getRequiredNtalkerParams(sellerid, medicineDetailsModel.getWAREID(), medicineDetailsModel.getWARENAME(),
+                        "", "");
 
-                JSONObject itemOptional = MyUtil.getOptionalNtalkerParams( item, medicineDetailsModel.getSALEPRICE() + "", medicineDetailsModel.getSALEPRICE() + "", null, medicineDetailsModel.getWARESPEC(), null, null, null );
+                JSONObject itemOptional = MyUtil.getOptionalNtalkerParams(item, medicineDetailsModel.getSALEPRICE() + "", medicineDetailsModel.getSALEPRICE() + "", null, medicineDetailsModel.getWARESPEC(), null, null, null);
 
-                JSONObject itemSelfDefine = MyUtil.getSelfDefineNtalkerParams( itemOptional );
+                JSONObject itemSelfDefine = MyUtil.getSelfDefineNtalkerParams(itemOptional);
 
-                String ntalkerparamStr = MyUtil.getNtalkerParam( itemSelfDefine );
+                String ntalkerparamStr = MyUtil.getNtalkerParam(itemSelfDefine);
 
                 trailparams.ntalkerparam = ntalkerparamStr; // 商品信息、购物车商品JSON字符串数据
 
-                int action = Ntalker.getInstance().startAction( trailparams );
+                int action = Ntalker.getInstance().startAction(trailparams);
 //                Log.e( "action",action+";  "+MyUtil.getNtalkerParam(itemSelfDefine) );
                 //-------
                 closeLoding();
@@ -275,14 +298,14 @@ public class ActivityMedicinesInfo extends BaseActivity {
         cartTask = new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
-                Log.e( "************",str );
-                return GoodsBiz.shoppingCart( str, "create" );
+                Log.e("************", str);
+                return GoodsBiz.shoppingCart(str, "create");
             }
 
             @Override
             protected void onExecuteSucceeded(String s) {
 //                if (s.equals( "1" )){
-                ToastUtil.show( ActivityMedicinesInfo.this, "添加购物车成功！" );
+                ToastUtil.show(ActivityMedicinesInfo.this, "添加购物车成功！");
 //                }else {
 //
 //                }

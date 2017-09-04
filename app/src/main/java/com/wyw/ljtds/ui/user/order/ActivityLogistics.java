@@ -19,6 +19,7 @@ import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -98,6 +99,8 @@ public class ActivityLogistics extends BaseActivity {
 
 
         adapter = new MyAdapter();
+        View noData = this.getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
+        adapter.setEmptyView(noData);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
@@ -129,8 +132,8 @@ public class ActivityLogistics extends BaseActivity {
                 closeLoding();
                 Log.e(AppConfig.ERR_TAG, GsonUtils.Bean2Json(logisticsModel));
                 if(logisticsModel.getORDER() == null){
-                    ToastUtil.show(ActivityLogistics.this,getResources().getString(R.string.logistic_null));
-                    finish();
+//                    ToastUtil.show(ActivityLogistics.this,getResources().getString(R.string.logistic_null));
+//                    finish();
                     return;
                 }
                 if ("C".equals(logisticsModel.getORDER().getSTATUS())) {

@@ -60,6 +60,7 @@ public class ActivityAddress extends BaseActivity {
         Intent it;
         switch (view.getId()) {
             case R.id.tianjia:
+                Log.e(AppConfig.ERR_TAG, "edit................");
                 it = new Intent(this, ActivityAddressEdit.class);
                 it.putExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, 1);
                 startActivity(it);
@@ -75,17 +76,6 @@ public class ActivityAddress extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         title.setText(R.string.address_guanli);
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        setLoding(this, false);
-        getAddress();
-
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -135,6 +125,13 @@ public class ActivityAddress extends BaseActivity {
         });
 
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setLoding(this, false);
+        getAddress();
     }
 
     //    @Override

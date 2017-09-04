@@ -1,12 +1,14 @@
 package com.wyw.ljtds.ui.user.order;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -139,10 +141,12 @@ public class FragmentOrderList extends BaseFragment {
             @Override
             public void onItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, final int i) {
                 Intent it;
-                switch (adapter1.getData().get(i).getSTATUS()) {
+                final OrderModelMedicine currentModel = adapter1.getData().get(i);
+                switch (currentModel.getSTATUS()) {
                     case "A":
                         if (view.getId() == R.id.button1) {
-                            OrderModelMedicine order = adapter1.getData().get(i);
+                            //立即支付
+                            OrderModelMedicine order = currentModel;
                             OrderTrade orderTrade = new OrderTrade();
                             orderTrade.setPayAmount(String.valueOf(order.getPAY_AMOUNT()));
                             orderTrade.setOrderTradeId(order.getORDER_TRADE_ID());
@@ -163,47 +167,110 @@ public class FragmentOrderList extends BaseFragment {
                             });
 
                         } else if (view.getId() == R.id.button2) {
-                            cancelOrder(adapter1.getData().get(i).getORDER_GROUP_ID());
-                        } else if (view.getId() == R.id.button3) {
-                            activityOrder.openChat("交易订单号：" + adapter1.getData().get(i).getORDER_TRADE_ID(), "", settingid1, groupName, false, "");
+                            //取消
+                            final AlertDialog alert = new AlertDialog.Builder(getActivity()).create();
+                            alert.setTitle(R.string.alert_tishi);
+                            alert.setMessage(getResources().getString(R.string.confirm_order_cancel));
+                            alert.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.alert_queding), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    cancelOrder(currentModel.getORDER_GROUP_ID());
+                                }
+                            });
+                            alert.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.alert_quxiao), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    alert.dismiss();
+                                }
+                            });
+                            alert.show();
                         }
+//                        else if (view.getId() == R.id.button3) {
+////                            activityOrder.openChat("交易订单号：" + adapter1.getData().get(i).getORDER_TRADE_ID(), "", settingid1, groupName, false, "");
+//                            Log.e(AppConfig.ERR_TAG, "data:" + GsonUtils.Bean2Json(adapter1.getData().get(i)));
+////                openChat( model.getTitle(), "", settingid1, groupName, true, model.getCommodityId() );
+////                            if (!StringUtils.isEmpty(group_id) && group_id.equals("sxljt")) {
+////                                openChat("交易订单号：" + trade_id, "", settingid0, groupName, false, "");
+////                            } else if (!StringUtils.isEmpty(group_id)) {
+////                                openChat("交易订单号：" + trade_id, "", settingid1, groupName, false, "");
+////                            }
+//                        }
                         break;
 
                     case "B":
                         if (view.getId() == R.id.button1) {
-                            activityOrder.openChat("交易订单号：" + adapter1.getData().get(i).getORDER_TRADE_ID(), "", settingid1, groupName, false, "");
+//                            activityOrder.openChat("交易订单号：" + adapter1.getData().get(i).getORDER_TRADE_ID(), "", settingid1, groupName, false, "");
+                            it = new Intent(getActivity(), ActivityLogistics.class);
+                            it.putExtra("order_id", currentModel.getORDER_GROUP_ID());
+                            startActivity(it);
                         }
                         break;
 
                     case "C":
                         if (view.getId() == R.id.button1) {
-                            getSignFor(adapter1.getData().get(i).getORDER_GROUP_ID());
+                            getSignFor(currentModel.getORDER_GROUP_ID());
                         } else if (view.getId() == R.id.button2) {
                             it = new Intent(getActivity(), ActivityLogistics.class);
-                            it.putExtra("order_id", adapter1.getData().get(i).getORDER_GROUP_ID());
+                            it.putExtra("order_id", currentModel.getORDER_GROUP_ID());
                             startActivity(it);
-                        } else if (view.getId() == R.id.button3) {
-
                         }
                         break;
 
                     case "D":
                         if (view.getId() == R.id.button1) {
-                            String orderId = adapter1.getData().get(i).getORDER_GROUP_ID();
+                            String orderId = currentModel.getORDER_GROUP_ID();
                             goEvaluate(orderId);
+                        } else if (view.getId() == R.id.button2) {
+                            it = new Intent(getActivity(), ActivityLogistics.class);
+                            it.putExtra("order_id", currentModel.getORDER_GROUP_ID());
+                            startActivity(it);
                         }
                         break;
 
                     case "S":
                         if (view.getId() == R.id.button1) {
                             it = new Intent(getActivity(), ActivityLogistics.class);
-                            it.putExtra("order_id", adapter1.getData().get(i).getORDER_GROUP_ID());
+                            it.putExtra("order_id", currentModel.getORDER_GROUP_ID());
                             startActivity(it);
+                        } else if (view.getId() == R.id.button2) {
+                            final AlertDialog alert = new AlertDialog.Builder(getActivity()).create();
+                            alert.setTitle(R.string.alert_tishi);
+                            alert.setMessage(getResources().getString(R.string.confirm_order_del));
+                            alert.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.alert_queding), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    delete(currentModel.getORDER_TRADE_ID());
+                                }
+                            });
+                            alert.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.alert_quxiao), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    alert.dismiss();
+                                }
+                            });
+                            alert.show();
                         }
                         break;
 
                     case "E":
-                        delete(adapter1.getData().get(i).getORDER_TRADE_ID());
+                        if (view.getId() == R.id.button1) {
+                            final AlertDialog alert = new AlertDialog.Builder(getActivity()).create();
+                            alert.setTitle(R.string.alert_tishi);
+                            alert.setMessage(getResources().getString(R.string.confirm_order_del));
+                            alert.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.alert_queding), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    delete(currentModel.getORDER_TRADE_ID());
+                                }
+                            });
+                            alert.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.alert_quxiao), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    alert.dismiss();
+                                }
+                            });
+                            alert.show();
+                        }
                         break;
 
                 }
@@ -252,8 +319,6 @@ public class FragmentOrderList extends BaseFragment {
             @Override
             protected void onExecuteSucceeded(List<OrderModelMedicine> orderModelMedicines) {
                 closeLoding();
-                if (orderModelMedicines.size() < 1) {
-                }
                 adapter1.setNewData(orderModelMedicines);
                 adapter1.notifyDataSetChanged();
             }
@@ -393,46 +458,47 @@ public class FragmentOrderList extends BaseFragment {
                 status = getResources().getString(R.string.daifu);
                 baseViewHolder.setVisible(R.id.button1, true)
                         .setVisible(R.id.button2, true)
-                        .setVisible(R.id.button3, true)
+//                        .setVisible(R.id.button3, true)
                         .setText(R.id.button1, R.string.fukuan)
                         .setText(R.id.button2, R.string.order_quxiao)
-                        .setText(R.id.button3, R.string.order_lianxi1)
+//                        .setText(R.id.button3, R.string.order_lianxi1)
                         .addOnClickListener(R.id.button1)
                         .addOnClickListener(R.id.button2);
             } else if (orderModelMedicine.getSTATUS().equals("B")) {
                 status = getResources().getString(R.string.daifa);
                 baseViewHolder.setVisible(R.id.button1, true)
-                        .setVisible(R.id.button2, true)
-                        .setVisible(R.id.button3, false)
-                        .setText(R.id.button1, R.string.order_lianxi1)
-                        .setText(R.id.button2, R.string.order_chakan)
+//                        .setVisible(R.id.button2, true)
+//                        .setVisible(R.id.button3, false)
+                        .setText(R.id.button1, R.string.wuliu_chakan)
+//                        .setText(R.id.button2, R.string.order_chakan)
                         .addOnClickListener(R.id.button1);
             } else if (orderModelMedicine.getSTATUS().equals("C")) {
                 status = getResources().getString(R.string.daishou);
                 baseViewHolder.setVisible(R.id.button1, true)
                         .setVisible(R.id.button2, true)
-                        .setVisible(R.id.button3, true)
+//                        .setVisible(R.id.button3, true)
                         .setText(R.id.button1, R.string.querenshou)
                         .setText(R.id.button2, R.string.wuliu_chakan)
-                        .setText(R.id.button3, R.string.order_lianxi1)
+//                        .setText(R.id.button3, R.string.order_lianxi1)
                         .addOnClickListener(R.id.button1)
                         .addOnClickListener(R.id.button2);
             } else if (orderModelMedicine.getSTATUS().equals("D")) {
                 status = getResources().getString(R.string.daiping);
                 baseViewHolder.setVisible(R.id.button1, true)
                         .setVisible(R.id.button2, true)
-                        .setVisible(R.id.button3, false)
+//                        .setVisible(R.id.button3, false)
                         .setText(R.id.button1, R.string.order_pingjia)
-                        .setText(R.id.button2, R.string.order_chakan)
-                        .addOnClickListener(R.id.button1);
+                        .setText(R.id.button2, R.string.wuliu_chakan)
+                        .addOnClickListener(R.id.button1)
+                        .addOnClickListener(R.id.button2);
             } else if (orderModelMedicine.getSTATUS().equals("S")) {
                 status = getResources().getString(R.string.order_style6);
                 baseViewHolder.setVisible(R.id.button1, true)
                         .setVisible(R.id.button2, true)
-                        .setVisible(R.id.button3, false)
                         .setText(R.id.button1, R.string.wuliu_chakan)
-                        .setText(R.id.button2, R.string.order_chakan)
-                        .addOnClickListener(R.id.button1);
+                        .setText(R.id.button2, R.string.order_shanchu)
+                        .addOnClickListener(R.id.button1)
+                        .addOnClickListener(R.id.button2);
             } else if (orderModelMedicine.getSTATUS().equals("E")) {
                 status = getResources().getString(R.string.order_style7);
                 baseViewHolder.setVisible(R.id.button1, true)

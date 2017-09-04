@@ -2,27 +2,37 @@ package com.wyw.ljtds.ui.user.order;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.GoodsBiz;
+import com.wyw.ljtds.biz.biz.ReturnGoodsBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.GoodsHandingModel;
+import com.wyw.ljtds.model.KeyValue;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.utils.GsonUtils;
+import com.wyw.ljtds.utils.Utils;
 
+import org.kobjects.base64.Base64;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +53,14 @@ public class ActivityAfterMarket extends BaseActivity implements BGASortableNine
     private TextView title;
     @ViewInject(R.id.header_edit)
     private TextView submit;
-    @ViewInject(R.id.money)
-    private TextView money;
+    @ViewInject(R.id.tv_returnorder_money)
+    private TextView tvReturnOrderMoney;
+    @ViewInject(R.id.et_return_msg)
+    EditText etReturnMsg;
+    @ViewInject(R.id.sp_return_reason)
+    private Spinner spReturnReason;
+    @ViewInject(R.id.sp_return_cat)
+    private Spinner spReturnCat;
     /**
      * 拖拽排序九宫格控件
      */
@@ -58,25 +74,45 @@ public class ActivityAfterMarket extends BaseActivity implements BGASortableNine
 
     private static final String EXTRA_MOMENT = "EXTRA_MOMENT";
 
-    private int index=1;
+    private int index = 1;
     private GoodsHandingModel goodsHandingModel;
+    private String orderId;
 
-    @Event(value = {R.id.header_return,R.id.header_edit})
-    private void onClick(View view){
-        switch (view.getId()){
+    @Event(value = {R.id.header_return, R.id.header_edit})
+    private void onClick(View view) {
+        switch (view.getId()) {
             case R.id.header_return:
                 finish();
                 break;
 
             case R.id.header_edit:
-                goodsHandingModel=new GoodsHandingModel();
-                goodsHandingModel.setImgs(new String[]{"","","","",""});
-                goodsHandingModel.setCommodityOrderId(getIntent().getStringExtra("good_id"));
-                goodsHandingModel.setOrderGroupId("");
-                goodsHandingModel.setReturnOrChange("0");
-                goodsHandingModel.setReturnReason("0");
-                goodsHandingModel.setReturnRemarks("我要退货，不要了。");
-                read(GsonUtils.Bean2Json(goodsHandingModel));
+                ArrayList list = mPhotosSnpl.getData();
+//                for (int i = 0; i < list.size(); i++) {
+//                    Log.e( "***", list.get( i ).toString() );
+//                }
+
+                String[] image = new String[list.size()];
+                for (int i = 0; i < list.size(); i++) {
+                    Bitmap bitmap = Utils.getSmallBitmap(list.get(i).toString());
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 40, outputStream);
+                    byte[] b = outputStream.toByteArray();
+                    String str = new String(Base64.encode(b));  //进行Base64编码
+                    image[i] = str;
+                }
+
+                goodsHandingModel = new GoodsHandingModel();
+                goodsHandingModel.setImgs(image);
+//                goodsHandingModel.setCommodityOrderId(getIntent().getStringExtra("good_id"));
+                goodsHandingModel.setOrderGroupId(orderId);
+                String rOc = ((KeyValue) spReturnCat.getSelectedItem()).getK();
+                goodsHandingModel.setReturnOrChange(rOc);
+                String returnReason = ((KeyValue) spReturnReason.getSelectedItem()).getK();
+                goodsHandingModel.setReturnReason(returnReason);
+                goodsHandingModel.setReturnRemarks(etReturnMsg.getText().toString());
+                String json = GsonUtils.Bean2Json(goodsHandingModel);
+                Log.e(AppConfig.ERR_TAG, json);
+                read(json);
                 break;
 
         }
@@ -86,26 +122,79 @@ public class ActivityAfterMarket extends BaseActivity implements BGASortableNine
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        orderId = getIntent().getStringExtra(ActivityOrderInfo.TAG_ORDER_INFO_ID);
+
         title.setText("申请售后");
         submit.setText(getString(R.string.tijiao));
         submit.setTextColor(getResources().getColor(R.color.base_bar));
         // 设置拖拽排序控件的代理
         mPhotosSnpl.setDelegate(this);
+
+        List<KeyValue> keyValues = new ArrayList<>();
+        keyValues.add(new KeyValue("0", "退货退款"));
+        keyValues.add(new KeyValue("1", "退货换货"));
+        ArrayAdapter<KeyValue> spRCAdapter = new ArrayAdapter<>(ActivityAfterMarket.this, android.R.layout.simple_spinner_item, keyValues);
+        spRCAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spReturnCat.setAdapter(spRCAdapter);
+
+        initData();
+    }
+
+    private void initData() {
+        new BizDataAsyncTask<List<KeyValue>>() {
+            @Override
+            protected List<KeyValue> doExecute() throws ZYException, BizFailure {
+                return GoodsBiz.readReturnReasonList();
+            }
+
+            @Override
+            protected void onExecuteSucceeded(List<KeyValue> keyValues) {
+                ArrayAdapter<KeyValue> adapter = new ArrayAdapter<>(ActivityAfterMarket.this, android.R.layout.simple_spinner_item, keyValues);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spReturnReason.setAdapter(adapter);
+            }
+
+            @Override
+            protected void OnExecuteFailed() {
+
+            }
+        }.execute();
+        new BizDataAsyncTask<String>() {
+            @Override
+            protected String doExecute() throws ZYException, BizFailure {
+                return ReturnGoodsBiz.getReturnMoney(orderId);
+            }
+
+            @Override
+            protected void onExecuteSucceeded(String s) {
+                tvReturnOrderMoney.setText(s);
+            }
+
+            @Override
+            protected void OnExecuteFailed() {
+
+            }
+        }.execute();
     }
 
 
     BizDataAsyncTask<Object> task;
-    private void read(final String data){
-        task=new BizDataAsyncTask<Object>() {
+
+    private void read(final String data) {
+        task = new BizDataAsyncTask<Object>() {
             @Override
             protected Object doExecute() throws ZYException, BizFailure {
-                Log.e("-----",data);
-                return GoodsBiz.returnGoodsHanding(data,"create");
+                return GoodsBiz.returnGoodsHanding(data, "create");
             }
 
             @Override
             protected void onExecuteSucceeded(Object o) {
-                Log.e("*****",o.toString());
+                Log.e(AppConfig.ERR_TAG, "........returngoodsSubmit:" + o);
+                if ("1".equals(o + "")) {
+                    Intent it = new Intent(ActivityAfterMarket.this, ReturnGoodsOrderListActivity.class);
+                    startActivity(it);
+                    ActivityAfterMarket.this.finish();
+                }
             }
 
             @Override
@@ -133,13 +222,13 @@ public class ActivityAfterMarket extends BaseActivity implements BGASortableNine
 
     @AfterPermissionGranted(REQUEST_CODE_PERMISSION_PHOTO_PICKER)
     private void choicePhotoWrapper() {
-        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE,  Manifest.permission.CAMERA};
-        Log.e("-------",EasyPermissions.hasPermissions(this, perms)+"");
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+        Log.e("-------", EasyPermissions.hasPermissions(this, perms) + "");
         if (EasyPermissions.hasPermissions(this, perms)) {
-        //拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话就没有拍照功能
-        File takePhotoDir = new File(AppConfig.EXT_STORAGE_ROOT, AppConfig.CACHE_ROOT_NAME);
+            //拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话就没有拍照功能
+            File takePhotoDir = new File(AppConfig.EXT_STORAGE_ROOT, AppConfig.CACHE_ROOT_NAME);
 
-        startActivityForResult(BGAPhotoPickerActivity.newIntent(this, takePhotoDir, mPhotosSnpl.getMaxItemCount() - mPhotosSnpl.getItemCount(), null, false), REQUEST_CODE_CHOOSE_PHOTO);
+            startActivityForResult(BGAPhotoPickerActivity.newIntent(this, takePhotoDir, mPhotosSnpl.getMaxItemCount() - mPhotosSnpl.getItemCount(), null, false), REQUEST_CODE_CHOOSE_PHOTO);
         } else {
             EasyPermissions.requestPermissions(this, "图片选择需要以下权限:拍照,浏览本地图片。", REQUEST_CODE_PERMISSION_PHOTO_PICKER, perms);
         }

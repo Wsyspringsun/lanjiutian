@@ -498,8 +498,10 @@ public class FragmentMedcinesInfo extends BaseFragment implements SlideDetailsLa
             protected void onExecuteSucceeded(Boolean aBoolean) {
                 if (aBoolean) {
                     if (type.equals("add")) {
+                        model.setFavorited("1");
                         shoucang_img.setImageDrawable(getResources().getDrawable(R.mipmap.icon_shoucang_xuanzhong));
                     } else {
+                        model.setFavorited("0");
                         shoucang_img.setImageDrawable(getResources().getDrawable(R.mipmap.icon_shoucang_weixuan));
                     }
                 }

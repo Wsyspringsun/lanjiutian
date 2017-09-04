@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -40,9 +41,11 @@ import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
+
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -54,6 +57,9 @@ import java.util.List;
 
 @ContentView(R.layout.fragment_shopping_cart)
 public class FragmentCart extends BaseFragment {
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
     @ViewInject(R.id.exListView)
     private RecyclerView recyclerView;
     //    @ViewInject(R.id.all_chekbox)
@@ -88,6 +94,7 @@ public class FragmentCart extends BaseFragment {
 //                break;
 
             case R.id.tv_go_to_pay:
+                calculate();
                 if (totalCount <= 0) {
                     ToastUtil.show(getActivity(), "请选择要支付的商品");
                     return;
@@ -177,11 +184,20 @@ public class FragmentCart extends BaseFragment {
     }
 
 
+    public static FragmentCart newInstance(String param1, String param2) {
+        FragmentCart fragment = new FragmentCart();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 //        x = 0;
-//        back.setVisibility(View.GONE);
+        back.setVisibility(View.GONE);
 //        title.setText( "购物车（" + x + "）" );
         title.setText("购物车");
 
@@ -464,7 +480,7 @@ public class FragmentCart extends BaseFragment {
             protected void onExecuteSucceeded(String s) {
                 closeLoding();
 
-                if (s.contains("用户名密码") || s.contains("Token不一致")) {//未登陆跳转
+                if (s.contains("用户名密码") || s.contains("Token不一致") || s.contains("Token为空")) {//未登陆跳转
                     Toast.makeText(MyApplication.getAppContext(), R.string.auth_expire,
                             Toast.LENGTH_LONG).show();
                     Intent i = new Intent(AppConfig.AppAction.ACTION_TOKEN_EXPIRE);

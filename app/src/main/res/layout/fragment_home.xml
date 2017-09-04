@@ -8,10 +8,10 @@
         android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             <com.bigkoo.convenientbanner.ConvenientBanner
                 android:id="@+id/banner"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/x170"
+                android:layout_height="@dimen/x150"
                 app:canLoop="true">
 
             </com.bigkoo.convenientbanner.ConvenientBanner>
@@ -53,10 +53,10 @@
 
                         <TextView
                             style="@style/font_ww_14"
-                            android:textColor="@color/font_black2"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
-                            android:text="@string/home_button1" />
+                            android:text="@string/home_button1"
+                            android:textColor="@color/font_black2" />
 
                     </RelativeLayout>
 
@@ -75,10 +75,10 @@
 
                         <TextView
                             style="@style/font_ww_14"
-                            android:textColor="@color/font_black2"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
-                            android:text="@string/home_button2" />
+                            android:text="@string/home_button2"
+                            android:textColor="@color/font_black2" />
 
                     </RelativeLayout>
 
@@ -97,10 +97,10 @@
 
                         <TextView
                             style="@style/font_ww_14"
-                            android:textColor="@color/font_black2"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
-                            android:text="@string/home_button3" />
+                            android:text="@string/home_button3"
+                            android:textColor="@color/font_black2" />
 
                     </RelativeLayout>
 
@@ -119,10 +119,10 @@
 
                         <TextView
                             style="@style/font_ww_14"
-                            android:textColor="@color/font_black2"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
-                            android:text="@string/home_button4" />
+                            android:text="@string/home_button4"
+                            android:textColor="@color/font_black2" />
 
                     </RelativeLayout>
 
@@ -158,10 +158,10 @@
 
                         <TextView
                             style="@style/font_ww_14"
-                            android:textColor="@color/font_black2"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
-                            android:text="@string/home_button5" />
+                            android:text="@string/home_button5"
+                            android:textColor="@color/font_black2" />
 
                     </RelativeLayout>
 
@@ -180,10 +180,10 @@
 
                         <TextView
                             style="@style/font_ww_14"
-                            android:textColor="@color/font_black2"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
-                            android:text="@string/home_button6" />
+                            android:text="@string/home_button6"
+                            android:textColor="@color/font_black2" />
 
                     </RelativeLayout>
 
@@ -202,10 +202,10 @@
 
                         <TextView
                             style="@style/font_ww_14"
-                            android:textColor="@color/font_black2"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
-                            android:text="@string/home_button7" />
+                            android:text="@string/home_button7"
+                            android:textColor="@color/font_black2" />
 
                     </RelativeLayout>
 
@@ -224,10 +224,10 @@
 
                         <TextView
                             style="@style/font_ww_14"
-                            android:textColor="@color/font_black2"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
-                            android:text="@string/home_button8" />
+                            android:text="@string/home_button8"
+                            android:textColor="@color/font_black2" />
 
                     </RelativeLayout>
 
@@ -243,9 +243,9 @@
                 android:background="@color/gray1" />
 
             <!--<com.wyw.ljtds.widget.banner.TaobaoHeadline-->
-                <!--android:id="@+id/taobao_headline_headline"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/x35" />-->
+            <!--android:id="@+id/taobao_headline_headline"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/x35" />-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x35"
@@ -263,17 +263,17 @@
                     android:src="@mipmap/icon_guangbo" />
 
                 <com.sunfusheng.marqueeview.MarqueeView
-                    android:layout_marginLeft="@dimen/x10"
-                    android:layout_marginRight="@dimen/x5"
                     android:id="@+id/marqueeView"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="@dimen/x35"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:layout_marginRight="@dimen/x5"
+                    android:layout_weight="1"
                     app:mvAnimDuration="1000"
                     app:mvInterval="3000"
+                    app:mvSingleLine="true"
                     app:mvTextColor="@color/font_black2"
-                    app:mvTextSize="14sp"
-                    app:mvSingleLine="true"/>
+                    app:mvTextSize="14sp" />
 
                 <View
                     android:layout_width="1dp"
@@ -287,7 +287,8 @@
                     android:layout_marginLeft="@dimen/x6"
                     android:gravity="center_vertical"
                     android:text="@string/gengduo"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -322,90 +323,99 @@
                 android:background="@color/gray1" />
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+            <!--<LinearLayout-->
+            <!--id=-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1">-->
 
-                    <!--<include layout="@layout/fragment_home_activity"/>-->
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/x95"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/test_home_huodong2" />
+            <!--&lt;!&ndash;<include layout="@layout/fragment_home_activity"/>&ndash;&gt;-->
+            <!--<ImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/x95"-->
+            <!--android:scaleType="fitXY"-->
+            <!--android:src="@mipmap/test_home_huodong2" />-->
 
-                </LinearLayout>
+            <!--</LinearLayout>-->
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/gray1" />
+            <!--<View-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@color/gray1" />-->
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+            <!--<LinearLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1">-->
 
-                    <!--<include layout="@layout/fragment_home_activity"/>-->
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/x95"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/test_home_huodong4" />
+            <!--&lt;!&ndash;<include layout="@layout/fragment_home_activity"/>&ndash;&gt;-->
+            <!--<ImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/x95"-->
+            <!--android:scaleType="fitXY"-->
+            <!--android:src="@mipmap/test_home_huodong4" />-->
 
-                </LinearLayout>
+            <!--</LinearLayout>-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/gray1" />
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/img_home_active_goods"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="@dimen/x95"
+                android:scaleType="fitXY"
+                android:src="@mipmap/img_shenghuo_active" />0
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
 
-                    <!--<include layout="@layout/fragment_home_activity" />-->
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/x95"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/test_home_huodong1" />
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
 
-                </LinearLayout>
+            <!--<LinearLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1">-->
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/gray1" />
+            <!--&lt;!&ndash;<include layout="@layout/fragment_home_activity" />&ndash;&gt;-->
+            <!--<ImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/x95"-->
+            <!--android:scaleType="fitXY"-->
+            <!--android:src="@mipmap/test_home_huodong1" />0-->
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+            <!--</LinearLayout>-->
 
-                    <!--<include layout="@layout/fragment_home_activity" />-->
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/x95"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/test_home_huodong3" />
+            <!--<View-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@color/gray1" />-->
 
-                </LinearLayout>
+            <!--<LinearLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1">-->
 
-            </LinearLayout>
+            <!--&lt;!&ndash;<include layout="@layout/fragment_home_activity" />&ndash;&gt;-->
+            <!--<ImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/x95"-->
+            <!--android:scaleType="fitXY"-->
+            <!--android:src="@mipmap/test_home_huodong3" />-->
+
+            <!--</LinearLayout>-->
+
+            <!--</LinearLayout>-->
 
             <View
                 android:layout_width="match_parent"
@@ -441,7 +451,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x30"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/textView"
@@ -543,18 +554,18 @@
 
             </LinearLayout>
 
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:descendantFocusability="blocksDescendants">-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:descendantFocusability="blocksDescendants">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/tuijian"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/white"/>
+                    android:background="@color/white" />
 
-            <!--</RelativeLayout>-->
+            </RelativeLayout>
 
         </LinearLayout>
 

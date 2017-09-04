@@ -99,6 +99,7 @@ public class ActivityEvaluate extends BaseActivity implements BGASortableNinePho
                 break;
 
             case R.id.header_edit:
+                submit.setEnabled(false);
                 ArrayList list = mPhotosSnpl.getData();
 //                for (int i = 0; i < list.size(); i++) {
 //                    Log.e( "***", list.get( i ).toString() );

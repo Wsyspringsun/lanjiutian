@@ -37,7 +37,6 @@ import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-
 /**
  * Created by Administrator on 2016/12/8 0008.
  */
@@ -56,10 +55,10 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage( msg );
+            super.handleMessage(msg);
             switch (msg.what) {
                 case AppConfig.IntentExtraKey.LODING_CONTEXT:
-                    LoadingDialogUtils.closeDialog( mDialog );
+                    LoadingDialogUtils.closeDialog(mDialog);
                     break;
             }
         }
@@ -68,58 +67,58 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
-        AppManager.getAppManager().addActivity( this );//activity管理
-        x.view().inject( this );//xutils初始化视图
-        Ntalker.getInstance().setSDKListener( this );// 小能监听接口
+        AppManager.getAppManager().addActivity(this);//activity管理
+        x.view().inject(this);//xutils初始化视图
+        Ntalker.getInstance().setSDKListener(this);// 小能监听接口
 
 
         receiver = new BroadcastReceiver() {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                onReceiveBroadcast( intent );
+                onReceiveBroadcast(intent);
             }
         };
 
         IntentFilter filter = new IntentFilter();
-        filter.addAction( AppConfig.AppAction.ACTION_TOKEN_EXPIRE ); // token过期
-        filter.addAction( AppConfig.AppAction.ACTION_ADDRESS_EXPIRE );//没有地址
-        filter.addAction( AppConfig.AppAction.Base_ACTION_PREFIX + "refresh" );
-        registerReceiver( receiver, filter );
+        filter.addAction(AppConfig.AppAction.ACTION_TOKEN_EXPIRE); // token过期
+        filter.addAction(AppConfig.AppAction.ACTION_ADDRESS_EXPIRE);//没有地址
+        filter.addAction(AppConfig.AppAction.Base_ACTION_PREFIX + "refresh");
+        registerReceiver(receiver, filter);
     }
 
     protected void onReceiveBroadcast(Intent intent) {
         String action = intent.getAction();
-        Log.e( "action", action );
+        Log.e("action", action);
 //        Log.e("-------",AppManager.getAppManager().currentActivity()+"");
-        if (action.equals( AppConfig.AppAction.ACTION_TOKEN_EXPIRE )) {// token过期
+        if (action.equals(AppConfig.AppAction.ACTION_TOKEN_EXPIRE)) {// token过期
             /**
              * MainActivity 与 其他 Activity 都继承与BaseActivity ，当超时时 会显示出多个Login页面
              * 这里block住所有onPause的Activity(意在只保留当前显示的Activity) 防止重复出现多个login
              */
             if (!(BaseActivity.this instanceof ActivityLogin) && canShowLogin) {
-                Intent it = new Intent( BaseActivity.this, ActivityLogin.class );
+                Intent it = new Intent(BaseActivity.this, ActivityLogin.class);
 //                if ((BaseActivity.this instanceof MainActivity)) {
 //                    it.putExtra( AppConfig.IntentExtraKey.LOGIN_FROM_MAIN, true );
 //                }else {
 //                    it.putExtra( AppConfig.IntentExtraKey.LOGIN_FROM_MAIN, false );
 //                }
-                BaseActivity.this.startActivity( it );
+                BaseActivity.this.startActivity(it);
             }
-        } else if (action.equals( AppConfig.AppAction.ACTION_ADDRESS_EXPIRE )) {
+        } else if (action.equals(AppConfig.AppAction.ACTION_ADDRESS_EXPIRE)) {
             if (!(BaseActivity.this instanceof ActivityAddress) && canShowAddress) {
-                Intent it = new Intent( BaseActivity.this, ActivityAddressEdit.class );
+                Intent it = new Intent(BaseActivity.this, ActivityAddressEdit.class);
 //                if ((BaseActivity.this instanceof MainActivity)) {
 //                    it.putExtra( AppConfig.IntentExtraKey.LOGIN_FROM_MAIN, true );
 //                }else {
 //                    it.putExtra( AppConfig.IntentExtraKey.LOGIN_FROM_MAIN, false );
 //                }
-                it.putExtra( AppConfig.IntentExtraKey.ADDRESS_FROM, 4 );
-                BaseActivity.this.startActivity( it );
+                it.putExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, 4);
+                BaseActivity.this.startActivity(it);
             }
-        } else if (action.equals( AppConfig.AppAction.Base_ACTION_PREFIX + "refresh" )) {
+        } else if (action.equals(AppConfig.AppAction.Base_ACTION_PREFIX + "refresh")) {
 //            resumeFromOnResume();
             resumeFromOther();
         }
@@ -162,11 +161,18 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        closeLoding();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        AppManager.getAppManager().finishActivity( this );
+        AppManager.getAppManager().finishActivity(this);
+        closeLoding();
         if (receiver != null) {
-            unregisterReceiver( receiver );
+            unregisterReceiver(receiver);
         }
     }
 
@@ -176,22 +182,32 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
 //        if (keyCode == event.KEYCODE_BACK) {
 //            AppManager.getAppManager().finishActivity();
 //        }
-        return super.onKeyDown( keyCode, event );
+        return super.onKeyDown(keyCode, event);
     }
 
     public void setLoding(Context context, boolean settime) {
         loading = true;
         if (settime) {
-            mDialog = LoadingDialogUtils.createLoadingDialog( context, "加载中..." );
-            mHandler.sendEmptyMessageDelayed( AppConfig.IntentExtraKey.LODING_CONTEXT, 1500 );
+            mDialog = LoadingDialogUtils.createLoadingDialog(context, "加载中...");
+            mHandler.sendEmptyMessageDelayed(AppConfig.IntentExtraKey.LODING_CONTEXT, 1500);
         } else {
-            mDialog = LoadingDialogUtils.createLoadingDialog( context, "加载中..." );
+            mDialog = LoadingDialogUtils.createLoadingDialog(context, "加载中...");
         }
+
+//        new TimerTask() {
+//            @Override
+//            public void run() {
+//                // TODO Auto-generated method stub
+//                Message message = new Message();
+//                message.what = 1;
+//                handler.sendMessage(message);
+//            }
+//        };
     }
 
     public void closeLoding() {
         loading = false;
-        LoadingDialogUtils.closeDialog( mDialog );
+        LoadingDialogUtils.closeDialog(mDialog);
     }
 
     /**
@@ -227,7 +243,7 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA};
 
-        if (EasyPermissions.hasPermissions( this, perms )) {
+        if (EasyPermissions.hasPermissions(this, perms)) {
             ChatParamsBody chatparams = new ChatParamsBody();
 
             // 咨询发起页（专有参数）
@@ -253,15 +269,15 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
             }
 
             //判断是否登陆   是否为游客模式
-            if (!StringUtils.isEmpty( PreferenceCache.getToken() )) {
-                Ntalker.getInstance().login( PreferenceCache.getPhoneNum(), PreferenceCache.getPhoneNum(), 0 );
+            if (!StringUtils.isEmpty(PreferenceCache.getToken())) {
+                Ntalker.getInstance().login(PreferenceCache.getPhoneNum(), PreferenceCache.getPhoneNum(), 0);
             } else {
                 Ntalker.getInstance().logout();
             }
-            int code = Ntalker.getInstance().startChat( getApplicationContext(), settingid, groupName, null, null, chatparams );
-            Log.e( "xiaoneng_code", code + "" );
+            int code = Ntalker.getInstance().startChat(getApplicationContext(), settingid, groupName, null, null, chatparams);
+            Log.e("xiaoneng_code", code + "");
         } else {
-            EasyPermissions.requestPermissions( this, "需要以下权限:", REQUEST_CODE_PERMISSION_XIAONENG, perms );
+            EasyPermissions.requestPermissions(this, "需要以下权限:", REQUEST_CODE_PERMISSION_XIAONENG, perms);
         }
 
     }
@@ -317,32 +333,32 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult( requestCode, resultCode, data );
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
-            Log.e( "****", "****" );
+            Log.e("****", "****");
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult( requestCode, permissions, grantResults );
-        EasyPermissions.onRequestPermissionsResult( requestCode, permissions, grantResults, this );
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-        Log.e( "camera", "成功获取权限" );
+        Log.e("camera", "成功获取权限");
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        if (EasyPermissions.somePermissionPermanentlyDenied( this, perms )) {
-            new AppSettingsDialog.Builder( this, "需要开启此权限" )
-                    .setTitle( getString( R.string.alert_tishi ) )
-                    .setPositiveButton( "设置" )
-                    .setNegativeButton( "取消", null )
-                    .setRequestCode( 100 )
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this, "需要开启此权限")
+                    .setTitle(getString(R.string.alert_tishi))
+                    .setPositiveButton("设置")
+                    .setNegativeButton("取消", null)
+                    .setRequestCode(100)
                     .build()
                     .show();
         }

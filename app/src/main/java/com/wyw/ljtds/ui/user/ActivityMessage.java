@@ -36,13 +36,13 @@ import java.util.List;
  */
 
 @ContentView(R.layout.activity_message)
-public class ActivityMessage extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class ActivityMessage extends BaseActivity {
     @ViewInject(R.id.reclcyer)
     private RecyclerView recyclerView;
     @ViewInject(R.id.header_title)
     private TextView title;
-    @ViewInject(R.id.swipeLayout)
-    private SwipeRefreshLayout swipeLayout;
+//    @ViewInject(R.id.swipeLayout)
+//    private SwipeRefreshLayout swipeLayout;
 
     private TextView viewEnd;
     //无数据时的界面
@@ -54,6 +54,7 @@ public class ActivityMessage extends BaseActivity implements SwipeRefreshLayout.
     //客服
     String settingid1 = "lj_1000_1493167191869";// 客服组id示例kf_9979_1452750735837
     String groupName = "蓝九天";// 客服组默认名称
+    private List<MessageModel> data;
 
     @Event(value = {R.id.header_return})
     private void onClick(View view) {
@@ -69,123 +70,117 @@ public class ActivityMessage extends BaseActivity implements SwipeRefreshLayout.
         super.onCreate(savedInstanceState);
 
         title.setText(R.string.message1);
+//        setLoding(this, false);
+//        getMsg(true, true);
 
-        setLoding(this, false);
-        getMsg(true, true);
+        final LinearLayoutManager llm = new LinearLayoutManager(this);//必须有
+        llm.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动
+        recyclerView.setLayoutManager(llm);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动
-        recyclerView.setLayoutManager(linearLayoutManager);
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (adapter == null) return;
+                int cnt = adapter.getItemCount() - 1;
+                int lastVisibleItem = llm.findLastVisibleItemPosition();
+                Log.e(AppConfig.ERR_TAG, "l/cnt:" + lastVisibleItem + "/" + cnt);
+                if (!end && !loading && (lastVisibleItem >= cnt)) {
+                    pageIndex = pageIndex + 1;
+                    getMsg();
+                }
+            }
+        });
+//        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                Log.e(AppConfig.ERR_TAG, "onRefresh");
+//                pageIndex = 1;
+//                getMsg();
+//            }
+//        });
+        initAdapter();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(AppConfig.ERR_TAG,"onResume");
+        pageIndex = 1;
+        end = false;
+        getMsg();
+    }
+
+    private void updAdapter() {
+        if (adapter == null) {
+            initAdapter();
+        }
+        if (data == null || data.size() <= 0) {
+            end = true;
+            return;
+        }
+        if (pageIndex <= 1) {
+            adapter.setNewData(data);
+        } else {
+            adapter.addData(data);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    private void initAdapter() {
         noData = getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
-
         adapter = new MyAdapter();
         adapter.isFirstOnly(true);//是否只有第一次加载有特效   默认true
         adapter.addHeaderView(getHeaderView(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openChat("首页","", settingid1,groupName ,false,"");
+                openChat("首页", "", settingid1, groupName, false, "");
             }
         }));
-        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                getMsg(true, false);
-            }
-
-        });
-
-
-        swipeLayout.setOnRefreshListener(this);
         recyclerView.setAdapter(adapter);
-
     }
 
-    @Override
-    protected void resumeFromOther() {
-        super.resumeFromOther();
-        getMsg( true,true );
-    }
-
-    @Override
-    public void onRefresh() {
-        getMsg(false, true);
-    }
+//    @Override
+//    protected void resumeFromOther() {
+//        super.resumeFromOther();
+//        getMsg( true,true );
+//    }
 
 
-    BizDataAsyncTask<List<MessageModel>> msgTask;
-
-    private void getMsg(final boolean loadmore, final boolean refresh) {
-        msgTask = new BizDataAsyncTask<List<MessageModel>>() {
+    private void getMsg() {
+        setLoding(this, false);
+        new BizDataAsyncTask<List<MessageModel>>() {
             @Override
             protected List<MessageModel> doExecute() throws ZYException, BizFailure {
-                if (refresh) {
-                    Log.e("-----", "msg1");
-                    return UserBiz.getMessage("0", PreferenceCache.getToken(), "1", AppConfig.DEFAULT_PAGE_COUNT + "");
-                } else {
-//                    if (end){
-//                        return adapter.getData();
-//                    }else {
-                    Log.e("-----", "msg3");
-                    return UserBiz.getMessage("0", PreferenceCache.getToken(), pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "");
-//                    }
-                }
+//                List<MessageModel> list = new ArrayList<MessageModel>();
+//                for (int i = 0; i < 20; i++) {
+//                    MessageModel m = new MessageModel();
+//                    m.setCONTENTS("Hello" + (pageIndex * 20 + i));
+//                    m.setMSG_TYPE("1");
+//                    list.add(m);
+//                }
+//                return list;
+                return UserBiz.getMessage("0", PreferenceCache.getToken(), "" + pageIndex, AppConfig.DEFAULT_PAGE_COUNT + "");
             }
 
             @Override
             protected void onExecuteSucceeded(List<MessageModel> messageModels) {
-                if (messageModels.size() < AppConfig.DEFAULT_PAGE_COUNT) {
-                    end = true;
-                    //可以加入emptyview
-                    if (loadmore && messageModels.size() == 0) {
-                        adapter.setEmptyView(noData);
-                    }
-                } else {
-                    end = false;
-
-                }
-
-
-                if (refresh) {
-                    pageIndex = 1;
-
-                    adapter.setNewData(messageModels);
-                    adapter.notifyDataSetChanged();
-
-                }else {
-
-                    adapter.addData(messageModels);
-                    adapter.notifyDataSetChanged();
-                }
-
-                if (end){
-                    adapter.addFooterView(getFooterView());
-                    adapter.notifyDataSetChanged();
-                }else {
-                    adapter.removeAllFooterView();
-                    adapter.notifyDataSetChanged();
-                }
-
-
-                pageIndex++;
-                swipeLayout.setRefreshing(false);
-
-
-//                adapter.addData(messageModels);
-                Log.e("****", messageModels.size() + ";    " + pageIndex + ";  " + adapter.getData().size() + "");
-//                adapter.notifyDataSetChanged();
-
                 closeLoding();
+//                swipeLayout.setRefreshing(false);
+                ActivityMessage.this.data = messageModels;
+                updAdapter();
             }
 
             @Override
             protected void OnExecuteFailed() {
-                adapter.setEmptyView(noData);
-                swipeLayout.setRefreshing(false);
                 closeLoding();
+//                swipeLayout.setRefreshing(false);
             }
-        };
-
-        msgTask.execute();
+        }.execute();
     }
 
     //添加headerview  用于客服
@@ -197,7 +192,7 @@ public class ActivityMessage extends BaseActivity implements SwipeRefreshLayout.
     }
 
     private TextView getFooterView() {
-        if(viewEnd ==null){
+        if (viewEnd == null) {
             viewEnd = new TextView(this);
             viewEnd.setGravity(Gravity.CENTER);
         }
@@ -212,7 +207,7 @@ public class ActivityMessage extends BaseActivity implements SwipeRefreshLayout.
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, MessageModel messageModel) {
-            baseViewHolder.setText(R.id.msg_time, messageModel.getINS_DATE() == null ?"":messageModel.getINS_DATE().substring(0,messageModel.getINS_DATE().indexOf(" ")));
+            baseViewHolder.setText(R.id.msg_time, messageModel.getINS_DATE() == null ? "" : messageModel.getINS_DATE().substring(0, messageModel.getINS_DATE().indexOf(" ")));
             if (messageModel.getMSG_TYPE().equals("1")) {
                 baseViewHolder.setText(R.id.msg_title, messageModel.getSUBJECT())
                         .setText(R.id.msg_content, messageModel.getCONTENTS())

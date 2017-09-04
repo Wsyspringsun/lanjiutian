@@ -1,5 +1,6 @@
 package com.wyw.ljtds.ui.goods;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.gxz.PagerSlidingTabStrip;
 import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
@@ -24,15 +26,20 @@ import com.wyw.ljtds.model.GoodSubmitModel1;
 import com.wyw.ljtds.model.GoodSubmitModel2;
 import com.wyw.ljtds.model.GoodSubmitModel3;
 import com.wyw.ljtds.model.ShoppingCartAddModel;
+import com.wyw.ljtds.model.XiaoNengData;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.utils.GsonUtils;
+import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.widget.goodsinfo.NoScrollViewPager;
+
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import cn.xiaoneng.coreapi.TrailActionBody;
 
 /**
@@ -52,17 +59,23 @@ public class ActivityGoodsInfo extends BaseActivity {
     private LinearLayout shang_ll;
     @ViewInject(R.id.kefu_call)
     private RelativeLayout kefu_call;
+    @ViewInject(R.id.activity_goods_info_shop)
+    private RelativeLayout rlShop;
+
     @ViewInject(R.id.goumai)
     private TextView tvGoumai;
 
 
-    public static final String VAL_INFO_SOURCE="ActivityGoodsInfo";
-    //客服
-    String settingid1 = "lj_1001_1496308413541";
-    String groupName = "蓝九天商户平台";// 客服组默认名称
-    TrailActionBody trailparams = null;// 轨迹信息实例
+    public static final String VAL_INFO_SOURCE = "ActivityGoodsInfo";
     // 轨迹（专有参数）
-    String sellerid = "lj_1001";// 商户id,平台版企业(B2B2C企业)使用此参数，B2C企业此参数传""
+//    String sellerid = "lj_1001";// 商户id,平台版企业(B2B2C企业)使用此参数，B2C企业此参数传""
+    String sellerid = "";// 商户id,平台版企业(B2B2C企业)使用此参数，B2C企业此参数传""
+    //客服
+    String settingid1 = "";
+    //    String settingid1 = "lj_1001_1496308413541";
+    String groupName = "";// 客服组默认名称
+    //    String groupName = "蓝九天商户平台";// 客服组默认名称
+    TrailActionBody trailparams = null;// 轨迹信息实例
     String ttl = "";// 当前页标题，如首页、购物车、订单、支付
     String url = "";// 当前页地址
     String ref = "";// 前一页面的地址
@@ -78,8 +91,13 @@ public class ActivityGoodsInfo extends BaseActivity {
     private FragmentGoodsPagerDetails goodsDetail;
     private FragmentGoodsPagerEvaluate goodsEvaluate;
 
+    public static Intent getIntent(Context ctx, String commId) {
+        Intent it = new Intent(ctx, ActivityGoodsInfo.class);
+        it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, commId);
+        return it;
+    }
 
-    @Event(value = {R.id.goumai, R.id.add_cart, R.id.yao_ll, R.id.shopping_cart, R.id.kefu_call, R.id.ll_back,})
+    @Event(value = {R.id.activity_goods_info_shop, R.id.goumai, R.id.add_cart, R.id.yao_ll, R.id.shopping_cart, R.id.kefu_call, R.id.ll_back,})
     private void onClick(View v) {
         Intent it;
         switch (v.getId()) {
@@ -90,7 +108,7 @@ public class ActivityGoodsInfo extends BaseActivity {
             case R.id.goumai:
                 if (model != null) {
                     it = new Intent(this, ActivityGoodsSubmit.class);
-                    it.putExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE,ActivityGoodsInfo.VAL_INFO_SOURCE);
+                    it.putExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE, ActivityGoodsInfo.VAL_INFO_SOURCE);
 
                     GoodSubmitModel1 goodSubmitModel = new GoodSubmitModel1();
                     GoodSubmitModel2 goodSubmitModel2 = new GoodSubmitModel2();
@@ -140,7 +158,19 @@ public class ActivityGoodsInfo extends BaseActivity {
 //                }
                 break;
 
+            case R.id.activity_goods_info_shop:
+                String groupId = model.getOidGroupId();
+                if (StringUtils.isEmpty(groupId)) {
+                    ToastUtil.show(this, "对不起，漂亮商铺页面还没完工。给程序员哥哥加油！");
+                }
+                it = ShopActivity.getIntent(this, groupId);
+                startActivity(it);
+                break;
+
             case R.id.kefu_call:
+                if (StringUtils.isEmpty(settingid1)) {
+                    ToastUtil.show(this, "抱歉，客服丢了！");
+                }
 
 //                addDb();
                 openChat(model.getTitle(), "", settingid1, groupName, true, model.getCommodityId());
@@ -199,9 +229,19 @@ public class ActivityGoodsInfo extends BaseActivity {
 
             @Override
             protected void onExecuteSucceeded(CommodityDetailsModel commodityDetailsModel) {
+                closeLoding();
                 model = commodityDetailsModel;
 
                 Log.e(AppConfig.ERR_TAG, "model:" + GsonUtils.Bean2Json(model));
+
+                XiaoNengData xnd = model.getXiaonengData();
+                if (xnd != null) {
+                    sellerid = xnd.getSellerid();
+                    settingid1 = xnd.getSettingid1();
+                } else {
+                    Log.e(AppConfig.ERR_EXCEPTION, "XiaoNengData is null");
+                }
+                groupName = model.getGroupName();
 
                 goodsInfo.updeta(model);
                 goodsEvaluate.update(model);
@@ -242,7 +282,6 @@ public class ActivityGoodsInfo extends BaseActivity {
 //                int action = Ntalker.getInstance().startAction( trailparams );
 //                Log.e( "action",action+";  "+MyUtil.getNtalkerParam(itemSelfDefine) );
                 //-------
-                closeLoding();
             }
 
             @Override

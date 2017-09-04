@@ -15,8 +15,8 @@ android {
         applicationId "com.wyw.ljtds"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 5
-        versionName "1.0.5"
+        versionCode 10
+        versionName "1.1.0"
         multiDexEnabled = true
     }
     buildTypes {
@@ -52,6 +52,14 @@ dependencies {
     //xutils3
     //ksoap2
     compile files('libs/ksoap2-android-assembly-3.6.1-jar-with-dependencies.jar')
+    //百度地图
+    compile files('libs/baidumapapi_base_v4_2_0.jar')
+    compile files('libs/baidumapapi_cloud_v4_2_0.jar')
+    compile files('libs/baidumapapi_map_v4_2_0.jar')
+    compile files('libs/baidumapapi_radar_v4_2_0.jar')
+    compile files('libs/baidumapapi_search_v4_2_0.jar')
+    compile files('libs/baidumapapi_util_v4_2_0.jar')
+    compile files('libs/locSDK_6.13.jar')
     //gson
     //图片轮播
     //商品详情页
@@ -61,11 +69,7 @@ dependencies {
     //6.0权限请求
     compile project(':easypermissions')
     //扫一扫
-    //百度地图
-    compile files('src/main/jniLibs/locSDK_6.13.jar')
-    compile files('src/main/jniLibs/baidumapapi_base_v4_2_0.jar')
-    compile files('src/main/jniLibs/baidumapapi_map_v4_2_0.jar')
-    compile files('src/main/jniLibs/baidumapapi_search_v4_2_0.jar')
+
     //银联支付
     compile files('libs/UPPayPluginExPro.jar')
     compile files('libs/UPPayAssistEx.jar')
@@ -79,6 +83,8 @@ dependencies {
     compile project(':circledialog')
     //android  svg图
     compile files('libs/androidsvg-1.2.1.jar')
+    //baidu data report
+    compile files('libs/Baidu_Mtj_3.7.6.1.jar')
     //标签流
     compile project(':flowlayout-lib')
     //跑马灯

@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">蓝九天物流</string>
+    <string name="zhanghao">账号</string>
+    <string name="phone_number1">请输入账号</string>
+    <string name="mima">密码</string>
+    <string name="mima1">请输入密码</string>
+    <string name="login">登陆</string>
+    <!--<string name="shop">商品管理</string>-->
+    <string name="order">订单管理</string>
+    <string name="fahuo">发货</string>
+    <string name="songda">送达</string>
+    <string name="order_del">删除订单</string>
+    <string name="order_details">订单详情</string>
+    <string name="tuichu">退出登录</string>
+    <string name="empty_error">暂无数据</string>
+    <string name="setting">设置</string>
+    <string name="finish">已完成</string>
+    <string name="unpay">待付款</string>
+    <string name="toshipped">待发货</string>
+    <string name="unreject">待收货</string>
+    <string name="returned">退款/售后</string>
+
+    <string name="msg_opreation_timeout">与服务器连接超时，请稍后重试</string>
+    <string name="network_not_available">无法连接到网络，请检查网络配置</string>
+    <string name="opreation_failure">服务器访问异常，请稍后重试</string>
+    <string name="title_home">蓝九天物流</string>
+    <string name="title_notifications">通知</string>
+    <string name="title_dashboard">蓝九天</string>
+    <string name="text_holder">-----</string>
+    <string name="lanjian">拦件</string>
+    <string name="fragment_delegater_courier">派件人</string>
+    <string name="fragment_delegater_courier_mobile">派件人电话</string>
+    <string name="fragment_delegater_courier_car">派件车辆</string>
+    <string name="text_sure">确认</string>
+</resources>

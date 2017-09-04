@@ -99,12 +99,12 @@
         android:id="@+id/next"
         android:textSize="18sp"
         android:text="@string/login"
-        android:textColor="@color/white"
         android:layout_marginTop="@dimen/x35"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x35"
         android:layout_marginLeft="@dimen/x15"
         android:layout_marginRight="@dimen/x15"
+        android:textColor="@color/white"
         android:background="@drawable/background_submit_yuan_lan"/>
 
     <RelativeLayout

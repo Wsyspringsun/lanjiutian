@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/index"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="@string/holder"
+        android:padding="@dimen/x5" />
+
+    <TextView
+        android:id="@+id/item_ticket_datespan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="@string/holder"
+        style="@style/font_ww_18_black"
+        android:layout_marginRight="@dimen/x3"
+        android:padding="@dimen/x1" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/x1"
+        android:paddingRight="@dimen/x1"
+        android:scaleType="fitCenter"
+        android:layout_marginTop="@dimen/x8"
+        android:src="@mipmap/img_ticket_youfeiquan" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black" />
+</RelativeLayout>
+

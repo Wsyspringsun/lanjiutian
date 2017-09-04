@@ -99,6 +99,30 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
+            <RelativeLayout
+                android:id="@+id/activity_goods_info_shop"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/activity_goods_info_iv_shop"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="@dimen/x21"
+                    android:layout_height="@dimen/x21"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/icon_dianpu"/>
+
+                <TextView
+                    android:textColor="@color/gray"
+                    android:layout_marginTop="@dimen/x2"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/activity_goods_info_iv_shop"
+                    style="@style/font_ww_12"
+                    android:text="@string/shop"/>
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/kefu_call"

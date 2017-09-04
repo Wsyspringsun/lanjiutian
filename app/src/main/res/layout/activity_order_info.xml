@@ -27,11 +27,28 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
+            <LinearLayout
                 android:id="@+id/images"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x90"
-                android:scaleType="fitXY" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/order_info_stat"
+                    style="@style/font_ww_22_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="@dimen/x15"
+                    android:paddingTop="@dimen/x20"
+                    android:text="待发货" />
+            </LinearLayout>
+
+            <!--<ImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/x90"-->
+            <!--android:scaleType="fitXY" />-->
+
 
             <include layout="@layout/item_order_submit_address" />
 
@@ -115,6 +132,25 @@
 
                     <TextView
                         style="@style/font_ww_14"
+                        android:text="@string/order_dianzibi"
+                        android:textColor="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/tv_orderinfo_dianzibi"
+                        style="@style/font_ww_14"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/gray" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/x4"
+                    android:layout_marginTop="@dimen/x4">
+
+                    <TextView
+                        style="@style/font_ww_14"
                         android:text="@string/order_dikou"
                         android:textColor="@color/gray" />
 
@@ -125,6 +161,7 @@
                         android:textColor="@color/gray" />
 
                 </RelativeLayout>
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -353,29 +390,9 @@
             android:id="@+id/ly_order_info_bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/x1"
             android:gravity="right"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/order_shanchu"
-                style="@style/font_ww_14"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/x6"
-                android:background="@drawable/background_text_button"
-                android:padding="@dimen/x5"
-                android:text="@string/order_shanchu"
-                android:textColor="@color/base_bar" />
-
-            <TextView
-                android:id="@+id/order_wuliu"
-                style="@style/font_ww_14"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/x6"
-                android:background="@drawable/background_text_button"
-                android:padding="@dimen/x5"
-                android:text="@string/wuliu_chakan"
-                android:textColor="@color/base_bar" />
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/x1">
 
             <TextView
                 android:id="@+id/order_fuwu"
@@ -386,28 +403,6 @@
                 android:padding="@dimen/x5"
                 android:text="@string/shouhou_shenqing"
                 android:textColor="@color/base_bar" />
-
-            <TextView
-                android:id="@+id/tv_order_info_tousu"
-                style="@style/font_ww_14"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/x10"
-                android:background="@drawable/background_text_button"
-                android:padding="@dimen/x5"
-                android:text="@string/order_info_tousu"
-                android:textColor="@color/base_bar" />
-
-
-            <TextView
-                android:id="@+id/order_quxiao"
-                style="@style/font_ww_14"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/x6"
-                android:background="@drawable/background_text_button"
-                android:padding="@dimen/x5"
-                android:text="@string/order_pingjia"
-                android:textColor="@color/base_bar" />
-
         </LinearLayout>
 
         <View

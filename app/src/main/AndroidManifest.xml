@@ -4,6 +4,8 @@
 
     <!-- 网络相关 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -78,6 +80,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".ui.base.CustomErrorActivity"
@@ -105,7 +108,8 @@
             android:theme="@style/Login" />
         <activity
             android:name=".ui.user.ActivityRegist1"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"></activity>
+
         <activity
             android:name=".ui.user.ActivityLogin"
             android:screenOrientation="portrait"
@@ -126,8 +130,10 @@
         <!-- 医药馆 -->
         <activity
             android:name=".ui.find.ActivityMapLocation"
-            android:screenOrientation="portrait"
-            android:theme="@style/Login" />
+            android:screenOrientation="portrait">
+        </activity>
+
+
         <activity
             android:name=".ui.find.RoutePlanDemo"
             android:configChanges="orientation|keyboardHidden"
@@ -213,7 +219,7 @@
         <activity
             android:name=".ui.user.address.ActivityAddressEdit"
             android:screenOrientation="portrait"
-            android:theme="@style/Login" />
+            android:theme="@style/Login"></activity>
         <activity
             android:name=".ui.user.address.ActivityProvince"
             android:screenOrientation="portrait"
@@ -271,10 +277,33 @@
             android:screenOrientation="portrait"
             android:theme="@style/Login" />
 
-        <!-- 百度地图所需 -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="lTBfXPufsGg7iEZw0jGgxD8X988wCUO3" />
+        <meta-data
+            android:name="BaiduMobAd_STAT_ID"
+            android:value="e60050ac68" />
+        <meta-data
+            android:name="BaiduMobAd_CHANNEL"
+            android:value="vivo" />
+        <meta-data
+            android:name="BaiduMobAd_EXCEPTION_LOG"
+            android:value="false" />
+        <meta-data
+            android:name="BaiduMobAd_SEND_STRATEGY"
+            android:value="APP_START" />
+        <meta-data
+            android:name="BaiduMobAd_ONLY_WIFI"
+            android:value="false" />
+        <meta-data
+            android:name="BaiduMobAd_CELL_LOCATION"
+            android:value="true" />
+        <meta-data
+            android:name="BaiduMobAd_GPS_LOCATION"
+            android:value="true" />
+        <meta-data
+            android:name="BaiduMobAd_WIFI_LOCATION"
+            android:value="true" />
 
         <service
             android:name="com.baidu.location.f"
@@ -360,13 +389,32 @@
             android:label="@string/title_activity_web_show" />
         <activity
             android:name=".ui.user.wallet.BalanceActivity"
-            android:label="@string/title_activity_balance"></activity>
+            android:label="@string/title_activity_balance" />
         <activity
             android:name=".ui.user.wallet.PointRecordActivity"
-            android:label="@string/title_activity_point">
+            android:label="@string/title_activity_point" />
+        <activity
+            android:name=".ui.cart.CartActivity"
+            android:label="@string/title_activity_cart" />
+        <activity
+            android:name=".ui.user.wallet.TicketActivity"
+            android:label="@string/title_activity_web_show"></activity>
+        <activity
+            android:name=".ui.user.wallet.YouHuiQuanActivity"
+            android:label="@string/title_activity_web_show"></activity>
+        <activity
+            android:name=".ui.user.wallet.DianZiBiActivity"
+            android:label="@string/title_activity_web_show"></activity>
+        <activity
+            android:name=".ui.TestActivity"
+            android:label="@string/title_activity_test"></activity>
+        <activity
+            android:name=".ui.user.order.ReturnGoodsOrderListActivity"
+            android:label="@string/title_activity_test"></activity>
 
-        </activity>
-
+        <activity
+            android:name=".ui.goods.ShopActivity"
+            android:label="@string/title_activity_test"></activity>
     </application>
 
 </manifest>

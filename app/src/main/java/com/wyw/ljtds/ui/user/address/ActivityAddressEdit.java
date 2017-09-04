@@ -67,34 +67,34 @@ public class ActivityAddressEdit extends BaseActivity {
                 break;
 
             case R.id.select_shengshi:
-                it = new Intent( this, ActivityProvince.class );
-                it.putExtra( "address_id",address_id );
-                it.putExtra( AppConfig.IntentExtraKey.ADDRESS_FROM, from );
+                it = new Intent(this, ActivityProvince.class);
+                it.putExtra("address_id", address_id);
+                it.putExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, from);
 
                 Bundle bundle = new Bundle();
-                bundle.putString( "name", name.getText().toString().trim() );
-                bundle.putString( "phone", phone.getText().toString().trim() );
-                bundle.putString( "xiangxi", xiangxi.getText().toString().trim() );
-                bundle.putString( "shengshi", shengshi.getText().toString() );
+                bundle.putString("name", name.getText().toString().trim());
+                bundle.putString("phone", phone.getText().toString().trim());
+                bundle.putString("xiangxi", xiangxi.getText().toString().trim());
+                bundle.putString("shengshi", shengshi.getText().toString());
 //                if (from==2){
 //                    it.putExtra( AppConfig.IntentExtraKey.ADDRESS_FROM, 2 );
 //                }
-                it.putExtra( "bundle", bundle );
-                AppManager.addDestoryActivity( ActivityAddressEdit.this, "addressEdit" );
-                startActivity( it );
+                it.putExtra("bundle", bundle);
+                AppManager.addDestoryActivity(ActivityAddressEdit.this, "addressEdit");
+                startActivity(it);
                 break;
 
             case R.id.header_edit:
-                if (StringUtils.isEmpty( name.getText() )) {
-                    ToastUtil.show( this, getResources().getString( R.string.realname_error1 ) );
-                } else if (StringUtils.isEmpty( phone.getText() )) {
-                    ToastUtil.show( this, getResources().getString( R.string.phone_error ) );
-                } else if (StringUtils.isEmpty( xiangxi.getText() )) {
-                    ToastUtil.show( this, getResources().getString( R.string.address_error ) );
+                if (StringUtils.isEmpty(name.getText())) {
+                    ToastUtil.show(this, getResources().getString(R.string.realname_error1));
+                } else if (StringUtils.isEmpty(phone.getText())) {
+                    ToastUtil.show(this, getResources().getString(R.string.phone_error));
+                } else if (StringUtils.isEmpty(xiangxi.getText())) {
+                    ToastUtil.show(this, getResources().getString(R.string.address_error));
                 } else {
                     if (from == 4 || from == 1) {
-                        add( from );
-                    } else if (from==3||from==2){
+                        add(from);
+                    } else if (from == 3 || from == 2) {
                         update();
                     }
                 }
@@ -108,37 +108,37 @@ public class ActivityAddressEdit extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
-        setLoding( this, false );
+        setLoding(this, false);
 
-        title.setText( "新增收货地址" );
-        edit.setText( "保存" );
-        edit.setTextColor( getResources().getColor( R.color.base_bar ) );
+        title.setText("新增收货地址");
+        edit.setText("保存");
+        edit.setTextColor(getResources().getColor(R.color.base_bar));
 
-        from = getIntent().getIntExtra( AppConfig.IntentExtraKey.ADDRESS_FROM, 0 );
-        Log.e( "from", from + "" );
+        from = getIntent().getIntExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, 0);
+        Log.e("from", from + "");
 //        if (from == 1 || from == 4) {
 //            shanchu.setVisibility( View.GONE );
 //        }
 
-        if (from == 2||from==3) {
+        if (from == 2 || from == 3) {
 //            shanchu.setVisibility( View.VISIBLE );
-            address_id = getIntent().getStringExtra( "address_id" );
-            Bundle bundle = getIntent().getBundleExtra( "bundle" );
+            address_id = getIntent().getStringExtra("address_id");
+            Bundle bundle = getIntent().getBundleExtra("bundle");
             if (bundle != null) {
-                name.setText( bundle.getString( "name" ) );
-                phone.setText( bundle.getString( "phone" ) );
-                xiangxi.setText( bundle.getString( "xiangxi" ) );
-                shengshi.setText( bundle.getString( "shengshi" ) );
+                name.setText(bundle.getString("name"));
+                phone.setText(bundle.getString("phone"));
+                xiangxi.setText(bundle.getString("xiangxi"));
+                shengshi.setText(bundle.getString("shengshi"));
             }
         } else if (from == 1 || from == 4) {
-            Bundle bundle = getIntent().getBundleExtra( "bundle" );
+            Bundle bundle = getIntent().getBundleExtra("bundle");
             if (bundle != null) {
-                name.setText( bundle.getString( "name" ) );
-                phone.setText( bundle.getString( "phone" ) );
-                xiangxi.setText( bundle.getString( "xiangxi" ) );
-                shengshi.setText( getIntent().getStringExtra( "name_p" ) + getIntent().getStringExtra( "name_c" ) );
+                name.setText(bundle.getString("name"));
+                phone.setText(bundle.getString("phone"));
+                xiangxi.setText(bundle.getString("xiangxi"));
+                shengshi.setText(getIntent().getStringExtra("name_p") + getIntent().getStringExtra("name_c"));
             }
         }
 
@@ -152,21 +152,21 @@ public class ActivityAddressEdit extends BaseActivity {
         addTask = new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                return UserBiz.addUserAddress( name.getText().toString().trim(), phone.getText().toString().trim(), "048000",
-                        getIntent().getStringExtra( "id_p" ), getIntent().getStringExtra( "id_c" ), xiangxi.getText().toString().trim() );
+                return UserBiz.addUserAddress(name.getText().toString().trim(), phone.getText().toString().trim(), "048000",
+                        getIntent().getStringExtra("id_p"), getIntent().getStringExtra("id_c"), xiangxi.getText().toString().trim());
             }
 
             @Override
             protected void onExecuteSucceeded(Integer s) {
-                ToastUtil.show( ActivityAddressEdit.this, getResources().getString( R.string.add_succeed ) );
+                ToastUtil.show(ActivityAddressEdit.this, getResources().getString(R.string.add_succeed));
                 finish();
                 if (from == 1) {
-                    InputMethodUtils.keyBoxIsShow( ActivityAddressEdit.this );
+                    InputMethodUtils.keyBoxIsShow(ActivityAddressEdit.this);
                     finish();
-                    startActivity( new Intent( ActivityAddressEdit.this, ActivityAddress.class ) );
-                } else if (from==4){
-                    InputMethodUtils.keyBoxIsShow( ActivityAddressEdit.this );
-                    Intent it=new Intent( AppConfig.AppAction.Base_ACTION_PREFIX+"refresh" );
+                    startActivity(new Intent(ActivityAddressEdit.this, ActivityAddress.class));
+                } else if (from == 4) {
+                    InputMethodUtils.keyBoxIsShow(ActivityAddressEdit.this);
+                    Intent it = new Intent(AppConfig.AppAction.Base_ACTION_PREFIX + "refresh");
                     MyApplication.getAppContext().sendBroadcast(it);
                     finish();
                 }
@@ -186,27 +186,27 @@ public class ActivityAddressEdit extends BaseActivity {
         updateTask = new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                Log.e( "uodate=====", address_id + ";" + getIntent().getStringExtra( "id_p" ) + ";" + getIntent().getStringExtra( "id_c" ) );
-                return UserBiz.updateUserAddress( address_id, name.getText().toString().trim(),
-                        phone.getText().toString().trim(), "048000", getIntent().getStringExtra( "id_p" ), getIntent().getStringExtra( "id_c" ),
-                        xiangxi.getText().toString().trim() );
+                Log.e("uodate=====", address_id + ";" + getIntent().getStringExtra("id_p") + ";" + getIntent().getStringExtra("id_c"));
+                return UserBiz.updateUserAddress(address_id, name.getText().toString().trim(),
+                        phone.getText().toString().trim(), "048000", getIntent().getStringExtra("id_p"), getIntent().getStringExtra("id_c"),
+                        xiangxi.getText().toString().trim());
             }
 
             @Override
             protected void onExecuteSucceeded(Integer s) {
-                ToastUtil.show( ActivityAddressEdit.this, getResources().getString( R.string.update_succeed ) );
-                if (from==2){
-                    InputMethodUtils.keyBoxIsShow( ActivityAddressEdit.this );
+                ToastUtil.show(ActivityAddressEdit.this, getResources().getString(R.string.update_succeed));
+                if (from == 2) {
+                    InputMethodUtils.keyBoxIsShow(ActivityAddressEdit.this);
 //                    setResult( AppConfig.IntentExtraKey.RESULT_OK );
                     finish();
-                    startActivity( new Intent( ActivityAddressEdit.this, ActivityAddress.class ) );
-                }else if (from==3){
+                    startActivity(new Intent(ActivityAddressEdit.this, ActivityAddress.class));
+                } else if (from == 3) {
 
-                    InputMethodUtils.keyBoxIsShow( ActivityAddressEdit.this );
-                    Intent mIntent=new Intent(  );
-                    mIntent.putExtra( "refresh",true );
-                    setResult( AppConfig.IntentExtraKey.RESULT_OK, mIntent );
-                    Log.e( "aaaaaaaaaaaaaa","aaaaaaaaaaaaa" );
+                    InputMethodUtils.keyBoxIsShow(ActivityAddressEdit.this);
+                    Intent mIntent = new Intent();
+                    mIntent.putExtra("refresh", true);
+                    setResult(AppConfig.IntentExtraKey.RESULT_OK, mIntent);
+                    Log.e("aaaaaaaaaaaaaa", "aaaaaaaaaaaaa");
                     finish();
                 }
             }
@@ -225,14 +225,14 @@ public class ActivityAddressEdit extends BaseActivity {
         deleteTask = new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                return UserBiz.deleteUserAddress( address_id );
+                return UserBiz.deleteUserAddress(address_id);
             }
 
             @Override
             protected void onExecuteSucceeded(Integer integer) {
-                ToastUtil.show( ActivityAddressEdit.this, getResources().getString( R.string.delete_succeed ) );
+                ToastUtil.show(ActivityAddressEdit.this, getResources().getString(R.string.delete_succeed));
                 finish();
-                startActivity( new Intent( ActivityAddressEdit.this, ActivityAddress.class ) );
+                startActivity(new Intent(ActivityAddressEdit.this, ActivityAddress.class));
             }
 
             @Override
@@ -248,44 +248,44 @@ public class ActivityAddressEdit extends BaseActivity {
         if (keyCode == event.KEYCODE_BACK) {
             finshThis();
         }
-        return super.onKeyDown( keyCode, event );
+        return super.onKeyDown(keyCode, event);
     }
 
-    private void finshThis(){
-        InputMethodUtils.keyBoxIsShow( this );
-        AlertDialog alert = new AlertDialog.Builder( this ).create();
-        if (from==4){
-            alert.setTitle( R.string.alert_tishi );
-            alert.setMessage( getResources().getString( R.string.alert_dizhi ) );
-            alert.setButton( DialogInterface.BUTTON_POSITIVE,getResources().getString( R.string.alert_queding ), new DialogInterface.OnClickListener() {
+    private void finshThis() {
+        InputMethodUtils.keyBoxIsShow(this);
+        AlertDialog alert = new AlertDialog.Builder(this).create();
+        if (from == 4) {
+            alert.setTitle(R.string.alert_tishi);
+            alert.setMessage(getResources().getString(R.string.alert_dizhi));
+            alert.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.alert_queding), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
 
                 }
-            } );
+            });
             alert.show();
 
-        }else {
-            alert.setTitle( R.string.alert_tishi );
-            alert.setMessage( getResources().getString( R.string.alert_xiugai ) );
-            alert.setButton( DialogInterface.BUTTON_POSITIVE,getResources().getString( R.string.alert_queding ), new DialogInterface.OnClickListener() {
+        } else {
+            alert.setTitle(R.string.alert_tishi);
+            alert.setMessage(getResources().getString(R.string.alert_xiugai));
+            alert.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.alert_queding), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    finish();
+                    ActivityAddressEdit.this.finish();
                 }
-            } );
-            alert.setButton( DialogInterface.BUTTON_NEGATIVE,getResources().getString( R.string.alert_quxiao ), new DialogInterface.OnClickListener() {
+            });
+            alert.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.alert_quxiao), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
 
                 }
-            } );
+            });
             alert.show();
 
         }
-        Button button1=alert.getButton( DialogInterface.BUTTON_POSITIVE );
-        Button button2=alert.getButton( DialogInterface.BUTTON_NEGATIVE );
-        button1.setTextColor( getResources().getColor( R.color.base_bar ) );
-        button2.setTextColor( getResources().getColor( R.color.base_bar ) );
+        Button button1 = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+        Button button2 = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+        button1.setTextColor(getResources().getColor(R.color.base_bar));
+        button2.setTextColor(getResources().getColor(R.color.base_bar));
     }
 }

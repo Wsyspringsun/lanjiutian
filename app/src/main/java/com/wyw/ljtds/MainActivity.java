@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.mobstat.StatService;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.UpdateAppModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
@@ -102,12 +103,14 @@ public class MainActivity extends BaseActivity {
                 break;
         }
         AppConfig.currSel = index;
-        addFragmentToStack( AppConfig.currSel );
+        addFragmentToStack(AppConfig.currSel);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
+
+        StatService.start(this);
 
         callback();
     }
@@ -122,8 +125,9 @@ public class MainActivity extends BaseActivity {
 
     private void init() {
         fragmentManager = getSupportFragmentManager();
-        index = getIntent().getIntExtra( AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel );
-        addFragmentToStack( index );
+        index = getIntent().getIntExtra(AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel);
+        Log.e(AppConfig.ERR_TAG, "index:" + index);
+        addFragmentToStack(index);
     }
 
     /**
@@ -132,70 +136,69 @@ public class MainActivity extends BaseActivity {
      * @param cur
      */
     private void addFragmentToStack(int cur) {
-        Log.e( "cur", cur + "" );
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        hideFragments( fragmentTransaction );
+        hideFragments(fragmentTransaction);
         reset();
-
+        index = cur % 5;
         switch (index) {
             case 0:
-                tv_home.setTextColor( getResources().getColor( R.color.base_bar ) );
-                iv_home.setImageDrawable( getResources().getDrawable( R.mipmap.icon_home_home_yes ) );
+                tv_home.setTextColor(getResources().getColor(R.color.base_bar));
+                iv_home.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_home_yes));
 
                 if (fragmentHome == null) {
                     fragmentHome = new FragmentHome();
-                    fragmentTransaction.add( R.id.fragment_container, fragmentHome );
+                    fragmentTransaction.add(R.id.fragment_container, fragmentHome);
                 } else {
-                    fragmentTransaction.show( fragmentHome );
+                    fragmentTransaction.show(fragmentHome);
                 }
 
                 break;
 
             case 1:
-                tv_category.setTextColor( getResources().getColor( R.color.base_bar ) );
-                iv_category.setImageDrawable( getResources().getDrawable( R.mipmap.icon_home_fenlei_yes ) );
+                tv_category.setTextColor(getResources().getColor(R.color.base_bar));
+                iv_category.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_fenlei_yes));
 
                 if (fragmentCategory == null) {
                     fragmentCategory = new FragmentCategory();
-                    fragmentTransaction.add( R.id.fragment_container, fragmentCategory );
+                    fragmentTransaction.add(R.id.fragment_container, fragmentCategory);
                 } else {
-                    fragmentTransaction.show( fragmentCategory );
+                    fragmentTransaction.show(fragmentCategory);
                 }
 
                 break;
             case 2:
-                tv_find.setTextColor( getResources().getColor( R.color.base_bar ) );
-                iv_find.setImageDrawable( getResources().getDrawable( R.mipmap.icon_home_yiyao_yes ) );
+                tv_find.setTextColor(getResources().getColor(R.color.base_bar));
+                iv_find.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_yiyao_yes));
 
                 if (fragmentFind == null) {
                     fragmentFind = new FragmentFind();
-                    fragmentTransaction.add( R.id.fragment_container, fragmentFind );
+                    fragmentTransaction.add(R.id.fragment_container, fragmentFind);
                 } else {
-                    fragmentTransaction.show( fragmentFind );
+                    fragmentTransaction.show(fragmentFind);
                 }
 
                 break;
             case 3:
-                tv_cart.setTextColor( getResources().getColor( R.color.base_bar ) );
-                iv_cart.setImageDrawable( getResources().getDrawable( R.mipmap.icon_home_gouwuche_yes ) );
+                tv_cart.setTextColor(getResources().getColor(R.color.base_bar));
+                iv_cart.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_gouwuche_yes));
 
                 if (fragmentCart == null) {
                     fragmentCart = new FragmentCart();
-                    fragmentTransaction.add( R.id.fragment_container, fragmentCart );
+                    fragmentTransaction.add(R.id.fragment_container, fragmentCart);
                 } else {
-                    fragmentTransaction.show( fragmentCart );
+                    fragmentTransaction.show(fragmentCart);
                 }
 
                 break;
             case 4:
-                tv_user.setTextColor( getResources().getColor( R.color.base_bar ) );
-                iv_user.setImageDrawable( getResources().getDrawable( R.mipmap.icon_home_user_yes ) );
+                tv_user.setTextColor(getResources().getColor(R.color.base_bar));
+                iv_user.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_user_yes));
 
                 if (fragmentUser == null) {
                     fragmentUser = new FragmentUser();
-                    fragmentTransaction.add( R.id.fragment_container, fragmentUser );
+                    fragmentTransaction.add(R.id.fragment_container, fragmentUser);
                 } else {
-                    fragmentTransaction.show( fragmentUser );
+                    fragmentTransaction.show(fragmentUser);
                 }
 
                 break;
@@ -208,16 +211,16 @@ public class MainActivity extends BaseActivity {
      * 重置底部按钮
      */
     private void reset() {
-        tv_home.setTextColor( getResources().getColor( R.color.font_black2 ) );
-        tv_category.setTextColor( getResources().getColor( R.color.font_black2 ) );
-        tv_find.setTextColor( getResources().getColor( R.color.font_black2 ) );
-        tv_cart.setTextColor( getResources().getColor( R.color.font_black2 ) );
-        tv_user.setTextColor( getResources().getColor( R.color.font_black2 ) );
-        iv_home.setImageDrawable( getResources().getDrawable( R.mipmap.icon_home_home_no ) );
-        iv_category.setImageDrawable( getResources().getDrawable( R.mipmap.icon_home_fenlei_no ) );
-        iv_find.setImageDrawable( getResources().getDrawable( R.mipmap.icon_home_yiyao_no ) );
-        iv_cart.setImageDrawable( getResources().getDrawable( R.mipmap.icon_home_gouwuche_no ) );
-        iv_user.setImageDrawable( getResources().getDrawable( R.mipmap.icon_home_user_no ) );
+        tv_home.setTextColor(getResources().getColor(R.color.font_black2));
+        tv_category.setTextColor(getResources().getColor(R.color.font_black2));
+        tv_find.setTextColor(getResources().getColor(R.color.font_black2));
+        tv_cart.setTextColor(getResources().getColor(R.color.font_black2));
+        tv_user.setTextColor(getResources().getColor(R.color.font_black2));
+        iv_home.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_home_no));
+        iv_category.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_fenlei_no));
+        iv_find.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_yiyao_no));
+        iv_cart.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_gouwuche_no));
+        iv_user.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_user_no));
     }
 
     /**
@@ -227,19 +230,19 @@ public class MainActivity extends BaseActivity {
      */
     private void hideFragments(FragmentTransaction fragmentTransaction) {
         if (fragmentHome != null) {
-            fragmentTransaction.hide( fragmentHome );
+            fragmentTransaction.hide(fragmentHome);
         }
         if (fragmentCategory != null) {
-            fragmentTransaction.hide( fragmentCategory );
+            fragmentTransaction.hide(fragmentCategory);
         }
         if (fragmentFind != null) {
-            fragmentTransaction.hide( fragmentFind );
+            fragmentTransaction.hide(fragmentFind);
         }
         if (fragmentCart != null) {
-            fragmentTransaction.hide( fragmentCart );
+            fragmentTransaction.hide(fragmentCart);
         }
         if (fragmentUser != null) {
-            fragmentTransaction.hide( fragmentUser );
+            fragmentTransaction.hide(fragmentUser);
         }
     }
 
@@ -252,7 +255,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (System.currentTimeMillis() - lastBackKeyDownTime > 2000) { // 两秒钟内双击返回键关闭主界面
-            ToastUtil.show( this, getResources().getString( R.string.double_tap_to_exit ) );
+            ToastUtil.show(this, getResources().getString(R.string.double_tap_to_exit));
             lastBackKeyDownTime = System.currentTimeMillis();
         } else {
             super.onBackPressed();
@@ -264,41 +267,41 @@ public class MainActivity extends BaseActivity {
      * 更新版本
      */
     private void callback() {
-        RequestParams params = new RequestParams( AppConfig.APP_UPDATE_URL );
-        Callback.Cancelable cancelable = x.http().get( params, new Callback.CommonCallback<String>() {
+        RequestParams params = new RequestParams(AppConfig.APP_UPDATE_URL);
+        Callback.Cancelable cancelable = x.http().get(params, new Callback.CommonCallback<String>() {
 
             @Override
             public void onSuccess(String result) {
-                updateAppModel = GsonUtils.Json2Bean( result, UpdateAppModel.class );
+                updateAppModel = GsonUtils.Json2Bean(result, UpdateAppModel.class);
                 PackageManager packageManager = getPackageManager();
                 // getPackageName()是你当前类的包名，0代表是获取版本信息
                 PackageInfo packInfo = null;
                 try {
-                    packInfo = packageManager.getPackageInfo( getPackageName(), 0 );
+                    packInfo = packageManager.getPackageInfo(getPackageName(), 0);
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
                 String version = packInfo.versionName;
 //                Log.e( "********",version+"; "+updateAppModel.getAndroid() );
-                if (!version.equals( updateAppModel.getAndroid() )) {
+                if (!version.equals(updateAppModel.getAndroid())) {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(
-                            MainActivity.this ).setTitle( "下载更新" ).setMessage( updateAppModel.getAndroid_update_message() )
-                            .setPositiveButton( "立即更新", new DialogInterface.OnClickListener() {
+                            MainActivity.this).setTitle("下载更新").setMessage(updateAppModel.getAndroid_update_message())
+                            .setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     dialogInterface.dismiss();
-                                    downloadFile( updateAppModel.getAndroid_download_link(), AppConfig.CACHE_ROOT_NAME );
+                                    downloadFile(updateAppModel.getAndroid_download_link(), AppConfig.CACHE_ROOT_NAME);
                                 }
-                            } );
-                    if (!updateAppModel.getAndroid_force_update().equals( "1" )) {
-                        dialog.setNegativeButton( "稍后更新", new DialogInterface.OnClickListener() {
+                            });
+                    if (!updateAppModel.getAndroid_force_update().equals("1")) {
+                        dialog.setNegativeButton("稍后更新", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
                             }
-                        } );
+                        });
                     }
-                    dialog.setCancelable( false ).show();
+                    dialog.setCancelable(false).show();
 
                 }
             }
@@ -318,15 +321,15 @@ public class MainActivity extends BaseActivity {
 
             }
 
-        } );
+        });
     }
 
     private void downloadFile(final String url, String path) {
 
-        final ProgressDialog progressDialog = new ProgressDialog( this );
-        RequestParams requestParams = new RequestParams( url );
-        requestParams.setSaveFilePath( path );
-        x.http().get( requestParams, new Callback.ProgressCallback<File>() {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        RequestParams requestParams = new RequestParams(url);
+        requestParams.setSaveFilePath(path);
+        x.http().get(requestParams, new Callback.ProgressCallback<File>() {
             @Override
             public void onWaiting() {
             }
@@ -337,24 +340,24 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onLoading(long total, long current, boolean isDownloading) {
-                progressDialog.setProgressStyle( ProgressDialog.STYLE_HORIZONTAL );
-                progressDialog.setMessage( "亲，努力下载中。。。" );
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                progressDialog.setMessage("亲，努力下载中。。。");
                 progressDialog.show();
-                progressDialog.setMax( (int) total );
-                progressDialog.setProgress( (int) current );
+                progressDialog.setMax((int) total);
+                progressDialog.setProgress((int) current);
             }
 
             @Override
             public void onSuccess(File result) {
 
                 progressDialog.dismiss();
-                File apkFile = new File(AppConfig.CACHE_ROOT_NAME );
+                File apkFile = new File(AppConfig.CACHE_ROOT_NAME);
                 if (!apkFile.exists()) {
                     return;
                 }
-                Intent intent = new Intent( Intent.ACTION_VIEW);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setDataAndType( Uri.parse("file://" + apkFile.toString()),
+                intent.setDataAndType(Uri.parse("file://" + apkFile.toString()),
                         "application/vnd.android.package-archive");
                 startActivity(intent);
             }
@@ -362,7 +365,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 ex.printStackTrace();
-                ToastUtil.show( MainActivity.this, "下载失败，请检查网络和SD卡" );
+                ToastUtil.show(MainActivity.this, "下载失败，请检查网络和SD卡");
                 progressDialog.dismiss();
             }
 
@@ -373,7 +376,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onFinished() {
             }
-        } );
+        });
     }
 
 }

@@ -9,13 +9,16 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.CommodityDetailsModel;
 import com.wyw.ljtds.model.CreatOrderModel;
+import com.wyw.ljtds.model.KeyValue;
 import com.wyw.ljtds.model.LogisticsModel;
 import com.wyw.ljtds.model.MedicineDetailsEvaluateModel;
 import com.wyw.ljtds.model.MedicineDetailsModel;
 import com.wyw.ljtds.model.OnlinePayModel;
 import com.wyw.ljtds.model.OrderModelInfoMedicine;
 import com.wyw.ljtds.model.OrderModelMedicine;
+import com.wyw.ljtds.model.ShopImg;
 import com.wyw.ljtds.ui.goods.ActivityGoodsSubmit;
+import com.wyw.ljtds.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +43,14 @@ public class GoodsBiz extends BaseBiz {
      * @throws ZYException
      */
     public static CommodityDetailsModel getGoods(String commodityId) throws BizFailure, ZYException {
-        SoapProcessor ksoap = new SoapProcessor("Service", "getCommodityDetails", true);
+        SoapProcessor ksoap;
+        if (!StringUtils.isEmpty(PreferenceCache.getToken())) {
+            ksoap = new SoapProcessor("Service", "getCommodityDetails", true);
+        } else {
+            ksoap = new SoapProcessor("Service", "getCommodityDetails", false);
+            ksoap.setProperty("token", "", SoapProcessor.PropertyType.TYPE_STRING);
+        }
+
 
         ksoap.setProperty("commodityId", commodityId, SoapProcessor.PropertyType.TYPE_STRING);
 
@@ -322,12 +332,35 @@ public class GoodsBiz extends BaseBiz {
     }
 
 
-    public static Object returnGoodsHanding(String data,String op)throws BizFailure, ZYException {
+    public static Object returnGoodsHanding(String data, String op) throws BizFailure, ZYException {
         SoapProcessor ksoap = new SoapProcessor("Service", "returnGoodsHanding", true);
 
         ksoap.setProperty("op", op, SoapProcessor.PropertyType.TYPE_STRING);
         ksoap.setProperty("data", data, SoapProcessor.PropertyType.TYPE_STRING);
 
         return ksoap.request();
+    }
+
+    public static List<KeyValue> readReturnReasonList() throws BizFailure, ZYException {
+        SoapProcessor ksoap = new SoapProcessor("Service", "returnReasonList", true);
+
+        JsonElement element = ksoap.request();
+        Gson gson = new GsonBuilder().create();
+
+        TypeToken<List<KeyValue>> tt = new TypeToken<List<KeyValue>>() {
+        };
+        List<KeyValue> fs = gson.fromJson(element, tt.getType());
+        return fs;
+    }
+
+    public static List<ShopImg> readShopPage(String shopid) throws BizFailure, ZYException {
+        SoapProcessor ksoap = new SoapProcessor("Service", "getShopPage", false);
+        ksoap.setProperty("oidAdminUserId", shopid, SoapProcessor.PropertyType.TYPE_STRING);
+        JsonElement element = ksoap.request();
+        Gson gson = new GsonBuilder().create();
+        TypeToken<List<ShopImg>> tt = new TypeToken<List<ShopImg>>() {
+        };
+        List<ShopImg> fs = gson.fromJson(element, tt.getType());
+        return fs;
     }
 }

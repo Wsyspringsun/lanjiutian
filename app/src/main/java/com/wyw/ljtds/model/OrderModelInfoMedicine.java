@@ -8,6 +8,7 @@ import java.util.List;
  */
 
 public class OrderModelInfoMedicine extends BaseModel {
+    private XiaoNengData xiaonengData;
     private String DISTRIBUTION_MODE;
     private int GROUP_EXCHANGE_QUANLITY;
     private BigDecimal POINT_MONEY;
@@ -22,6 +23,8 @@ public class OrderModelInfoMedicine extends BaseModel {
     private String ORDER_GROUP_ID;
     private String ORDER_TRADE_ID;
     private BigDecimal POSTAGE;
+    //使用邮费抵用券标识
+    private String POSTAGE_FLG;
     private String STATUS;
     private String USER_ADDRESS_ID;
     private List<Goods> DETAILS;
@@ -29,6 +32,8 @@ public class OrderModelInfoMedicine extends BaseModel {
     private Long CREATE_DATE;
     private String CONTACT_TEL;
     private CreatOrderModel.USER_ADDRESS USER_ADDRESS;
+
+    private String ELECTRONIC_MONEY;
 
     public String getDISTRIBUTION_MODE() {
         return DISTRIBUTION_MODE;
@@ -196,6 +201,30 @@ public class OrderModelInfoMedicine extends BaseModel {
 
     public void setUSER_ADDRESS(CreatOrderModel.USER_ADDRESS USER_ADDRESS) {
         this.USER_ADDRESS = USER_ADDRESS;
+    }
+
+    public String getELECTRONIC_MONEY() {
+        return ELECTRONIC_MONEY;
+    }
+
+    public void setELECTRONIC_MONEY(String ELECTRONIC_MONEY) {
+        this.ELECTRONIC_MONEY = ELECTRONIC_MONEY;
+    }
+
+    public String getPOSTAGE_FLG() {
+        return POSTAGE_FLG;
+    }
+
+    public void setPOSTAGE_FLG(String POSTAGE_FLG) {
+        this.POSTAGE_FLG = POSTAGE_FLG;
+    }
+
+    public XiaoNengData getXiaonengData() {
+        return xiaonengData;
+    }
+
+    public void setXiaonengData(XiaoNengData xiaonengData) {
+        this.xiaonengData = xiaonengData;
     }
 
     public class Goods{

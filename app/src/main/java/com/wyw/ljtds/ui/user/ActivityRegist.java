@@ -43,10 +43,10 @@ public class ActivityRegist extends BaseActivity {
         switch (v.getId()) {
             case R.id.next:
                 Intent in = new Intent(this, ActivityRegist1.class);
-                if (ed_phone.getText().toString().trim().length()!=11){
+                /*if (ed_phone.getText().toString().trim().length()!=11){
                     ToastUtil.show(this,getResources().getString(R.string.phone_error));
                     return;
-                }
+                }*/
                 in.putExtra(AppConfig.IntentExtraKey.PHONE_NUMBER, ed_phone.getText().toString().trim());
                 startActivity(in);
                 break;

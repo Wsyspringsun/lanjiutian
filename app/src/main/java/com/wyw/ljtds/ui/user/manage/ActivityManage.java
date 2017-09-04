@@ -3,6 +3,7 @@ package com.wyw.ljtds.ui.user.manage;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -43,9 +44,10 @@ public class ActivityManage extends BaseActivity {
     private TextView name;
     @ViewInject(R.id.nicheng)
     private TextView nicheng;
-    @ViewInject( R.id.shiming_xin )
+    @ViewInject(R.id.shiming_xin)
     private TextView shiming_xin;
 
+    public static final String TAG_USER = "COM.WYW.LJTDS.UI.USER.MANAGE.TAG_USER";
 
     private UserModel user;
 
@@ -59,69 +61,72 @@ public class ActivityManage extends BaseActivity {
                 break;
 
             case R.id.address:
-                it = new Intent( ActivityManage.this, ActivityAddress.class );
-                startActivity( it );
+                Log.e(AppConfig.ERR_TAG,"click...................");
+                it = new Intent(ActivityManage.this, ActivityAddress.class);
+                startActivity(it);
                 break;
 
             case R.id.shiming:
-                if (StringUtils.isEmpty( user.getID_CARD() ) || StringUtils.isEmpty( user.getUSER_NAME() )) {
-                    it = new Intent( ActivityManage.this, ActivityRealName.class );
-                    startActivityForResult( it, 2 );
-                }else {
+                if (StringUtils.isEmpty(user.getID_CARD()) || StringUtils.isEmpty(user.getUSER_NAME())) {
+                    it = new Intent(ActivityManage.this, ActivityRealName.class);
+                    it.putExtra(TAG_USER, user);
+                    startActivityForResult(it, 1);
+                } else {
 
                 }
                 break;
 
             case R.id.touxiang:
-                it = new Intent( ActivityManage.this, ActivityInformation.class );
-                it.putExtra( "user", getIntent().getParcelableExtra( "user" ) );
-                startActivityForResult( it, 1 );
+                it = new Intent(ActivityManage.this, ActivityInformation.class);
+//                it.putExtra("user", getIntent().getParcelableExtra("user"));
+                it.putExtra(TAG_USER, user);
+                startActivityForResult(it, 1);
                 break;
 
             case R.id.guanyu:
-                startActivity( new Intent( ActivityManage.this, ActivityUpdate.class ) );
+                startActivity(new Intent(ActivityManage.this, ActivityUpdate.class));
                 break;
 
             case R.id.sdv_item_head_img:
                 ArrayList<String> arrayList = new ArrayList<>();
-                arrayList.add( AppConfig.IMAGE_PATH + user.getUSER_ICON_FILE_ID() );
-                it = new Intent( ActivityManage.this, ActivityBigImage.class );
-                it.putStringArrayListExtra( "imgs", arrayList );
-                startActivity( it );
+                arrayList.add(AppConfig.IMAGE_PATH + user.getUSER_ICON_FILE_ID());
+                it = new Intent(ActivityManage.this, ActivityBigImage.class);
+                it.putStringArrayListExtra("imgs", arrayList);
+                startActivity(it);
                 break;
 
             case R.id.qiehuan:
-                AlertDialog alert = new AlertDialog.Builder( this ).create();
-                alert.setMessage( getResources().getString( R.string.exit_account ) );
-                alert.setButton( DialogInterface.BUTTON_POSITIVE, getResources().getString( R.string.alert_queding ), new DialogInterface.OnClickListener() {
+                AlertDialog alert = new AlertDialog.Builder(this).create();
+                alert.setMessage(getResources().getString(R.string.exit_account));
+                alert.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.alert_queding), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         finish();
-                        PreferenceCache.putToken( "" );
-                        PreferenceCache.putUsername( "" );
-                        PreferenceCache.putPhoneNum( "" );
-                        Intent it = new Intent( AppConfig.AppAction.ACTION_TOKEN_EXPIRE );
-                        MyApplication.getAppContext().sendBroadcast( it );
+                        PreferenceCache.putToken("");
+                        PreferenceCache.putUsername("");
+                        PreferenceCache.putPhoneNum("");
+                        Intent it = new Intent(AppConfig.AppAction.ACTION_TOKEN_EXPIRE);
+                        MyApplication.getAppContext().sendBroadcast(it);
                     }
-                } );
-                alert.setButton( DialogInterface.BUTTON_NEGATIVE, getResources().getString( R.string.alert_quxiao ), new DialogInterface.OnClickListener() {
+                });
+                alert.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.alert_quxiao), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
-                } );
+                });
                 alert.show();
 
-                Button button1 = alert.getButton( DialogInterface.BUTTON_POSITIVE );
-                Button button2 = alert.getButton( DialogInterface.BUTTON_NEGATIVE );
-                button1.setTextColor( getResources().getColor( R.color.base_bar ) );
-                button2.setTextColor( getResources().getColor( R.color.base_bar ) );
+                Button button1 = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+                Button button2 = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+                button1.setTextColor(getResources().getColor(R.color.base_bar));
+                button2.setTextColor(getResources().getColor(R.color.base_bar));
 
                 break;
 
             case R.id.anquan:
-                AppManager.addDestoryActivity( this, "222" );
-                startActivity( new Intent( ActivityManage.this, ActivitySecurity.class ) );
+                AppManager.addDestoryActivity(this, "222");
+                startActivity(new Intent(ActivityManage.this, ActivitySecurity.class));
                 break;
 
         }
@@ -129,38 +134,46 @@ public class ActivityManage extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
-        title.setText( R.string.user_zhanghu );
-        user = getIntent().getParcelableExtra( "user" );
-        name.setText( "用户名：" + user.getMOBILE() );
-        sdv_item_head_img.setImageURI( Uri.parse( AppConfig.IMAGE_PATH + user.getUSER_ICON_FILE_ID() ) );
+        title.setText(R.string.user_zhanghu);
+        user = getIntent().getParcelableExtra("user");
 
-        if (StringUtils.isEmpty( user.getNICKNAME() )) {
-            nicheng.setText( "昵称：保密" );
+        updView();
+    }
+
+    private void updView() {
+        name.setText("用户名：" + user.getMOBILE());
+        sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH + user.getUSER_ICON_FILE_ID()));
+
+        if (StringUtils.isEmpty(user.getNICKNAME())) {
+            nicheng.setText("昵称：保密");
         } else {
-            nicheng.setText( "昵称：" + user.getNICKNAME() );
+            nicheng.setText("昵称：" + user.getNICKNAME());
         }
 
-        if (StringUtils.isEmpty( user.getID_CARD() ) || StringUtils.isEmpty( user.getUSER_NAME() )) {
-            shiming_xin.setText( "" );
-        }else {
-            shiming_xin.setText( "已实名认证" );
+        if (StringUtils.isEmpty(user.getID_CARD()) || StringUtils.isEmpty(user.getUSER_NAME())) {
+            shiming_xin.setText("");
+        } else {
+            shiming_xin.setText("已实名认证");
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult( requestCode, resultCode, data );
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == AppConfig.IntentExtraKey.RESULT_OK) {
-            user = data.getParcelableExtra( "user" );
+            user = data.getParcelableExtra(TAG_USER);
             Log.e(AppConfig.ERR_TAG, GsonUtils.Bean2Json(user));
-            name.setText( "用户名：" + user.getMOBILE().substring( 0, user.getMOBILE().length() - (user.getMOBILE().substring( 3 )).length() ) + "****" + user.getMOBILE().substring( 7 ) );
-            sdv_item_head_img.setImageURI( Uri.parse( AppConfig.IMAGE_PATH + user.getUSER_ICON_FILE_ID() ) );
-            if (StringUtils.isEmpty( user.getNICKNAME() )) {
-                nicheng.setText( "昵称：保密" );
+
+            updView();
+
+            name.setText("用户名：" + user.getMOBILE().substring(0, user.getMOBILE().length() - (user.getMOBILE().substring(3)).length()) + "****" + user.getMOBILE().substring(7));
+            sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH + user.getUSER_ICON_FILE_ID()));
+            if (StringUtils.isEmpty(user.getNICKNAME())) {
+                nicheng.setText("昵称：保密");
             } else {
-                nicheng.setText( "昵称：" + user.getNICKNAME() );
+                nicheng.setText("昵称：" + user.getNICKNAME());
             }
         }
     }

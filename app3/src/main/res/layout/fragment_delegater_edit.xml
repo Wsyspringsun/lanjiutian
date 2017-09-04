@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basebackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/basebackground"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/LabelBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_delegater_courier" />
+
+        <EditText
+            android:id="@+id/fragment_delegater_et_courier"
+            style="@style/TextEditCommon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            style="@style/LabelBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_delegater_courier_mobile" />
+
+        <EditText
+            android:id="@+id/fragment_delegater_et_courier_mobile"
+            style="@style/TextEditCommon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone" />
+
+
+        <TextView
+            style="@style/LabelBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_delegater_courier_car" />
+
+
+        <EditText
+            android:id="@+id/fragment_delegater_et_courier_car"
+            style="@style/TextEditCommon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/fragment_delegater_submit"
+        style="@style/ConfirmBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/text_sure" />
+
+</RelativeLayout>

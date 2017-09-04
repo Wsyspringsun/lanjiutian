@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/zzhifu"
@@ -14,7 +14,7 @@
         <TextView
             android:id="@+id/zhifu"
             style="@style/font_ww_16_black"
-            android:text="@string/pay_choice0"/>
+            android:text="@string/pay_choice0" />
 
 
         <TextView
@@ -23,7 +23,7 @@
             android:layout_alignBottom="@+id/zhifu"
             android:layout_marginRight="@dimen/x7"
             android:layout_toLeftOf="@+id/zhifu_jt"
-            android:textColor="@color/gray"/>
+            android:textColor="@color/gray" />
 
 
         <TextView
@@ -31,23 +31,23 @@
             style="@style/font_ww_16_black"
             android:layout_below="@+id/zhifu"
             android:layout_marginTop="@dimen/x7"
-            android:text="@string/jifendikou"/>
+            android:text="@string/jifendikou" />
 
         <TextView
-            android:text="元"
             android:id="@+id/yuan"
             style="@style/font_ww_14"
             android:layout_alignBottom="@+id/jifen"
             android:layout_marginRight="@dimen/x7"
             android:layout_toLeftOf="@+id/zhifu_jt"
-            android:textColor="@color/gray"/>
+            android:text="元"
+            android:textColor="@color/gray" />
 
         <TextView
-            android:layout_alignBottom="@+id/jifen"
             android:id="@+id/jifen_jieguo"
             style="@style/font_ww_14"
+            android:layout_alignBottom="@+id/jifen"
             android:layout_toLeftOf="@+id/yuan"
-            android:textColor="@color/gray"/>
+            android:textColor="@color/gray" />
 
         <ImageView
             android:id="@+id/zhifu_jt"
@@ -56,8 +56,65 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:scaleType="fitCenter"
-            android:src="@mipmap/jiantou_you_hei"/>
+            android:src="@mipmap/jiantou_you_hei" />
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/x10">
+
+        <CheckBox
+            android:id="@+id/chk_use_dianzibi"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/font_ww_16_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/chk_use_dianzibi"
+            android:layout_alignParentLeft="true"
+            android:text="@string/use_dianzibi" />
+
+
+        <TextView
+            android:id="@+id/tv_dianzibi_show"
+            style="@style/font_ww_18_black"
+            android:layout_alignBaseline="@id/chk_use_dianzibi"
+            android:layout_marginRight="@dimen/x7"
+            android:layout_toLeftOf="@id/chk_use_dianzibi" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/x10">
+
+        <CheckBox
+            android:id="@+id/chk_use_youfeiquan"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/font_ww_16_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/chk_use_youfeiquan"
+            android:layout_alignParentLeft="true"
+            android:text="@string/use_youfeiquan" />
+
+
+        <TextView
+            android:id="@+id/tv_youfeiquan_show"
+            style="@style/font_ww_18_black"
+            android:layout_alignBaseline="@id/chk_use_youfeiquan"
+            android:layout_marginRight="@dimen/x7"
+            android:layout_toLeftOf="@id/chk_use_youfeiquan" />
+    </RelativeLayout>
+
 
 </LinearLayout>

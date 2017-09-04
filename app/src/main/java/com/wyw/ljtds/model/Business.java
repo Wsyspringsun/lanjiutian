@@ -28,6 +28,10 @@ public class Business extends BaseModel{
     private String OID_GROUP_NAME;
     //运费
     private String POSTAGE;
+    private String POST_NUM;
+
+    private String ELECTRONIC_MONEY;
+    private String ELECTRONIC_USEABLE_MONEY;
     //商品list
     private List<Good> DETAILS;
 
@@ -117,5 +121,29 @@ public class Business extends BaseModel{
 
     public void setINVOICE_CONTENT(String INVOICE_CONTENT) {
         this.INVOICE_CONTENT = INVOICE_CONTENT;
+    }
+
+    public String getELECTRONIC_MONEY() {
+        return ELECTRONIC_MONEY;
+    }
+
+    public void setELECTRONIC_MONEY(String ELECTRONIC_MONEY) {
+        this.ELECTRONIC_MONEY = ELECTRONIC_MONEY;
+    }
+
+    public String getELECTRONIC_USEABLE_MONEY() {
+        return ELECTRONIC_USEABLE_MONEY;
+    }
+
+    public void setELECTRONIC_USEABLE_MONEY(String ELECTRONIC_USEABLE_MONEY) {
+        this.ELECTRONIC_USEABLE_MONEY = ELECTRONIC_USEABLE_MONEY;
+    }
+
+    public String getPOST_NUM() {
+        return POST_NUM;
+    }
+
+    public void setPOST_NUM(String POST_NUM) {
+        this.POST_NUM = POST_NUM;
     }
 }

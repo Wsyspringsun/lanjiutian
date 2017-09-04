@@ -1,143 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
-    <include layout="@layout/main_header_return"/>
+    <include layout="@layout/main_header_return" />
 
     <LinearLayout
-        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x8"
+        android:layout_marginRight="@dimen/x8"
         android:layout_marginTop="@dimen/x12"
-        android:layout_marginLeft="@dimen/x8"
-        android:layout_marginRight="@dimen/x8"
-        android:padding="@dimen/x8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:background="@drawable/background_text_gray"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:background="@drawable/background_text_gray">
+        android:padding="@dimen/x8">
 
         <TextView
             style="@style/font_ww_14"
             android:text="*"
-            android:textColor="@color/base_bar"/>
+            android:textColor="@color/base_bar" />
 
         <TextView
-            android:layout_marginLeft="@dimen/x3"
             style="@style/font_ww_14"
-            android:textColor="@color/font_black2"
-            android:text="@string/shouhou_shenqing"/>
+            android:layout_marginLeft="@dimen/x3"
+            android:text="@string/shouhou_shenqing"
+            android:textColor="@color/font_black2" />
 
-        <TextView
-            android:layout_marginRight="@dimen/x5"
-            android:layout_marginLeft="@dimen/x15"
-            android:textSize="14sp"
-            android:textColor="@color/font_black1"
+        <Spinner
+            android:id="@+id/sp_return_cat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableRight="@mipmap/jiantou_xia"
-            android:text="退货退款"/>
+            android:layout_marginLeft="@dimen/x5" />
+
 
     </LinearLayout>
 
     <LinearLayout
-        android:gravity="center_vertical"
-        android:layout_marginTop="@dimen/x10"
-        android:layout_marginLeft="@dimen/x8"
-        android:layout_marginRight="@dimen/x8"
-        android:padding="@dimen/x8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x8"
+        android:layout_marginRight="@dimen/x8"
+        android:layout_marginTop="@dimen/x10"
+        android:background="@drawable/background_text_gray"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:background="@drawable/background_text_gray">
+        android:padding="@dimen/x8">
 
         <TextView
             style="@style/font_ww_14"
             android:text="*"
-            android:textColor="@color/base_bar"/>
+            android:textColor="@color/base_bar" />
 
         <TextView
-            android:layout_marginLeft="@dimen/x3"
             style="@style/font_ww_14"
-            android:textColor="@color/font_black2"
-            android:text="@string/shouhou_yuanyin"/>
+            android:layout_marginLeft="@dimen/x3"
+            android:text="@string/shouhou_yuanyin"
+            android:textColor="@color/font_black2" />
 
-        <TextView
-            android:layout_marginRight="@dimen/x5"
-            android:layout_marginLeft="@dimen/x15"
-            android:textSize="14sp"
-            android:textColor="@color/font_black1"
+
+        <Spinner
+            android:id="@+id/sp_return_reason"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableRight="@mipmap/jiantou_xia"
-            android:text="请选择退款原因"/>
+            android:layout_marginLeft="@dimen/x5" />
+        <!--<TextView-->
+        <!--android:layout_marginRight="@dimen/x5"-->
+        <!--android:layout_marginLeft="@dimen/x15"-->
+        <!--android:textSize="14sp"-->
+        <!--android:textColor="@color/font_black1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:drawableRight="@mipmap/jiantou_xia"-->
+        <!--android:text="请选择退款原因"/>-->
 
     </LinearLayout>
 
     <LinearLayout
-        android:gravity="center_vertical"
-        android:layout_marginTop="@dimen/x10"
-        android:layout_marginLeft="@dimen/x8"
-        android:layout_marginRight="@dimen/x8"
-        android:padding="@dimen/x8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x8"
+        android:layout_marginRight="@dimen/x8"
+        android:layout_marginTop="@dimen/x10"
+        android:background="@drawable/background_text_gray"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:background="@drawable/background_text_gray">
+        android:padding="@dimen/x8" >
 
         <TextView
             style="@style/font_ww_14"
             android:text="*"
-            android:textColor="@color/base_bar"/>
+            android:textColor="@color/base_bar" />
 
         <TextView
-            android:layout_marginLeft="@dimen/x3"
             style="@style/font_ww_14"
-            android:textColor="@color/font_black2"
-            android:text="@string/shouhou_jine"/>
+            android:layout_marginLeft="@dimen/x3"
+            android:text="@string/shouhou_jine"
+            android:textColor="@color/font_black2" />
 
         <TextView
-            android:id="@+id/money"
-            android:layout_marginRight="@dimen/x5"
+            android:id="@+id/tv_returnorder_money"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/x15"
-            android:textSize="14sp"
+            android:layout_marginRight="@dimen/x5"
+            android:text="@string/meiqian"
             android:textColor="@color/base_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/meiqian"/>
+            android:textSize="14sp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:gravity="center_vertical"
-        android:layout_marginTop="@dimen/x15"
-        android:layout_marginLeft="@dimen/x8"
-        android:layout_marginRight="@dimen/x8"
-        android:padding="@dimen/x8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x8"
+        android:layout_marginRight="@dimen/x8"
+        android:layout_marginTop="@dimen/x15"
+        android:background="@drawable/background_text_gray"
+        android:gravity="center_vertical"
         android:orientation="vertical"
-        android:background="@drawable/background_text_gray">
+        android:padding="@dimen/x8">
 
 
         <TextView
-            android:layout_marginLeft="@dimen/x3"
             style="@style/font_ww_14"
-            android:textColor="@color/font_black2"
-            android:text="@string/shouhou_shuoming"/>
+            android:layout_marginLeft="@dimen/x3"
+            android:text="@string/shouhou_shuoming"
+            android:textColor="@color/font_black2" />
 
         <EditText
-            android:gravity="top"
-            android:lineSpacingExtra="@dimen/x3"
-            android:textSize="13sp"
-            android:background="@null"
-            android:layout_marginTop="@dimen/x4"
+            android:id="@+id/et_return_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x4"
+            android:background="@null"
+            android:gravity="top"
+            android:lineSpacingExtra="@dimen/x3"
             android:lines="5"
-            android:maxLines="10"/>
+            android:maxLines="10"
+            android:textSize="13sp" />
 
     </LinearLayout>
 
@@ -145,10 +149,10 @@
         android:id="@+id/snpl_moment_add_photos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/x10"
-        android:layout_marginTop="@dimen/x15"
         android:layout_marginBottom="@dimen/x10"
+        android:layout_marginLeft="@dimen/x10"
         android:layout_marginRight="@dimen/x10"
+        android:layout_marginTop="@dimen/x15"
         app:bga_snpl_deleteDrawable="@mipmap/bga_pp_ic_delete"
         app:bga_snpl_deleteDrawableOverlapQuarter="false"
         app:bga_snpl_editable="true"

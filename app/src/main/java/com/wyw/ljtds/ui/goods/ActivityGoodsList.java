@@ -1,7 +1,9 @@
 package com.wyw.ljtds.ui.goods;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -44,6 +46,7 @@ import java.util.List;
 
 @ContentView(R.layout.activity_goods_list)
 public class ActivityGoodsList extends BaseActivity {
+    private static final String TAG_TYPE_ID = "com.wyw.ljtds.ui.goods.ActivityGoodsList.TAG_TYPE_ID";
     @ViewInject(R.id.recyclerView)
     private RecyclerView recyclerView;
     @ViewInject(R.id.back)
@@ -77,6 +80,11 @@ public class ActivityGoodsList extends BaseActivity {
     private String classId = "";//分类的typeid
     private String orderby = "";
 
+    public static Intent getStartMeIntent(Context ctx, String typeId) {
+        Intent it = new Intent(ctx, ActivityGoodsList.class);
+        it.putExtra(TAG_TYPE_ID, typeId);
+        return it;
+    }
 
     @Event(value = {R.id.back, R.id.edHeader, R.id.xiaoxi, R.id.paixu1, R.id.paixu2, R.id.paixu3, R.id.paixu4})
     private void onclick(View view) {
@@ -87,59 +95,59 @@ public class ActivityGoodsList extends BaseActivity {
                 break;
 
             case R.id.edHeader:
-                it = new Intent( this, ActivitySearch.class );
-                it.putExtra( "from", 1 );
+                it = new Intent(this, ActivitySearch.class);
+                it.putExtra("from", 1);
                 finish();
-                startActivity( it );
+                startActivity(it);
                 break;
 
             case R.id.xiaoxi:
-                it = new Intent( this, ActivityMessage.class );
-                startActivity( it );
+                it = new Intent(this, ActivityMessage.class);
+                startActivity(it);
                 break;
 
             case R.id.paixu1:
                 reset();
-                paixu1_tv.setTextColor( getResources().getColor( R.color.base_bar ) );
-                paixu1_iv.setImageDrawable( getResources().getDrawable( R.mipmap.paixu_1 ) );
+                paixu1_tv.setTextColor(getResources().getColor(R.color.base_bar));
+                paixu1_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_1));
                 pageIndex = 1;
-                getlist( classId, true, true, "", keyword );
+                getlist(classId, true, true, "", keyword);
                 orderby = "";
                 break;
 
             case R.id.paixu2:
                 reset();
-                paixu2_tv.setTextColor( getResources().getColor( R.color.base_bar ) );
+                paixu2_tv.setTextColor(getResources().getColor(R.color.base_bar));
                 pageIndex = 1;
-                getlist( classId, true, true, "SALE_NUM", keyword );
+                getlist(classId, true, true, "SALE_NUM", keyword);
                 orderby = "SALE_NUM";
                 break;
 
             case R.id.paixu3:
                 if (isRise) {
                     reset();
-                    paixu3_tv.setTextColor( getResources().getColor( R.color.base_bar ) );
-                    paixu3_iv.setImageDrawable( getResources().getDrawable( R.mipmap.paixu_4 ) );
+                    paixu3_tv.setTextColor(getResources().getColor(R.color.base_bar));
+                    paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_4));
                     isRise = false;
                     pageIndex = 1;
-                    getlist( classId, true, true, "COST_MONEY", keyword );
+                    getlist(classId, true, true, "COST_MONEY", keyword);
                     orderby = "COST_MONEY";
                 } else {
                     reset();
-                    paixu3_tv.setTextColor( getResources().getColor( R.color.base_bar ) );
-                    paixu3_iv.setImageDrawable( getResources().getDrawable( R.mipmap.paixu_5 ) );
+                    paixu3_tv.setTextColor(getResources().getColor(R.color.base_bar));
+                    paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_5));
                     isRise = true;
                     pageIndex = 1;
-                    getlist( classId, true, true, "COST_MONEY desc", keyword );
+                    getlist(classId, true, true, "COST_MONEY desc", keyword);
                     orderby = "COST_MONEY desc";
                 }
                 break;
 
             case R.id.paixu4:
                 reset();
-                paixu4_tv.setTextColor( getResources().getColor( R.color.base_bar ) );
+                paixu4_tv.setTextColor(getResources().getColor(R.color.base_bar));
                 pageIndex = 1;
-                getlist( classId, true, true, "EVALUATE", keyword );
+                getlist(classId, true, true, "EVALUATE", keyword);
                 orderby = "EVALUATE";
                 break;
         }
@@ -148,43 +156,41 @@ public class ActivityGoodsList extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
-        keyword = getIntent().getStringExtra( "search" );
-        classId = getIntent().getStringExtra( "typeid" );
-        if (StringUtils.isEmpty( keyword )) {
-            setLoding( this, false );
-            getlist( classId, true, true, "", keyword );
-        } else {
-            setLoding( this, false );
-            getlist( classId, true, true, "", keyword );
+        keyword = getIntent().getStringExtra("search");
+        classId = getIntent().getStringExtra("typeid");
+        if (StringUtils.isEmpty(classId)) {
+            classId = getIntent().getStringExtra(TAG_TYPE_ID);
         }
+        setLoding(this, false);
+        getlist(classId, true, true, "", keyword);
 
 
 //        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有
 //        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动
-        recyclerView.setLayoutManager( new GridLayoutManager( this, 2 ) );
-        recyclerView.setItemAnimator( new DefaultItemAnimator() );
-        noData = getLayoutInflater().inflate( R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false );
-        recyclerView.addItemDecoration( new SpaceItemDecoration( 10 ) );
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        noData = getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
+        recyclerView.addItemDecoration(new SpaceItemDecoration(10));
 
 
         adapter = new MyAdapter();
-        adapter.setOnLoadMoreListener( new BaseQuickAdapter.RequestLoadMoreListener() {
+        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                getlist( classId, true, false, orderby, keyword );
+                getlist(classId, true, false, orderby, keyword);
             }
-        } );
-        recyclerView.addOnItemTouchListener( new OnItemClickListener() {
+        });
+        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                Intent it = new Intent( ActivityGoodsList.this, ActivityGoodsInfo.class );
-                it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getData().get( i ).getCommodityId() );
-                startActivity( it );
+                Intent it = new Intent(ActivityGoodsList.this, ActivityGoodsInfo.class);
+                it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getData().get(i).getCommodityId());
+                startActivity(it);
             }
-        } );
-        recyclerView.setAdapter( adapter );
+        });
+        recyclerView.setAdapter(adapter);
 
     }
 
@@ -194,11 +200,11 @@ public class ActivityGoodsList extends BaseActivity {
         getListTask = new BizDataAsyncTask<List<CommodityListModel>>() {
             @Override
             protected List<CommodityListModel> doExecute() throws ZYException, BizFailure {
-                Log.e( "*****", classid + "; " + keyword + "; " + orderby + "; " + loadmore+"; "+refresh );
+                Log.e(AppConfig.ERR_TAG, "params:" + classid + "; " + keyword + "; " + orderby + "; " + loadmore + "; " + refresh);
                 if (refresh) {
-                    return CategoryBiz.getCommodityList( classid, orderby, keyword, "0", AppConfig.DEFAULT_PAGE_COUNT + "" );
+                    return CategoryBiz.getCommodityList(classid, orderby, keyword, "0", AppConfig.DEFAULT_PAGE_COUNT + "");
                 } else {
-                    return CategoryBiz.getCommodityList( classid, orderby, keyword, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "" );
+                    return CategoryBiz.getCommodityList(classid, orderby, keyword, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "");
                 }
             }
 
@@ -208,7 +214,7 @@ public class ActivityGoodsList extends BaseActivity {
                     end = true;
                     //可以加入emptyview
                     if (loadmore && commodityListModels.size() == 0) {
-                        adapter.setEmptyView( noData );
+                        adapter.setEmptyView(noData);
                     }
                 } else {
                     end = false;
@@ -217,24 +223,24 @@ public class ActivityGoodsList extends BaseActivity {
 
                 list = commodityListModels;
                 if (loadmore) {
-                    adapter.addData( list );
+                    adapter.addData(list);
                     adapter.notifyDataSetChanged();
                 }
                 if (refresh) {
-                    adapter.setNewData( list );
+                    adapter.setNewData(list);
                     adapter.notifyDataSetChanged();
                 }
 
 
                 if (end) {
-                    adapter.addFooterView( getFooterView() );
+                    adapter.addFooterView(getFooterView());
                     adapter.notifyDataSetChanged();
                 } else {
                     adapter.removeAllFooterView();
                     adapter.notifyDataSetChanged();
                 }
 
-                Log.e( "****", commodityListModels.size() + ";    " + pageIndex + ";  " + adapter.getData().size() + "" );
+                Log.e("****", commodityListModels.size() + ";    " + pageIndex + ";  " + adapter.getData().size() + "");
 
                 pageIndex++;
                 closeLoding();
@@ -242,7 +248,7 @@ public class ActivityGoodsList extends BaseActivity {
 
             @Override
             protected void OnExecuteFailed() {
-                adapter.setEmptyView( noData );
+                adapter.setEmptyView(noData);
                 closeLoding();
             }
         };
@@ -250,7 +256,7 @@ public class ActivityGoodsList extends BaseActivity {
     }
 
     private View getFooterView() {
-        View view = getLayoutInflater().inflate( R.layout.main_end_view, (ViewGroup) recyclerView.getParent(), false );
+        View view = getLayoutInflater().inflate(R.layout.main_end_view, (ViewGroup) recyclerView.getParent(), false);
 
         return view;
     }
@@ -259,20 +265,20 @@ public class ActivityGoodsList extends BaseActivity {
     private class MyAdapter extends BaseQuickAdapter<CommodityListModel> {
 
         public MyAdapter() {
-            super( R.layout.item_goods_grid, list );
+            super(R.layout.item_goods_grid, list);
         }
 
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, CommodityListModel commodityListModel) {
-            baseViewHolder.setText( R.id.goods_title, StringUtils.deletaFirst( commodityListModel.getTitle() ) )
-                    .setText( R.id.money, commodityListModel.getCostMoney() + "" );
+            baseViewHolder.setText(R.id.goods_title, StringUtils.deletaFirst(commodityListModel.getTitle()))
+                    .setText(R.id.money, commodityListModel.getCostMoney() + "");
 
-            SimpleDraweeView goods_img = baseViewHolder.getView( R.id.item_head_img );
-            if (StringUtils.isEmpty( commodityListModel.getImgPath() )) {
-                goods_img.setImageURI( Uri.parse( "" ) );
+            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_head_img);
+            if (StringUtils.isEmpty(commodityListModel.getImgPath())) {
+                goods_img.setImageURI(Uri.parse(""));
             } else {
-                goods_img.setImageURI( Uri.parse( "http://www.lanjiutian.com/upload/images" + commodityListModel.getImgPath() ) );
+                goods_img.setImageURI(Uri.parse("http://www.lanjiutian.com/upload/images" + commodityListModel.getImgPath()));
             }
 
         }
@@ -280,12 +286,12 @@ public class ActivityGoodsList extends BaseActivity {
 
 
     private void reset() {
-        paixu1_tv.setTextColor( getResources().getColor( R.color.font_black2 ) );
-        paixu1_iv.setImageDrawable( getResources().getDrawable( R.mipmap.paixu_2 ) );
-        paixu2_tv.setTextColor( getResources().getColor( R.color.font_black2 ) );
-        paixu3_tv.setTextColor( getResources().getColor( R.color.font_black2 ) );
-        paixu3_iv.setImageDrawable( getResources().getDrawable( R.mipmap.paixu_3 ) );
-        paixu4_tv.setTextColor( getResources().getColor( R.color.font_black2 ) );
+        paixu1_tv.setTextColor(getResources().getColor(R.color.font_black2));
+        paixu1_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_2));
+        paixu2_tv.setTextColor(getResources().getColor(R.color.font_black2));
+        paixu3_tv.setTextColor(getResources().getColor(R.color.font_black2));
+        paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_3));
+        paixu4_tv.setTextColor(getResources().getColor(R.color.font_black2));
         isRise = true;
     }
 }

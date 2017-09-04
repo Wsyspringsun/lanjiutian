@@ -47,14 +47,18 @@ public class ActivityAmendPassword extends BaseActivity {
                 break;
 
             case R.id.next:
-                if (StringUtils.isEmpty( ed_pass1.getText().toString().trim() )) {
-                    ToastUtil.show( this,"请输入原密码" );
-                } else if (StringUtils.isEmpty( ed_pass2.getText().toString().trim() )) {
-                    ToastUtil.show( this,"请输入新密码" );
-                } else if (StringUtils.isEmpty( ed_pass3.getText().toString().trim() )) {
-                    ToastUtil.show( this,"请再次输入新密码" );
-                } else if (!ed_pass2.getText().toString().equals( ed_pass3.getText().toString() )) {
-                    ToastUtil.show( this,"新旧密码不一致" );
+                ed_pass2.setText(ed_pass2.getText().toString().trim());
+                ed_pass3.setText(ed_pass3.getText().toString().trim());
+                if (StringUtils.isEmpty(ed_pass1.getText().toString().trim())) {
+                    ToastUtil.show(this, "请输入原密码");
+                } else if (StringUtils.isEmpty(ed_pass2.getText().toString().trim())) {
+                    ToastUtil.show(this, "请输入新密码");
+                } else if (StringUtils.isEmpty(ed_pass3.getText().toString().trim())) {
+                    ToastUtil.show(this, "请再次输入新密码");
+                } else if (!ed_pass2.getText().toString().equals(ed_pass3.getText().toString())) {
+                    ToastUtil.show(this, "新旧密码不一致");
+                } else if (ed_pass2.getText().length() > 20 || ed_pass2.getText().length() < 6) {
+                    ToastUtil.show(this, getString(R.string.password_valid));
                 } else {
                     modifyPwd();
                 }
@@ -65,9 +69,9 @@ public class ActivityAmendPassword extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
-        title.setText( "修改密码" );
+        title.setText("修改密码");
     }
 
     BizDataAsyncTask<Boolean> pwdTask;
@@ -76,16 +80,16 @@ public class ActivityAmendPassword extends BaseActivity {
         pwdTask = new BizDataAsyncTask<Boolean>() {
             @Override
             protected Boolean doExecute() throws ZYException, BizFailure {
-                return UserBiz.modifyPwd( ed_pass1.getText().toString(), ed_pass2.getText().toString() );
+                return UserBiz.modifyPwd(ed_pass1.getText().toString(), ed_pass2.getText().toString());
             }
 
             @Override
             protected void onExecuteSucceeded(Boolean aBoolean) {
                 if (aBoolean) {
                     finish();
-                    AppManager.destoryActivity( "111" );
-                    AppManager.destoryActivity( "222" );
-                    startActivity( new Intent( ActivityAmendPassword.this, ActivityLogin.class ) );
+                    AppManager.destoryActivity("111");
+                    AppManager.destoryActivity("222");
+                    startActivity(new Intent(ActivityAmendPassword.this, ActivityLogin.class));
                 }
             }
 

@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.holder.Holder;
@@ -54,17 +55,21 @@ import com.wyw.ljtds.widget.RecycleViewDivider;
 import com.wyw.ljtds.widget.commodity.CheckInchModel;
 import com.wyw.ljtds.widget.commodity.CheckInchPopWindow;
 import com.wyw.ljtds.widget.goodsinfo.SlideDetailsLayout;
+
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPreviewActivity;
 import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
+
 /**
  * Created by Administrator on 2017/3/12 0012.
  */
@@ -178,6 +183,7 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
                 break;
 
             case R.id.shoucang:
+                Log.e(AppConfig.ERR_TAG, "fav:" + model.getFavorited());
                 //收藏
                 setLoding(getActivity(), false);
                 if (model.getFavorited().equals("0")) {
@@ -559,6 +565,7 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
         addTask = new BizDataAsyncTask<Boolean>() {
             @Override
             protected Boolean doExecute() throws ZYException, BizFailure {
+                Log.e(AppConfig.ERR_TAG,"type:"+type);
                 if (type.equals("add")) {
                     return UserBiz.addFavoritesGoods(id, flg);
                 } else {
@@ -571,8 +578,10 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
             protected void onExecuteSucceeded(Boolean aBoolean) {
                 if (aBoolean) {
                     if (type.equals("add")) {
+                        model.setFavorited("1");
                         shoucang_img.setImageDrawable(getResources().getDrawable(R.mipmap.icon_shoucang_xuanzhong));
                     } else {
+                        model.setFavorited("0");
                         shoucang_img.setImageDrawable(getResources().getDrawable(R.mipmap.icon_shoucang_weixuan));
                     }
                 }

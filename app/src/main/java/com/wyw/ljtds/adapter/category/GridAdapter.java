@@ -40,7 +40,7 @@ public class GridAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return mChildrenBeanXes.get( position );
+        return mChildrenBeanXes.get(position);
     }
 
     @Override
@@ -52,26 +52,25 @@ public class GridAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = View.inflate( mContext, R.layout.category_grid_item, null );
+            convertView = View.inflate(mContext, R.layout.category_grid_item, null);
             viewHolder = new ViewHolder();
-            viewHolder.mImageView = (SimpleDraweeView) convertView.findViewById( R.id.item_head_img );
-            viewHolder.textView = (TextView) convertView.findViewById( R.id.grid_item_text );
-            viewHolder.item = (LinearLayout) convertView.findViewById( R.id.item );
-            convertView.setTag( viewHolder );
+            viewHolder.mImageView = (SimpleDraweeView) convertView.findViewById(R.id.item_head_img);
+            viewHolder.textView = (TextView) convertView.findViewById(R.id.grid_item_text);
+            viewHolder.item = (LinearLayout) convertView.findViewById(R.id.item);
+            convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.textView.setText( mChildrenBeanXes.get( position ).getName() );
-        viewHolder.mImageView.setImageURI( Uri.parse( "http://www.lanjiutian.com/upload/images"+mChildrenBeanXes.get( position ).getImgPath() ) );
+        viewHolder.textView.setText(mChildrenBeanXes.get(position).getName());
+        viewHolder.mImageView.setImageURI(Uri.parse("http://www.lanjiutian.com/upload/images" + mChildrenBeanXes.get(position).getImgPath()));
 
-        viewHolder.item.setOnClickListener( new View.OnClickListener() {
+        viewHolder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent( mContext, ActivityGoodsList.class );
-                it.putExtra( "typeid", mChildrenBeanXes.get( position ).getCommodityTypeId() );
-                mContext.startActivity( it );
+                Intent it = ActivityGoodsList.getStartMeIntent(mContext, mChildrenBeanXes.get(position).getCommodityTypeId());
+                mContext.startActivity(it);
             }
-        } );
+        });
 
         return convertView;
     }

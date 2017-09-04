@@ -54,17 +54,6 @@
             android:text="@string/bianji"
             android:id="@+id/header_edit"/>
 
-        <ImageView
-            android:id="@+id/header_image_right"
-            android:visibility="gone"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x10"
-            android:layout_width="@dimen/x18"
-            android:layout_height="@dimen/x18"
-            android:scaleType="fitCenter"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_xiaoxi_hei"/>
-
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView

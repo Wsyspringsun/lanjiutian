@@ -11,6 +11,7 @@ import java.util.List;
  */
 
 public class CommodityDetailsModel extends BaseModel {
+    private XiaoNengData xiaonengData;
     //商品id
     private String commodityId;
     //商品类型id
@@ -170,6 +171,14 @@ public class CommodityDetailsModel extends BaseModel {
 
     public void setEVALUATE_CNT(int EVALUATE_CNT) {
         this.EVALUATE_CNT = EVALUATE_CNT;
+    }
+
+    public XiaoNengData getXiaonengData() {
+        return xiaonengData;
+    }
+
+    public void setXiaonengData(XiaoNengData xiaonengData) {
+        this.xiaonengData = xiaonengData;
     }
 
     public class ColorList{

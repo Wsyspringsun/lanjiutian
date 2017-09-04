@@ -71,6 +71,12 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        closeLoding();
+    }
+
     public void closeLoding(){
         loading = false;
         LoadingDialogUtils.closeDialog(mDialog);

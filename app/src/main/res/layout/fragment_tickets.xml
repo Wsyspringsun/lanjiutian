@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basebackground"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/sel_ticket_dianzibi"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x42"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x10"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/x22"
+                android:layout_height="@dimen/x22"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/icon_ticket_dianzibi" />
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_marginLeft="@dimen/x5"
+                android:text="@string/tickets_dianzibi"
+                android:textColor="@color/font_black2" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="@dimen/x18"
+            android:layout_height="@dimen/x12"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x10"
+            android:scaleType="fitXY"
+            android:src="@mipmap/jiantou_you_hei" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/sel_ticket_mianyouquan"
+        android:layout_marginTop="@dimen/x10"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x42"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/x22"
+                android:layout_height="@dimen/x22"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/icon_ticket_mianyouquan"/>
+
+            <TextView
+                android:layout_marginLeft="@dimen/x5"
+                style="@style/font_ww_14"
+                android:text="@string/tickets_diyouquan"
+                android:textColor="@color/font_black2"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x10"
+            android:scaleType="fitXY"
+            android:layout_width="@dimen/x18"
+            android:layout_height="@dimen/x12"
+            android:src="@mipmap/jiantou_you_hei"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -17,6 +17,7 @@ import com.wyw.ljtds.model.WalletModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.user.wallet.BalanceActivity;
 import com.wyw.ljtds.ui.user.wallet.PointRecordActivity;
+import com.wyw.ljtds.ui.user.wallet.TicketActivity;
 import com.wyw.ljtds.utils.GsonUtils;
 
 import org.xutils.view.annotation.ContentView;
@@ -37,6 +38,7 @@ public class ActivityWallet extends BaseActivity {
     private TextView jifen;
     @ViewInject(R.id.money)
     private TextView money;
+    WalletModel wallModel;
 
     @Event(value = {R.id.header_return, R.id.sel_wallet_jifen, R.id.sel_wallet_youhuiquan, R.id.sel_wallet_yue})
     private void onClick(View view) {
@@ -50,6 +52,8 @@ public class ActivityWallet extends BaseActivity {
                 startActivity(it);
                 break;
             case R.id.sel_wallet_youhuiquan:
+                it = new Intent(this, TicketActivity.class);
+                startActivity(it);
                 break;
             case R.id.sel_wallet_yue:
                 it = new Intent(this, BalanceActivity.class);
@@ -72,7 +76,8 @@ public class ActivityWallet extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getPoin();
+        if (wallModel == null)
+            getPoin();
     }
 
     private void getPoin() {
@@ -87,11 +92,9 @@ public class ActivityWallet extends BaseActivity {
             @Override
             protected void onExecuteSucceeded(WalletModel model) {
                 closeLoding();
-                jifen.setText(model.getUsablePoint() + "");
-                money.setText("￥" + model.getCardbalance() + "");
-//                for (int i = 0; i < model.size(); i++) {
-//                }
-
+                wallModel = model;
+                jifen.setText(wallModel.getUsablePoint() + "");
+                money.setText("￥" + wallModel.getCardbalance() + "");
             }
 
             @Override

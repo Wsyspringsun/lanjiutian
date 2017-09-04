@@ -111,7 +111,7 @@ public class RegionView {
             public void onClick(View v) {
                 String classId = classIdMap.get(region);
                 Intent it = new Intent(mContext, ActivityMedicineList.class);
-                it.putExtra(FragmentFind.TAG_FIND_MTD,FragmentFind. FIND_MTD_QUICK);
+                it.putExtra(ActivityMedicineList.TAG_LIST_FROM,FragmentFind. FIND_MTD_QUICK);
                 it.putExtra(FragmentFind.TAG_MTD_QUICK_PARAM, classId);
                 mContext.startActivity(it);
 //                Log.e(AppConfig.ERR_TAG, "click " + classId);

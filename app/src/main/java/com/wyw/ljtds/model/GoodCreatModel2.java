@@ -14,6 +14,12 @@ public class GoodCreatModel2 extends BaseModel {
     private String INVOICE_CONTENT;
     private String OID_GROUP_ID;
     private String OID_GROUP_NAME;
+
+    private String POSTAGE;
+    private String POST_NUM;
+    private String ELECTRONIC_MONEY;
+    private String ELECTRONIC_USEABLE_MONEY;
+
     private List<GoodCreatModel3> DETAILS;
 
     public String getOID_GROUP_ID() {
@@ -78,5 +84,37 @@ public class GoodCreatModel2 extends BaseModel {
 
     public void setDETAILS(List<GoodCreatModel3> DETAILS) {
         this.DETAILS = DETAILS;
+    }
+
+    public String getELECTRONIC_USEABLE_MONEY() {
+        return ELECTRONIC_USEABLE_MONEY;
+    }
+
+    public void setELECTRONIC_USEABLE_MONEY(String ELECTRONIC_USEABLE_MONEY) {
+        this.ELECTRONIC_USEABLE_MONEY = ELECTRONIC_USEABLE_MONEY;
+    }
+
+    public String getELECTRONIC_MONEY() {
+        return ELECTRONIC_MONEY;
+    }
+
+    public void setELECTRONIC_MONEY(String ELECTRONIC_MONEY) {
+        this.ELECTRONIC_MONEY = ELECTRONIC_MONEY;
+    }
+
+    public String getPOSTAGE() {
+        return POSTAGE;
+    }
+
+    public void setPOSTAGE(String POSTAGE) {
+        this.POSTAGE = POSTAGE;
+    }
+
+    public String getPOST_NUM() {
+        return POST_NUM;
+    }
+
+    public void setPOST_NUM(String POST_NUM) {
+        this.POST_NUM = POST_NUM;
     }
 }

@@ -32,7 +32,7 @@
                 <TextView
                     style="@style/font_ww_14"
                     android:layout_marginTop="@dimen/x25"
-                    android:text="@string/zhanghuyue"
+                    android:text="@string/user_yue"
                     android:textColor="@color/white" />
 
                 <TextView
@@ -74,7 +74,7 @@
                 <TextView
                     style="@style/font_ww_14"
                     android:layout_marginTop="@dimen/x25"
-                    android:text="@string/youhuiquan"
+                    android:text="@string/user_youhuiquan"
                     android:textColor="@color/white" />
 
                 <TextView

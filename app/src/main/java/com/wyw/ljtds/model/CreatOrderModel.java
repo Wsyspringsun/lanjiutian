@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Administrator on 2017/4/13 0013.
  */
 
-public class CreatOrderModel extends BaseModel implements Serializable{
+public class CreatOrderModel extends BaseModel implements Serializable {
     //配送时间 起始
     private String DISTRIBUTION_DATE_START;
     //配送时间 截止
@@ -16,6 +16,10 @@ public class CreatOrderModel extends BaseModel implements Serializable{
     private String COST_POINT;
     //支付方式
     private String PAYMENT_METHOD;
+    //使用电子币标识
+    private String COIN_FLG;
+    //使用邮费抵用券标识
+    private String POSTAGE_FLG;
     //应付金额
     private String PAY_AMOUNT;
     //积分抵用金额
@@ -109,6 +113,22 @@ public class CreatOrderModel extends BaseModel implements Serializable{
         this.DISTRIBUTION_DATE_END = DISTRIBUTION_DATE_END;
     }
 
+    public String getPOSTAGE_FLG() {
+        return POSTAGE_FLG;
+    }
+
+    public void setPOSTAGE_FLG(String POSTAGE_FLG) {
+        this.POSTAGE_FLG = POSTAGE_FLG;
+    }
+
+    public String getCOIN_FLG() {
+        return COIN_FLG;
+    }
+
+    public void setCOIN_FLG(String COIN_FLG) {
+        this.COIN_FLG = COIN_FLG;
+    }
+
     public class USER_ADDRESS {
         private String ADDRESS_DETAIL;
         private int ADDRESS_ID;
@@ -191,9 +211,6 @@ public class CreatOrderModel extends BaseModel implements Serializable{
         public void setCONSIGNEE_CITY(int CONSIGNEE_CITY) {
             this.CONSIGNEE_CITY = CONSIGNEE_CITY;
         }
-
-
-
 
 
     }

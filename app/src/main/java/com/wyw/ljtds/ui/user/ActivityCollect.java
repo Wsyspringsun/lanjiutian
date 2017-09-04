@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,6 +33,7 @@ import com.wyw.ljtds.ui.goods.ActivityGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.ui.goods.FragmentGoodsDetails;
 import com.wyw.ljtds.utils.GsonUtils;
+import com.wyw.ljtds.utils.StringUtils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -52,8 +54,6 @@ public class ActivityCollect extends BaseActivity {
     private ImageView jianTou;
     @ViewInject(R.id.header_title)
     private TextView title;
-    @ViewInject(R.id.header_image_right)
-    private ImageView header_image;
     @ViewInject(R.id.header_edit)
     private TextView header_edit;
     @ViewInject(R.id.footer)
@@ -65,6 +65,7 @@ public class ActivityCollect extends BaseActivity {
     private List<String> date;
 
     private String tagMy;
+    private View noData;
 
     @Event(value = {R.id.header_edit, R.id.header_return, R.id.shanchu, R.id.add_car})
     private void onClick(View view) {
@@ -73,22 +74,20 @@ public class ActivityCollect extends BaseActivity {
                 if (index == 0) {
                     jianTou.setVisibility(View.GONE);
                     title.setText("编辑");
-                    header_image.setVisibility(View.GONE);
                     header_edit.setText("完成");
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) header_edit.getLayoutParams();
-                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);//0为true,1为维false
-                    header_edit.setLayoutParams(params);
+//                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) header_edit.getLayoutParams();
+//                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);//0为true,1为维false
+//                    header_edit.setLayoutParams(params);
                     footer.setVisibility(View.VISIBLE);
                     index = 1;
                 } else {
                     jianTou.setVisibility(View.VISIBLE);
                     title.setText(R.string.user_shoucang);
-                    header_image.setVisibility(View.VISIBLE);
                     header_edit.setText(R.string.bianji);
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) header_edit.getLayoutParams();
-                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
-                    params.addRule(RelativeLayout.LEFT_OF, R.id.header_image_right);//相当于xml中的to_left_of
-                    header_edit.setLayoutParams(params);
+//                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) header_edit.getLayoutParams();
+//                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+//                    params.addRule(RelativeLayout.LEFT_OF, R.id.header_image_right);//相当于xml中的to_left_of
+//                    header_edit.setLayoutParams(params);
                     footer.setVisibility(View.GONE);
                     index = 0;
                 }
@@ -128,21 +127,16 @@ public class ActivityCollect extends BaseActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         tagMy = intent.getStringExtra(FragmentUser.TAG_MY);
-        if (FragmentUser.TAG_MY_SHOUCANG.equals(tagMy)) {
-            header_edit.setVisibility(View.VISIBLE);
-            title.setText(getResources().getString(R.string.user_shoucang));
-            getFavorite();
-        } else if (FragmentUser.TAG_MY_ZUJI.equals(tagMy)) {
-            header_edit.setVisibility(View.GONE);
-            title.setText(getResources().getString(R.string.user_zuji));
-            getHistory();
-        }
+
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动
         recyclerView.setLayoutManager(linearLayoutManager);
 
+
         adapter = new MyAdapter();
+        noData = this.getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
+        adapter.setEmptyView(noData);
         adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(new OnItemClickListener() {
@@ -178,6 +172,24 @@ public class ActivityCollect extends BaseActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        refreshData();
+    }
+
+    private void refreshData() {
+        if (FragmentUser.TAG_MY_SHOUCANG.equals(tagMy)) {
+            header_edit.setVisibility(View.VISIBLE);
+            title.setText(getResources().getString(R.string.user_shoucang));
+            getFavorite();
+        } else if (FragmentUser.TAG_MY_ZUJI.equals(tagMy)) {
+            header_edit.setVisibility(View.GONE);
+            title.setText(getResources().getString(R.string.user_zuji));
+            getHistory();
+        }
+    }
 
     BizDataAsyncTask<List<FavoriteModel>> favoriteTask;
 
@@ -247,8 +259,9 @@ public class ActivityCollect extends BaseActivity {
             @Override
             protected void onExecuteSucceeded(Boolean isfl) {
                 if (isfl) {
-                    finish();
-                    startActivity(new Intent(ActivityCollect.this, ActivityCollect.class));
+//                    finish();
+//                    startActivity(new Intent(ActivityCollect.this, ActivityCollect.class));
+                    refreshData();
                 }
             }
 
@@ -285,7 +298,13 @@ public class ActivityCollect extends BaseActivity {
             SimpleDraweeView imageView = baseViewHolder.getView(R.id.goods_img);
             imageView.setImageURI(Uri.parse("http://www.lanjiutian.com/upload/images" + messageModel.getImgPath()));
 
-            baseViewHolder.setText(R.id.goods_title, messageModel.getTitle())
+            String title = messageModel.getTitle();
+            if (!StringUtils.isEmpty(title)) {
+                if ("y".equalsIgnoreCase("" + title.charAt(0))) {
+                    title = title.substring(1);
+                }
+            }
+            baseViewHolder.setText(R.id.goods_title, title)
                     .setText(R.id.money, "￥" + messageModel.getCostMoney() + "")
                     .setOnCheckedChangeListener(R.id.check, new CompoundButton.OnCheckedChangeListener() {
                         @Override

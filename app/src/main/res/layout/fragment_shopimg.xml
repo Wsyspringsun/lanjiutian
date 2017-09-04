@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.wyw.ljtds.widget.MyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:background="@color/white"
+    android:paddingBottom="@dimen/x10"
+    android:paddingTop="@dimen/x3">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/basebackground"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/fragment_shopimg_iv_logo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x100"
+                fresco:actualImageScaleType="fitXY"
+                fresco:fadeDuration="200"
+                fresco:failureImage="@mipmap/zhanweitu"
+                fresco:failureImageScaleType="fitCenter"
+                fresco:placeholderImage="@mipmap/zhanweitu" />
+
+
+            <TextView
+                android:id="@+id/fragment_shopimg_iv_shopname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:background="#0F000000"
+                android:paddingTop="@dimen/x10"
+                android:paddingLeft="@dimen/x20"
+                android:text="@string/holder"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/dp_22" />
+
+        </FrameLayout>
+
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:visibility="gone"
+            android:id="@+id/fragment_shopimg_iv_banner"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x120"
+            fresco:actualImageScaleType="fitCenter"
+            fresco:fadeDuration="200"
+            fresco:failureImage="@mipmap/zhanweitu"
+            fresco:failureImageScaleType="fitCenter"
+            fresco:placeholderImage="@mipmap/zhanweitu" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_shopimg_rv_types"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:layoutDirection="ltr" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x10"
+            android:background="#cccccc" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:descendantFocusability="blocksDescendants"
+            android:paddingTop="@dimen/x20">
+
+            <TextView
+                style="@style/RecycleViewTitle"
+                android:text="@string/home_activity" />
+
+            <com.bigkoo.convenientbanner.ConvenientBanner
+                android:id="@+id/fragment_shopimg_rv_activity"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x150"
+                android:background="@color/white"
+                app:canLoop="true"></com.bigkoo.convenientbanner.ConvenientBanner>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x10"
+            android:background="#cccccc" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:descendantFocusability="blocksDescendants"
+            android:paddingTop="@dimen/x20">
+
+            <TextView
+                style="@style/RecycleViewTitle"
+                android:text="@string/shop_nearest" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_shopimg_rv_nearest"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+</com.wyw.ljtds.widget.MyScrollView>
+

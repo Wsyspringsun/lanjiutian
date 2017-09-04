@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/header_con"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x140"
+        android:layout_centerVertical="true"
+        android:background="@drawable/bg_dianzibi_head"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dianzibi_tv_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/font_ww_18_black"
+            android:text="@string/holder"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="63dp" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/reclcyer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+</LinearLayout>

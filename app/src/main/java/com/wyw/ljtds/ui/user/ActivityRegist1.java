@@ -1,13 +1,17 @@
 package com.wyw.ljtds.ui.user;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -50,6 +54,10 @@ public class ActivityRegist1 extends BaseActivity {
     @ViewInject(R.id.mima)
     private EditText password;
 
+    @ViewInject(R.id.chk_agree_license)
+    private CheckBox chkAgreeLicense;
+
+
 
     private Timer timer;
     private TimerTask timerTask;
@@ -60,30 +68,38 @@ public class ActivityRegist1 extends BaseActivity {
     private void onclick(View v) {
         switch (v.getId()) {
             case R.id.next:
-                Log.e( "***", "++++" );
 //                if (StringUtils.isEmpty(code.getText().toString().trim())){
 //                    //ToastUtil.show(this,);
 //                }
-                if (StringUtils.isEmpty( password.getText().toString().trim() )) {
-                    ToastUtil.show( this, "请输入6到12位密码" );
+//                 同意协议
+                if(!chkAgreeLicense.isChecked()){
+                    ToastUtil.show(this, getString(R.string.agree_license));
+                    return;
+                }
+                password.setText(password.getText().toString().trim());
+                Log.e(AppConfig.ERR_TAG, "data:" + password.getText().toString() + "/len:" + password.getText().length());
+                if (StringUtils.isEmpty(password.getText())) {
+                    ToastUtil.show(this, getString(R.string.password_valid));
+                } else if (password.getText().length() > 20 || password.getText().length() < 8) {
+                    ToastUtil.show(this, getString(R.string.password_valid));
                 } else {
-                    setLoding( this, false );
+                    setLoding(this, false);
                     doRegist();
                 }
                 break;
 
             case R.id.header_return:
                 finish();
-                startActivity( new Intent( this, ActivityLogin.class ) );
+                startActivity(new Intent(this, ActivityLogin.class));
                 break;
 
             case R.id.fasong:
-                getCode( phone );
+                getCode(phone);
                 runTimerTask();
                 break;
 
             case R.id.zhuce_text:
-                startActivity( new Intent( this, ActivityWebView.class ) );
+                startActivity(new Intent(this, ActivityWebView.class));
                 break;
 
         }
@@ -91,15 +107,15 @@ public class ActivityRegist1 extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
-        title.setText( "设置密码" );
-        return_tv.setText( "账号登陆" );
+        title.setText("设置密码");
+        return_tv.setText("账号登陆");
 
-        phone = getIntent().getStringExtra( AppConfig.IntentExtraKey.PHONE_NUMBER );
-        phone_num.setText( getResources().getString( R.string.yanzhengma4 ) + phone );
+        phone = getIntent().getStringExtra(AppConfig.IntentExtraKey.PHONE_NUMBER);
+        phone_num.setText(getResources().getString(R.string.yanzhengma4) + phone);
 
-        getCode( phone );
+        getCode(phone);
         runTimerTask();
     }
 
@@ -109,8 +125,8 @@ public class ActivityRegist1 extends BaseActivity {
         public void dispatchMessage(Message msg) {
             // TODO Auto-generated method stub
             if (count >= 0) {
-                button.setText( count + "s" );
-                button.setClickable( false );
+                button.setText(count + "s");
+                button.setClickable(false);
                 count--;
             } else {
                 resetTimer();
@@ -128,26 +144,25 @@ public class ActivityRegist1 extends BaseActivity {
 
             @Override
             protected String doExecute() throws ZYException, BizFailure {
-                Log.e( "++++", phone + "" + password.getText().toString() );
-                return UserBiz.register( phone, code.getText().toString().trim(), password.getText().toString().trim(), "", "0" );
+                return UserBiz.register(phone, code.getText().toString().trim(), password.getText().toString().trim(), "", "0");
             }
 
             @Override
             protected void onExecuteSucceeded(String result) {
-                PreferenceCache.putToken( result ); // 持久化缓存token
-                PreferenceCache.putAutoLogin( true );// 记录是否自动登录
-                PreferenceCache.putUsername( phone );
-
-                if (PreferenceCache.isAutoLogin()) {
-                    PreferenceCache.putPhoneNum( phone );
-                }
-
                 closeLoding();
 
-                Intent it = new Intent( ActivityRegist1.this, MainActivity.class );
-                AppConfig.currSel = 4;
-                it.putExtra( AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel );
-                startActivity( it );
+                PreferenceCache.putToken(result); // 持久化缓存token
+                PreferenceCache.putAutoLogin(true);// 记录是否自动登录
+                PreferenceCache.putUsername(phone);
+
+                if (PreferenceCache.isAutoLogin()) {
+                    PreferenceCache.putPhoneNum(phone);
+                }
+
+                //显示赠送优惠券的
+                showSentTicket();
+
+
             }
 
             @Override
@@ -159,13 +174,51 @@ public class ActivityRegist1 extends BaseActivity {
 
     }
 
+    private void showSentTicket() {
+        super.onResume();
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.fragment_send_ticket, (ViewGroup) findViewById(R.id.fragment_con));
+//       final Dialog dialog = new AlertDialog.Builder(this)).setView(layout).create();
+        Dialog dialog = new Dialog(ActivityRegist1.this, R.style.Theme_AppCompat_Dialog);
+//        dialog.setContentView(R.layout.fragment_send_ticket);
+        dialog.setContentView(layout);
+        dialog.setCancelable(false);
+        dialog.setTitle(R.string.gongxi);
+
+//        Window dialogWindow = dialog.getWindow();
+//        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+//        dialogWindow.setGravity(Gravity.LEFT | Gravity.TOP);
+//        lp.alpha = 0.9f; // 透明度
+        dialog.show();
+
+        View view = layout.findViewById(R.id.btn_sent_ticket);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //申请领取优惠券
+//                doGetTicketTask();
+//                Log.e(AppConfig.ERR_TAG, "恭喜您");
+                Intent it = new Intent(ActivityRegist1.this, MainActivity.class);
+                AppConfig.currSel = 4;
+                it.putExtra(AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel);
+                startActivity(it);
+
+//                dialog.dismiss();
+//                Intent it = new Intent(TestActivity.this, ActivityLogin.class);
+//                startActivity(it);
+            }
+        });
+
+
+    }
+
     BizDataAsyncTask<String> codeTask;
 
     private void getCode(final String phone) {
         codeTask = new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
-                return UserBiz.VerificationCode( phone, "0" );
+                return UserBiz.VerificationCode(phone, "0");
             }
 
             @Override
@@ -190,16 +243,16 @@ public class ActivityRegist1 extends BaseActivity {
 
             @Override
             public void run() {
-                mHandler.sendEmptyMessage( 0 );
+                mHandler.sendEmptyMessage(0);
             }
         };
-        timer.schedule( timerTask, 1000, 1000 );
+        timer.schedule(timerTask, 1000, 1000);
 
     }
 
     private void resetTimer() {
-        button.setText( R.string.yanzhengma3 );
-        button.setClickable( true );
+        button.setText(R.string.yanzhengma3);
+        button.setClickable(true);
         count = 60;
         if (timerTask != null) {
             timerTask.cancel();

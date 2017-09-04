@@ -14,6 +14,12 @@ public class GoodCreatModel1 extends BaseModel {
     private String DISTRIBUTION_DATE_START;
     //配送时间 截止
     private String DISTRIBUTION_DATE_END;
+
+        //使用电子币标识
+    private String COIN_FLG;
+    //使用邮费抵用券标识
+    private String POSTAGE_FLG;
+
     public List<GoodCreatModel2> getDETAILS() {
         return DETAILS;
     }
@@ -52,5 +58,21 @@ public class GoodCreatModel1 extends BaseModel {
 
     public void setDISTRIBUTION_DATE_START(String DISTRIBUTION_DATE_START) {
         this.DISTRIBUTION_DATE_START = DISTRIBUTION_DATE_START;
+    }
+
+    public String getPOSTAGE_FLG() {
+        return POSTAGE_FLG;
+    }
+
+    public void setPOSTAGE_FLG(String POSTAGE_FLG) {
+        this.POSTAGE_FLG = POSTAGE_FLG;
+    }
+
+    public String getCOIN_FLG() {
+        return COIN_FLG;
+    }
+
+    public void setCOIN_FLG(String COIN_FLG) {
+        this.COIN_FLG = COIN_FLG;
     }
 }

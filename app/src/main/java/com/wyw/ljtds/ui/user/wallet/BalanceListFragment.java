@@ -107,7 +107,6 @@ public class BalanceListFragment extends BaseFragment {
             protected void onExecuteSucceeded(List<BalanceRecord> balanceRecords) {
                 closeLoding();
                 list = balanceRecords;
-
                 BalanceListFragment.this.updAdapter();
             }
 

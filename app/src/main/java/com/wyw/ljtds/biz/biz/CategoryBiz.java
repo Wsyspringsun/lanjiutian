@@ -181,9 +181,10 @@ public class CategoryBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static List<MedicineListModel> getMedicineList(String classId, String orderby, String keyword, String startIdx, String pageSize)
+    public static List<MedicineListModel> getMedicineList(String topFlg,String classId, String orderby, String keyword, String startIdx, String pageSize)
             throws BizFailure, ZYException {
         SoapProcessor ksoap2 = new SoapProcessor("Service", "getMedicineList", false);
+        ksoap2.setProperty("topFlg", topFlg, PropertyType.TYPE_STRING);
         ksoap2.setProperty("classId", classId, PropertyType.TYPE_STRING);
         ksoap2.setProperty("orderby", orderby, PropertyType.TYPE_STRING);
         ksoap2.setProperty("keyword", keyword, PropertyType.TYPE_STRING);

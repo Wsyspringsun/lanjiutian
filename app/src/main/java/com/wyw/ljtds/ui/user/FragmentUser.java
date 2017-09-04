@@ -39,6 +39,7 @@ import com.wyw.ljtds.ui.user.help.ActivityHelp;
 import com.wyw.ljtds.ui.user.manage.ActivityManage;
 import com.wyw.ljtds.ui.user.order.ActivityAfterMarket;
 import com.wyw.ljtds.ui.user.order.ActivityOrder;
+import com.wyw.ljtds.ui.user.order.ReturnGoodsOrderListActivity;
 import com.wyw.ljtds.ui.user.wallet.BalanceActivity;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.widget.DividerGridItemDecoration;
@@ -124,7 +125,7 @@ public class FragmentUser extends LazyLoadFragment {
                     break;
 
                 case R.id.order_shouhou://售后
-                    it = new Intent(getActivity(), ActivityAfterMarket.class);
+                    it = new Intent(getActivity(), ReturnGoodsOrderListActivity.class);
                     startActivity(it);
                     break;
 
@@ -222,19 +223,15 @@ public class FragmentUser extends LazyLoadFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (getActivity() == null) return;
         initGridView();
         initTuijian();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
         if (user == null)
             getUser();
         if (list == null)
             getrecommend(PreferenceCache.getToken(), "");
     }
+
 
     @Override
     protected void lazyLoad() {
@@ -256,6 +253,7 @@ public class FragmentUser extends LazyLoadFragment {
     BizDataAsyncTask<UserModel> userTask;
 
     private void getUser() {
+//        setLoding(getActivity(), false);
         userTask = new BizDataAsyncTask<UserModel>() {
             @Override
             protected UserModel doExecute() throws ZYException, BizFailure {
@@ -264,7 +262,7 @@ public class FragmentUser extends LazyLoadFragment {
 
             @Override
             protected void onExecuteSucceeded(UserModel userModel) {
-                closeLoding();
+//                closeLoding();
                 user = userModel;
 
                 jifen.setText("积分：" + userModel.getUSER_POINT() + "分");
@@ -277,7 +275,6 @@ public class FragmentUser extends LazyLoadFragment {
                     user.setUSER_ICON_FILE_ID(userModel.getUSER_ICON_FILE_ID());
                 }
 
-
                 if (user.getBIRTHDAY() == null) {
                     user.setBIRTHDAY(new Long(0));
                 }
@@ -285,16 +282,16 @@ public class FragmentUser extends LazyLoadFragment {
 
             @Override
             protected void OnExecuteFailed() {
-                closeLoding();
+//                closeLoding();
             }
         };
-        setLoding(getActivity(), false);
         userTask.execute();
     }
 
     BizDataAsyncTask<List<RecommendModel>> recTask;
 
     private void getrecommend(final String token, final String orderid) {
+//        setLoding(getActivity(), false);
         recTask = new BizDataAsyncTask<List<RecommendModel>>() {
             @Override
             protected List<RecommendModel> doExecute() throws ZYException, BizFailure {
@@ -303,6 +300,7 @@ public class FragmentUser extends LazyLoadFragment {
 
             @Override
             protected void onExecuteSucceeded(List<RecommendModel> recommendModels) {
+//                closeLoding();
                 list = recommendModels;
                 myAdapter.setNewData(list);
                 myAdapter.notifyDataSetChanged();
@@ -310,7 +308,7 @@ public class FragmentUser extends LazyLoadFragment {
 
             @Override
             protected void OnExecuteFailed() {
-
+//                closeLoding();
             }
         };
         recTask.execute();

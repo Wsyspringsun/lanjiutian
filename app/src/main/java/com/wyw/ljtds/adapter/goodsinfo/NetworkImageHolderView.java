@@ -2,12 +2,14 @@ package com.wyw.ljtds.adapter.goodsinfo;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.bigkoo.convenientbanner.holder.Holder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.wyw.ljtds.R;
+import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.utils.StringUtils;
 
 /**
@@ -26,9 +28,10 @@ public class NetworkImageHolderView implements Holder<String> {
 
     @Override
     public void UpdateUI(Context context, int position, String data) {
-//        if (!StringUtils.isEmpty( data )){
+//        Log.e(AppConfig.ERR_TAG, "createImage:" + data);
+        if (!StringUtils.isEmpty(data)) {
             imageView.setImageURI(Uri.parse(data));
-//        }
+        }
 
     }
 }

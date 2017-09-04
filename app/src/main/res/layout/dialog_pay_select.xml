@@ -33,6 +33,7 @@
 
     <LinearLayout
         android:id="@+id/select1"
+        android:visibility="gone"
         android:paddingLeft="@dimen/x100"
         android:background="@color/white"
         android:layout_width="match_parent"

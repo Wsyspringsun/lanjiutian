@@ -32,14 +32,17 @@
         <TextView
             android:id="@+id/name"
             style="@style/font_ww_14"
+            android:text="@string/holder"
             android:layout_toRightOf="@+id/shouhou_tv"
             android:textColor="@color/font_black2"/>
 
         <TextView
             android:id="@+id/phone"
             style="@style/font_ww_14"
+            android:text="@string/holder"
+            android:layout_marginLeft="@dimen/x10"
             android:layout_marginRight="@dimen/x8"
-            android:layout_toLeftOf="@+id/jiantou"
+            android:layout_toRightOf="@+id/name"
             android:textColor="@color/font_black2"/>
 
         <TextView
