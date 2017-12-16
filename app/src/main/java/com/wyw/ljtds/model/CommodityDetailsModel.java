@@ -1,8 +1,5 @@
 package com.wyw.ljtds.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -20,6 +17,12 @@ public class CommodityDetailsModel extends BaseModel {
     private String title;
     //点击量
     private int clickNum;
+    //商铺联系电话
+    private String contactTel;
+    //商铺 联系电话
+    private String contactMobile;
+    //展示的土坯啊
+    private String imgPath;
     //评价数量
     private int EVALUATE_CNT;
     //品牌
@@ -181,7 +184,31 @@ public class CommodityDetailsModel extends BaseModel {
         this.xiaonengData = xiaonengData;
     }
 
-    public class ColorList{
+    public String getContactTel() {
+        return contactTel;
+    }
+
+    public void setContactTel(String contactTel) {
+        this.contactTel = contactTel;
+    }
+
+    public String getContactMobile() {
+        return contactMobile;
+    }
+
+    public void setContactMobile(String contactMobile) {
+        this.contactMobile = contactMobile;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
+
+    public class ColorList {
         //颜色code
         private String colorCode;
         //颜色名字
@@ -234,7 +261,7 @@ public class CommodityDetailsModel extends BaseModel {
         }
     }
 
-    public class SizeList{
+    public class SizeList {
         //尺寸对应的商品id
         private String commodityId;
         //尺寸对应的颜色id
@@ -245,6 +272,8 @@ public class CommodityDetailsModel extends BaseModel {
         private String commoditySizeId;
         //销售价格
         private BigDecimal costMoney;
+        //活动消费额抵扣 描述
+        private String flgDetail;
         //市场价
         private BigDecimal marketPrice;
         //可购买库存
@@ -369,6 +398,14 @@ public class CommodityDetailsModel extends BaseModel {
 
         public void setImgPath6(String imgPath6) {
             this.imgPath6 = imgPath6;
+        }
+
+        public String getFlgDetail() {
+            return flgDetail;
+        }
+
+        public void setFlgDetail(String flgDetail) {
+            this.flgDetail = flgDetail;
         }
     }
 }

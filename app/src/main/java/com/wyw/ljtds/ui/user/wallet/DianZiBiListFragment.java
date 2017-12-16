@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,8 @@ import com.wyw.ljtds.model.DianZiBiLog;
 import com.wyw.ljtds.model.PointRecord;
 import com.wyw.ljtds.model.Ticket;
 import com.wyw.ljtds.ui.base.BaseFragment;
+import com.wyw.ljtds.utils.DateUtils;
+import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
@@ -68,7 +71,32 @@ public class DianZiBiListFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         this.page = 1;
+    }
+
+    private void loadDianzibiTotal() {
+        setLoding(getActivity(), false);
+        new BizDataAsyncTask<List<Ticket>>() {
+            @Override
+            protected List<Ticket> doExecute() throws ZYException, BizFailure {
+                return UserBiz.readTicket("0");
+            }
+
+            @Override
+            protected void onExecuteSucceeded(List<Ticket> dianZiBiLogs) {
+                closeLoding();
+                Log.e(AppConfig.ERR_TAG, GsonUtils.Bean2Json(dianZiBiLogs));
+                if (dianZiBiLogs != null && dianZiBiLogs.size() > 0) {
+                    dianzibiTvTotal.setText("  ￥" + dianZiBiLogs.get(0).getUSED_AMOUNT());
+                }
+            }
+
+            @Override
+            protected void OnExecuteFailed() {
+                closeLoding();
+            }
+        }.execute();
     }
 
     @Nullable
@@ -95,11 +123,13 @@ public class DianZiBiListFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
+        loadDianzibiTotal();
+
+        loadDianzibiLog();
     }
 
 
-    private void loadData() {
+    private void loadDianzibiLog() {
         setLoding(getActivity(), false);
         new BizDataAsyncTask<List<DianZiBiLog>>() {
             @Override
@@ -139,7 +169,7 @@ public class DianZiBiListFragment extends BaseFragment {
         } else {
             adapter1.addData(list);
         }
-        dianzibiTvTotal.setText(list.get(0).getELECTRONIC_USEABLE_MONEY());
+        Log.e(AppConfig.ERR_TAG, GsonUtils.List2Json(list));
 
         adapter1.notifyDataSetChanged();
     }
@@ -164,7 +194,7 @@ public class DianZiBiListFragment extends BaseFragment {
                 int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
                 if (!end && !loading && (lastVisibleItem) >= cnt) {
                     page = page + 1;
-                    loadData();
+                    loadDianzibiLog();
                 }
             }
         });
@@ -177,8 +207,9 @@ public class DianZiBiListFragment extends BaseFragment {
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, DianZiBiLog s) {
-            baseViewHolder.setText(R.id.item_dianzibi_electronic_money, s.getELECTRONIC_MONEY())
-                    .setText(R.id.item_dianzibi_electronic_useable_money, s.getELECTRONIC_USEABLE_MONEY());
+            baseViewHolder.setText(R.id.item_dianzibi_electronic_money, "-" + s.getELECTRONIC_MONEY())
+                    .setText(R.id.item_dianzibi_electronic_orderid, s.getORDER_TRADE_ID())
+                    .setText(R.id.item_dianzibi_electronic_insdate, s.getINS_DATE());
         }
     }
 }

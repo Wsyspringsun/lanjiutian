@@ -18,17 +18,20 @@ Moved Files:
 Android Gradle projects use a different directory structure than ADT
 Eclipse projects. Here's how the projects were restructured:
 
-* AndroidManifest.xml => xiaonengChatUI\src\main\AndroidManifest.xml
-* assets\ => xiaonengChatUI\src\main\assets
-* libs\xiaoneng-mqtt.jar => xiaonengChatUI\libs\xiaoneng-mqtt.jar
-* libs\xiaonengchatcore.jar => xiaonengChatUI\libs\xiaonengchatcore.jar
-* libs\xiaonengchatui.jar => xiaonengChatUI\libs\xiaonengchatui.jar
-* libs\xiaonengnetwork.jar => xiaonengChatUI\libs\xiaonengnetwork.jar
-* libs\xiaonengutil.jar => xiaonengChatUI\libs\xiaonengutil.jar
-* libs\xiaonengv4.jar => xiaonengChatUI\libs\xiaonengv4.jar
-* lint.xml => xiaonengChatUI\lint.xml
-* res\ => xiaonengChatUI\src\main\res\
-* src\ => xiaonengChatUI\src\main\java
+* AndroidManifest.xml => xiaonengChatUI/src/main/AndroidManifest.xml
+* assets/ => xiaonengChatUI/src/main/assets
+* libs/HwPush_SDK.jar => xiaonengChatUI/libs/HwPush_SDK.jar
+* libs/MiPush_SDK_Client_3_0_3.jar => xiaonengChatUI/libs/MiPush_SDK_Client_3_0_3.jar
+* libs/xiaoneng-mqtt.jar => xiaonengChatUI/libs/xiaoneng-mqtt.jar
+* libs/xiaonengchatcore.jar => xiaonengChatUI/libs/xiaonengchatcore.jar
+* libs/xiaonengchatui.jar => xiaonengChatUI/libs/xiaonengchatui.jar
+* libs/xiaonengnetwork.jar => xiaonengChatUI/libs/xiaonengnetwork.jar
+* libs/xiaonengutil.jar => xiaonengChatUI/libs/xiaonengutil.jar
+* libs/xiaonengv4.jar => xiaonengChatUI/libs/xiaonengv4.jar
+* libs/xiaonengxpush.jar => xiaonengChatUI/libs/xiaonengxpush.jar
+* lint.xml => xiaonengChatUI/lint.xml
+* res/ => xiaonengChatUI/src/main/res/
+* src/ => xiaonengChatUI/src/main/java
 
 Missing Android Support Repository:
 -----------------------------------

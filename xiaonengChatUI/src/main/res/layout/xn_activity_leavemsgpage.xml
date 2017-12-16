@@ -34,7 +34,6 @@
                 android:id="@+id/tv_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/chat_username"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/sdk_chat_finsh"
                 android:text="@string/xn_toast_cancel"
@@ -87,10 +86,9 @@
                 android:layout_below="@id/sdk_chat_top"
                 android:layout_margin="6dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/edittext_selector"
-                android:gravity="top"
                 android:padding="3dp"
                 android:minLines="3"
+                android:gravity="center_vertical"
                 android:textColor="@color/xn_black"
                 android:textSize="14sp" >
             </TextView>

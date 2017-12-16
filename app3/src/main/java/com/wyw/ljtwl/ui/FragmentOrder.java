@@ -54,8 +54,10 @@ public class FragmentOrder extends BaseFragment {
     private List<OrderInfoModel> list;
     private String status;
 
-    public FragmentOrder(String status) {
-        this.status = status;
+    public static FragmentOrder newInstance(String status) {
+        FragmentOrder ins = new FragmentOrder();
+        ins.setStatus(status);
+        return ins;
     }
 
     @Override
@@ -68,6 +70,7 @@ public class FragmentOrder extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+        tvShow.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
         noData = getActivity().getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
 
@@ -88,7 +91,7 @@ public class FragmentOrder extends BaseFragment {
                 startActivity(it);
             }
         });
-        tvShow.setText("状态:" + status);
+//        tvShow.setText("状态:" + status);
 //        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 //            @Override
 //            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -133,6 +136,10 @@ public class FragmentOrder extends BaseFragment {
         String data = gson.toJson(baseJson);
 //        Log.e("jsondata", data);
         doList(data);
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 //    @Override

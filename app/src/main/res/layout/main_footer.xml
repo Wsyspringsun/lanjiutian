@@ -31,7 +31,7 @@
                 android:layout_width="@dimen/x23"
                 android:layout_height="@dimen/x23"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/icon_home_home_yes" />
+                android:src="@mipmap/icon_home_home_no" />
 
             <TextView
                 android:id="@+id/tv_home"
@@ -39,7 +39,7 @@
                 android:layout_alignParentBottom="true"
                 style="@style/font_ww_14"
                 android:text="@string/home"
-                android:textColor="@color/base_bar" />
+                android:textColor="@color/font_black2" />
 
         </RelativeLayout>
 
@@ -80,7 +80,7 @@
                 android:layout_width="@dimen/x26"
                 android:layout_height="@dimen/x28"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/icon_home_yiyao_no" />
+                android:src="@mipmap/icon_home_yiyao_yes" />
 
             <TextView
                 android:id="@+id/tv_find"
@@ -104,7 +104,7 @@
                 android:layout_width="@dimen/x25"
                 android:layout_height="@dimen/x26"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/icon_home_gouwuche_no" />
+                android:src="@drawable/icon_home_gouwuche_no" />
 
             <TextView
                 android:id="@+id/tv_shopping_cart"

@@ -15,6 +15,7 @@ import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.CreatOrderModel;
 import com.wyw.ljtds.model.OrderTrade;
+import com.wyw.ljtds.model.OrderTradeDto;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.Utils;
@@ -75,10 +76,10 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
             mIntent.putExtra("jifen", "0");
         } else if (radioGroup2.getCheckedRadioButtonId() == R.id.jifen_rb2) {
             mIntent.putExtra("jifen_money", "1");
-            mIntent.putExtra("jifen", "300");
+            mIntent.putExtra("jifen", "100");
         } else {
             mIntent.putExtra("jifen_money", "2");
-            mIntent.putExtra("jifen", "600");
+            mIntent.putExtra("jifen", "200");
         }
         cOrderModel.setDISTRIBUTION_DATE_START(spinner1.getSelectedItem().toString());
         cOrderModel.setDISTRIBUTION_DATE_END(spinner2.getSelectedItem().toString());
@@ -134,30 +135,34 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
         }
 
 
-        if ((dou1.compareTo(new BigDecimal("599.99"))) == 1) {
+        if ((dou1.compareTo(new BigDecimal("200"))) >= 0) {
             radioGroup2.check(R.id.jifen_rb3);
             jifen_rb1.setEnabled(true);
             jifen_rb2.setEnabled(true);
             jifen_rb3.setEnabled(true);
-        } else if ((dou1.compareTo(new BigDecimal("300.00")) == -1)) {
+        } else if ((dou1.compareTo(new BigDecimal("100.00")) >= 0)) {
             radioGroup2.check(R.id.jifen_rb1);
             jifen_rb1.setEnabled(true);
-            jifen_rb2.setEnabled(false);
+            jifen_rb2.setEnabled(true);
             jifen_rb3.setEnabled(false);
         } else {
             radioGroup2.check(R.id.jifen_rb2);
             jifen_rb1.setEnabled(true);
-            jifen_rb2.setEnabled(true);
+            jifen_rb2.setEnabled(false);
             jifen_rb3.setEnabled(false);
         }
 
         shuoming.setText("当前积分：" + jifen + "" + getResources().getString(R.string.order_point_info));
 //        spinner选中值
         String flgInfoSrc = getIntent().getStringExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE);
-        if (ActivityMedicinesInfo.VAL_INFO_SOURCE.equals(flgInfoSrc)) {
+        Log.e(AppConfig.ERR_TAG, "flgInfoSrc:" + flgInfoSrc);
+//        if (ActivityMedicinesInfo.VAL_INFO_SOURCE.equals(flgInfoSrc)) { //old
+        if (AppConfig.GROUP_LJT.equals(flgInfoSrc)) {
             View rdZFOnline = findViewById(R.id.zhifu_rb1);
             rdZFOnline.setVisibility(View.GONE);
             radioGroup1.check(R.id.zhifu_rb2);
+
+            findViewById(R.id.activity_submit_choice_ll_point).setVisibility(View.GONE);
         }
     }
 

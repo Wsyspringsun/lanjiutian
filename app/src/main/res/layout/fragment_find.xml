@@ -5,6 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fragment_find_btn_consult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/x100"
+        android:layout_marginRight="@dimen/x3"
+        android:src="@mipmap/consult"
+        app:backgroundTint="#40666666"
+        app:borderWidth="1dp"
+        app:fabSize="mini"
+        app:rippleColor="#40666666" />
+
+
     <com.wyw.ljtds.widget.MyScrollView
         android:id="@+id/sv"
         android:layout_width="match_parent"
@@ -213,7 +229,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/button8"
+                        android:id="@+id/btn_kefu"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1">
@@ -279,6 +295,20 @@
 
             </LinearLayout>
 
+            <!--节日活动-->
+            <!--<RelativeLayout-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content">-->
+
+                <!--<android.support.v7.widget.RecyclerView-->
+                    <!--android:id="@+id/fragment_find_rv_huodong"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content" />-->
+
+            <!--</RelativeLayout>-->
+
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x1"
@@ -322,6 +352,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x5"
                     android:layout_toLeftOf="@id/jt_djs"
+                    android:textSize="22dp"
                     android:text="@string/gengduo"
                     android:textColor="@color/gray" />
 
@@ -341,8 +372,7 @@
                 fresco:fadeDuration="400"
                 fresco:failureImage="@mipmap/zhanweitu_lunbo"
                 fresco:failureImageScaleType="centerInside"
-                fresco:placeholderImage="@mipmap/zhanweitu_lunbo" >
-            </com.facebook.drawee.view.SimpleDraweeView>
+                fresco:placeholderImage="@mipmap/zhanweitu_lunbo"></com.facebook.drawee.view.SimpleDraweeView>
 
             <View
                 android:layout_width="match_parent"

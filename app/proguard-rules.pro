@@ -78,3 +78,14 @@
 
 #实体类不需要混淆
 -keep class com.wyw.ljtds.model.** { *; }
+
+#微信 为了保证sdk的正常使用，需要在proguard.cfg加上下面两行配置：
+-keep class com.tencent.mm.opensdk.** {
+   *;
+}
+-keep class com.tencent.wxop.** {
+   *;
+}
+-keep class com.tencent.mm.sdk.** {
+   *;
+}

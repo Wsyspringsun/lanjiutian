@@ -1,20 +1,37 @@
 package com.wyw.ljtds.model;
 
+import android.test.ApplicationTestCase;
+
+import com.wyw.ljtds.R;
+import com.wyw.ljtds.config.MyApplication;
+
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2017/4/5 0005.
  */
 
-public class Business extends BaseModel{
+public class Business extends BaseModel {
+    public static Map<String, String> mapFapiaoCatText = new HashMap<>();
+
+    static {
+        mapFapiaoCatText.put("0", "明细");
+        mapFapiaoCatText.put("1", "办公用品");
+        mapFapiaoCatText.put("2", "家居用品");
+        mapFapiaoCatText.put("3", "药品");
+        mapFapiaoCatText.put("4", "耗材");
+    }
+
     //配送方式  0送货上门  1门店自取
     private String DISTRIBUTION_MODE;
     //店铺价格小计
     private String GROUP_MONEY_ALL;
     //店铺数量小计
     private String GROUP_EXCHANGE_QUANLITY;
-    //是否开发票
+    //是否开发票 0 不开 1 开
     private String INVOICE_FLG;
     //发票类型 0：纸质  1：电子
     private String INVOICE_TYPE;
@@ -22,6 +39,8 @@ public class Business extends BaseModel{
     private String INVOICE_TITLE;
     //发票种类 0：明细  1办公  2：家居   3：药品   4：耗材
     private String INVOICE_CONTENT;
+    //发票 税务登记 号码
+    private String INVOICE_TAX;
     //店铺id
     private String OID_GROUP_ID;
     //店铺名字
@@ -145,5 +164,13 @@ public class Business extends BaseModel{
 
     public void setPOST_NUM(String POST_NUM) {
         this.POST_NUM = POST_NUM;
+    }
+
+    public String getINVOICE_TAX() {
+        return INVOICE_TAX;
+    }
+
+    public void setINVOICE_TAX(String INVOICE_TAX) {
+        this.INVOICE_TAX = INVOICE_TAX;
     }
 }

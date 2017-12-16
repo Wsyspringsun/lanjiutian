@@ -1,5 +1,7 @@
 package com.wyw.ljtds.ui.user.address;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,10 +9,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -28,6 +32,7 @@ import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 
 import org.xutils.view.annotation.ContentView;
@@ -36,6 +41,7 @@ import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 /**
  * Created by Administrator on 2017/1/6 0006.
@@ -43,7 +49,8 @@ import java.util.List;
 
 @ContentView(R.layout.activity_address_list)
 public class ActivityAddress extends BaseActivity {
-    @ViewInject(R.id.reclcyer)
+    public static final String TAG_SELECTED_ADDRESS = "com.wyw.ljtds.ui.user.address.ActivityAddress.tag_selected_address";
+    @ViewInject(R.id.activity_address_list_rv_addrlist)
     private RecyclerView recyclerView;
     @ViewInject(R.id.header_return_text)
     private TextView title;
@@ -52,8 +59,8 @@ public class ActivityAddress extends BaseActivity {
 
     //无数据时的界面
     private View noData;
-    private MyAdapter adapter;
     private List<AddressModel> list = new ArrayList<>();
+    private AddressAdapter adapter;
 
     @Event(value = {R.id.tianjia, R.id.header_return})
     private void onClick(View view) {
@@ -71,66 +78,27 @@ public class ActivityAddress extends BaseActivity {
         }
     }
 
+    public static Intent getIntent(Context ctx, Boolean isSel) {
+        Intent it = new Intent(ctx, ActivityAddress.class);
+        it.putExtra(TAG_SELECTED_ADDRESS, isSel);
+        return it;
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         title.setText(R.string.address_guanli);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动 recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         noData = getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
 
-        adapter = new MyAdapter();
-        recyclerView.addOnItemTouchListener(new SimpleClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-
-            }
-
-            @Override
-            public void onItemLongClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-
-            }
-
-            @Override
-            public void onItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                switch (view.getId()) {
-                    case R.id.bianji:
-                        Intent it = new Intent(ActivityAddress.this, ActivityAddressEdit.class);
-                        it.putExtra("address_id", adapter.getData().get(i).getADDRESS_ID() + "");
-                        it.putExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, 2);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("name", adapter.getData().get(i).getCONSIGNEE_NAME());
-                        bundle.putString("phone", adapter.getData().get(i).getCONSIGNEE_MOBILE());
-                        bundle.putString("xiangxi", adapter.getData().get(i).getCONSIGNEE_ADDRESS());
-                        bundle.putString("shengshi", adapter.getData().get(i).getPROVINCE() + adapter.getData().get(i).getCITY());
-                        it.putExtra("bundle", bundle);
-                        startActivity(it);
-                        break;
-
-                    case R.id.shanchu:
-                        delete(adapter.getData().get(i).getADDRESS_ID() + "");
-                        finish();
-                        startActivity(new Intent(ActivityAddress.this, ActivityAddress.class));
-                        break;
-                }
-            }
-
-            @Override
-            public void onItemChildLongClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-
-            }
-        });
-
-        recyclerView.setAdapter(adapter);
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        setLoding(this, false);
         getAddress();
     }
 
@@ -145,10 +113,10 @@ public class ActivityAddress extends BaseActivity {
 //        }
 //    }
 
-    BizDataAsyncTask<List<AddressModel>> addressTask;
 
     private void getAddress() {
-        addressTask = new BizDataAsyncTask<List<AddressModel>>() {
+        setLoding(this, false);
+        new BizDataAsyncTask<List<AddressModel>>() {
             @Override
             protected List<AddressModel> doExecute() throws ZYException, BizFailure {
                 return UserBiz.selectUserAddress();
@@ -157,67 +125,167 @@ public class ActivityAddress extends BaseActivity {
             @Override
             protected void onExecuteSucceeded(List<AddressModel> addressModels) {
                 list = addressModels;
-
-                adapter.setNewData(addressModels);
-                adapter.notifyDataSetChanged();
-
-                if (addressModels != null && addressModels.size() > 0)
-                    add.setVisibility(View.GONE);
-                else
-                    add.setVisibility(View.VISIBLE);
-
+                updateAddressAdapter();
                 closeLoding();
             }
 
             @Override
             protected void OnExecuteFailed() {
-                adapter.setEmptyView(noData);
-                adapter.notifyDataSetChanged();
-
                 closeLoding();
             }
-        };
-        addressTask.execute();
+        }.execute();
     }
 
-    BizDataAsyncTask<Integer> deleteTask;
+    private void updateAddressAdapter() {
+        adapter = new AddressAdapter(list);
+        recyclerView.setAdapter(adapter);
+    }
+
 
     private void delete(final String str) {
-        deleteTask = new BizDataAsyncTask<Integer>() {
+        setLoding(this, false);
+        new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
                 return UserBiz.deleteUserAddress(str);
             }
 
             @Override
-            protected void onExecuteSucceeded(Integer integer) {
-                ToastUtil.show(ActivityAddress.this, getResources().getString(R.string.delete_succeed));
+            protected void onExecuteSucceeded(Integer rlt) {
+                closeLoding();
+                if (1 == rlt) {
+                    ToastUtil.show(ActivityAddress.this, getResources().getString(R.string.delete_succeed));
+                    getAddress();
+                }
             }
 
             @Override
             protected void OnExecuteFailed() {
                 closeLoding();
             }
-        };
-        deleteTask.execute();
+        }.execute();
     }
 
 
-    private class MyAdapter extends BaseQuickAdapter<AddressModel> {
-        public MyAdapter() {
-            super(R.layout.item_address, list);
+    private void changeDefaultAddress(final String addrId) {
+        setLoding(this, false);
+        new BizDataAsyncTask<Integer>() {
+            @Override
+            protected Integer doExecute() throws ZYException, BizFailure {
+                return UserBiz.changeDefaultAddress(addrId);
+            }
+
+            @Override
+            protected void onExecuteSucceeded(Integer integer) {
+                closeLoding();
+                ToastUtil.show(ActivityAddress.this, getResources().getString(R.string.update_succeed));
+                getAddress();
+            }
+
+            @Override
+            protected void OnExecuteFailed() {
+                closeLoding();
+            }
+        }.execute();
+    }
+
+    class AddressHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        AddressModel data;
+        TextView tvName;
+        TextView tvPhone;
+        TextView tvXiangxi;
+        RadioButton chkIsDefault;
+        LinearLayout llytIsCheck;
+        LinearLayout llytBianji;
+        LinearLayout llytShanchu;
+
+        public AddressModel getData() {
+            return data;
+        }
+
+        public void setData(AddressModel data) {
+            this.data = data;
+        }
+
+        public AddressHolder(View itemView) {
+            super(itemView);
+
+            tvName = (TextView) itemView.findViewById(R.id.name);
+            tvPhone = (TextView) itemView.findViewById(R.id.phone);
+            tvXiangxi = (TextView) itemView.findViewById(R.id.xiangxi);
+            chkIsDefault = (RadioButton) itemView.findViewById(R.id.item_address_chk_ischeck);
+            chkIsDefault.setEnabled(false);
+            llytIsCheck = (LinearLayout) itemView.findViewById(R.id.item_address_llyt_ischeck);
+            llytBianji = (LinearLayout) itemView.findViewById(R.id.bianji);
+            llytShanchu = (LinearLayout) itemView.findViewById(R.id.shanchu);
+
+            itemView.setOnClickListener(this);
+            llytIsCheck.setOnClickListener(this);
+            llytBianji.setOnClickListener(this);
+            llytShanchu.setOnClickListener(this);
         }
 
         @Override
-        protected void convert(BaseViewHolder baseViewHolder, AddressModel addressModel) {
-            baseViewHolder.setText(R.id.name, addressModel.getCONSIGNEE_NAME())
-                    .setText(R.id.phone, addressModel.getCONSIGNEE_MOBILE())
-                    .setText(R.id.xiangxi, addressModel.getPROVINCE() + addressModel.getCITY() + " " + addressModel.getCONSIGNEE_ADDRESS())
-                    .addOnClickListener(R.id.bianji)
-                    .addOnClickListener(R.id.shanchu);
-
+        public void onClick(View v) {
+            Intent it;
+            switch (v.getId()) {
+                case R.id.item_address:
+                    Boolean isSel = ActivityAddress.this.getIntent().getBooleanExtra(TAG_SELECTED_ADDRESS, false);
+                    if (!isSel)
+                        return;
+                    Log.e(AppConfig.ERR_TAG, "Click..................");
+                    it = new Intent();
+                    it.putExtra(TAG_SELECTED_ADDRESS, data);
+                    ActivityAddress.this.setResult(Activity.RESULT_OK, it);
+                    finish();
+                    break;
+                case R.id.bianji:
+                    Log.e(AppConfig.ERR_TAG, "....edit addrModel" + GsonUtils.Bean2Json(data));
+                    it = ActivityAddressEdit.getIntent(ActivityAddress.this, data);
+                    startActivity(it);
+                    break;
+                case R.id.shanchu:
+                    delete(data.getADDRESS_ID() + "");
+                    break;
+                case R.id.item_address_llyt_ischeck:
+                    if (!chkIsDefault.isChecked()) {
+                        changeDefaultAddress(data.getADDRESS_ID() + "");
+                    }
+                    break;
+            }
         }
     }
 
+    class AddressAdapter extends RecyclerView.Adapter<AddressHolder> {
+        List<AddressModel> data;
+
+        public AddressAdapter(List<AddressModel> data) {
+            this.data = data;
+        }
+
+        @Override
+        public AddressHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(ActivityAddress.this);
+            View view = inflater.inflate(R.layout.item_address, parent, false);
+            AddressHolder holder = new AddressHolder(view);
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(AddressHolder holder, int position) {
+            AddressModel itemData = data.get(position);
+            holder.setData(itemData);
+            holder.tvName.setText(itemData.getCONSIGNEE_NAME());
+            holder.tvPhone.setText(itemData.getCONSIGNEE_MOBILE());
+            holder.tvXiangxi.setText(itemData.getPROVINCE() + itemData.getCITY() + itemData.getCOUNTY() + " " + itemData.getCONSIGNEE_ADDRESS());
+            holder.chkIsDefault.setChecked("0".equals(itemData.getDEFAULT_FLG()));
+        }
+
+        @Override
+        public int getItemCount() {
+            if (data == null) return 0;
+            return data.size();
+        }
+    }
 
 }

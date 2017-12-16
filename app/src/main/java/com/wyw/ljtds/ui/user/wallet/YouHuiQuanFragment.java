@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.PointRecord;
 import com.wyw.ljtds.model.Ticket;
 import com.wyw.ljtds.ui.base.BaseFragment;
+import com.wyw.ljtds.utils.GsonUtils;
+import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
@@ -159,8 +162,13 @@ public class YouHuiQuanFragment extends BaseFragment {
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, Ticket s) {
-            baseViewHolder.setText(R.id.index, "" + (1 + list.indexOf(s)))
-                    .setText(R.id.item_ticket_datespan, s.getSTART_DATE() + "~" + s.getEND_DATE());
+            Log.e(AppConfig.ERR_TAG, "ticket:" + GsonUtils.Bean2Json(s));
+            baseViewHolder.setText(R.id.index, "" + (1 + list.indexOf(s)));
+            if (StringUtils.isEmpty(s.getSTART_DATE())) {
+                baseViewHolder.setText(R.id.item_ticket_datespan, "长期");
+            }else{
+                baseViewHolder.setText(R.id.item_ticket_datespan, s.getSTART_DATE() + "~" + s.getEND_DATE());
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -18,13 +18,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mobstat.StatService;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.UpdateAppModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.cart.FragmentCart;
 import com.wyw.ljtds.ui.category.FragmentCategory;
 import com.wyw.ljtds.ui.find.FragmentFind;
-import com.wyw.ljtds.ui.home.FragmentHome;
+import com.wyw.ljtds.ui.home.FragmentLifeIndex;
 import com.wyw.ljtds.ui.user.FragmentUser;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.ToastUtil;
@@ -41,6 +43,8 @@ import java.io.File;
 
 @ContentView(R.layout.activity_main)//setcontextview
 public class MainActivity extends BaseActivity {
+    private static final String TAG_POSITION = "TAG_POSITION";
+    private IWXAPI wxApi;
     @ViewInject(R.id.home)
     private RelativeLayout home;
     @ViewInject(R.id.category)
@@ -72,10 +76,12 @@ public class MainActivity extends BaseActivity {
     @ViewInject(R.id.iv_user)
     private ImageView iv_user;
 
+
     //fragment相关
-    private int index;
+    public static int index = AppConfig.DEFAULT_INDEX_FRAGMENT;
     private FragmentManager fragmentManager;
-    private FragmentHome fragmentHome;
+    //    private FragmentHome fragmentHome;
+    private FragmentLifeIndex fragmentHome;
     private FragmentCategory fragmentCategory;
     private FragmentFind fragmentFind;
     private FragmentCart fragmentCart;
@@ -102,32 +108,61 @@ public class MainActivity extends BaseActivity {
                 index = 4;
                 break;
         }
-        AppConfig.currSel = index;
-        addFragmentToStack(AppConfig.currSel);
+//        AppConfig.currSel = index;
+        addFragmentToStack(index);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(TAG_POSITION, index);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final IWXAPI api = WXAPIFactory.createWXAPI(this, null);
+        api.registerApp(AppConfig.WEIXIN_APP_ID);
+        Log.e(AppConfig.ERR_TAG, "registerApp  WEIXIN_APP_ID...................");
+        //注册微信
         StatService.start(this);
 
+
+        fragmentManager = getSupportFragmentManager();
+        if (savedInstanceState == null) {
+            //默认
+            index = AppConfig.DEFAULT_INDEX_FRAGMENT;
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            switch (index) {
+                case 0:
+                    fragmentHome = FragmentLifeIndex.newInstance();
+                    fragmentTransaction.replace(R.id.fragment_container, fragmentHome, fragmentHome.getClass().getName()).commit();
+                    break;
+                case 2:
+                    fragmentFind = new FragmentFind();
+                    fragmentTransaction.replace(R.id.fragment_container, fragmentFind, fragmentFind.getClass().getName()).commit();
+                    break;
+                default:
+                    index = 0;
+                    break;
+            }
+        } else {
+            index = savedInstanceState.getInt(TAG_POSITION);
+            addFragmentToStack(index);
+        }
         callback();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        init();
-    }
-
-
-    private void init() {
-        fragmentManager = getSupportFragmentManager();
-        index = getIntent().getIntExtra(AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel);
-        Log.e(AppConfig.ERR_TAG, "index:" + index);
-        addFragmentToStack(index);
+//        addFragmentToStack(index);
     }
 
     /**
@@ -138,73 +173,72 @@ public class MainActivity extends BaseActivity {
     private void addFragmentToStack(int cur) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         hideFragments(fragmentTransaction);
-        reset();
-        index = cur % 5;
-        switch (index) {
+        cur = cur % 5;
+        switch (cur) {
             case 0:
                 tv_home.setTextColor(getResources().getColor(R.color.base_bar));
                 iv_home.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_home_yes));
 
+//                fragmentHome = (FragmentHome) fragmentManager.findFragmentByTag(FragmentHome.class.getName());
+                fragmentHome = (FragmentLifeIndex) fragmentManager.findFragmentByTag(FragmentLifeIndex.class.getName());
                 if (fragmentHome == null) {
-                    fragmentHome = new FragmentHome();
-                    fragmentTransaction.add(R.id.fragment_container, fragmentHome);
-                } else {
-                    fragmentTransaction.show(fragmentHome);
+//                    fragmentHome = new FragmentHome();
+                    fragmentHome = FragmentLifeIndex.newInstance();
                 }
-
+                selectFragment(fragmentHome, fragmentTransaction);
                 break;
-
             case 1:
                 tv_category.setTextColor(getResources().getColor(R.color.base_bar));
                 iv_category.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_fenlei_yes));
 
+                fragmentCategory = (FragmentCategory) fragmentManager.findFragmentByTag(FragmentCategory.class.getName());
                 if (fragmentCategory == null) {
                     fragmentCategory = new FragmentCategory();
-                    fragmentTransaction.add(R.id.fragment_container, fragmentCategory);
-                } else {
-                    fragmentTransaction.show(fragmentCategory);
                 }
+                selectFragment(fragmentCategory, fragmentTransaction);
 
                 break;
             case 2:
                 tv_find.setTextColor(getResources().getColor(R.color.base_bar));
                 iv_find.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_yiyao_yes));
 
+                fragmentFind = (FragmentFind) fragmentManager.findFragmentByTag(FragmentFind.class.getName());
                 if (fragmentFind == null) {
                     fragmentFind = new FragmentFind();
-                    fragmentTransaction.add(R.id.fragment_container, fragmentFind);
-                } else {
-                    fragmentTransaction.show(fragmentFind);
                 }
 
+                selectFragment(fragmentFind, fragmentTransaction);
                 break;
             case 3:
                 tv_cart.setTextColor(getResources().getColor(R.color.base_bar));
-                iv_cart.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_gouwuche_yes));
+                iv_cart.setImageDrawable(getResources().getDrawable(R.drawable.icon_home_gouwuche_yes));
 
+                fragmentCart = (FragmentCart) fragmentManager.findFragmentByTag(FragmentCart.class.getName());
                 if (fragmentCart == null) {
                     fragmentCart = new FragmentCart();
-                    fragmentTransaction.add(R.id.fragment_container, fragmentCart);
-                } else {
-                    fragmentTransaction.show(fragmentCart);
                 }
+                selectFragment(fragmentCart, fragmentTransaction);
 
                 break;
             case 4:
                 tv_user.setTextColor(getResources().getColor(R.color.base_bar));
                 iv_user.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_user_yes));
 
+                fragmentUser = (FragmentUser) fragmentManager.findFragmentByTag(FragmentUser.class.getName());
                 if (fragmentUser == null) {
                     fragmentUser = new FragmentUser();
-                    fragmentTransaction.add(R.id.fragment_container, fragmentUser);
-                } else {
-                    fragmentTransaction.show(fragmentUser);
                 }
-
+                selectFragment(fragmentUser, fragmentTransaction);
                 break;
 
         }
-        fragmentTransaction.commit();
+    }
+
+    private void selectFragment(Fragment fragment, FragmentTransaction transaction) {
+        if (!fragment.isAdded()) {
+            transaction.add(R.id.fragment_container, fragment, fragment.getClass().getName());
+        }
+        transaction.show(fragment).commit();
     }
 
     /**
@@ -216,10 +250,11 @@ public class MainActivity extends BaseActivity {
         tv_find.setTextColor(getResources().getColor(R.color.font_black2));
         tv_cart.setTextColor(getResources().getColor(R.color.font_black2));
         tv_user.setTextColor(getResources().getColor(R.color.font_black2));
+
         iv_home.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_home_no));
         iv_category.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_fenlei_no));
         iv_find.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_yiyao_no));
-        iv_cart.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_gouwuche_no));
+        iv_cart.setImageDrawable(getResources().getDrawable(R.drawable.icon_home_gouwuche_no));
         iv_user.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_user_no));
     }
 
@@ -229,6 +264,7 @@ public class MainActivity extends BaseActivity {
      * @param fragmentTransaction
      */
     private void hideFragments(FragmentTransaction fragmentTransaction) {
+        reset();
         if (fragmentHome != null) {
             fragmentTransaction.hide(fragmentHome);
         }
@@ -282,8 +318,9 @@ public class MainActivity extends BaseActivity {
                     e.printStackTrace();
                 }
                 String version = packInfo.versionName;
-//                Log.e( "********",version+"; "+updateAppModel.getAndroid() );
-                if (!version.equals(updateAppModel.getAndroid())) {
+                Log.e(AppConfig.ERR_TAG, version + "; " + updateAppModel.getAndroid());
+//                if (!version.equals(updateAppModel.getAndroid())) {
+                if (version.compareTo(updateAppModel.getAndroid()) < 0) {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(
                             MainActivity.this).setTitle("下载更新").setMessage(updateAppModel.getAndroid_update_message())
                             .setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
@@ -378,5 +415,4 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
-
 }

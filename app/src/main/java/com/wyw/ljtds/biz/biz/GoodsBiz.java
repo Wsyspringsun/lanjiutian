@@ -19,6 +19,7 @@ import com.wyw.ljtds.model.OrderModelMedicine;
 import com.wyw.ljtds.model.ShopImg;
 import com.wyw.ljtds.ui.goods.ActivityGoodsSubmit;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

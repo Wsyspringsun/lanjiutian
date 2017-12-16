@@ -199,6 +199,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/activity_submit_choice_ll_point"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/x10"
@@ -243,7 +244,7 @@
                     android:button="@drawable/select_btn_order"
                     android:gravity="center"
                     android:padding="@dimen/x5"
-                    android:text="300积分"
+                    android:text="100积分"
                     android:textColor="@color/select_btn_order_text"
                     android:textSize="14sp"/>
 
@@ -256,7 +257,7 @@
                     android:button="@drawable/select_btn_order"
                     android:gravity="center"
                     android:padding="@dimen/x5"
-                    android:text="600积分"
+                    android:text="200积分"
                     android:textColor="@color/select_btn_order_text"
                     android:textSize="14sp"/>
 

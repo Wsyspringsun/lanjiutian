@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Temp</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications_on">开启</string>
+    <string name="title_notifications_off">关闭</string>
+</resources>

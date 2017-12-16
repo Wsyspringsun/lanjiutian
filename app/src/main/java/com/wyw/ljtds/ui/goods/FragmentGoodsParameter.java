@@ -27,22 +27,22 @@ public class FragmentGoodsParameter extends BaseFragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated( savedInstanceState );
+        super.onActivityCreated(savedInstanceState);
 
-        if (!StringUtils.isEmpty( str )){
-            tv.setText( str );
-        }
+        tv.setText(str);
     }
 
-    public void getmodel(MedicineDetailsModel model){
-        str="商品名称："+ model.getWARENAME()+"\n规格："+model.getWARESPEC()+"\n计量单位："+
-                model.getWAREUNIT() +"\n生产厂商："+model.getPRODUCER()+"\n批准文号："+model.getFILENO();
+    public void bindData2View(MedicineDetailsModel model) {
+        if (model == null) return;
+        str = "商品名称：" + model.getWARENAME() + "\n规格：" + model.getWARESPEC() + "\n计量单位：" +
+                model.getWAREUNIT() + "\n生产厂商：" + model.getPRODUCER() + "\n批准文号：" + model.getFILENO();
+//        tv.setText(str);
     }
 
-    public void getmodel(CommodityDetailsModel model){
-        str="商品名称："+ model.getTitle()+"\n规格："+model.getCommodityParameter()+"\n商品信息："+model.getDesc();
+    public void bindData2View(CommodityDetailsModel model) {
+        str = "商品名称：" + model.getTitle() + "\n规格：" + model.getCommodityParameter() + "\n商品信息：" + model.getDesc();
+//        tv.setText(str);
     }
-
 
 
 }

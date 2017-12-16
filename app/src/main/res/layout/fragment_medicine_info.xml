@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.wyw.ljtds.widget.goodsinfo.SlideDetailsLayout
+            android:id="@+id/sv_switch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:id="@+id/sv_goods_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#eeeff3"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x255"
+                        android:background="@color/white">
+
+                        <!-- 自动轮播的第三方控件 -->
+                        <com.bigkoo.convenientbanner.ConvenientBanner
+                            android:id="@+id/vp_item_goods_img"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#ffffff"
+                            app:canLoop="true" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/x3"
+                        android:paddingLeft="@dimen/x10"
+                        android:paddingTop="@dimen/x6">
+
+                        <ImageView
+                            android:id="@+id/flag_otc"
+                            android:layout_width="@dimen/x20"
+                            android:layout_height="@dimen/x16"
+                            android:layout_marginRight="@dimen/x2"
+                            android:scaleType="fitCenter" />
+
+
+                        <TextView
+                            android:id="@+id/fragment_goods_info_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/vertical_margin"
+                            android:background="@color/white"
+                            android:padding="@dimen/normal_padding"
+                            android:text="商品详情"
+                            android:textColor="@color/base_bar"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+
+                    <!--数量加减器-->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/vertical_margin"
+                        android:background="@color/white"
+                        android:padding="@dimen/normal_padding">
+
+                        <TextView
+                            android:id="@+id/fragment_goods_info_heji"
+                            style="@style/font_ww_14"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x3"
+                            android:text="@string/heji1"
+                            android:textColor="@color/font_black2" />
+
+                        <com.wyw.ljtds.widget.NumberButton
+                            android:id="@+id/number_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            app:editable="true"
+                            app:textColor="@color/font_black2">
+
+                        </com.wyw.ljtds.widget.NumberButton>
+
+                    </RelativeLayout>
+
+                    <!--目标地址 -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/vertical_margin"
+                        android:background="@color/white"
+                        android:padding="@dimen/normal_padding">
+
+                        <TextView
+                            style="@style/font_ww_14"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x3"
+                            android:text="送至 xxx"
+                            android:textColor="@color/font_black2" />
+
+                        <ImageView
+                            android:id="@+id/fragment_goods_info_changeaddr"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:paddingLeft="@dimen/normal_padding"
+                            android:paddingRight="@dimen/normal_padding"
+                            android:src="@drawable/ic_more" />
+
+                    </RelativeLayout>
+
+                    <!--来源地址及其相关信息  -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/vertical_margin"
+                        android:background="@color/white"
+                        android:padding="@dimen/normal_padding">
+
+                        <TextView
+                            style="@style/font_ww_14"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x3"
+                            android:text="来源地址及其相关信息 xx店..."
+                            android:textColor="@color/font_black2" />
+
+                        <ImageView
+                            android:id="@+id/fragment_goods_info_changeshop"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:paddingLeft="@dimen/normal_padding"
+                            android:paddingRight="@dimen/normal_padding"
+                            android:src="@drawable/ic_more" />
+
+
+                    </RelativeLayout>
+
+                    <!-- 商品保障图 -->
+                    <ImageView
+                        android:id="@+id/iv_ensure"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_gravity="center_horizontal"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/medicine_info" />
+
+
+                    <!-- 用户点评 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/vertical_margin"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="商品评价"
+                            android:textColor="#222222"
+                            android:textSize="13dp" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/eva_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:overScrollMode="never" />
+
+                        <TextView
+                            android:id="@+id/fragment_goods_info_loadevalist"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@drawable/text_border"
+                            android:padding="@dimen/normal_padding"
+                            android:text="查看更多评论"
+                            android:textColor="#0000FF"
+                            android:textSize="14dp" />
+
+
+                    </LinearLayout>
+
+
+                    <!-- 上拉查看图文详情 -->
+                    <LinearLayout
+                        android:id="@+id/ll_pull_up"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/white"
+                        android:clickable="true"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="6dp"
+                            android:text="上拉查看图文详情"
+                            android:textColor="#222222"
+                            android:textSize="14dp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+
+            <include layout="@layout/include_item_tab" />
+        </com.wyw.ljtds.widget.goodsinfo.SlideDetailsLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_up_slide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="30dp"
+            android:src="@mipmap/go_top"
+            app:backgroundTint="@color/white"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:rippleColor="@color/white" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</LinearLayout>

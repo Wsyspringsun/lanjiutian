@@ -13,12 +13,19 @@ android {
     buildToolsVersion "25.0.1"
     defaultConfig {
         applicationId "com.wyw.ljtds"
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 23
-        versionCode 10
-        versionName "1.1.0"
+        versionCode 14
+        versionName "1.1.4"
         multiDexEnabled = true
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: applicationId,
+                JPUSH_APPKEY : "e1b6b90911be3d5c5a9d5c8b", //JPush上注册的包名对应的appkey.
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+                TENCENT_APPID: "wxc245fe43d076d9d3"
+        ]
     }
+
     buildTypes {
         release {
             //混淆
@@ -45,21 +52,23 @@ android {
     }
     productFlavors {
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    //compile fileTree(include: ['*.jar'], dir: 'libs')
     //xutils3
     //ksoap2
     compile files('libs/ksoap2-android-assembly-3.6.1-jar-with-dependencies.jar')
+    //百度定位
     //百度地图
-    compile files('libs/baidumapapi_base_v4_2_0.jar')
-    compile files('libs/baidumapapi_cloud_v4_2_0.jar')
-    compile files('libs/baidumapapi_map_v4_2_0.jar')
-    compile files('libs/baidumapapi_radar_v4_2_0.jar')
-    compile files('libs/baidumapapi_search_v4_2_0.jar')
-    compile files('libs/baidumapapi_util_v4_2_0.jar')
-    compile files('libs/locSDK_6.13.jar')
+    compile files('libs/BaiduLBS_Android.jar')
+    //百度数据统计
+    compile files('libs/Baidu_Mtj_3.7.6.1.jar')
     //gson
     //图片轮播
     //商品详情页
@@ -69,7 +78,6 @@ dependencies {
     //6.0权限请求
     compile project(':easypermissions')
     //扫一扫
-
     //银联支付
     compile files('libs/UPPayPluginExPro.jar')
     compile files('libs/UPPayAssistEx.jar')
@@ -83,8 +91,6 @@ dependencies {
     compile project(':circledialog')
     //android  svg图
     compile files('libs/androidsvg-1.2.1.jar')
-    //baidu data report
-    compile files('libs/Baidu_Mtj_3.7.6.1.jar')
     //标签流
     compile project(':flowlayout-lib')
     //跑马灯
@@ -106,6 +112,14 @@ dependencies {
     compile 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.1.3'
     compile 'cat.ereza:customactivityoncrash:1.5.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'junit:junit:4.12'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    //极光推送服务 jiguang
+    compile 'cn.jiguang.sdk:jpush:3.0.9'
+    // 此处以JPush 3.0.9 版本为例。
+    compile 'cn.jiguang.sdk:jcore:1.1.7'
+    // 此处以JCore 1.1.7 版本为例。
+    //微信
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
 }

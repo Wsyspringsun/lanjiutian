@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.UserBiz;
@@ -39,7 +40,8 @@ public class ActivityRealName extends BaseActivity {
     @ViewInject(R.id.header_title)
     private TextView header_title;
     private UserModel user;
-
+    @ViewInject(R.id.realname_chk_agr)
+    CheckBox realnameChkAgr;
     @ViewInject(R.id.next)
     Button btnNext;
     @ViewInject(R.id.realname_chk_agr)
@@ -52,6 +54,10 @@ public class ActivityRealName extends BaseActivity {
                 finish();
                 break;
             case R.id.next:
+                if (!realnameChkAgr.isChecked()) {
+                    Toast.makeText(this, "请选择同意协议", Toast.LENGTH_LONG);
+                    return;
+                }
                 if (StringUtils.isEmpty(ed_name.getText().toString().trim())) {
                     ToastUtil.show(this, getResources().getString(R.string.realname_error1));
                 } else if (StringUtils.isEmpty(ed_card.getText().toString().trim()) || ed_card.length() != 18) {

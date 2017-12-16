@@ -14,6 +14,7 @@ import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.ui.find.FragmentFind;
 import com.wyw.ljtds.ui.goods.ActivityMedicineList;
+import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.body.WaveEffectLayout;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class RegionView {
         classIdMap.put(Region.SHOULDER, "2746");
         classIdMap.put(Region.BACKBACK, "2763");
         classIdMap.put(Region.BACKANUSRECTUM, "2765");
-        classIdMap.put(Region.PELVIC, "2761");
+        classIdMap.put(Region.PELVIC, "2751");
 
         classIdMap.put(Region.HAND, "2752");
         classIdMap.put(Region.FOOT, "2754");
@@ -110,8 +111,9 @@ public class RegionView {
             @Override
             public void onClick(View v) {
                 String classId = classIdMap.get(region);
+                Utils.log("body part :" + classId);
                 Intent it = new Intent(mContext, ActivityMedicineList.class);
-                it.putExtra(ActivityMedicineList.TAG_LIST_FROM,FragmentFind. FIND_MTD_QUICK);
+                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FragmentFind.FIND_MTD_QUICK);
                 it.putExtra(FragmentFind.TAG_MTD_QUICK_PARAM, classId);
                 mContext.startActivity(it);
 //                Log.e(AppConfig.ERR_TAG, "click " + classId);

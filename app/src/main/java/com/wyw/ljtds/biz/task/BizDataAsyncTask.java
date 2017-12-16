@@ -1,5 +1,6 @@
 package com.wyw.ljtds.biz.task;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.config.PreferenceCache;
+import com.wyw.ljtds.ui.user.address.ActivityAddressEdit;
 
 
 /**
@@ -23,7 +25,6 @@ import com.wyw.ljtds.config.PreferenceCache;
  */
 public abstract class BizDataAsyncTask<Result> extends
         AsyncTask<Void, Void, Boolean> {
-
     private Result mResult;
 
     private ZYException mException;
@@ -34,6 +35,8 @@ public abstract class BizDataAsyncTask<Result> extends
     public BizDataAsyncTask() {
         super();
     }
+
+
 
 
     @Override
@@ -103,21 +106,26 @@ public abstract class BizDataAsyncTask<Result> extends
     }
 
     protected void onExecuteFailure(BizFailure failure) {
-        Log.e(AppConfig.ERR_TAG, this.getClass().getName() + " BizTask onExecuteFailure:" + failure.getMessage());
+        Log.e(AppConfig.ERR_TAG, this.getClass().getName() + " BizTask onExecuteFailure.......:" + failure.getMessage());
         OnExecuteFailed();
-        if (mFailure.getMessage().contains("新旧Token不一致") || mFailure.getMessage().contains("用户名密码") || mFailure.getMessage().contains("Token为空")) {// token认证失败
+        if (mFailure.getMessage().contains("新旧Token不一致") || mFailure.getMessage().contains("用户名密码") || mFailure.getMessage().contains("Token不一致") || mFailure.getMessage().contains("Token为空")) {// token认证失败
             Toast.makeText(MyApplication.getAppContext(), R.string.auth_expire,
                     Toast.LENGTH_LONG).show();
-            Intent i = new Intent(AppConfig.AppAction.ACTION_TOKEN_EXPIRE);
-            MyApplication.getAppContext().sendBroadcast(i);
             PreferenceCache.putToken("");
             PreferenceCache.putUsername("");
             PreferenceCache.putPhoneNum("");
+            Intent i = new Intent(AppConfig.AppAction.ACTION_TOKEN_EXPIRE);
+            MyApplication.getAppContext().sendBroadcast(i);
         } else if (mFailure.getMessage().contains("地址为空") || mFailure.getMessage().contains("获取地址为空")) {//没有地址
+            Log.e(AppConfig.ERR_TAG, "地址为空:" + AppConfig.AppAction.ACTION_ADDRESS_EXPIRE);
             Intent i = new Intent(AppConfig.AppAction.ACTION_ADDRESS_EXPIRE);
             MyApplication.getAppContext().sendBroadcast(i);
-        } else if (mFailure.getMessage().contains("获取消息失败")) {
+//            Intent it = new Intent(MyApplication.getAppContext(), ActivityAddressEdit.class);
+//            it.putExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, 4);
+//            MyApplication.getAppContext().startActivity(it);
 
+            Toast.makeText(MyApplication.getAppContext(), "请在我的账户中维护您的送货地址",
+                    Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(MyApplication.getAppContext(), failure.getMessage(),
                     Toast.LENGTH_LONG).show();

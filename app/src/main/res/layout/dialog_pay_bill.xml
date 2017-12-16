@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/basebackground">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basebackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include layout="@layout/main_header_return"/>
+        <include layout="@layout/main_header_return" />
 
+        <!--配送方式 -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:visibility="gone"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:paddingLeft="@dimen/x10"
             android:paddingBottom="@dimen/x8"
+            android:paddingLeft="@dimen/x10"
             android:paddingRight="@dimen/x10"
-            android:paddingTop="@dimen/x10">
+            android:paddingTop="@dimen/x10"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/peisong"
                 style="@style/font_ww_14"
                 android:text="@string/peisong"
-                android:textColor="@color/font_black2"/>
+                android:textColor="@color/font_black2" />
 
             <RadioGroup
                 android:id="@+id/peisong_rg"
@@ -41,37 +42,37 @@
                     android:layout_width="@dimen/x64"
                     android:layout_height="wrap_content"
                     android:background="@drawable/select_btn_order"
-                    android:textColor="@color/select_btn_order_text"
                     android:button="@null"
                     android:gravity="center"
                     android:padding="@dimen/x5"
                     android:text="@string/peisong1"
-                    android:textSize="14sp"/>
+                    android:textColor="@color/select_btn_order_text"
+                    android:textSize="14sp" />
 
                 <RadioButton
+                    android:id="@+id/peisong_rb2"
+                    android:layout_width="@dimen/x64"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x15"
                     android:background="@drawable/select_btn_order"
-                    android:textColor="@color/select_btn_order_text"
                     android:button="@null"
                     android:gravity="center"
                     android:padding="@dimen/x5"
-                    android:layout_width="@dimen/x64"
-                    android:id="@+id/peisong_rb2"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x15"
                     android:text="@string/peisong2"
-                    android:textSize="14sp"/>
+                    android:textColor="@color/select_btn_order_text"
+                    android:textSize="14sp" />
 
             </RadioGroup>
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginTop="@dimen/x10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
             android:background="@color/white"
-            android:paddingLeft="@dimen/x10"
             android:paddingBottom="@dimen/x8"
+            android:paddingLeft="@dimen/x10"
             android:paddingRight="@dimen/x10"
             android:paddingTop="@dimen/x10">
 
@@ -79,7 +80,7 @@
                 android:id="@+id/fapiao"
                 style="@style/font_ww_14"
                 android:text="@string/fapiao_xuanze"
-                android:textColor="@color/font_black2"/>
+                android:textColor="@color/font_black2" />
 
             <RadioGroup
                 android:id="@+id/fapiao_rg"
@@ -91,49 +92,49 @@
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:checked="true"
+                    android:id="@+id/activity_orderbill_rb_fapiao_no"
+                    android:layout_width="@dimen/x64"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/select_btn_order"
-                    android:textColor="@color/select_btn_order_text"
                     android:button="@null"
+                    android:checked="true"
                     android:gravity="center"
                     android:padding="@dimen/x5"
-                    android:layout_width="@dimen/x64"
-                    android:id="@+id/fapiao_rb1"
-                    android:visibility="gone"
-                    android:layout_height="wrap_content"
                     android:text="@string/fapiao_no"
-                    android:textSize="14sp"/>
+                    android:textColor="@color/select_btn_order_text"
+                    android:textSize="14sp" />
 
                 <RadioButton
+                    android:id="@+id/activity_orderbill_rb_fapiao_yes"
+                    android:layout_width="@dimen/x64"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/select_btn_order"
-                    android:textColor="@color/select_btn_order_text"
                     android:button="@null"
                     android:gravity="center"
                     android:padding="@dimen/x5"
-                    android:layout_width="@dimen/x64"
-                    android:id="@+id/fapiao_rb2"
-                    android:layout_height="wrap_content"
                     android:text="@string/fapiao_yes"
-                    android:textSize="14sp"/>
+                    android:textColor="@color/select_btn_order_text"
+                    android:textSize="14sp" />
 
             </RadioGroup>
 
         </RelativeLayout>
 
+        <!-- 选择发票具体信息 -->
         <LinearLayout
-            android:visibility="invisible"
-            android:id="@+id/xiangqing"
+            android:id="@+id/dialog_pay_bill_ll_xiangqing"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <RelativeLayout
-                android:layout_marginTop="@dimen/x10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/x10"
                 android:background="@color/white"
-                android:paddingLeft="@dimen/x10"
                 android:paddingBottom="@dimen/x8"
+                android:paddingLeft="@dimen/x10"
                 android:paddingRight="@dimen/x10"
                 android:paddingTop="@dimen/x10">
 
@@ -141,7 +142,7 @@
                     android:id="@+id/fapiao_leixing"
                     style="@style/font_ww_14"
                     android:text="@string/fapiao_leixing"
-                    android:textColor="@color/font_black2"/>
+                    android:textColor="@color/font_black2" />
 
                 <RadioGroup
                     android:id="@+id/fapiao_lx_rg"
@@ -153,46 +154,45 @@
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:checked="true"
+                        android:id="@+id/fapiao_lx_rb1"
+                        android:layout_width="@dimen/x64"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/select_btn_order"
-                        android:textColor="@color/select_btn_order_text"
                         android:button="@null"
+                        android:checked="true"
                         android:gravity="center"
                         android:padding="@dimen/x5"
-                        android:layout_width="@dimen/x64"
-                        android:id="@+id/fapiao_lx_rb1"
-                        android:layout_height="wrap_content"
                         android:text="@string/fapiao_z"
-                        android:textSize="14sp"/>
+                        android:textColor="@color/select_btn_order_text"
+                        android:textSize="14sp" />
 
                     <RadioButton
+                        android:id="@+id/fapiao_lx_rb2"
+                        android:layout_width="@dimen/x64"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x15"
                         android:background="@drawable/select_btn_order"
-                        android:textColor="@color/select_btn_order_text"
                         android:button="@null"
                         android:gravity="center"
                         android:padding="@dimen/x5"
-                        android:layout_width="@dimen/x64"
-                        android:id="@+id/fapiao_lx_rb2"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/x15"
                         android:text="@string/fapiao_d"
-                        android:textSize="14sp"/>
+                        android:textColor="@color/select_btn_order_text"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
 
                 </RadioGroup>
 
             </RelativeLayout>
 
             <LinearLayout
-                android:id="@+id/mingxi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
+                android:orientation="vertical" >
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/x8"
-                    android:background="@color/basebackground"/>
+                    android:background="@color/basebackground" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -204,70 +204,85 @@
                         android:id="@+id/fapiao_taitou"
                         style="@style/font_ww_14"
                         android:text="发票抬头"
-                        android:textColor="@color/font_black2"/>
-
+                        android:textColor="@color/font_black2" />
 
                     <RadioGroup
-                        android:id="@+id/fapiao_tt_rg"
-                        android:layout_below="@+id/fapiao_taitou"
-                        android:layout_marginTop="@dimen/x3"
+                        android:id="@+id/dialog_pay_bill_rg_orglvl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center">
+                        android:layout_below="@+id/fapiao_taitou"
+                        android:layout_marginTop="@dimen/x3"
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <RadioButton
+                            android:id="@+id/dialog_pay_bill_gren"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:checked="true"
-                            android:textSize="14sp"
-                            android:id="@+id/gren"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/fapiao_gr"/>
+                            android:text="@string/fapiao_gr"
+                            android:textSize="14sp" />
 
                         <RadioButton
-                            android:textSize="14sp"
-                            android:layout_marginLeft="@dimen/x15"
-                            android:id="@+id/gongsi"
+                            android:id="@+id/dialog_pay_bill_gongsi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/fapiao_gs"/>
+                            android:layout_marginLeft="@dimen/x15"
+                            android:text="@string/fapiao_gs"
+                            android:textSize="14sp" />
 
                     </RadioGroup>
 
-                    <EditText
-                        android:id="@+id/edit_taitou"
+                    <LinearLayout
+                        android:layout_below="@id/dialog_pay_bill_rg_orglvl"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/fapiao_tt_rg"
-                        android:layout_marginTop="@dimen/x5"
-                        android:background="@drawable/background_division_line"
-                        android:hint="请填写单位名称"
-                        android:maxLines="1"
-                        android:padding="@dimen/x5"
-                        android:singleLine="true"
-                        android:textColor="@color/font_black2"
-                        android:textSize="14sp"/>
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/dialog_bill_ed_company_id"
+                            style="@style/edtxt_single"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/fapiao_tt_rg"
+                            android:hint="请填写单位税务登记号" />
+
+                        <EditText
+                            android:id="@+id/dialog_bill_ed_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/ed_company_id"
+                            android:layout_marginTop="@dimen/x5"
+                            android:background="@drawable/background_division_line"
+                            android:hint="请填写发票抬头"
+                            android:maxLines="1"
+                            android:padding="@dimen/x5"
+                            android:singleLine="true"
+                            android:textColor="@color/font_black2"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
 
                 </RelativeLayout>
 
             </LinearLayout>
 
         </LinearLayout>
-
+        <!-- 选择发票具体信息 end -->
     </LinearLayout>
 
     <Button
-        android:layout_marginBottom="24dp"
         android:id="@+id/queding"
         android:layout_width="@dimen/x120"
         android:layout_height="@dimen/x30"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/background_submit_yuan"
         android:text="@string/alert_queding"
         android:textColor="@color/white"
-        android:textSize="16sp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:textSize="16sp" />
 
 
 </RelativeLayout>

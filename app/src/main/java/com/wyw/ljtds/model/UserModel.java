@@ -10,6 +10,8 @@ import java.math.BigDecimal;
  */
 
 public class UserModel extends BaseModel implements Parcelable {
+    //唯一标识
+    private String OID_USER_ID;
     //昵称
     private String NICKNAME;
     //头像文件id
@@ -171,6 +173,14 @@ public class UserModel extends BaseModel implements Parcelable {
         this.DEFAULT_ADDRESS = DEFAULT_ADDRESS;
     }
 
+    public String getOID_USER_ID() {
+        return OID_USER_ID;
+    }
+
+    public void setOID_USER_ID(String OID_USER_ID) {
+        this.OID_USER_ID = OID_USER_ID;
+    }
+
     public class Address {
         //地址的唯一id
         private int ADDRESS_ID;
@@ -263,20 +273,22 @@ public class UserModel extends BaseModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString( this.NICKNAME );
-        dest.writeString( this.USER_ICON_FILE_ID );
-        dest.writeString( this.USER_NAME );
-        dest.writeString( this.ID_CARD );
-        dest.writeString( this.SEX );
-        dest.writeString( this.MOBILE );
-        dest.writeInt( this.CARD_NO );
-        dest.writeLong( this.BIRTHDAY );
+        dest.writeString(this.OID_USER_ID);
+        dest.writeString(this.NICKNAME);
+        dest.writeString(this.USER_ICON_FILE_ID);
+        dest.writeString(this.USER_NAME);
+        dest.writeString(this.ID_CARD);
+        dest.writeString(this.SEX);
+        dest.writeString(this.MOBILE);
+        dest.writeInt(this.CARD_NO);
+        dest.writeLong(this.BIRTHDAY);
     }
 
     public UserModel() {
     }
 
     protected UserModel(Parcel in) {
+        this.OID_USER_ID = in.readString();
         this.NICKNAME = in.readString();
         this.USER_ICON_FILE_ID = in.readString();
         this.USER_NAME = in.readString();
@@ -290,7 +302,7 @@ public class UserModel extends BaseModel implements Parcelable {
     public static final Parcelable.Creator<UserModel> CREATOR = new Parcelable.Creator<UserModel>() {
         @Override
         public UserModel createFromParcel(Parcel source) {
-            return new UserModel( source );
+            return new UserModel(source);
         }
 
         @Override

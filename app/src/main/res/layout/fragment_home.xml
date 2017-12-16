@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -18,223 +19,27 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <!--轮播-->
             <com.bigkoo.convenientbanner.ConvenientBanner
                 android:id="@+id/banner"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/x150"
+                android:layout_height="@dimen/x142"
                 app:canLoop="true">
 
             </com.bigkoo.convenientbanner.ConvenientBanner>
-
-            <LinearLayout
+            <!--分类标签-->
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/x6"
-                android:orientation="vertical">
+                android:descendantFocusability="blocksDescendants">
 
-                <LinearLayout
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragment_home_rv_iconcatlist"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x60"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
 
-                    <RelativeLayout
-                        android:id="@+id/fenlei1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_home_fenlei1" />
-
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/home_button1"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/fenlei2"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_home_fenlei2" />
-
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/home_button2"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/fenlei3"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_home_fenlei3" />
-
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/home_button3"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/fenlei4"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_home_fenlei4" />
-
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/home_button4"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/x10"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/x60"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:id="@+id/fenlei5"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_home_fenlei5" />
-
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/home_button5"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/fenlei6"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_home_fenlei6" />
-
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/home_button6"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/fenlei7"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_home_fenlei7" />
-
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/home_button7"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/fenlei8"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_home_fenlei8" />
-
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/home_button8"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-
-            </LinearLayout>
+            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -246,6 +51,9 @@
             <!--android:id="@+id/taobao_headline_headline"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="@dimen/x35" />-->
+
+
+            <!--公告栏 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x35"
@@ -279,29 +87,21 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:background="@color/gray" />
-
-                <TextView
-                    android:id="@+id/taobao_headline_more_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/x6"
-                    android:gravity="center_vertical"
-                    android:text="@string/gengduo"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
-
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x1"
+                android:layout_marginBottom="@dimen/x8"
                 android:background="@color/gray1" />
 
+            <!--活动区 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x28"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="@dimen/x18"
@@ -317,255 +117,62 @@
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x1"
-                android:background="@color/gray1" />
-
-
-            <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<LinearLayout-->
-            <!--id=-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1">-->
-
-            <!--&lt;!&ndash;<include layout="@layout/fragment_home_activity"/>&ndash;&gt;-->
-            <!--<ImageView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/x95"-->
-            <!--android:scaleType="fitXY"-->
-            <!--android:src="@mipmap/test_home_huodong2" />-->
-
-            <!--</LinearLayout>-->
-
-            <!--<View-->
-            <!--android:layout_width="1dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:background="@color/gray1" />-->
-
-            <!--<LinearLayout-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1">-->
-
-            <!--&lt;!&ndash;<include layout="@layout/fragment_home_activity"/>&ndash;&gt;-->
-            <!--<ImageView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/x95"-->
-            <!--android:scaleType="fitXY"-->
-            <!--android:src="@mipmap/test_home_huodong4" />-->
-
-            <!--</LinearLayout>-->
-
-            <!--</LinearLayout>-->
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray1" />
 
             <ImageView
                 android:id="@+id/img_home_active_goods"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x95"
+                android:layout_width="@dimen/x320"
+                android:layout_height="@dimen/x135"
                 android:scaleType="fitXY"
-                android:src="@mipmap/img_shenghuo_active" />0
+                android:src="@mipmap/zhanweitu"
+                android:visibility="gone" />0
 
-
-            <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<LinearLayout-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1">-->
-
-            <!--&lt;!&ndash;<include layout="@layout/fragment_home_activity" />&ndash;&gt;-->
-            <!--<ImageView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/x95"-->
-            <!--android:scaleType="fitXY"-->
-            <!--android:src="@mipmap/test_home_huodong1" />0-->
-
-            <!--</LinearLayout>-->
-
-            <!--<View-->
-            <!--android:layout_width="1dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:background="@color/gray1" />-->
-
-            <!--<LinearLayout-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1">-->
-
-            <!--&lt;!&ndash;<include layout="@layout/fragment_home_activity" />&ndash;&gt;-->
-            <!--<ImageView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/x95"-->
-            <!--android:scaleType="fitXY"-->
-            <!--android:src="@mipmap/test_home_huodong3" />-->
-
-            <!--</LinearLayout>-->
-
-            <!--</LinearLayout>-->
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x1"
-                android:background="@color/gray1" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x28"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="@dimen/x16"
-                    android:layout_height="@dimen/x16"
-                    android:scaleType="fitCenter"
-                    android:src="@mipmap/icon_home_hot" />
-
-                <TextView
-                    style="@style/font_ww_14"
-                    android:layout_marginLeft="@dimen/x15"
-                    android:text="@string/hot"
-                    android:textColor="@color/font_black1" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x1"
-                android:background="@color/gray1" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x30"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/textView"
-                    style="@style/font_ww_12"
-                    android:layout_marginLeft="@dimen/x8"
-                    android:text="@string/hot_list_title1"
-                    android:textColor="@color/font_black1" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="@dimen/x13"
-                    android:layout_marginLeft="@dimen/x4"
-                    android:layout_marginRight="@dimen/x4"
-                    android:background="@color/gray" />
-
-                <TextView
-                    style="@style/font_ww_12"
-                    android:text="@string/hot_list_title2"
-                    android:textColor="@color/font_black2" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="@dimen/x13"
-                    android:layout_marginLeft="@dimen/x4"
-                    android:layout_marginRight="@dimen/x4"
-                    android:background="@color/gray" />
-
-                <TextView
-                    style="@style/font_ww_12"
-                    android:text="@string/hot_list_title3"
-                    android:textColor="@color/font_black2" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="@dimen/x13"
-                    android:layout_marginLeft="@dimen/x4"
-                    android:layout_marginRight="@dimen/x4"
-                    android:background="@color/gray" />
-
-                <TextView
-                    style="@style/font_ww_12"
-                    android:text="@string/hot_list_title4"
-                    android:textColor="@color/font_black2" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="@dimen/x13"
-                    android:layout_marginLeft="@dimen/x4"
-                    android:layout_marginRight="@dimen/x4"
-                    android:background="@color/gray" />
-
-                <TextView
-                    style="@style/font_ww_12"
-                    android:text="@string/hot_list_title5"
-                    android:textColor="@color/font_black2" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="@dimen/x13"
-                    android:layout_marginLeft="@dimen/x4"
-                    android:layout_marginRight="@dimen/x4"
-                    android:background="@color/gray" />
-
-                <TextView
-                    style="@style/font_ww_12"
-                    android:text="@string/hot_list_title6"
-                    android:textColor="@color/font_black2" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="@dimen/x13"
-                    android:layout_marginLeft="@dimen/x4"
-                    android:layout_marginRight="@dimen/x4"
-                    android:background="@color/gray" />
-
-                <TextView
-                    style="@style/font_ww_12"
-                    android:text="@string/hot_list_title7"
-                    android:textColor="@color/font_black2" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="@dimen/x13"
-                    android:layout_marginLeft="@dimen/x4"
-                    android:layout_marginRight="@dimen/x4"
-                    android:background="@color/gray" />
-
-                <TextView
-                    style="@style/font_ww_12"
-                    android:text="@string/hot_list_title8"
-                    android:textColor="@color/font_black2" />
-
-                <ImageView
-                    android:layout_width="@dimen/x16"
-                    android:layout_height="@dimen/x12"
-                    android:layout_marginLeft="@dimen/x10"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/shuangjiantou_you" />
-
-            </LinearLayout>
-
+            <!--节日活动区-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:descendantFocusability="blocksDescendants">
 
+                <WebView
+                    android:id="@+id/fragment_home_webview_huodong"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"></WebView>
+
+                <ImageView
+                    android:id="@+id/fragment_home_img_loaderr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/img_err_404" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x1"
+                android:background="@color/gray1" />
+
+
+            <!--推荐区-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x26"
+                    android:layout_alignParentTop="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_home_hot" />
+
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/tuijian"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white" />
+                    android:layout_height="match_parent" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

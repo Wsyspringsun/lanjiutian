@@ -203,6 +203,24 @@ public class FragmentOrderList extends BaseFragment {
                             it = new Intent(getActivity(), ActivityLogistics.class);
                             it.putExtra("order_id", currentModel.getORDER_GROUP_ID());
                             startActivity(it);
+                        } else if (view.getId() == R.id.button2) {
+                            //取消
+                            final AlertDialog alert = new AlertDialog.Builder(getActivity()).create();
+                            alert.setTitle(R.string.alert_tishi);
+                            alert.setMessage(getResources().getString(R.string.confirm_order_cancel));
+                            alert.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.alert_queding), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    cancelOrder(currentModel.getORDER_GROUP_ID());
+                                }
+                            });
+                            alert.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.alert_quxiao), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    alert.dismiss();
+                                }
+                            });
+                            alert.show();
                         }
                         break;
 
@@ -454,7 +472,7 @@ public class FragmentOrderList extends BaseFragment {
         @Override
         protected void convert(BaseViewHolder baseViewHolder, OrderModelMedicine orderModelMedicine) {
             String status = "";
-            if (orderModelMedicine.getSTATUS().equals("A")) {
+            if ("A".equals(orderModelMedicine.getSTATUS())) {
                 status = getResources().getString(R.string.daifu);
                 baseViewHolder.setVisible(R.id.button1, true)
                         .setVisible(R.id.button2, true)
@@ -464,15 +482,18 @@ public class FragmentOrderList extends BaseFragment {
 //                        .setText(R.id.button3, R.string.order_lianxi1)
                         .addOnClickListener(R.id.button1)
                         .addOnClickListener(R.id.button2);
-            } else if (orderModelMedicine.getSTATUS().equals("B")) {
+            } else if ("B".equals(orderModelMedicine.getSTATUS())) {
                 status = getResources().getString(R.string.daifa);
                 baseViewHolder.setVisible(R.id.button1, true)
-//                        .setVisible(R.id.button2, true)
-//                        .setVisible(R.id.button3, false)
                         .setText(R.id.button1, R.string.wuliu_chakan)
-//                        .setText(R.id.button2, R.string.order_chakan)
                         .addOnClickListener(R.id.button1);
-            } else if (orderModelMedicine.getSTATUS().equals("C")) {
+                if (OrderTrade.PAYMTD_MONEY.equals(orderModelMedicine.getPAYMENT_METHOD())) {
+                    //货到付款的可以取消
+                    baseViewHolder.setVisible(R.id.button2, true)
+                            .setText(R.id.button2, R.string.order_quxiao)
+                            .addOnClickListener(R.id.button2);
+                }
+            } else if ("C".equals(orderModelMedicine.getSTATUS())) {
                 status = getResources().getString(R.string.daishou);
                 baseViewHolder.setVisible(R.id.button1, true)
                         .setVisible(R.id.button2, true)
@@ -482,7 +503,7 @@ public class FragmentOrderList extends BaseFragment {
 //                        .setText(R.id.button3, R.string.order_lianxi1)
                         .addOnClickListener(R.id.button1)
                         .addOnClickListener(R.id.button2);
-            } else if (orderModelMedicine.getSTATUS().equals("D")) {
+            } else if ("D".equals(orderModelMedicine.getSTATUS())) {
                 status = getResources().getString(R.string.daiping);
                 baseViewHolder.setVisible(R.id.button1, true)
                         .setVisible(R.id.button2, true)
@@ -491,7 +512,7 @@ public class FragmentOrderList extends BaseFragment {
                         .setText(R.id.button2, R.string.wuliu_chakan)
                         .addOnClickListener(R.id.button1)
                         .addOnClickListener(R.id.button2);
-            } else if (orderModelMedicine.getSTATUS().equals("S")) {
+            } else if ("S".equals(orderModelMedicine.getSTATUS())) {
                 status = getResources().getString(R.string.order_style6);
                 baseViewHolder.setVisible(R.id.button1, true)
                         .setVisible(R.id.button2, true)
@@ -499,13 +520,16 @@ public class FragmentOrderList extends BaseFragment {
                         .setText(R.id.button2, R.string.order_shanchu)
                         .addOnClickListener(R.id.button1)
                         .addOnClickListener(R.id.button2);
-            } else if (orderModelMedicine.getSTATUS().equals("E")) {
+            } else if ("E".equals(orderModelMedicine.getSTATUS())) {
                 status = getResources().getString(R.string.order_style7);
                 baseViewHolder.setVisible(R.id.button1, true)
                         .setVisible(R.id.button2, false)
                         .setVisible(R.id.button3, false)
                         .setText(R.id.button1, R.string.shanchu)
                         .addOnClickListener(R.id.button1);
+            } else {
+                status = getResources().getString(R.string.stat_unkwon);
+                Log.e(AppConfig.ERR_TAG, this.getClass().getName() + "err status :" + GsonUtils.Bean2Json(orderModelMedicine));
             }
 
             baseViewHolder.setVisible(R.id.select, false)

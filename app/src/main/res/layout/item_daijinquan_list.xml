@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:background="#FF7160"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="@dimen/x320"
+            android:layout_height="@dimen/x120"
+            android:layout_marginTop="@dimen/x8"
+            android:paddingLeft="@dimen/x1"
+            android:paddingRight="@dimen/x1"
+            android:scaleType="fitXY"
+            android:src="@drawable/daijinquan_bg" />
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/x100"
+            android:layout_gravity="center">
+
+
+            <TextView
+                android:id="@+id/item_daijinquan_list_tv_rule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/white"
+                android:text="全场满50即可享用"
+                android:textColor="@color/black"
+                android:textSize="24dp" />
+
+            <TextView
+                android:id="@+id/item_daijinquan_list_tv_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/item_daijinquan_list_tv_rule"
+                android:text="￥5"
+                android:textColor="@color/white"
+                android:textSize="64dp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/item_daijinquan_list_tv_cost"
+                android:layout_toRightOf="@id/item_daijinquan_list_tv_cost"
+                android:text="现金券"
+                android:textColor="@color/white"
+                android:textSize="30dp" />
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/item_daijinquan_list_tv_validdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:textColorHighlight="@color/white"
+            android:padding="@dimen/x5"
+            android:text="有效期:xxx-xxx-xxx"
+            android:textColor="@color/white" />
+
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black" />
+</RelativeLayout>
+

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x55"
+    android:background="@color/white">
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_width="@dimen/x30"
+        android:layout_height="@dimen/x30"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/msg_kefu"
+        android:id="@+id/item_consult_img_kefu"/>
+
+    <TextView
+        android:text="@string/kefu"
+        android:layout_marginTop="@dimen/x10"
+        android:textColor="@color/font_black2"
+        android:layout_marginLeft="@dimen/x12"
+        android:layout_toRightOf="@+id/msg_type_img"
+        style="@style/font_ww_14"
+        android:id="@+id/msg_title"/>
+
+    <View
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:background="@color/basebackground"/>
+
+</RelativeLayout>

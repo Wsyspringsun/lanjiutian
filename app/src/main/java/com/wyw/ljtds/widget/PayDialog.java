@@ -1,6 +1,5 @@
 package com.wyw.ljtds.widget;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +11,8 @@ import android.widget.TextView;
 
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.model.OrderTrade;
+import com.wyw.ljtds.model.OrderTradeDto;
 import com.wyw.ljtds.ui.base.BaseActivity;
-import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.widget.dialog.BottomDialog;
 
 import java.util.HashMap;

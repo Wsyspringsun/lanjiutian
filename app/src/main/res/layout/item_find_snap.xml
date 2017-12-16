@@ -1,57 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:fresco="http://schemas.android.com/apk/res-auto"
-              android:layout_width="@dimen/x80"
-              android:layout_height="wrap_content"
-              android:layout_marginLeft="@dimen/x10"
-              android:background="@color/white"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/x100"
+    android:layout_height="match_parent"
+    android:padding="@dimen/x3"
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x95"
+        android:layout_width="@dimen/x90"
+        android:layout_height="@dimen/x90"
         app:cardCornerRadius="8sp"
         app:cardElevation="@dimen/x2"
         app:cardPreventCornerOverlap="true"
         app:contentPadding="@dimen/x6">
 
-        <RelativeLayout
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/head_img"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <!--
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@mipmap/test_goods"/>
-                -->
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/head_img"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                fresco:failureImage="@mipmap/zhanweitu"
-                fresco:failureImageScaleType="centerInside"
-                fresco:placeholderImage="@mipmap/zhanweitu"/>
-
-            <!--
-            <TextView
-                android:id="@+id/zhekou"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="@dimen/x5"
-                android:textSize="11sp"
-                android:gravity="center"
-                android:layout_width="@dimen/x29"
-                android:layout_height="@dimen/x29"
-                android:textColor="@color/white"
-                android:padding="@dimen/x3"
-                android:background="@drawable/shape_item_index_red"
-                android:text="9.6折"/>
-                -->
-
-        </RelativeLayout>
-
+            android:layout_height="match_parent"
+            fresco:failureImage="@mipmap/zhanweitu"
+            fresco:failureImageScaleType="centerInside"
+            fresco:placeholderImage="@mipmap/zhanweitu" />
     </android.support.v7.widget.CardView>
 
     <TextView
@@ -62,12 +33,12 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="@color/font_black2"
-        android:textSize="13sp"/>
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/money"
         style="@style/font_ww_14"
         android:layout_marginTop="@dimen/x3"
-        android:textColor="@color/base_bar"/>
+        android:textColor="@color/base_bar" />
 
 </LinearLayout>

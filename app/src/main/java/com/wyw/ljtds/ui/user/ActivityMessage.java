@@ -107,12 +107,16 @@ public class ActivityMessage extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        Log.e(AppConfig.ERR_TAG,"onResume");
+    protected void onStart() {
+        super.onStart();
         pageIndex = 1;
         end = false;
         getMsg();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void updAdapter() {
@@ -156,14 +160,6 @@ public class ActivityMessage extends BaseActivity {
         new BizDataAsyncTask<List<MessageModel>>() {
             @Override
             protected List<MessageModel> doExecute() throws ZYException, BizFailure {
-//                List<MessageModel> list = new ArrayList<MessageModel>();
-//                for (int i = 0; i < 20; i++) {
-//                    MessageModel m = new MessageModel();
-//                    m.setCONTENTS("Hello" + (pageIndex * 20 + i));
-//                    m.setMSG_TYPE("1");
-//                    list.add(m);
-//                }
-//                return list;
                 return UserBiz.getMessage("0", PreferenceCache.getToken(), "" + pageIndex, AppConfig.DEFAULT_PAGE_COUNT + "");
             }
 

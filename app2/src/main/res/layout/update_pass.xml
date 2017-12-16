@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:paddingTop="100dp"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/main_header_return_red"/>
+
+    </LinearLayout>
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_edittext"
+        android:hint="旧密码"
+        android:id="@+id/oldPwd"/>
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_edittext"
+        android:hint="新密码"
+        android:id="@+id/newPwd"/>
+    <LinearLayout
+        android:id="@+id/sure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="50dp">
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="30dp"
+            android:text="确定"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_selector"
+            android:id="@+id/confirm"
+            />
+    </LinearLayout>
+
+
+
+</LinearLayout>

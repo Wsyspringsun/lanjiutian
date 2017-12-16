@@ -18,27 +18,29 @@ public class DateUtils {
     /**
      * Wheel TYPE Year
      */
-    public static final int TYPE_YEAR   = 1;
+    public static final int TYPE_YEAR = 1;
     /**
      * Wheel TYPE Month
      */
-    public static final int TYPE_MONTH  = 2;
+    public static final int TYPE_MONTH = 2;
     /**
      * Wheel TYPE Day
      */
-    public static final int TYPE_DAY    = 3;
+    public static final int TYPE_DAY = 3;
     /**
      * Wheel TYPE Hour
      */
-    public static final int TYPE_HOUR   = 4;
+    public static final int TYPE_HOUR = 4;
     /**
      * Wheel TYPE Minute
      */
     public static final int TYPE_MINUTE = 5;
+    private static final String NULL_DATE = "--/--";
 
 
     /**
      * date转制定格式的string
+     *
      * @param d
      * @param format
      * @return
@@ -57,23 +59,44 @@ public class DateUtils {
 
 
     /**
-     * 把long的字符串转日期
-     * @param s
+     * 格式化时间
+     * @param s long类型的日期字符串
      * @return
      */
-    public static String parseTime(String s){
+    public static String parseTime(String s) {
+        return parseTime(s, "yyyy-MM-dd");
+    }
+
+    /**
+     * @param s      Long类型的时间字符串
+     * @param format 格式化
+     * @return
+     */
+    public static String parseTime(String s, String format) {
 
         //将字符串转化为Long类型
-        Long timeLong = Long.parseLong(s);
+        try {
+            Long timeLong = Long.parseLong(s);
+            return parseTime(timeLong, format);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Utils.log(ex.getMessage());
+            return NULL_DATE;
+        }
+
+    }
+
+
+    public static String parseTime(Long timeLong, String format) {
+        if (timeLong == null) return NULL_DATE;
         //将Long类型转化为Date
         Date date = new Date(timeLong);
 
         //将Date类型格式化
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
         String dateString = sdf.format(date);
 
         return dateString;
-
     }
 
     /**
@@ -140,7 +163,7 @@ public class DateUtils {
      */
     public static List<String> createdDay(int year, int month) {
         List<String> wheelString = new ArrayList<>();
-        int          size        = 0;
+        int size = 0;
         if (isLeapMonth(month)) {
             size = 31;
         } else if (month == 2) {

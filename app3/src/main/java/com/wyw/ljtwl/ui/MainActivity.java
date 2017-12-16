@@ -68,11 +68,11 @@ public class MainActivity extends BaseActivitry {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fragmentOrder1 = new FragmentOrder("E");
-        fragmentOrder2 = new FragmentOrder("A");
-        fragmentOrder3 = new FragmentOrder("B");
-        fragmentOrder4 = new FragmentOrder("C");
-        fragmentOrder5 = new FragmentOrder("D");
+        fragmentOrder1 = FragmentOrder.newInstance("E");
+        fragmentOrder2 = FragmentOrder.newInstance("A");
+        fragmentOrder3 = FragmentOrder.newInstance("B");
+        fragmentOrder4 = FragmentOrder.newInstance("C");
+        fragmentOrder5 = FragmentOrder.newInstance("D");
 ////        fragmentList.add(fragmentShop);
         fragmentList.add(fragmentOrder1);
         fragmentList.add(fragmentOrder2);
@@ -191,6 +191,12 @@ public class MainActivity extends BaseActivitry {
                         tvMoneyAvaliable.setText(jsonData.getString("grpUsableAmount"));
                     } else if (success.equals("2")) {
                         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                    } else {
+                        if ("身份信息过期,请重新登录".equals(msg)) {
+                            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                            Intent it = ActivityLogin.getIntent(MainActivity.this);
+                            startActivity(it);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

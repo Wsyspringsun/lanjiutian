@@ -51,18 +51,11 @@ public class ActivityLogin extends BaseActivitry {
             case R.id.guanbi:
                 InputMethodUtils.closeSoftKeyboard(this);
                 finish();
-                it = new Intent(this, MainActivity.class);
-//                AppConfig.currSel = 0;
-//                it.putExtra( AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel );
-                startActivity(it);
                 break;
 
             case R.id.next:
                 doLogin();
-//                doGet();
                 break;
-
-
         }
     }
 
@@ -109,6 +102,11 @@ public class ActivityLogin extends BaseActivitry {
         return super.onKeyDown(keyCode, event);
     }
 
+    public static Intent getIntent(Context ctx) {
+        Intent it = new Intent(ctx, ActivityLogin.class);
+        return it;
+    }
+
     public void doLogin() {
         LoginModel loginModel = new LoginModel();
         Log.e(AppConfig.TAG_ERR, "111aaaa");
@@ -133,7 +131,7 @@ public class ActivityLogin extends BaseActivitry {
 
         params.setAsJsonContent(true);
         params.setBodyContent(data);
-//                setLoding(getActivity(), false);
+        setLoding();
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -155,7 +153,10 @@ public class ActivityLogin extends BaseActivitry {
                         Intent intent = new Intent(context, MainActivity.class);
                         intent.putExtra("jsonData", jsonData.toString());
                         startActivity(intent);
+                        finish();
                     } else if (success.equals("2")) {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                    } else {
                         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
@@ -183,6 +184,7 @@ public class ActivityLogin extends BaseActivitry {
             @Override
             public void onFinished() {
                 Log.e(AppConfig.TAG_ERR, "finished.........");
+                closeLoding();
             }
         });
     }

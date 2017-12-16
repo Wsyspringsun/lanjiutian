@@ -27,9 +27,16 @@
     <string name="title_notifications">通知</string>
     <string name="title_dashboard">蓝九天</string>
     <string name="text_holder">-----</string>
-    <string name="lanjian">拦件</string>
+    <string name="lanjian">揽件</string>
     <string name="fragment_delegater_courier">派件人</string>
     <string name="fragment_delegater_courier_mobile">派件人电话</string>
     <string name="fragment_delegater_courier_car">派件车辆</string>
     <string name="text_sure">确认</string>
+    <string name="delegater_edit_courierName_valid">清填写10个字符以内的名字</string>
+    <string name="delegater_edit_courierMobile_valid">请填写您的手机号</string>
+    <string name="delegater_edit_courierCar_valid">请填写正确的车牌号</string>
+    <string name="alert_tishi">提示</string>
+    <string name="confirm_curior_arrive">是否确定送达?</string>
+    <string name="alert_queding">确定</string>
+    <string name="alert_quxiao">取消</string>
 </resources>

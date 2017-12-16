@@ -16,12 +16,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.baidu.mapapi.search.busline.OnGetBusLineSearchResultListener;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -72,6 +70,10 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
     private RecyclerView recyclerView;
     @ViewInject(R.id.order_fuwu)
     private TextView tvShouhou;
+    @ViewInject(R.id.activity_order_info_tv_shopaddr)
+    private TextView tvShopAddr;
+    @ViewInject(R.id.activity_order_info_tv_orderremark)
+    private TextView tvOrderRemark;
     @ViewInject(R.id.name)
     private TextView address_name;
     @ViewInject(R.id.phone)
@@ -160,7 +162,7 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
 //                break;
 
             case R.id.lianxi:
-                Log.e(AppConfig.ERR_TAG, "group_id:" + group_id);
+                //Log.e(AppConfig.ERR_TAG, "group_id:" + group_id);
 //                openChat( model.getTitle(), "", settingid1, groupName, true, model.getCommodityId() );
 //                if (!StringUtils.isEmpty(group_id) && group_id.equals("sxljt")) {
 //                    openChat("交易订单号：" + trade_id, "", settingid0, groupName, false, "");
@@ -172,7 +174,7 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 break;
 
             case R.id.boda:
-                Log.e(AppConfig.ERR_TAG, "phone:" + phone);
+                //Log.e(AppConfig.ERR_TAG, "phone:" + phone);
                 if (StringUtils.isEmpty(phone)) {
 
                 } else {
@@ -242,13 +244,10 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
     }
 
 
-    BizDataAsyncTask<OrderModelInfoMedicine> infoTask;
-
     private void getInfo(final String data, final String op) {
-        infoTask = new BizDataAsyncTask<OrderModelInfoMedicine>() {
+        new BizDataAsyncTask<OrderModelInfoMedicine>() {
             @Override
             protected OrderModelInfoMedicine doExecute() throws ZYException, BizFailure {
-                Log.e("****", data);
                 return GoodsBiz.getOrderInfo(data, op);
             }
 
@@ -256,7 +255,6 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
             @Override
             protected void onExecuteSucceeded(OrderModelInfoMedicine orderModelInfoMedicine) {
                 closeLoding();
-                Log.e(AppConfig.ERR_TAG, "response:" + GsonUtils.Bean2Json(orderModelInfoMedicine));
                 String userAddressId = orderModelInfoMedicine.getUSER_ADDRESS_ID();
                 String addr = "", uname = "", phone = "";
                 //分别显示 地址信息
@@ -278,6 +276,9 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 address_dizhi.setText(addr);
 
                 dianpu.setText(orderModelInfoMedicine.getOID_GROUP_NAME());
+                tvShopAddr.setText(getString(R.string.shop_addr) + orderModelInfoMedicine.getADDRESS());
+                //tvOrderRemark.setText(orderModelInfoMedicine.getR);
+
                 String postageFlg = orderModelInfoMedicine.getPOSTAGE_FLG();
                 String postageFlgDisplay = "";
                 if ("1".equals(postageFlg)) {
@@ -364,8 +365,7 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
             protected void OnExecuteFailed() {
                 closeLoding();
             }
-        };
-        infoTask.execute();
+        }.execute();
     }
 
     BizDataAsyncTask<Integer> deleteTask;

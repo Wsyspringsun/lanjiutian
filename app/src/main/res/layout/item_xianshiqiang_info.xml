@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/item_consult_img_kefu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/zhanweitu" />
+
+    <TextView
+        style="@style/font_ww_12_white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x30"
+        android:layout_gravity="bottom"
+        android:background="@color/gray"
+        android:gravity="left"
+        android:paddingLeft="@dimen/x11"
+        android:text="@string/huodong_xianshiqiang" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/gray"
+        android:layout_gravity="right|top">
+
+        <TextView
+            android:id="@+id/item_xianshiqiang_info_tv_price"
+            style="@style/font_price_highlight"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#FFF347"
+            android:text="@string/holder_price" />
+
+        <ImageView
+            android:layout_width="@dimen/x45"
+            android:layout_height="@dimen/x45"
+            android:layout_toRightOf="@id/item_xianshiqiang_info_tv_price"
+            android:src="@drawable/ic_btn_qiang" />
+
+    </RelativeLayout>
+
+
+</FrameLayout>

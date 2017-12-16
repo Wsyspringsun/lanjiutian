@@ -21,26 +21,27 @@ import org.xutils.view.annotation.ViewInject;
 
 @ContentView(R.layout.activity_medicine_category)
 public class ActivityFindCategort extends BaseActivity {
-    @ViewInject( R.id.header_title )
+    @ViewInject(R.id.header_title)
     private TextView title;
 
-    @Event( value ={R.id.header_return,R.id.buwei,R.id.fenlei})
-    private void onClick(View v){
-        switch (v.getId()){
+    @Event(value = {R.id.header_return, R.id.buwei, R.id.fenlei})
+    private void onClick(View v) {
+        switch (v.getId()) {
             case R.id.header_return:
                 finish();
                 break;
 
             case R.id.buwei:
-                startActivity( new Intent( this,ActivityBody.class ) );
+                startActivity(new Intent(this, ActivityBody.class));
                 break;
 
             case R.id.fenlei:
-                Intent it = new Intent( this, MainActivity.class );
-                AppConfig.currSel = 1;
-                it.putExtra( AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel );
+//                Intent it = new Intent( this, MainActivity.class );
+//                AppConfig.currSel = 1;
+//                it.putExtra( AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel );
+                MainActivity.index = 1;
                 finish();
-                startActivity( it );
+//                startActivity(it);
                 break;
 
         }
@@ -48,9 +49,9 @@ public class ActivityFindCategort extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
-        title.setText( R.string.find_button1 );
+        title.setText(R.string.find_button1);
     }
 
 }

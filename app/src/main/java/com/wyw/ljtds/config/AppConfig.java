@@ -8,20 +8,33 @@ import java.io.File;
  * Created by Administrator on 2016-10-05.
  */
 public class AppConfig {
-    public static final String ERR_TAG = "www.ljt.com.err";
+
+    public static final String ERR_TAG = "err";
     public static final String ERR_EXCEPTION = "www.ljt.com.exeption";
     public static final String GROUP_LJT = "sxljt";
+    public static final int RESPONSE_OK = 1;
+    public static final String LJG_TEL = "0356-5681888";
+    public static final int DEFAULT_INDEX_FRAGMENT = 2;
+    public static final String WEIXIN_APP_ID = "wxc245fe43d076d9d3";//微信appid
+    public static final String WEB_APP_URL = "http://www.lanjiutian.com/mobile";
+    public static final long OUT_TIME = 12000;
     //是否测试环境
-    private static boolean test = true;
-//    private static boolean test = false;
-    public static final String WS_BASE_URL = test ? "http://192.168.2.110:8080/e-commerce_platform_WebService/services/" : "http://www.lanjiutian.com/WebService/services/";
-    public static final String WS_BASE_HTML_URL = test ? "http://192.168.2.110:8080/e-commerce_platform_WebService/html/" : "http://www.lanjiutian.com/WebService/html/";
-    public static final String IMAGE_PATH = test ? "http://192.168.2.110:8080/upload/images" : "http://www.lanjiutian.com/upload/images";
+    public static boolean debug = true;
+    //    public static boolean test = true;
+    public static boolean test = false; // http://192.168.2.102:8080
+    //http://124.164.246.214:8011
+    public static final String WS_DOMAIN = test ? "http://192.168.2.110:8080" : "http://www.lanjiutian.com";
+    public static final String VIRTUAL_PATH = debug ? "/e-commerce_platform_WebService" : "/WebService";
+    public static String WS_BASE_URL = test ? WS_DOMAIN + VIRTUAL_PATH + "/services/" : "http://www.lanjiutian.com/WebService/services/";
+    public static final String WS_BASE_HTML_URL = test ? WS_DOMAIN + VIRTUAL_PATH + "/html/" : "http://www.lanjiutian.com/WebService/html/";
+    public static final String WS_BASE_JSP_URL = test ? WS_DOMAIN + VIRTUAL_PATH + "/jsp/" : "http://www.lanjiutian.com/WebService/jsp/";
+    public static String BLANK_URL = AppConfig.WS_BASE_HTML_URL + "blank.html";
+    public static final String IMAGE_PATH = test ? WS_DOMAIN + "/upload/images" : "http://www.lanjiutian.com/upload/images";
     public static final String IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";
     // 命名空间
     public static final String WS_NAME_SPACE = "http://impl.service.ds.ljt.com";
     //APP更新路径
-    public static final String APP_UPDATE_URL = test ? "http://192.168.2.110:8080/e-commerce_platform_WebService/version.json" : "http://www.lanjiutian.com/WebService/version.json";
+    public static final String APP_UPDATE_URL = test ? WS_DOMAIN + "/e-commerce_platform_WebService/version.json" : "http://www.lanjiutian.com/WebService/version.json";
 
     public static class AppAction {
         /**
@@ -32,8 +45,11 @@ public class AppConfig {
         /**
          * token过期
          */
-        public static final String ACTION_TOKEN_EXPIRE = Base_ACTION_PREFIX
-                + "token.expire";
+        public static final String ACTION_TOKEN_EXPIRE = Base_ACTION_PREFIX + "token.expire";
+        /**
+         * 重置主界面
+         */
+        public static final String ACTION_RESETMAIN = Base_ACTION_PREFIX + "reset.main";
 
         /**
          * 地址为空
@@ -52,6 +68,8 @@ public class AppConfig {
      * 选中哪个主菜单
      */
     public static int currSel = 2;
+    public static final int DEFAULT_CURRSEL = 2;
+
 
     /**
      * 默认加载数量

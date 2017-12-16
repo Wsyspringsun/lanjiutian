@@ -273,7 +273,6 @@
                     android:id="@+id/ed_rela6"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/sdk_pj_item"
                     android:layout_marginTop="4dp" >
 
                     <TextView
@@ -293,7 +292,6 @@
                         android:layout_height="1dip"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="18dp"
-                        android:layout_toRightOf="@+id/tv000"
                         android:background="@drawable/valu_right" />
 
                     <View
@@ -301,7 +299,6 @@
                         android:layout_height="1dip"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="18dp"
-                        android:layout_toLeftOf="@+id/tv000"
                         android:background="@drawable/valu_left" />
                 </RelativeLayout>
 

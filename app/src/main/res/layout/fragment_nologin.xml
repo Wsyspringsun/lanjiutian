@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_user_nologin"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="@dimen/x100"
+        android:layout_height="@dimen/x100"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon_login" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/no_login"
+        android:textColor="@color/white"
+        android:textSize="18dp" />
+
+</LinearLayout>
+
+

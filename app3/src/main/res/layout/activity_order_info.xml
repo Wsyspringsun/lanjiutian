@@ -125,6 +125,20 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/x6">
+
+                    <TextView
+                        android:id="@+id/courierRemark"
+                        style="@style/font_ww_14"
+                        android:text="@string/text_holder"
+                        android:textColor="@color/recommend_bar_text"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -201,21 +215,20 @@
 
             <Button
                 android:id="@+id/acvitiy_order_info_btn_delegate"
+                style="@style/ConfirmBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/whitesmoke"
-                android:text="@string/lanjian"
-                android:textColor="@color/font_black2" />
+                android:text="@string/lanjian" />
+
 
             <Button
                 android:id="@+id/acvitiy_order_info_btn_arrived"
+                style="@style/ConfirmBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/songda"
-                android:background="@color/whitesmoke"
-                android:textColor="@color/font_black2" />
+                android:text="@string/songda" />
 
         </LinearLayout>
 

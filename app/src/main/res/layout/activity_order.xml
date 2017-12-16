@@ -43,7 +43,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x10"
             android:scaleType="fitCenter"
-            android:src="@mipmap/icon_xiaoxi" />
+            android:src="@drawable/icon_xiaoxi" />
 
 
     </RelativeLayout>

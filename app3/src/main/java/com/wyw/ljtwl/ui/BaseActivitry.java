@@ -27,6 +27,7 @@ public class BaseActivitry extends AppCompatActivity implements EasyPermissions.
 
     //等待动画
     private Dialog mDialog;
+    protected boolean loading = false;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -48,11 +49,31 @@ public class BaseActivitry extends AppCompatActivity implements EasyPermissions.
         AppManager.getAppManager().addActivity(this);//activity管理
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        closeLoding();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        closeLoding();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        closeLoding();
+    }
+
     public void setLoding() {
+        loading = true;
         mDialog = LoadingDialogUtils.createLoadingDialog(this, "加载中...");
     }
 
     public void closeLoding() {
+        loading = false;
         LoadingDialogUtils.closeDialog(mDialog);
     }
 

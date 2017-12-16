@@ -2,27 +2,20 @@ package com.wyw.ljtds.model;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2017/6/10 0010.
  */
 
 public class HomePageModel1 extends BaseModel {
+    private List<Map<String,String>> headImgsList;
     private String[] headImgs;
     private List<NewsModel> news;
     private List<RecommendComms> recommendComms;
+    private List<IConCatInfo> iconImg;
 
-    public String[] getHeadImgs() {
-        return headImgs;
-    }
-
-    public void setHeadImgs(String[] headImgs) {
-        this.headImgs = headImgs;
-    }
-
-    public List<NewsModel> getNews() {
-        return news;
-    }
+    public List<NewsModel> getNews() { return news; }
 
     public void setNews(List<NewsModel> news) {
         this.news = news;
@@ -36,13 +29,37 @@ public class HomePageModel1 extends BaseModel {
         this.recommendComms = recommendComms;
     }
 
+    public List<IConCatInfo> getIconImg() {
+        return iconImg;
+    }
+
+    public void setIconImg(List<IConCatInfo> iconImg) {
+        this.iconImg = iconImg;
+    }
+
+    public String[] getHeadImgs() {
+        return headImgs;
+    }
+
+    public void setHeadImgs(String[] headImgs) {
+        this.headImgs = headImgs;
+    }
+
+    public List<Map<String, String>> getHeadImgsList() {
+        return headImgsList;
+    }
+
+    public void setHeadImgsList(List<Map<String, String>> headImgsList) {
+        this.headImgsList = headImgsList;
+    }
+
     public class RecommendComms {
         private String imgPath;
         private String name;
         private String commodityTypeId;
         private String menuRank;
         private List<goods> commodityList;
-        private boolean flg;
+        private boolean flg = false; //标识商品列表是否要显示
 
         public boolean isFlg() {
             return flg;

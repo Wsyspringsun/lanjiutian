@@ -15,7 +15,7 @@ public class AddressModel extends BaseModel implements Parcelable {
     //手机号
     private String CONSIGNEE_MOBILE;
     //邮编
-    private String CONSIGNEE_ZIP_CODE;
+    private String CONSIGNEE_ZIP_CODE = "048000";
     //详细地址
     private String CONSIGNEE_ADDRESS;
     //默认标识
@@ -24,9 +24,13 @@ public class AddressModel extends BaseModel implements Parcelable {
     private String DEL_FLG;
     //省
     private String PROVINCE;
+    private String CONSIGNEE_PROVINCE;
     //市
     private String CITY;
+    private String CONSIGNEE_CITY;
 
+    private String CONSIGNEE_COUNTY;
+    private String COUNTY = "";
 
     public int getADDRESS_ID() {
         return ADDRESS_ID;
@@ -145,4 +149,36 @@ public class AddressModel extends BaseModel implements Parcelable {
             return new AddressModel[size];
         }
     };
+
+    public String getCONSIGNEE_PROVINCE() {
+        return CONSIGNEE_PROVINCE;
+    }
+
+    public void setCONSIGNEE_PROVINCE(String CONSIGNEE_PROVINCE) {
+        this.CONSIGNEE_PROVINCE = CONSIGNEE_PROVINCE;
+    }
+
+    public String getCONSIGNEE_CITY() {
+        return CONSIGNEE_CITY;
+    }
+
+    public void setCONSIGNEE_CITY(String CONSIGNEE_CITY) {
+        this.CONSIGNEE_CITY = CONSIGNEE_CITY;
+    }
+
+    public String getCONSIGNEE_COUNTY() {
+        return CONSIGNEE_COUNTY;
+    }
+
+    public void setCONSIGNEE_COUNTY(String CONSIGNEE_COUNTY) {
+        this.CONSIGNEE_COUNTY = CONSIGNEE_COUNTY;
+    }
+
+    public String getCOUNTY() {
+        return COUNTY;
+    }
+
+    public void setCOUNTY(String COUNTY) {
+        this.COUNTY = COUNTY;
+    }
 }

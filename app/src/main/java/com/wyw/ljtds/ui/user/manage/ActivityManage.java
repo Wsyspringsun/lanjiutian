@@ -52,7 +52,7 @@ public class ActivityManage extends BaseActivity {
     private UserModel user;
 
 
-    @Event(value = {R.id.address, R.id.shiming, R.id.touxiang, R.id.header_return, R.id.guanyu, R.id.qiehuan, R.id.anquan, R.id.sdv_item_head_img})
+    @Event(value = {R.id.address, R.id.shiming, R.id.touxiang, R.id.header_return, R.id.guanyu, R.id.qiehuan, R.id.anquan, R.id.sdv_item_head_img, R.id.activity_manage_qrcode})
     private void onClick(View view) {
         Intent it;
         switch (view.getId()) {
@@ -61,7 +61,7 @@ public class ActivityManage extends BaseActivity {
                 break;
 
             case R.id.address:
-                Log.e(AppConfig.ERR_TAG,"click...................");
+                Log.e(AppConfig.ERR_TAG, "click...................");
                 it = new Intent(ActivityManage.this, ActivityAddress.class);
                 startActivity(it);
                 break;
@@ -74,6 +74,12 @@ public class ActivityManage extends BaseActivity {
                 } else {
 
                 }
+                break;
+
+            case R.id.activity_manage_qrcode:
+                String jsonUser = GsonUtils.Bean2Json(user);
+                it = QrCodeActivity.getIntent(this, jsonUser);
+                startActivity(it);
                 break;
 
             case R.id.touxiang:
@@ -101,10 +107,11 @@ public class ActivityManage extends BaseActivity {
                 alert.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.alert_queding), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
                         PreferenceCache.putToken("");
                         PreferenceCache.putUsername("");
                         PreferenceCache.putPhoneNum("");
+
+                        finish();
                         Intent it = new Intent(AppConfig.AppAction.ACTION_TOKEN_EXPIRE);
                         MyApplication.getAppContext().sendBroadcast(it);
                     }

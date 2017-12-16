@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
@@ -17,8 +18,11 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.PreferenceCache;
+import com.wyw.ljtds.ui.TestActivity;
 import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
+import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -42,11 +46,12 @@ public class ActivityRegist extends BaseActivity {
     private void onclick(View v) {
         switch (v.getId()) {
             case R.id.next:
-                Intent in = new Intent(this, ActivityRegist1.class);
-                /*if (ed_phone.getText().toString().trim().length()!=11){
-                    ToastUtil.show(this,getResources().getString(R.string.phone_error));
+                if (StringUtils.isEmpty(ed_phone.getText().toString().trim()) || !Utils.validPhoneNum(ed_phone.getText().toString().trim())) {
+                    ToastUtil.show(this, getResources().getString(R.string.phone_error));
                     return;
-                }*/
+                }
+
+                Intent in = new Intent(this, TestActivity.class);
                 in.putExtra(AppConfig.IntentExtraKey.PHONE_NUMBER, ed_phone.getText().toString().trim());
                 startActivity(in);
                 break;
@@ -65,7 +70,6 @@ public class ActivityRegist extends BaseActivity {
         return_tv.setText("账号登陆");
 
     }
-
 
 
 }

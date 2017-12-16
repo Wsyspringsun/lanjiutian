@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x35"
+    android:background="@color/base_bar">
+
+    <LinearLayout
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x5"
+        android:orientation="vertical"
+        android:padding="@dimen/x5">
+
+        <ImageView
+            android:layout_width="@dimen/x18"
+            android:layout_height="@dimen/x18"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/jiantou_zuo_bai" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/activity_fragment_title"
+        style="@style/font_ww_16"
+        android:layout_centerInParent="true"
+        android:textColor="@color/white" />
+
+    <LinearLayout
+        android:id="@+id/ll_icon_btnlist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x5"
+        android:orientation="horizontal"
+        android:padding="@dimen/x5">
+
+        <!--0 消息-->
+        <ImageView
+            android:layout_width="@dimen/x18"
+            android:layout_height="@dimen/x18"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x10"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_xiaoxi"
+            android:visibility="gone" />
+
+        <!--1 刷新-->
+        <ImageView
+            android:layout_width="@dimen/x18"
+            android:layout_height="@dimen/x18"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x10"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_refresh"
+            android:visibility="gone" />
+
+        <!--2 购物车-->
+        <ImageView
+            android:layout_width="@dimen/x18"
+            android:layout_height="@dimen/x18"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x10"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_add_shoppingcart" />
+
+        <!--3 微信分享-->
+        <ImageView
+            android:layout_width="@dimen/x18"
+            android:layout_height="@dimen/x18"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x10"
+            android:scaleType="fitCenter"
+            android:src="@drawable/fenxiang" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>
+

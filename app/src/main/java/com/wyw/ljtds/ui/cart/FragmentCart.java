@@ -1,5 +1,6 @@
 package com.wyw.ljtds.ui.cart;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,8 +24,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.mylhyl.circledialog.CircleDialog;
+import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.GoodsBiz;
+import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
@@ -38,6 +43,7 @@ import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.ui.goods.ActivityGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityGoodsSubmit;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
+import com.wyw.ljtds.ui.user.ActivityLogin;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
@@ -60,6 +66,7 @@ public class FragmentCart extends BaseFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+
     @ViewInject(R.id.exListView)
     private RecyclerView recyclerView;
     //    @ViewInject(R.id.all_chekbox)
@@ -68,10 +75,14 @@ public class FragmentCart extends BaseFragment {
     private TextView tv_total_price;
     @ViewInject(R.id.tv_go_to_pay)
     private TextView tv_go_to_pay;
-    @ViewInject(R.id.header_back_img)
-    private ImageView back;
-    @ViewInject(R.id.header_title)
-    private TextView title;
+//    @ViewInject(R.id.header_back_img)
+//    private ImageView back;
+//    @ViewInject(R.id.header_title)
+//    private TextView title;
+    @ViewInject(R.id.fragment_user_nologin)
+    private LinearLayout layoutNologin;
+    @ViewInject(R.id.fragment_user_logined)
+    private LinearLayout layoutlogin;
 
     private double totalPrice = 0.00;// 购买的商品总价
     private int totalCount = 0;// 购买的商品总数量
@@ -83,6 +94,7 @@ public class FragmentCart extends BaseFragment {
     private int index = 0;
     //    private int x = 0;//购物车商品数量
     private List<Goods> select = new ArrayList<>();
+    private boolean fresh = true;
 
 
     @Event(value = { /**R.id.all_chekbox,*/R.id.tv_go_to_pay, R.id.tv_delete})
@@ -148,6 +160,7 @@ public class FragmentCart extends BaseFragment {
                 } else {
                     goodSubmitModel.setDETAILS(groupList);
                     Intent it = new Intent(getActivity(), ActivityGoodsSubmit.class);
+                    Log.e(AppConfig.ERR_TAG, "Bean2Json:" + GsonUtils.Bean2Json(goodSubmitModel));
                     it.putExtra("data", GsonUtils.Bean2Json(goodSubmitModel));
                     startActivity(it);
                 }
@@ -194,54 +207,73 @@ public class FragmentCart extends BaseFragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //判断是否登录
+        if (!UserBiz.isLogined()) {
+            layoutlogin.setVisibility(View.GONE);
+            layoutNologin.setVisibility(View.VISIBLE);
+            return;
+        }
+        layoutlogin.setVisibility(View.VISIBLE);
+        layoutNologin.setVisibility(View.GONE);
+        showCart();
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        x = 0;
-        back.setVisibility(View.GONE);
-//        title.setText( "购物车（" + x + "）" );
-        title.setText("购物车");
 
-        showCart();
+        //添加登录事件
+        layoutNologin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityLogin.goLogin(getActivity());
+            }
+        });
+
+
+//        x = 0;
+//        back.setVisibility(View.GONE);
+//        title.setText( "购物车（" + x + "）" );
+//        title.setText("购物车");
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         noData = getActivity().getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
         adapter = new MyAdapter();
         recyclerView.setAdapter(adapter);
-//        recyclerView.addOnItemTouchListener( new OnItemChildClickListener() {
-//            @Override
-//            public void SimpleOnItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-//                switch (view.getId()){
-//                    case R.id.determine_chekbox:
-//                        CheckBox checkBox= (CheckBox) view.findViewById( R.id.determine_chekbox );
-//                        adapter.getItem( i ).setChoosed( checkBox.isChecked() );
-//                        Group group=adapter.getItem( i );
-//                        for (int j = 0; j < adapter.getItem( i ).getGoodses().size(); j++) {
-//                            group.getGoodses().get( j ).setChoosed( group.isChoosed );
-//                        }
-//                        Log.e( "******asdasd",group.isChoosed()+"" );
-//                        adapter.notifyDataSetChanged();
-//                        calculate();
 //
-//                        break;
-//                }
-//            }
-//        } );
         adapter.setEmptyView(noData);
+
+//        if (getActivity() instanceof MainActivity)
+//            showCart();
+
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         //购物车隐藏时   清除数据   显现时重新加载数据
+
         if (hidden) {
-            adapter.getData().clear();
-//            x = 0;
-//            cb_check_all.setChecked( false );
-            tv_total_price.setText("￥0.00");
-            tv_go_to_pay.setText("结算(0)");
         } else {
-            if (AppConfig.currSel == 3) {
+            if (MainActivity.index == 3) {
+                //没有登录跳入登录界面
+                if (!UserBiz.isLogined()) {
+                    layoutlogin.setVisibility(View.GONE);
+                    layoutNologin.setVisibility(View.VISIBLE);
+                    return;
+                }
+                layoutlogin.setVisibility(View.VISIBLE);
+                layoutNologin.setVisibility(View.GONE);
                 showCart();
             }
         }
@@ -403,6 +435,7 @@ public class FragmentCart extends BaseFragment {
 
         }
         String str = GsonUtils.List2Json(toBeDeleteProducts);
+        Log.e(AppConfig.ERR_TAG, "delete............" + str);
         updateCart(str, "delete");
 
         calculate();
@@ -480,7 +513,8 @@ public class FragmentCart extends BaseFragment {
             protected void onExecuteSucceeded(String s) {
                 closeLoding();
 
-                if (s.contains("用户名密码") || s.contains("Token不一致") || s.contains("Token为空")) {//未登陆跳转
+                if (s.contains("新旧Token不一致") || s.contains("用户名密码") || s.contains("Token为空")) {
+                    //未登陆跳转
                     Toast.makeText(MyApplication.getAppContext(), R.string.auth_expire,
                             Toast.LENGTH_LONG).show();
                     Intent i = new Intent(AppConfig.AppAction.ACTION_TOKEN_EXPIRE);

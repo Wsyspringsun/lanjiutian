@@ -151,6 +151,26 @@
 
                     <TextView
                         style="@style/font_ww_14"
+                        android:text="@string/order_userremark"
+                        android:textColor="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/activity_order_info_tv_orderremark"
+                        style="@style/font_ww_14"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/gray" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/x4"
+                    android:layout_marginTop="@dimen/x4">
+
+                    <TextView
+                        style="@style/font_ww_14"
                         android:text="@string/order_dikou"
                         android:textColor="@color/gray" />
 
@@ -220,30 +240,6 @@
                 android:orientation="vertical"
                 android:padding="@dimen/x6">
 
-                <!--
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        style="@style/font_ww_14"
-                        android:text="@string/order_fanjifen"
-                        android:textColor="@color/gray" />
-
-                    <TextView
-                        style="@style/font_ww_16"
-                        android:text="15"
-                        android:textColor="@color/base_bar" />
-
-                    <TextView
-                        style="@style/font_ww_14"
-                        android:text="@string/dian"
-                        android:textColor="@color/gray" />
-
-                </LinearLayout>
-                -->
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -273,6 +269,14 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/activity_order_info_tv_shopaddr"
+                    style="@style/font_ww_14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/x10"
+                    android:text="@string/shop_addr"
+                    android:textColor="@color/font_black2" />
             </LinearLayout>
 
             <LinearLayout

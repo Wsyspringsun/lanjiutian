@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/fragment_xianshiqiang_tv_timershow"
+        style="@style/font_ww_22_white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#60000000"
+        android:gravity="center"
+        android:padding="@dimen/x3"
+        android:text="@string/holder" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_xianshiqiang_rv_goods"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

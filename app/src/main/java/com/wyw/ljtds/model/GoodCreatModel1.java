@@ -8,14 +8,16 @@ import java.util.List;
 
 public class GoodCreatModel1 extends BaseModel {
     private List<GoodCreatModel2> DETAILS;
+    private String ADDRESS_ID;
     private String COST_POINT;
     private String PAYMENT_METHOD;
     //配送时间 起始
     private String DISTRIBUTION_DATE_START;
     //配送时间 截止
     private String DISTRIBUTION_DATE_END;
-
-        //使用电子币标识
+    //用户留言
+    private String REMARKS;
+    //使用电子币标识
     private String COIN_FLG;
     //使用邮费抵用券标识
     private String POSTAGE_FLG;
@@ -74,5 +76,21 @@ public class GoodCreatModel1 extends BaseModel {
 
     public void setCOIN_FLG(String COIN_FLG) {
         this.COIN_FLG = COIN_FLG;
+    }
+
+    public String getADDRESS_ID() {
+        return ADDRESS_ID;
+    }
+
+    public void setADDRESS_ID(String ADDRESS_ID) {
+        this.ADDRESS_ID = ADDRESS_ID;
+    }
+
+    public String getREMARKS() {
+        return REMARKS;
+    }
+
+    public void setREMARKS(String REMARKS) {
+        this.REMARKS = REMARKS;
     }
 }

@@ -8,6 +8,8 @@ import java.util.List;
  */
 
 public class CreatOrderModel extends BaseModel implements Serializable {
+    //获取的 地址 id
+    private String ADDRESS_ID;
     //配送时间 起始
     private String DISTRIBUTION_DATE_START;
     //配送时间 截止
@@ -127,6 +129,14 @@ public class CreatOrderModel extends BaseModel implements Serializable {
 
     public void setCOIN_FLG(String COIN_FLG) {
         this.COIN_FLG = COIN_FLG;
+    }
+
+    public String getADDRESS_ID() {
+        return ADDRESS_ID;
+    }
+
+    public void setADDRESS_ID(String ADDRESS_ID) {
+        this.ADDRESS_ID = ADDRESS_ID;
     }
 
     public class USER_ADDRESS {

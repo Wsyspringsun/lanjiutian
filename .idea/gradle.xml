@@ -10,10 +10,12 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/MarqueeView" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/app2" />
             <option value="$PROJECT_DIR$/app3" />
             <option value="$PROJECT_DIR$/circledialog" />
             <option value="$PROJECT_DIR$/easypermissions" />
             <option value="$PROJECT_DIR$/flowlayout-lib" />
+            <option value="$PROJECT_DIR$/temp" />
             <option value="$PROJECT_DIR$/xiaonengChatUI" />
           </set>
         </option>

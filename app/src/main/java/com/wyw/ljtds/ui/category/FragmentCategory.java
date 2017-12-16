@@ -27,13 +27,13 @@ import java.util.List;
 
 @ContentView(R.layout.fragment_categorys)
 public class FragmentCategory extends BaseFragment {
-    @ViewInject( R.id.tabs )
+    @ViewInject(R.id.tabs)
     private PagerSlidingTabStrip tabs;
-    @ViewInject( R.id.pager )
+    @ViewInject(R.id.pager)
     private ViewPager pager;
 
 
-    private ArrayList<String> titles=new ArrayList<>(  );
+    private ArrayList<String> titles = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
     private FragmentLife fragmentLife;
     private FragmentMedicine fragmentMedicine;
@@ -60,21 +60,26 @@ public class FragmentCategory extends BaseFragment {
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        if (pager == null) return;
+        pager.setCurrentItem(1);
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        fragmentLife=new FragmentLife();
-        fragmentMedicine=new FragmentMedicine();
-        fragmentList.add( fragmentLife );
-        fragmentList.add( fragmentMedicine );
-        titles.add( "生活馆" );
-        titles.add( "医药馆" );
-        pager.setAdapter( new MyFrPagerAdapter(getActivity().getSupportFragmentManager(),titles,fragmentList ));
+        fragmentLife = new FragmentLife();
+        fragmentMedicine = new FragmentMedicine();
+        fragmentList.add(fragmentLife);
+        fragmentList.add(fragmentMedicine);
+        titles.add("生活馆");
+        titles.add("医药馆");
+        pager.setAdapter(new MyFrPagerAdapter(getActivity().getSupportFragmentManager(), titles, fragmentList));
         tabs.setViewPager(pager);
-        pager.setCurrentItem(1);
 
     }
 

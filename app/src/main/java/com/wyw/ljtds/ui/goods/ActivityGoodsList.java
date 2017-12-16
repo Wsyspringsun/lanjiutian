@@ -97,6 +97,7 @@ public class ActivityGoodsList extends BaseActivity {
             case R.id.edHeader:
                 it = new Intent(this, ActivitySearch.class);
                 it.putExtra("from", 1);
+                it.putExtra(ActivitySearch.TAG_INIT_KEYWORD, search.getText().toString());
                 finish();
                 startActivity(it);
                 break;
@@ -159,6 +160,10 @@ public class ActivityGoodsList extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         keyword = getIntent().getStringExtra("search");
+        if (!StringUtils.isEmpty(keyword)) {
+            search.setText(keyword);
+        }
+
         classId = getIntent().getStringExtra("typeid");
         if (StringUtils.isEmpty(classId)) {
             classId = getIntent().getStringExtra(TAG_TYPE_ID);

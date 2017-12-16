@@ -1,5 +1,6 @@
 package com.wyw.ljtds.ui.user.order;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,6 +40,7 @@ public class ActivityOrder extends BaseActivity {
 
     private ArrayList<String> titles = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<Fragment>();
+    private static final String TAG_INDEX= "com.wyw.ljtds.ui.user.order.tag_index";
 
     @Event(value = {R.id.back, R.id.message})
     private void onClick(View v) {
@@ -66,10 +68,6 @@ public class ActivityOrder extends BaseActivity {
         orderList4.setStateCat("C");
         FragmentOrderList orderList5 = new FragmentOrderList();
         orderList5.setStateCat("D");
-//        orderList2 = new FragmentOrderList2();
-//        orderList3 = new FragmentOrderList3();
-//        orderList4 = new FragmentOrderList4();
-//        orderList5 = new FragmentOrderList5();
         fragmentList.add(orderList1);
         fragmentList.add(orderList2);
         fragmentList.add(orderList3);
@@ -83,8 +81,14 @@ public class ActivityOrder extends BaseActivity {
 
         viewPager.setAdapter(new MyFrPagerAdapter(getSupportFragmentManager(), titles, fragmentList));
         tabs.setViewPager(viewPager);
-        viewPager.setCurrentItem(getIntent().getIntExtra("index", 0));
+        viewPager.setCurrentItem(getIntent().getIntExtra(TAG_INDEX, 0));
         AppManager.addDestoryActivity(this, "order");
+    }
+
+    public static Intent getIntent(Context ctx, int index) {
+        Intent it = new Intent(ctx, ActivityOrder.class);
+        it.putExtra(TAG_INDEX, index);
+        return it;
     }
 
     @Override

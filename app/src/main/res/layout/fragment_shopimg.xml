@@ -39,8 +39,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|bottom"
                 android:background="#0F000000"
-                android:paddingTop="@dimen/x10"
                 android:paddingLeft="@dimen/x20"
+                android:paddingTop="@dimen/x10"
                 android:text="@string/holder"
                 android:textColor="#ffffff"
                 android:textSize="@dimen/dp_22" />
@@ -49,23 +49,24 @@
 
 
         <com.facebook.drawee.view.SimpleDraweeView
-            android:visibility="gone"
             android:id="@+id/fragment_shopimg_iv_banner"
             android:layout_width="match_parent"
             android:layout_height="@dimen/x120"
+            android:visibility="gone"
             fresco:actualImageScaleType="fitCenter"
             fresco:fadeDuration="200"
             fresco:failureImage="@mipmap/zhanweitu"
             fresco:failureImageScaleType="fitCenter"
             fresco:placeholderImage="@mipmap/zhanweitu" />
 
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/fragment_shopimg_rv_types"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/white"
-            android:layoutDirection="ltr" />
+            android:layoutDirection="ltr"
+            android:visibility="gone" />
 
         <View
             android:layout_width="match_parent"
@@ -76,8 +77,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:orientation="vertical"
             android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical"
             android:paddingTop="@dimen/x20">
 
             <TextView
@@ -102,19 +103,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:orientation="vertical"
             android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical"
             android:paddingTop="@dimen/x20">
 
             <TextView
                 style="@style/RecycleViewTitle"
                 android:text="@string/shop_nearest" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/fragment_shopimg_rv_nearest"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white" />
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragment_shopimg_rv_nearest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white" />
+
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 </com.wyw.ljtds.widget.MyScrollView>

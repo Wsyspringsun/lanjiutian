@@ -1,13 +1,19 @@
 package com.wyw.ljtds.ui.goods;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.util.StringBuilderPrinter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,6 +23,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.CategoryBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
@@ -48,7 +55,7 @@ import java.util.List;
 public class ActivityMedicineList extends BaseActivity {
     public static final String TAG_LIST_FROM = "com.wyw.ljtds.ui.goods.ActivityMedicineList.tag_list_from";
     @ViewInject(R.id.recyclerView)
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView; //药品列表
     @ViewInject(R.id.back)
     private ImageView back;
     @ViewInject(R.id.edHeader)
@@ -84,6 +91,7 @@ public class ActivityMedicineList extends BaseActivity {
     private String orderby = "";
     private int pageIndex = 1;
     private String topFlg = "";
+    private Object activeList;
 
     @Event(value = {R.id.back, R.id.edHeader, R.id.xiaoxi, R.id.paixu1, R.id.paixu2, R.id.paixu3, R.id.paixu4})
     private void onclick(View view) {
@@ -96,6 +104,7 @@ public class ActivityMedicineList extends BaseActivity {
             case R.id.edHeader:
                 it = new Intent(this, ActivitySearch.class);
                 it.putExtra("from", 0);
+                it.putExtra(ActivitySearch.TAG_INIT_KEYWORD, search.getText().toString());
                 finish();
                 startActivity(it);
                 break;
@@ -147,9 +156,7 @@ public class ActivityMedicineList extends BaseActivity {
         adapter = new MyAdapter();
         adapter.setNewData(new ArrayList<MedicineListModel>());
         adapter.notifyDataSetChanged();
-        Log.e(AppConfig.ERR_TAG, "new adapter:" + adapter.getItemCount());
         recyclerView.setAdapter(adapter);
-        Log.e(AppConfig.ERR_TAG, "setAdapter adapter:" + adapter.getItemCount());
         pageIndex = 1;
         loadData();
     }
@@ -170,10 +177,14 @@ public class ActivityMedicineList extends BaseActivity {
             classId = getIntent().getStringExtra(FragmentFind.TAG_MTD_QUICK_PARAM);
         } else if (FragmentFind.FIND_MTD_QUICK2.equals(listFrom)) {
             classId = getIntent().getStringExtra(FragmentFind.TAG_MTD_QUICK_PARAM);
-        } else if(FragmentFind.FIND_MTD_QUICK3.equals(listFrom)){
+        } else if (FragmentFind.FIND_MTD_QUICK3.equals(listFrom)) {
             topFlg = getIntent().getStringExtra(FragmentFind.TAG_MTD_QUICK_PARAM);
-        }else {
+        } else {
             keyword = getIntent().getStringExtra("search");
+            if (!StringUtils.isEmpty(keyword)) {
+                search.setText(keyword);
+            }
+
             classId = getIntent().getStringExtra("typeid");
         }
         Log.e(AppConfig.ERR_TAG, "params:[" + classId + "," + keyword + "]");
@@ -183,15 +194,14 @@ public class ActivityMedicineList extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final GridLayoutManager glm = new GridLayoutManager(this, 2);
+        final GridLayoutManager glm = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(glm);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new SpaceItemDecoration(10));
         recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                Intent it = new Intent(ActivityMedicineList.this, ActivityMedicinesInfo.class);
-                it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getData().get(i).getWAREID());
+                Intent it = ActivityMedicinesInfo.getIntent(ActivityMedicineList.this, adapter.getData().get(i).getWAREID());
                 startActivity(it);
             }
         });
@@ -207,8 +217,7 @@ public class ActivityMedicineList extends BaseActivity {
                 int cnt = adapter.getItemCount();
                 int totalItemCount = glm.getItemCount();
                 int lastVisibleItem = glm.findLastVisibleItemPosition();
-                Log.e(AppConfig.ERR_TAG, "itemCnt:" + cnt + "loadMore:[" + totalItemCount + "," + lastVisibleItem + "]");
-                if (!end && !loading && (lastVisibleItem) >= cnt) {
+                if (!end && !loading && (lastVisibleItem + 1) >= cnt) {
                     pageIndex = pageIndex + 1;
                     loadData();
                 }
@@ -309,20 +318,31 @@ public class ActivityMedicineList extends BaseActivity {
     private class MyAdapter extends BaseQuickAdapter<MedicineListModel> {
 
         public MyAdapter() {
-            super(R.layout.item_goods_grid, list);
+            super(R.layout.item_goods_onecol, list);
         }
 
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, MedicineListModel medicineListModel) {
-            baseViewHolder.setText(R.id.goods_title, StringUtils.deletaFirst(medicineListModel.getWARENAME()))
-                    .setText(R.id.money, medicineListModel.getSALEPRICE());
+            String wareName = StringUtils.deletaFirst(medicineListModel.getWARENAME()),
+                    brand = "白云山",
+                    detailFlg = "[买而送一]",
+                    size = "10g ^ 29里\n\n",
+                    postage = "问仓冻结点 配送费4元\n\n",
+                    price = "￥" + medicineListModel.getSALEPRICE();
+            StringBuilder sb = new StringBuilder(detailFlg).append(brand).append(wareName).append(size).append(postage).append(price);
+            int priceStart = sb.length() - price.length();
+            SpannableString sbs = new SpannableString(sb.toString());
+            sbs.setSpan(new ForegroundColorSpan(Color.RED), 0, detailFlg.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_head_img);
-            if (StringUtils.isEmpty(medicineListModel.getIMG_PATH())) {
-                goods_img.setImageURI(Uri.parse(""));
-            } else {
-                goods_img.setImageURI(Uri.parse(medicineListModel.getIMG_PATH()));
+            sbs.setSpan(new AbsoluteSizeSpan(50), priceStart, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sbs.setSpan(new ForegroundColorSpan(Color.RED), priceStart, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            baseViewHolder.setText(R.id.item_goods_omecol_goods_info, sbs);
+//                    .setText(R.id.money, medicineListModel.getSALEPRICE());
+
+            ImageView goodsImg = baseViewHolder.getView(R.id.item_goods_omecol_goods_img);
+            if (!StringUtils.isEmpty(medicineListModel.getIMG_PATH())) {
+                Picasso.with(ActivityMedicineList.this).load(Uri.parse(medicineListModel.getIMG_PATH())).into(goodsImg);
             }
 
         }

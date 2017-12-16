@@ -2,6 +2,7 @@ package com.wyw.ljtds.ui.user;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.UserBiz;
@@ -58,7 +60,6 @@ public class ActivityRegist1 extends BaseActivity {
     private CheckBox chkAgreeLicense;
 
 
-
     private Timer timer;
     private TimerTask timerTask;
     private int count = 60;//60秒
@@ -72,7 +73,7 @@ public class ActivityRegist1 extends BaseActivity {
 //                    //ToastUtil.show(this,);
 //                }
 //                 同意协议
-                if(!chkAgreeLicense.isChecked()){
+                if (!chkAgreeLicense.isChecked()) {
                     ToastUtil.show(this, getString(R.string.agree_license));
                     return;
                 }
@@ -80,7 +81,7 @@ public class ActivityRegist1 extends BaseActivity {
                 Log.e(AppConfig.ERR_TAG, "data:" + password.getText().toString() + "/len:" + password.getText().length());
                 if (StringUtils.isEmpty(password.getText())) {
                     ToastUtil.show(this, getString(R.string.password_valid));
-                } else if (password.getText().length() > 20 || password.getText().length() < 8) {
+                } else if (password.getText().length() > 20 || password.getText().length() < 6) {
                     ToastUtil.show(this, getString(R.string.password_valid));
                 } else {
                     setLoding(this, false);
@@ -178,6 +179,8 @@ public class ActivityRegist1 extends BaseActivity {
         super.onResume();
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.fragment_send_ticket, (ViewGroup) findViewById(R.id.fragment_con));
+        SimpleDraweeView sdv = (SimpleDraweeView) layout.findViewById(R.id.fragment_send_ticket_sdv_show);
+        sdv.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + "/.appinit/regist_ok.png"));
 //       final Dialog dialog = new AlertDialog.Builder(this)).setView(layout).create();
         Dialog dialog = new Dialog(ActivityRegist1.this, R.style.Theme_AppCompat_Dialog);
 //        dialog.setContentView(R.layout.fragment_send_ticket);

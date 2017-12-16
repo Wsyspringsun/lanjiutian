@@ -34,15 +34,10 @@
             android:gravity="center_vertical"
             android:orientation="horizontal" >
 
-            <cn.xiaoneng.uiview.CustomImageView
-                android:id="@+id/div_userhead"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:clickable="false"
-                android:src="@drawable/kefu" />
-
+		<include 
+            android:id="@+id/div_userhead"
+            layout="@layout/xn_lefthead_include"
+            />
             <RelativeLayout
                 android:id="@+id/l_rl_text_uname"
                 android:layout_width="wrap_content"
@@ -131,6 +126,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/tv_leaveinfo"
+                    android:text="11111"
                     android:textColor="@color/xn_card_title"
                     android:textSize="14sp" />
             </RelativeLayout>
@@ -157,11 +153,11 @@
                         android:id="@+id/foreText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:autoLink="web"
                         android:clickable="false"
                         android:paddingLeft="14dp"
                         android:paddingRight="4dp"
                         android:paddingTop="8dp"
+                        android:autoLink="phone"
                         android:textColor="@color/xn_black"
                         android:textSize="14sp" />
 

@@ -27,8 +27,10 @@
         <item name="android:background">@color/base_bar</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:paddingTop">@dimen/x5</item>
-        <item name="android:paddingBottom">@dimen/x5</item>
+        <item name="android:layout_marginLeft">@dimen/x1</item>
+        <item name="android:layout_marginRight">@dimen/x1</item>
+        <item name="android:paddingTop">@dimen/x8</item>
+        <item name="android:paddingBottom">@dimen/x8</item>
     </style>
 
 </resources>

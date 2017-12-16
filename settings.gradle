@@ -1,2 +1,1 @@
-include ':easypermissions', ':app3', 'app', ':circledialog', ':flowlayout-lib', ':MarqueeView'
-include ':xiaonengChatUI'
+include ':easypermissions', ':app3', ':temp', 'app', ':circledialog', ':flowlayout-lib', ':MarqueeView', ':app2', ':xiaonengChatUI'

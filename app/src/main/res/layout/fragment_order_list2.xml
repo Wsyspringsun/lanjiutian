@@ -17,7 +17,7 @@
             android:id="@+id/dianzibi_tv_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/font_ww_18_black"
+            style="@style/font_ww_22_red"
             android:text="@string/holder"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"

@@ -25,6 +25,7 @@ import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.goods.ActivityGoodsList;
 import com.wyw.ljtds.ui.goods.ActivityMedicineList;
 import com.wyw.ljtds.utils.InputMethodUtils;
+import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.widget.MyGridView;
 
 import org.xutils.view.annotation.ContentView;
@@ -40,6 +41,7 @@ import java.util.List;
 
 @ContentView(R.layout.activity_search)
 public class ActivitySearch extends BaseActivity {
+    public static final String TAG_INIT_KEYWORD = "com.wyw.ljtds.ui.home.ActivitySearch.tag_init_keyword";
     @ViewInject(R.id.gridview)
     private MyGridView gridView;
     @ViewInject(R.id.mgv_nearest_keywords)
@@ -73,8 +75,10 @@ public class ActivitySearch extends BaseActivity {
     private void goSearchRlt() {
         Intent it = null;
         if (getIntent().getIntExtra("from", 0) == 1) {
+            //搜索 商品
             it = new Intent(ActivitySearch.this, ActivityGoodsList.class);
         } else {
+            //搜索 药品
             it = new Intent(ActivitySearch.this, ActivityMedicineList.class);
         }
         String keyword = edHeader.getText().toString().trim();
@@ -127,6 +131,11 @@ public class ActivitySearch extends BaseActivity {
             KeywordsStore.initData(AppConfig.LIFE);
         }
         List<String> listKeys = KeywordsStore.getList();
+
+        String keyword = getIntent().getStringExtra(TAG_INIT_KEYWORD);
+        if (!StringUtils.isEmpty(keyword)) {
+            edHeader.setText(keyword);
+        }
         final AbstractListViewAdapter<String> adapter2 = new AbstractListViewAdapter<String>(this, R.
                 layout.item_search_tuijian) {
             @Override
@@ -180,6 +189,7 @@ public class ActivitySearch extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //持久化查询记录
         KeywordsStore.doStore();
     }
 

@@ -2,16 +2,22 @@ package com.wyw.ljtds.model;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2017/5/1 0001.
  */
 
 public class HomePageModel extends BaseModel {
+    //单独 的 广告 图片
     private String[] advImgs;
+    //轮播 图片
+    private List<Map<String, String>> headImgsList;
     private String[] headImgs;
+    //活动 图片
     private List<activeComms> activeComms;
     private List<NewsModel> news;
+    //推荐 图片
     private List<CLASS> recommendComms;
 
 
@@ -39,14 +45,6 @@ public class HomePageModel extends BaseModel {
         this.activeComms = activeComms;
     }
 
-    public String[] getHeadImgs() {
-        return headImgs;
-    }
-
-    public void setHeadImgs(String[] headImgs) {
-        this.headImgs = headImgs;
-    }
-
     public List<CLASS> getRecommendComms() {
         return recommendComms;
     }
@@ -55,7 +53,23 @@ public class HomePageModel extends BaseModel {
         this.recommendComms = recommendComms;
     }
 
-    public class activeComms{
+    public List<Map<String, String>> getHeadImgsList() {
+        return headImgsList;
+    }
+
+    public void setHeadImgsList(List<Map<String, String>> headImgsList) {
+        this.headImgsList = headImgsList;
+    }
+
+    public String[] getHeadImgs() {
+        return headImgs;
+    }
+
+    public void setHeadImgs(String[] headImgs) {
+        this.headImgs = headImgs;
+    }
+
+    public class activeComms {
         private String IMG_PATH;
         private BigDecimal SALEPRICE;
         private String WAREID;
@@ -95,9 +109,7 @@ public class HomePageModel extends BaseModel {
     }
 
 
-
-
-    public class CLASS{
+    public class CLASS {
         private String CLASSCODE;
         private String CLASSNAME;
         private List<DETAILS> DETAILS;
@@ -127,7 +139,7 @@ public class HomePageModel extends BaseModel {
         }
     }
 
-    public class DETAILS{
+    public class DETAILS {
         private String IMG_PATH;
         private String WARENAME;
         private String WAREID;

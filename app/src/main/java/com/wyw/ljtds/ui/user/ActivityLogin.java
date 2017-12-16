@@ -1,5 +1,6 @@
 package com.wyw.ljtds.ui.user;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.AppManager;
+import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.user.manage.ActivityAmendPassword1;
@@ -51,11 +53,11 @@ public class ActivityLogin extends BaseActivity {
         switch (view.getId()) {
             case R.id.guanbi:
                 InputMethodUtils.closeSoftKeyboard(this);
+
+//                it = new Intent(ActivityLogin.this, MainActivity.class);
+//                startActivity(it);
+
                 finish();
-                it = new Intent(this, MainActivity.class);
-                AppConfig.currSel = 2;
-                it.putExtra(AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel);
-                startActivity(it);
                 break;
 
             case R.id.zhuce:
@@ -148,12 +150,17 @@ public class ActivityLogin extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == event.KEYCODE_BACK) {
             InputMethodUtils.keyBoxIsShow(this);
+
+//            Intent it = new Intent(this, MainActivity.class);
+//            startActivity(it);
             finish();
-            Intent it = new Intent(this, MainActivity.class);
-            AppConfig.currSel = 0;
-            it.putExtra(AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel);
-            startActivity(it);
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+
+    public static void goLogin(Context context) {
+        Intent it = new Intent(context, ActivityLogin.class);
+        context.startActivity(it);
     }
 }

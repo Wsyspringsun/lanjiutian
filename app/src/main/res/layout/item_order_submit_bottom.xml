@@ -67,9 +67,12 @@
 
         <CheckBox
             android:id="@+id/chk_use_dianzibi"
-            android:layout_alignParentRight="true"
+            style="@style/MyCheckBox"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text=" " />
+
 
         <TextView
             style="@style/font_ww_16_black"
@@ -85,7 +88,8 @@
             style="@style/font_ww_18_black"
             android:layout_alignBaseline="@id/chk_use_dianzibi"
             android:layout_marginRight="@dimen/x7"
-            android:layout_toLeftOf="@id/chk_use_dianzibi" />
+            android:layout_toLeftOf="@id/chk_use_dianzibi"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -95,9 +99,11 @@
 
         <CheckBox
             android:id="@+id/chk_use_youfeiquan"
-            android:layout_alignParentRight="true"
+            style="@style/MyCheckBox"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text=" " />
 
         <TextView
             style="@style/font_ww_16_black"
@@ -113,7 +119,32 @@
             style="@style/font_ww_18_black"
             android:layout_alignBaseline="@id/chk_use_youfeiquan"
             android:layout_marginRight="@dimen/x7"
-            android:layout_toLeftOf="@id/chk_use_youfeiquan" />
+            android:layout_toLeftOf="@id/chk_use_youfeiquan"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/x10">
+
+        <EditText
+            android:id="@+id/order_submit_ed_customernote"
+            style="@style/edtxt_single"
+            android:layout_width="@dimen/x200"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:hint="@string/customer_note" />
+
+        <TextView
+            style="@style/font_ww_16_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/order_submit_ed_customernote"
+            android:layout_alignParentLeft="true"
+            android:text="@string/customer_note" />
+
+
     </RelativeLayout>
 
 

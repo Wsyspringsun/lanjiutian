@@ -14,7 +14,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
+import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.AppManager;
@@ -23,11 +29,16 @@ import com.wyw.ljtds.ui.user.ActivityLogin;
 import com.wyw.ljtds.ui.user.address.ActivityAddress;
 import com.wyw.ljtds.ui.user.address.ActivityAddressEdit;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.utils.Utils;
+import com.wyw.ljtds.widget.LoginDialog;
 import com.wyw.ljtds.widget.dialog.LoadingDialogUtils;
 
 import org.xutils.x;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.xiaoneng.coreapi.ChatParamsBody;
 import cn.xiaoneng.uiapi.Ntalker;
@@ -42,8 +53,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 
 public class BaseActivity extends AppCompatActivity implements XNSDKListener, EasyPermissions.PermissionCallbacks {
-    //广播
-    protected BroadcastReceiver receiver;
+    BroadcastReceiver receiver;
 
     protected boolean canShowLogin = true;
     protected boolean canShowAddress = true;
@@ -68,112 +78,67 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Utils.log(this.getClass().getName() + "................");
 
         AppManager.getAppManager().addActivity(this);//activity管理
         x.view().inject(this);//xutils初始化视图
         Ntalker.getInstance().setSDKListener(this);// 小能监听接口
 
-
+        //注册广播接收器
         receiver = new BroadcastReceiver() {
-
             @Override
             public void onReceive(Context context, Intent intent) {
-                onReceiveBroadcast(intent);
+                String action = intent.getAction();
+                Utils.log(action);
+                if (AppConfig.AppAction.ACTION_TOKEN_EXPIRE.equals(action)) {// token过期
+                    LoginDialog.show(BaseActivity.this);
+//                    Intent it = new Intent(context, ActivityLogin.class);
+//                    context.startActivity(it);
+                } else if (action.equals(AppConfig.AppAction.ACTION_RESETMAIN)) {
+                }
             }
         };
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(AppConfig.AppAction.ACTION_TOKEN_EXPIRE); // token过期
-        filter.addAction(AppConfig.AppAction.ACTION_ADDRESS_EXPIRE);//没有地址
-        filter.addAction(AppConfig.AppAction.Base_ACTION_PREFIX + "refresh");
-        registerReceiver(receiver, filter);
     }
 
-    protected void onReceiveBroadcast(Intent intent) {
-        String action = intent.getAction();
-        Log.e("action", action);
-//        Log.e("-------",AppManager.getAppManager().currentActivity()+"");
-        if (action.equals(AppConfig.AppAction.ACTION_TOKEN_EXPIRE)) {// token过期
-            /**
-             * MainActivity 与 其他 Activity 都继承与BaseActivity ，当超时时 会显示出多个Login页面
-             * 这里block住所有onPause的Activity(意在只保留当前显示的Activity) 防止重复出现多个login
-             */
-            if (!(BaseActivity.this instanceof ActivityLogin) && canShowLogin) {
-                Intent it = new Intent(BaseActivity.this, ActivityLogin.class);
-//                if ((BaseActivity.this instanceof MainActivity)) {
-//                    it.putExtra( AppConfig.IntentExtraKey.LOGIN_FROM_MAIN, true );
-//                }else {
-//                    it.putExtra( AppConfig.IntentExtraKey.LOGIN_FROM_MAIN, false );
-//                }
-                BaseActivity.this.startActivity(it);
-            }
-        } else if (action.equals(AppConfig.AppAction.ACTION_ADDRESS_EXPIRE)) {
-            if (!(BaseActivity.this instanceof ActivityAddress) && canShowAddress) {
-                Intent it = new Intent(BaseActivity.this, ActivityAddressEdit.class);
-//                if ((BaseActivity.this instanceof MainActivity)) {
-//                    it.putExtra( AppConfig.IntentExtraKey.LOGIN_FROM_MAIN, true );
-//                }else {
-//                    it.putExtra( AppConfig.IntentExtraKey.LOGIN_FROM_MAIN, false );
-//                }
-                it.putExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, 4);
-                BaseActivity.this.startActivity(it);
-            }
-        } else if (action.equals(AppConfig.AppAction.Base_ACTION_PREFIX + "refresh")) {
-//            resumeFromOnResume();
-            resumeFromOther();
-        }
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        canShowLogin = true;
-        canShowAddress = true;
-////        refreshForMain=true;
-//
-//        Log.e( "797979",((BaseActivity.this instanceof MainActivity)+";"+AppManager.getAppManager().currentActivity())+"");
-//        if ((BaseActivity.this instanceof MainActivity)) {
-//            /**
-//             * 刷新主页 4个tab
-//             */
-//            resumeFromOnResume();
-//        } else if (!(BaseActivity.this instanceof MainActivity)
-//                && !(BaseActivity.this instanceof ActivityLogin)
-//                &&!(BaseActivity.this instanceof MainActivity)){
-////                && refreshForOther ){
-//            /**
-//             * 当token=null 或者token过期， 登录后刷新当前页面
-//             */
-//            resumeFromOther();
-//
-//        }
+        Log.e(AppConfig.ERR_TAG, "onResume:" + this.getClass().getName());
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(AppConfig.AppAction.ACTION_TOKEN_EXPIRE); // token过期
+        filter.addAction(AppConfig.AppAction.ACTION_RESETMAIN); // token过期
+        registerReceiver(receiver, filter);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterReceiver(receiver);
+        Log.e(AppConfig.ERR_TAG, "onPause:" + this.getClass().getName());
+        closeLoding();
+    }
 
-        canShowLogin = false;
-        canShowAddress = false;
-//        refreshForMain=false;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e(AppConfig.ERR_TAG, "onStart:" + this.getClass().getName());
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        Log.e(AppConfig.ERR_TAG,"onStop:"+this.getClass().getName());
         closeLoding();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        AppManager.getAppManager().finishActivity(this);
         closeLoding();
-        if (receiver != null) {
-            unregisterReceiver(receiver);
-        }
+        AppManager.getAppManager().finishActivity(this);
     }
 
     @Override
@@ -186,6 +151,7 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     }
 
     public void setLoding(Context context, boolean settime) {
+        if (loading) return;
         loading = true;
         if (settime) {
             mDialog = LoadingDialogUtils.createLoadingDialog(context, "加载中...");
@@ -193,19 +159,19 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
         } else {
             mDialog = LoadingDialogUtils.createLoadingDialog(context, "加载中...");
         }
-
-//        new TimerTask() {
-//            @Override
-//            public void run() {
-//                // TODO Auto-generated method stub
-//                Message message = new Message();
-//                message.what = 1;
-//                handler.sendMessage(message);
-//            }
-//        };
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Message message = new Message();
+                message.what = AppConfig.IntentExtraKey.LODING_CONTEXT;
+                mHandler.sendMessage(message);
+            }
+        }, new Date(new Date().getTime() + AppConfig.OUT_TIME));
     }
 
     public void closeLoding() {
+        if (!loading) return;
         loading = false;
         LoadingDialogUtils.closeDialog(mDialog);
     }
@@ -284,14 +250,6 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
 
 
     /**
-     * 所有聊天消息监听
-     */
-    @Override
-    public void onChatMsg(boolean isSelfMsg, String settingid, String uname, String msgcontent, long msgtime, boolean hasunread) {
-
-    }
-
-    /**
      * 未读聊天消息监听
      */
     @Override
@@ -332,6 +290,11 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     }
 
     @Override
+    public void onChatMsg(boolean b, String s, String s1, String s2, long l, boolean b1, int i, String s3) {
+
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
@@ -363,4 +326,5 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
                     .show();
         }
     }
+
 }

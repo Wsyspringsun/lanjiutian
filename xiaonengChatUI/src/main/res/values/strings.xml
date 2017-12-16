@@ -81,14 +81,12 @@
     <string name="xn_offline">亲！客服不在线！</string>
     
     <string name="xn_leave_message">留言</string>
-    <string name="xn_leavecolor_message">留言</string>
 
     <!-- xn_dialog_leavemsg.xml -->
     <string name="xn_leavemsg_dialogback">返回</string>
     <string name="xn_getservicefail">请求服务失败，请联系服务商</string>
     <string name="xn_tt_leavemsgtip_phone">请输入手机号码</string>
     <string name="xn_tt_leavemsgtip_email">请输入邮箱</string>
-    <string name="xn_leavingmsg_notice">公告介绍：</string>
     <string name="xn_leavemesg_words_hint2">(必填) :</string>
     <string name="xn_leavemesg_words_hint3">(选填) :</string>
     <!-- xn_activity_leavemsgpage.xml -->
@@ -113,8 +111,8 @@
 
     <!-- xn_custom_facerelativelayout.xml -->
     <string name="xn_custom_send">发送</string>
-    <string name="xn_sdk_presstalk">按住说话</string>
-    <string name="xn_sdk_loosestop">松开结束</string>
+    <string name="xn_sdk_presstalk">按住 说话</string>
+    <string name="xn_sdk_loosestop">松开 结束</string>
 
     <!-- xn_message_function_layout.xml -->
     <string name="xn_sdk_havevaluation">已评价</string>
@@ -166,7 +164,7 @@
     <string name="xn_tt_leavemsgtip_success">留言成功,我们会尽快联系您</string>
     <string name="xn_tt_leavemsg_failed">留言失败</string>
     <string name="xn_toast_errorinput">请不要输入空字符</string>
-    <string name="xn_toast_authority">亲，请开启相关权限</string>
+    <string name="xn_toast_authority">亲,还没开启录音或内存卡权限哦</string>
     <string name="xn_valuationtip_hasposted">您的评价已提交,谢谢</string>
     <string name="xn_inputtext_size">您输入的字数已经超过了400字限制！</string>
     <string name="xn_inputvaluatuion_maxsize">评价内容不能超过200个字符</string>
@@ -199,11 +197,27 @@
     <string name="xn_btn_no">否</string>
     <string name="xn_netinvalid_valuation">亲！无网络，评价暂时不可提交</string>
     <string name="xn_robot_leave_message">留言</string>
+    <string name="xn_leavecolor_message">留言</string>
     
     <string name="xn_leavesetting_confirm">确定</string>
     <string name="xn_kefu_inputing">正在输入...</string>
     
     <string name="xn_swifttorobot">转人工</string>
-
-
+	
+	<!-- 消息成功率统计： 通道将消息转发给SDK后，SDK通知通道消息已接收到 -->
+    <string name="hwpush_ability_value" translatable="false">successRateAnalytics</string>
+    
+	<!--极简轨迹 -->
+	<string name="xn_trailtitle_home">首页</string>
+	<string name="xn_trailtitle_goodslist">商品页</string>
+	<string name="xn_trailtitle_goodsdetail">商品详情页</string>
+	<string name="xn_trailtitle_shoppingcart">购物车页</string>
+	<string name="xn_trailtitle_order">订单页</string>
+	<string name="xn_trailtitle_pay">支付页</string>
+	<string name="xn_trailtitle_paysuccess">支付成功页</string>
+	
+    <string name="simple_sdk_groupname">在线客服</string>
+    
+    <string name="xn_xpush_notify01">您有新消息</string>
+    <string name="xn_record_tooshort">录制时间太短</string>
 </resources>

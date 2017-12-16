@@ -1,12 +1,21 @@
 package com.wyw.ljtds.ui.goods;
 
+import com.wyw.ljtds.R;
+
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alipay.PayResult;
@@ -24,24 +34,31 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.google.gson.Gson;
 import com.unionpay.UPPayAssistEx;
-import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.GoodsBiz;
+import com.wyw.ljtds.biz.biz.OrderBiz;
+import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.AppManager;
+import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.Business;
 import com.wyw.ljtds.model.CreatOrderModel;
 import com.wyw.ljtds.model.Good;
 import com.wyw.ljtds.model.GoodCreatModel1;
 import com.wyw.ljtds.model.GoodCreatModel2;
 import com.wyw.ljtds.model.GoodCreatModel3;
+import com.wyw.ljtds.model.GoodSubmitModel1;
+import com.wyw.ljtds.model.MedicineDetailsModel;
 import com.wyw.ljtds.model.OnlinePayModel;
+import com.wyw.ljtds.model.OrderCommDto;
+import com.wyw.ljtds.model.OrderGroupDto;
 import com.wyw.ljtds.model.OrderTrade;
+import com.wyw.ljtds.model.OrderTradeDto;
 import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.ui.user.address.ActivityAddress;
 import com.wyw.ljtds.ui.user.address.ActivityAddressEdit;
 import com.wyw.ljtds.ui.user.order.ActivityOrder;
 import com.wyw.ljtds.utils.GsonUtils;
@@ -56,29 +73,37 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import cn.xiaoneng.uiapi.Ntalker;
+
+import static com.wyw.ljtds.ui.goods.ActivityGoodsSubmitBill.TAG_ORDER;
+
+
 /**
  * Created by Administrator on 2017/1/24 0024.
  * order submit
  */
-
 @ContentView(R.layout.activity_order_submit)
 public class ActivityGoodsSubmit extends BaseActivity {
     public static final String TAG_INFO_SOURCE = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmit.TAG_INFO_SOURCE";
+    private static final int REQUEST_FAPIAO = 1;
+    private static final int REQUEST_SELECT_ADDRESS = 2;
+    private static final String TAG_SELLERID = "com.wyw.ljtds.ui.goods.tag_sellerid";
+    private static final String TAG_ORDER_DATA = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmit.TAG_ORDER_DATA" ;
     private String flgInfoSrc = "";
     private String PAYMTD_C = "C";
 
     @ViewInject(R.id.header_return_text)
     private TextView title;
     @ViewInject(R.id.group)
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView;//gr order
     @ViewInject(R.id.money)
     private TextView money_all;
+    private EditText edCustomerNote;
 
 
     private GoodCreatModel1 model;
@@ -107,6 +132,13 @@ public class ActivityGoodsSubmit extends BaseActivity {
     private String jsonUnionOrder;
     private CreatOrderModel cOrderModel;
     private boolean isUpdFooter;
+    private BroadcastReceiver addrReciver;
+    private CreatOrderModel.USER_ADDRESS addressInfo;
+    private int REQUEST_ADDRESS_EDIT = 7;
+    private boolean isResult = false;
+
+    //小能
+    String sellerid = "";
 
 
     @Event(value = {R.id.header_return, R.id.submit})
@@ -117,16 +149,93 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 break;
 
             case R.id.submit:
-                submitOrder(GsonUtils.Bean2Json(model), "create");
+                final AlertDialog alert = new AlertDialog.Builder(this).create();
+                alert.setTitle(R.string.alert_tishi);
+                alert.setMessage(getResources().getString(R.string.confirm_order_submit));
+                alert.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.alert_queding), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (!StringUtils.isEmpty(edCustomerNote.getText().toString())) {
+                            model.setREMARKS(edCustomerNote.getText().toString());
+                            Log.e(AppConfig.ERR_TAG, "getREMARKS:" + model.getREMARKS());
+                        }
+                        submitOrder(GsonUtils.Bean2Json(model), "create");
+                    }
+                });
+                alert.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.alert_quxiao), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        alert.dismiss();
+                    }
+                });
+                alert.show();
+
                 break;
 
 
         }
     }
 
+    /**
+     * 处理 地址为空 的情况
+     *
+     * @param intent
+     */
+    public void handleAddressExpire(Intent intent) {
+        String action = intent.getAction();
+        Log.e(AppConfig.ERR_TAG, ".....handleAddressExpire");
+        if (action.equals(AppConfig.AppAction.ACTION_ADDRESS_EXPIRE)) {
+            Log.e(AppConfig.ERR_TAG, ".....handleAddressExpire ACTION_ADDRESS_EXPIRE");
+            setLoding(this, false);
+            new BizDataAsyncTask<List<AddressModel>>() {
+                @Override
+                protected List<AddressModel> doExecute() throws ZYException, BizFailure {
+                    return UserBiz.selectUserAddress();
+                }
+
+                @Override
+                protected void onExecuteSucceeded(List<AddressModel> addressModels) {
+                    closeLoding();
+                    AddressModel defaultAdd = null;
+                    if (addressModels == null || addressModels.size() <= 0) {
+                    } else {
+                        // 假定第一个元素为默认地址
+                        defaultAdd = addressModels.get(0);
+                        for (AddressModel addr : addressModels) {
+                            if ("1".equals(addr.getDEFAULT_FLG())) {
+                                //找到默认地址后结束循环
+                                defaultAdd = addr;
+                                break;
+                            }
+                        }
+                    }
+
+                    Intent it = ActivityAddressEdit.getIntent(ActivityGoodsSubmit.this, defaultAdd);
+                    ActivityGoodsSubmit.this.startActivity(it);
+                }
+
+                @Override
+                protected void OnExecuteFailed() {
+                    closeLoding();
+                    Intent it = ActivityAddressEdit.getIntent(ActivityGoodsSubmit.this, null);
+                    ActivityGoodsSubmit.this.startActivity(it);
+                }
+            }.execute();
+        }
+    }
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //注册广播接收器
+        addrReciver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                handleAddressExpire(intent);
+            }
+        };
 
         AppManager.addDestoryActivity(this, "submit");
 
@@ -139,16 +248,8 @@ public class ActivityGoodsSubmit extends BaseActivity {
         adapter.addHeaderView(getHeaderView(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(ActivityGoodsSubmit.this, ActivityAddressEdit.class);
-                it.putExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, 3);
-
-                if (!StringUtils.isEmpty(address_id)) {
-                    it.putExtra("address_id", address_id);
-                }
-                if (bundle != null) {
-                    it.putExtra("bundle", bundle);
-                }
-                startActivityForResult(it, 2);
+                Intent it = ActivityAddress.getIntent(ActivityGoodsSubmit.this, true);
+                startActivityForResult(it, REQUEST_SELECT_ADDRESS);
             }
         }));
         adapter.addFooterView(getFooterView(new View.OnClickListener() {
@@ -158,6 +259,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
                     case R.id.zzhifu:
                         Intent it = new Intent(ActivityGoodsSubmit.this, ActivityGoodsSubmitChoice.class);
                         String json = GsonUtils.Bean2Json(cOrderModel);
+//                        old
                         it.putExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE, ActivityGoodsSubmit.this.flgInfoSrc);
                         it.putExtra(ActivityGoodsSubmitChoice.TAG_CREATE_ORDER_MODEL, json);
 //                it.putExtra("pay", zhifu_s);
@@ -175,43 +277,97 @@ public class ActivityGoodsSubmit extends BaseActivity {
         recyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
             @Override
             public void SimpleOnItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+                Log.e(AppConfig.ERR_TAG, "position:" + i);
                 switch (view.getId()) {
                     case R.id.select:
-                        Intent it = new Intent(ActivityGoodsSubmit.this, ActivityGoodsSubmitBill.class);
-                        it.putExtra("possition", i);
-                        it.putExtra("fapiao_flg1", adapter.getData().get(i).getINVOICE_FLG());
-                        it.putExtra("fapiao_flg2", adapter.getData().get(i).getINVOICE_TYPE());
-                        it.putExtra("fapiao_flg3", adapter.getData().get(i).getINVOICE_TITLE());
-                        it.putExtra("fapiao_flg4", adapter.getData().get(i).getINVOICE_CONTENT());
-                        it.putExtra("peisong", adapter.getData().get(i).getDISTRIBUTION_MODE());
-
-                        startActivityForResult(it, 1);
+                        Intent it = ActivityGoodsSubmitBill.getIntent(ActivityGoodsSubmit.this, adapter.getData().get(i));
+                        startActivityForResult(it, REQUEST_FAPIAO);
                 }
             }
         });
 
         recyclerView.setAdapter(adapter);
 
+        sellerid = getIntent().getStringExtra(TAG_SELLERID);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    private void loadData() {
+        Intent it = getIntent();
+//        flgInfoSrc = it.getStringExtra(TAG_INFO_SOURCE);
+
+        data = it.getStringExtra(TAG_ORDER_DATA);
+        Log.e(AppConfig.ERR_TAG, "orderData:" + data);
+        if (!StringUtils.isEmpty(data))
+            showOrder(data, "showOrder");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!isResult) {
+            loadData();
+        }
+        isResult = false;
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(AppConfig.AppAction.ACTION_ADDRESS_EXPIRE);//没有地址
+        registerReceiver(addrReciver, filter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(addrReciver);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        Log.e(AppConfig.ERR_TAG, ".......onResume");
-        Intent it = getIntent();
-        flgInfoSrc = it.getStringExtra(TAG_INFO_SOURCE);
-        data = it.getStringExtra("data");
-        if (!StringUtils.isEmpty(data)) {
-            showOrder(data, "showOrder");
-        }
     }
+
+    /**
+     * order data
+     */
+    /*private void loadOrderData() {
+        setLoding(this, false);
+        new BizDataAsyncTask<OrderTradeDto>() {
+            @Override
+            protected OrderTradeDto doExecute() throws ZYException, BizFailure {
+                Intent it = getIntent();
+//        flgInfoSrc = it.getStringExtra(TAG_INFO_SOURCE);
+                data = it.getStringExtra("data");
+                return OrderBiz.showOrder(data);
+            }
+
+            @Override
+            protected void onExecuteSucceeded(OrderTradeDto orderTrade) {
+                closeLoding();
+                //bind data to view
+                ActivityGoodsSubmit.orderTradeModel = orderTrade;
+                bindData2View();
+            }
+
+            @Override
+            protected void OnExecuteFailed() {
+                closeLoding();
+            }
+        }.execute();
+    }*/
+
+    /*private void bindData2View() {
+
+    }*/
 
 //    @Override
 //    protected void resumeFromOther() {
 //        showOrder(data, "showOrder");
 //    }
-
     private View getHeaderView(View.OnClickListener listener) {
         View view = getLayoutInflater().inflate(R.layout.item_order_submit_address, (ViewGroup) recyclerView.getParent(), false);
 
@@ -221,9 +377,8 @@ public class ActivityGoodsSubmit extends BaseActivity {
     }
 
     private View getFooterView(View.OnClickListener listener) {
-        Log.e(AppConfig.ERR_TAG, "getFooterView");
+//        Log.e(AppConfig.ERR_TAG, "getFooterView");
         View view = getLayoutInflater().inflate(R.layout.item_order_submit_bottom, (ViewGroup) recyclerView.getParent(), false);
-
 
         View zzhifu = view.findViewById(R.id.zzhifu);
 
@@ -237,7 +392,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
         tbDianZiBi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.e(AppConfig.ERR_TAG, "chkDianzibi....." + isChecked);
+//                Log.e(AppConfig.ERR_TAG, "chkDianzibi....." + isChecked);
 
                 if (!isUpdFooter) {
                     String pf = isChecked ? "1" : "0";
@@ -268,22 +423,30 @@ public class ActivityGoodsSubmit extends BaseActivity {
             }
         });
 
+        edCustomerNote = (EditText) view.findViewById(R.id.order_submit_ed_customernote);
         return view;
     }
 
     private BizDataAsyncTask<String> submitTask;
 
     private void submitOrder(final String str, final String op) {
-        Log.e(AppConfig.ERR_TAG, "order create..." + str);
+//        Log.e(AppConfig.ERR_TAG, "order create..." + str);
         submitTask = new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
+                Log.e(AppConfig.ERR_TAG, "submit req:" + str);
                 return GoodsBiz.submitOrder(str, op);
             }
 
             @Override
             protected void onExecuteSucceeded(final String tradeOrderId) {
                 closeLoding();
+
+                //集成小能下单数量功能
+                // 订单页轨迹标准接口 * @param title 订单页的标题, 必传字段 * @param url 订单页的url, 必传字段，需要保证每个订单页的url唯一 * @param sellerid 商户id, B2C企业传空, B2B企业需要传入商户的id * @param ref 上一页url, 如没有可传空 * @param orderid 订单id, 必传字段 * @param orderprice 订单价格, 必传字段 */
+                String url = "http://www.lanjiutian.com/user/medicine/orderDetail.html?&wareid=002204&paramOrderGroupId=" + tradeOrderId;
+                Ntalker.getBaseInstance().startAction_order("蓝九天电商", url, sellerid, "", tradeOrderId, cOrderModel.getPAY_AMOUNT());
+
                 if (PAYMTD_C.equals(model.getPAYMENT_METHOD())) {
                     ActivityGoodsSubmit.this.goOrderList();
                 } else {
@@ -293,7 +456,6 @@ public class ActivityGoodsSubmit extends BaseActivity {
                         @Override
                         public void onItemSelected(OrderTrade order) {
 //                            Log.e(AppConfig.ERR_TAG, order.getPaymentMethod());
-                            setLoding(ActivityGoodsSubmit.this, false);
                             payModel.setPAYMENT_METHOD(order.getPaymentMethod());
                             payModel.setORDER_TRADE_ID(tradeOrderId);
                             goPay(GsonUtils.Bean2Json(payModel));
@@ -318,6 +480,11 @@ public class ActivityGoodsSubmit extends BaseActivity {
         submitTask.execute();
     }
 
+    private void loadOrder(String tradeOrderId) {
+
+
+    }
+
 
     /**
      * 进入 rlist
@@ -331,9 +498,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
     private BizDataAsyncTask<CreatOrderModel> orderTask;
 
     private void showOrder(final String str, final String op) {
-        Log.e(AppConfig.ERR_TAG,"showOrder........");
         orderTask = new BizDataAsyncTask<CreatOrderModel>() {
-
             @Override
             protected CreatOrderModel doExecute() throws ZYException, BizFailure {
                 CreatOrderModel rlt = GoodsBiz.getOrderShow(str, op);
@@ -343,10 +508,10 @@ public class ActivityGoodsSubmit extends BaseActivity {
             @Override
             protected void onExecuteSucceeded(CreatOrderModel creatOrderModel) {
                 closeLoding();
-                Log.e(AppConfig.ERR_TAG, "server:" + GsonUtils.Bean2Json(creatOrderModel));
                 ActivityGoodsSubmit.this.cOrderModel = creatOrderModel;
                 list_business = new ArrayList<>();
                 model = new GoodCreatModel1();
+                model.setADDRESS_ID(creatOrderModel.getADDRESS_ID());
                 model.setCOIN_FLG(creatOrderModel.getCOIN_FLG());
                 model.setPOSTAGE_FLG(creatOrderModel.getPOSTAGE_FLG());
                 model.setCOST_POINT(creatOrderModel.getCOST_POINT());
@@ -359,6 +524,8 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 for (int i = 0; i < creatOrderModel.getDETAILS().size(); i++) {
                     GoodCreatModel2 goodCreatModel2 = new GoodCreatModel2();
                     Business business = creatOrderModel.getDETAILS().get(i);
+                    //表明 是否 是 医药馆
+                    ActivityGoodsSubmit.this.flgInfoSrc = business.getOID_GROUP_ID();
                     goodCreatModel2.setOID_GROUP_NAME(business.getOID_GROUP_NAME());
                     goodCreatModel2.setOID_GROUP_ID(business.getOID_GROUP_ID());
                     goodCreatModel2.setDISTRIBUTION_MODE(business.getDISTRIBUTION_MODE());
@@ -417,6 +584,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
 
                 updFooter();
 
+                addressInfo = creatOrderModel.getUSER_ADDRESS();
                 ((TextView) adapter.getHeaderLayout().findViewById(R.id.name)).setText(creatOrderModel.getUSER_ADDRESS().getCONSIGNEE_NAME());
                 ((TextView) adapter.getHeaderLayout().findViewById(R.id.phone)).setText(creatOrderModel.getUSER_ADDRESS().getCONSIGNEE_MOBILE());
                 ((TextView) adapter.getHeaderLayout().findViewById(R.id.shouhuo_dizhi)).setText(creatOrderModel.getUSER_ADDRESS().getADDRESS_DETAIL());
@@ -431,8 +599,8 @@ public class ActivityGoodsSubmit extends BaseActivity {
 
             @Override
             protected void OnExecuteFailed() {
+                Log.e(AppConfig.ERR_TAG, ActivityGoodsSubmit.this.getClass().getName() + "OnExecuteFailed");
                 closeLoding();
-                finish();
             }
         };
         setLoding(this, false);
@@ -456,9 +624,9 @@ public class ActivityGoodsSubmit extends BaseActivity {
         CheckBox tbDianZiBi = (CheckBox) adapter.getFooterLayout().findViewById(R.id.chk_use_dianzibi);
         TextView tvDianzibi = (TextView) adapter.getFooterLayout().findViewById(R.id.tv_dianzibi_show);
         tvDianzibi.setVisibility(View.VISIBLE);
-        tvDianzibi.setText(ELECTRONIC_MONEY + "/" + ELECTRONIC_USEABLE_MONEY);
+        tvDianzibi.setText("已用" + ELECTRONIC_MONEY + "剩余" + ELECTRONIC_USEABLE_MONEY);
         if ("0".equals(ELECTRONIC_USEABLE_MONEY)) {
-            tbDianZiBi.setEnabled(false);
+//            tbDianZiBi.setEnabled(false);
         }
         if ("1".equals(model.getCOIN_FLG())) {
             tbDianZiBi.setChecked(true);
@@ -496,20 +664,12 @@ public class ActivityGoodsSubmit extends BaseActivity {
         protected void convert(BaseViewHolder baseViewHolder, Business group) {
             String fapiao1 = "";
             String peisong = "";
+            Log.e(AppConfig.ERR_TAG, "group:" + GsonUtils.Bean2Json(group));
             if (group.getINVOICE_FLG().equals("0")) {
                 fapiao1 = "不开发票";
             } else {
-                if (group.getINVOICE_CONTENT().equals("0")) {
-                    fapiao1 = "明细";
-                } else if (group.getINVOICE_CONTENT().equals(PAYMTD_C)) {
-                    fapiao1 = "办公用品";
-                } else if (group.getINVOICE_CONTENT().equals(OrderTrade.PAYMTD_ACCOUNT)) {
-                    fapiao1 = "家居用品";
-                } else if (group.getINVOICE_CONTENT().equals(OrderTrade.PAYMTD_ALI)) {
-                    fapiao1 = "药品";
-                } else {
-                    fapiao1 = "耗材";
-                }
+                //获取发票  Content
+                fapiao1 = Business.mapFapiaoCatText.get(group.getINVOICE_CONTENT());
             }
 
             if (group.getDISTRIBUTION_MODE().equals("0")) {
@@ -575,6 +735,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
 
             @Override
             protected void onExecuteSucceeded(OnlinePayModel aliPay) {
+                closeLoding();
                 final String orderInfo = aliPay.getPay();
                 if (payModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_ALI)) {
                     //支付宝
@@ -632,8 +793,10 @@ public class ActivityGoodsSubmit extends BaseActivity {
 
             @Override
             protected void OnExecuteFailed() {
+                closeLoding();
             }
         };
+        setLoding(ActivityGoodsSubmit.this, false);
         payTask.execute();
     }
 
@@ -641,14 +804,25 @@ public class ActivityGoodsSubmit extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.e(AppConfig.ERR_TAG, "onActivityResult..:" + requestCode + "/" + resultCode);
-        if (resultCode == AppConfig.IntentExtraKey.RESULT_OK) {
+        isResult = true;
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_SELECT_ADDRESS:
+                    Parcelable addr = data.getParcelableExtra(ActivityAddress.TAG_SELECTED_ADDRESS);
+                    if (addr != null) {
+                        int addrId = ((AddressModel) addr).getADDRESS_ID();
+                        model.setADDRESS_ID(addrId + "");
+                        String str = GsonUtils.Bean2Json(model);
+                        showOrder(str, "changeOrder");
+                    }
+                    break;
+            }
+        } else if (resultCode == AppConfig.IntentExtraKey.RESULT_OK) {
             switch (requestCode) {
                 case 0:
                     zhifu_s = data.getStringExtra("pay");
                     jifen_money = data.getStringExtra("jifen_money");
                     jifen = data.getStringExtra("jifen");
-
-
                     model.setCOST_POINT(jifen);
                     if (zhifu_s.equals("在线支付")) {
                         model.setPAYMENT_METHOD("0");
@@ -665,33 +839,42 @@ public class ActivityGoodsSubmit extends BaseActivity {
 
                     break;
 
-                case 1:
-                    int index = data.getIntExtra("possition", 0);
-                    peisong = data.getStringExtra("peisong");
-                    fapiao_flg1 = data.getStringExtra("fapiao_flg1");
-                    fapiao_flg2 = data.getStringExtra("fapiao_flg2");
-                    fapiao_flg3 = data.getStringExtra("fapiao_flg3");
-                    fapiao_flg4 = data.getStringExtra("fapiao_flg4");
+                case REQUEST_FAPIAO:
+                    //配送信息 和 发票信息
+                    //int index = data.getIntExtra("possition", 0);
+                    int index = 0;
+//                    peisong = data.getStringExtra("peisong");
+//                    fapiao_flg1 = data.getStringExtra("fapiao_flg1");
+//                    fapiao_flg2 = data.getStringExtra("fapiao_flg2");
+//                    fapiao_flg3 = data.getStringExtra("fapiao_flg3");
+//                    fapiao_flg4 = data.getStringExtra("fapiao_flg4");
+                    String jsonStr = data.getStringExtra(TAG_ORDER);
+                    Business fapiaoModel = GsonUtils.Json2Bean(jsonStr, Business.class);
+                    Log.e(AppConfig.ERR_TAG, "jsonStr:" + jsonStr);
 
-                    model.getDETAILS().get(index).setINVOICE_FLG(fapiao_flg1);
-                    model.getDETAILS().get(index).setINVOICE_TYPE(fapiao_flg2);
-                    model.getDETAILS().get(index).setINVOICE_TITLE(fapiao_flg3);
-                    model.getDETAILS().get(index).setINVOICE_CONTENT(fapiao_flg4);
-                    model.getDETAILS().get(index).setDISTRIBUTION_MODE(peisong);
+//                    Business bizFirst = list_business.get(index);
+//                    bizFirst.setINVOICE_FLG(fapiaoModel.getINVOICE_FLG());
+                    //model.getDETAILS().get(index).setINVOICE_FLG(fapiaoModel.getINVOICE_FLG());
+                    if (!"0".equals(fapiaoModel.getINVOICE_FLG())) {
+                        //如果开发票
+//                        bizFirst.setINVOICE_TYPE(fapiaoModel.getINVOICE_TYPE());
+//                        bizFirst.setINVOICE_TITLE(fapiaoModel.getINVOICE_TITLE());
+//                        bizFirst.setINVOICE_CONTENT(fapiaoModel.getINVOICE_CONTENT());
+//                        bizFirst.setINVOICE_TAX(fapiaoModel.getINVOICE_CONTENT());
 
-                    String str1 = GsonUtils.Bean2Json(model);
-                    showOrder(str1, "changeOrder");
-
-                    break;
-
-                case 2:
-                    boolean is = data.getBooleanExtra("refresh", false);
-                    if (is) {
-                        String str2 = GsonUtils.Bean2Json(model);
-                        showOrder(str2, "changeOrder");
+                        model.getDETAILS().get(index).setINVOICE_FLG(fapiaoModel.getINVOICE_FLG());
+                        model.getDETAILS().get(index).setINVOICE_TYPE(fapiaoModel.getINVOICE_TYPE());
+                        model.getDETAILS().get(index).setINVOICE_TITLE(fapiaoModel.getINVOICE_TITLE());
+                        model.getDETAILS().get(index).setINVOICE_CONTENT(fapiaoModel.getINVOICE_CONTENT());
+                        model.getDETAILS().get(index).setINVOICE_TAX(fapiaoModel.getINVOICE_TAX());
+//                        model.getDETAILS().get(index).setDISTRIBUTION_MODE(fapiaoModel.get);
                     }
+                    //adapter.setNewData(list_business);
+                    adapter.notifyDataSetChanged();
+//                    String str1 = GsonUtils.Bean2Json(model);
+//                    Log.e(AppConfig.ERR_TAG, "str1:" + str1);
+//                    showOrder(str1, "changeOrder");
                     break;
-
             }
         } else {
             if (requestCode == 10) {
@@ -729,7 +912,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
                     } else {
                         // 未收到签名信息
                         // 建议通过商户后台查询支付结果
-                        Log.e(AppConfig.ERR_TAG, "payresult .....2:" );
+                        Log.e(AppConfig.ERR_TAG, "payresult .....2:");
                         ToastUtil.show(ActivityGoodsSubmit.this, getResources().getString(R.string.pay_success));
                     }
 
@@ -851,6 +1034,21 @@ public class ActivityGoodsSubmit extends BaseActivity {
         startActivity(it);
     }
 
+    public static Intent getIntent(Context context, GoodSubmitModel1 goodSubmitModel, String sellerid) {
+        Intent it = new Intent(context, ActivityGoodsSubmit.class);
+//        it.putExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE, ActivityGoodsInfo.VAL_INFO_SOURCE);
+        it.putExtra("data", GsonUtils.Bean2Json(goodSubmitModel));
+        it.putExtra(TAG_SELLERID, GsonUtils.Bean2Json(goodSubmitModel));
+        return it;
+    }
+
+
+    public static Intent getIntent(Context context, OrderTradeDto order, String sellerid) {
+        Intent it = new Intent(context, ActivityGoodsSubmit.class);
+        it.putExtra(TAG_ORDER_DATA, GsonUtils.Bean2Json(order));
+        it.putExtra(TAG_SELLERID, GsonUtils.Bean2Json(order));
+        return it;
+    }
 
     //银联支付回执
     public class UnionResult {

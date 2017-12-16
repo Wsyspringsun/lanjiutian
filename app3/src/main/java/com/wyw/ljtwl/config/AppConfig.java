@@ -6,9 +6,9 @@ package com.wyw.ljtwl.config;
 
 public class AppConfig {
     public static final String TAG_ERR = "com.wyw.ljtwl.err";
-//        private static boolean test=false;
-    private static boolean test = true;
-    public static String WEB_DOMAIN = test ? "http://192.168.2.114:8080/ljt_mobile_logistics" : "http://www.lanjiutian.com";
+    private static boolean test = false;
+    //    private static boolean test = true;
+    public static String WEB_DOMAIN = test ? "http://192.168.2.114:8080/ljt_mobile_logistics" : "http://www.lanjiutian.com/ljt_mobile_logistics";
     public static final String IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";
 
     public static class IntentExtraKey {

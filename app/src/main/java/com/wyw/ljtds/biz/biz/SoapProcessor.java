@@ -26,6 +26,7 @@ import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.utils.Base64;
 import com.wyw.ljtds.utils.NetworkDetector;
+import com.wyw.ljtds.utils.Utils;
 
 
 public class SoapProcessor {
@@ -101,7 +102,6 @@ public class SoapProcessor {
         try {
             androidHttpTransport.call(null, envelope);
             if (envelope.bodyIn instanceof SoapFault) {
-
                 Log.e(AppConfig.ERR_TAG, envelope.bodyIn.toString());
             }
 
@@ -130,12 +130,10 @@ public class SoapProcessor {
         if (!NetworkDetector.isNetworkAvailable(MyApplication.getAppContext())) {
             throw new NetWorkNotAvailableException();
         }
-        Log.e(AppConfig.ERR_TAG, "response 1:" );
         HttpTransportSE androidHttpTransport = new HttpTransportSE(mUrl, 10000);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
                 SoapEnvelope.VER11);
 
-        Log.e(AppConfig.ERR_TAG, "response 2:" );
         envelope.bodyOut = mRequest;
         envelope.dotNet = true;
         envelope.setOutputSoapObject(mRequest);
@@ -145,7 +143,7 @@ public class SoapProcessor {
         SoapObject response = null;
 
 		/*
-		 * List<HeaderProperty> hps = new ArrayList<HeaderProperty>();
+         * List<HeaderProperty> hps = new ArrayList<HeaderProperty>();
 		 * hps.add(new HeaderProperty("Cookie", PreferenceCache.getSession()));
 		 * androidHttpTransport.call(BccfConfig.WS_NAME_SPACE + "/" +
 		 * mMethodName, envelope, hps);
@@ -157,7 +155,6 @@ public class SoapProcessor {
             }
 
             response = (SoapObject) (envelope.bodyIn);
-            Log.e(AppConfig.ERR_TAG, "response 3:" );
         } catch (IOException e) {
             if (e instanceof SocketTimeoutException) {
                 throw new OperationTimeOutException(e);
@@ -172,7 +169,7 @@ public class SoapProcessor {
         String result = response.getProperty("return").toString();
 
         // LogUtil.e(result);
-        Log.e(AppConfig.ERR_TAG, "response:" + result);
+        Utils.log("soap response:" + result);
 
         return parseResponse(result);
     }

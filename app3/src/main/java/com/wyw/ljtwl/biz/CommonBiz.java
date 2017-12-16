@@ -17,7 +17,7 @@ import org.xutils.x;
  */
 
 public class CommonBiz {
-    public static <T,R> void handle(String url, T model, AbstractCommonCallback<R> task) {
+    public static <T> void handle(String url, T model, AbstractCommonCallback task) {
         BaseJson<T> baseJson = new BaseJson<T>();
         String token = PreferenceCache.getToken();
         Header head = new Header();
@@ -26,12 +26,12 @@ public class CommonBiz {
         baseJson.setBody(model);
         Gson gson = new Gson();
         String data = gson.toJson(baseJson);
-        Log.e(AppConfig.TAG_ERR, "jsondata:" + data);
+        Log.e(AppConfig.TAG_ERR, "request jsondata:" + data);
 
         RequestParams params = new RequestParams(AppConfig.WEB_DOMAIN + url);
         params.setAsJsonContent(true);
         params.setBodyContent(data);
-        task.getActivity().setLoding();
+        task.getContextActivity().setLoding();
         x.http().post(params, task);
     }
 }

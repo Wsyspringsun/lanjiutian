@@ -2,8 +2,13 @@ package com.wyw.ljtds.ui;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Path;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
@@ -12,7 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.jauker.widget.BadgeView;
+import com.weixin.uikit.MMAlert;
 import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.UserBiz;
@@ -23,17 +37,29 @@ import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.Ticket;
 import com.wyw.ljtds.ui.user.ActivityLogin;
 import com.wyw.ljtds.utils.ToastUtil;
+import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@ContentView(R.layout.activity_fragment)
+@ContentView(R.layout.fragment_user_qrcode)
 public class TestActivity extends Activity {
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_user_qrcode);
+
+        ImageView imageView = (ImageView) findViewById(R.id.fragment_user_qrcode_idcode);
+        String content = "123456";
+        Bitmap bitmap = Utils.getQRCodeBitmap(this, content);
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+        }
 
     }
 
@@ -41,33 +67,15 @@ public class TestActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.fragment_send_ticket, (ViewGroup) findViewById(R.id.fragment_con));
-//        final Dialog dialog = new AlertDialog.Builder(this)).setView(layout).create();
-        Dialog dialog = new Dialog(TestActivity.this, R.style.Theme_AppCompat_Dialog);
-//        dialog.setContentView(R.layout.fragment_send_ticket);
-        dialog.setContentView(layout);
-        dialog.setCancelable(false);
-        dialog.setTitle(R.string.gongxi);
 
-//        Window dialogWindow = dialog.getWindow();
-//        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-//        dialogWindow.setGravity(Gravity.LEFT | Gravity.TOP);
-//        lp.alpha = 0.9f; // 透明度
-        dialog.show();
 
-        View view = layout.findViewById(R.id.btn_sent_ticket);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //申请领取优惠券
-                doGetTicketTask();
-                Log.e(AppConfig.ERR_TAG, "恭喜您");
-//                dialog.dismiss();
-                Intent it = new Intent(TestActivity.this, ActivityLogin.class);
-                startActivity(it);
-            }
-        });
+        //Path path = FileSystems.getDefault().getPath(filePath, fileName);
+//        MatrixToImageWriter.writeToPath(bitMatrix, format, path);// 输出图像
+        //testWeixinAlert();
+
+
+
+
         /*
          * lp.x与lp.y表示相对于原始位置的偏移.
          * 当参数值包含Gravity.LEFT时,对话框出现在左边,所以lp.x就表示相对左边的偏移,负值忽略.
@@ -89,22 +97,47 @@ public class TestActivity extends Activity {
 //        lp.height = 800; // 高度
     }
 
-    private void doGetTicketTask() {
-        new BizDataAsyncTask<List<Ticket>>() {
-            @Override
-            protected List<Ticket> doExecute() throws ZYException, BizFailure {
-                return null;
-            }
-
-            @Override
-            protected void onExecuteSucceeded(List<Ticket> tickets) {
-
-            }
-
-            @Override
-            protected void OnExecuteFailed() {
-
-            }
-        }.execute();
+    /*
+        测试微信弹框
+     */
+    private void testWeixinAlert() {
+        //微信接口分享方式
+        MMAlert.showAlert(this, getString(R.string.send_webpage),
+                this.getResources().getStringArray(R.array.send_webpage_item),
+                null, null);
     }
+
+    void testBadgeView() {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.fragment_send_ticket, (ViewGroup) findViewById(R.id.fragment_con));
+//        final Dialog dialog = new AlertDialog.Builder(this)).setView(layout).create();
+        SimpleDraweeView sdv = (SimpleDraweeView) layout.findViewById(R.id.fragment_send_ticket_sdv_show);
+        sdv.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + "/.appinit/regist_ok.png"));
+
+        BadgeView badge = new BadgeView(this);
+        badge.setTargetView(sdv);
+        badge.setBadgeCount(42);
+
+        Dialog dialog = new Dialog(TestActivity.this, R.style.Theme_AppCompat_Dialog);
+//        dialog.setContentView(R.layout.fragment_send_ticket);
+        dialog.setContentView(layout);
+        dialog.setCancelable(false);
+        dialog.setTitle(R.string.gongxi);
+
+//        Window dialogWindow = dialog.getWindow();
+//        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+//        dialogWindow.setGravity(Gravity.LEFT | Gravity.TOP);
+//        lp.alpha = 0.9f; // 透明度
+        dialog.show();
+
+        View view = layout.findViewById(R.id.btn_sent_ticket);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+
 }

@@ -12,12 +12,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.jauker.widget.BadgeView;
+import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.adapter.AbstractListViewAdapter;
 import com.wyw.ljtds.adapter.AbstractViewHolder;
@@ -29,6 +32,7 @@ import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.RecommendModel;
+import com.wyw.ljtds.model.UserDataModel;
 import com.wyw.ljtds.model.UserGridleModel;
 import com.wyw.ljtds.model.UserModel;
 import com.wyw.ljtds.ui.base.ActivityWebView;
@@ -42,9 +46,11 @@ import com.wyw.ljtds.ui.user.order.ActivityOrder;
 import com.wyw.ljtds.ui.user.order.ReturnGoodsOrderListActivity;
 import com.wyw.ljtds.ui.user.wallet.BalanceActivity;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.DividerGridItemDecoration;
 import com.wyw.ljtds.widget.MyGridView;
 import com.wyw.ljtds.widget.MyScrollView;
+import com.wyw.ljtds.widget.ScrollGridLayoutManager;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -60,9 +66,9 @@ import static com.wyw.ljtds.ui.user.FragmentUser.TAG_MY_ZUJI;
  */
 
 @ContentView(R.layout.fragment_user)
-public class FragmentUser extends LazyLoadFragment {
+public class FragmentUser extends BaseFragment {
     @ViewInject(R.id.gridview)
-    private MyGridView gridView;
+    private MyGridView gridView; //收藏，足迹 等
     @ViewInject(R.id.name)
     private TextView name;
     @ViewInject(R.id.jifen)
@@ -75,6 +81,10 @@ public class FragmentUser extends LazyLoadFragment {
     private MyScrollView scroll_view;
     @ViewInject(R.id.ll_sc)
     private LinearLayout ll_sc;
+    @ViewInject(R.id.fragment_user_nologin)
+    private LinearLayout layoutNologin;
+    @ViewInject(R.id.fragment_user_logined)
+    private RelativeLayout layoutlogin;
     //    @ViewInject( R.id.user )
 //    private RecyclerView user_rec;
     public static String TAG_MY = "com.wyw.ljtds.ui.user.FragmentUser.tag_my";
@@ -83,44 +93,43 @@ public class FragmentUser extends LazyLoadFragment {
 
     private AbstractListViewAdapter<UserGridleModel> adapter;
     private UserModel user;
+    //推荐商品
     private List<RecommendModel> list;
     //    private List<UserModel> list_user;
     private MyAdapter myAdapter;
 //    private UserAdapter userAdapter;
 
-    @Event(value = {R.id.user_img, R.id.order_all, R.id.order_daifu, R.id.order_daishou,
-            R.id.order_daiping, R.id.order_shouhou, R.id.zhanghuguanli, R.id.user_xiaoxi, R.id.user_shezhi,
-            R.id.all_order})
+    @Event(value = {R.id.fragment_user_rl_daifu, R.id.user_img, R.id.order_daifu, R.id.order_daifa, R.id.order_daishou,
+            R.id.order_daiping, R.id.order_shouhou, R.id.zhanghuguanli, R.id.user_xiaoxi, R.id.user_shezhi})
     private void onclick(View view) {
+        if (!UserBiz.isLogined()) {
+            ActivityLogin.goLogin(getActivity());
+            return;
+        }
+
         if (user != null) {
             Intent it = null;
             switch (view.getId()) {
-                case R.id.all_order://所有订单
-                    it = new Intent(getActivity(), ActivityOrder.class);
-                    it.putExtra("index", 0);
+                case R.id.fragment_user_rl_daifu://全部
+                    it = ActivityOrder.getIntent(getActivity(), 0);
+                    startActivity(it);
+                    break;
+                case R.id.order_daifu://待付
+                    it = ActivityOrder.getIntent(getActivity(), 1);
                     startActivity(it);
                     break;
 
-                case R.id.order_all://待付
-                    it = new Intent(getActivity(), ActivityOrder.class);
-                    it.putExtra("index", 1);
-                    startActivity(it);
-                    break;
-
-                case R.id.order_daifu://待发
-                    it = new Intent(getActivity(), ActivityOrder.class);
-                    it.putExtra("index", 2);
+                case R.id.order_daifa://待发
+                    it = ActivityOrder.getIntent(getActivity(), 2);
                     startActivity(it);
                     break;
 
                 case R.id.order_daishou://待收
-                    it = new Intent(getActivity(), ActivityOrder.class);
-                    it.putExtra("index", 3);
+                    it = ActivityOrder.getIntent(getActivity(), 3);
                     startActivity(it);
                     break;
                 case R.id.order_daiping://待评
-                    it = new Intent(getActivity(), ActivityOrder.class);
-                    it.putExtra("index", 4);
+                    it = ActivityOrder.getIntent(getActivity(), 4);
                     startActivity(it);
                     break;
 
@@ -147,6 +156,8 @@ public class FragmentUser extends LazyLoadFragment {
     }
 
     private void initGridView() {
+
+
         List<UserGridleModel> list = new ArrayList<UserGridleModel>();
         list.add(new UserGridleModel(R.mipmap.icon_user_shoucang, R.string.user_shoucang));
         list.add(new UserGridleModel(R.mipmap.icon_user_zuji, R.string.user_zuji));
@@ -171,6 +182,20 @@ public class FragmentUser extends LazyLoadFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent it;
+                if (i == 3) {
+                    //case 3://帮助中心
+                    it = new Intent(getActivity(), ActivityHelp.class);
+                    it = new Intent(getActivity(), ActivityWebView.class);
+                    startActivity(it);
+                    return;
+                }
+
+                if (!UserBiz.isLogined()) {
+                    //去登录
+                    ActivityLogin.goLogin(getActivity());
+                    return;
+                }
+
                 switch (i) {
                     case 0://我的收藏
                         it = new Intent(getActivity(), ActivityCollect.class);
@@ -188,12 +213,10 @@ public class FragmentUser extends LazyLoadFragment {
                         it = new Intent(getActivity(), ActivityWallet.class);
                         startActivity(it);
                         break;
-
-                    case 3://帮助中心
-//                        it = new Intent(getActivity(), ActivityHelp.class);
-                        it = new Intent(getActivity(), ActivityWebView.class);
-                        startActivity(it);
+                    default:
                         break;
+
+
                 }
             }
         });
@@ -201,7 +224,9 @@ public class FragmentUser extends LazyLoadFragment {
     }
 
     private void initTuijian() {
-        tuijian.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        ScrollGridLayoutManager glm = new ScrollGridLayoutManager(getActivity(), 2);
+        glm.setScroll(false);
+        tuijian.setLayoutManager(glm);
         tuijian.setItemAnimator(new DefaultItemAnimator());
         tuijian.addItemDecoration(new DividerGridItemDecoration(getActivity()));
 
@@ -217,44 +242,108 @@ public class FragmentUser extends LazyLoadFragment {
         myAdapter = new MyAdapter();
 //        myAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         tuijian.setAdapter(myAdapter);
-        tuijian.setVisibility(View.VISIBLE);
+//        tuijian.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getActivity() == null) return;
+
+        //添加登录事件
+        layoutNologin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityLogin.goLogin(getActivity());
+            }
+        });
+
         initGridView();
         initTuijian();
-        if (user == null)
-            getUser();
-        if (list == null)
-            getrecommend(PreferenceCache.getToken(), "");
+//        if (user == null)
+//            getUser();
+//        if (list == null)
+//            getrecommend(PreferenceCache.getToken(), "");
     }
 
 
     @Override
-    protected void lazyLoad() {
+    public void onResume() {
+        super.onResume();
+
+        //判断是否登录
+        if (UserBiz.isLogined()) {
+            layoutlogin.setVisibility(View.VISIBLE);
+            layoutNologin.setVisibility(View.GONE);
+            getUser();
+        } else {
+            layoutlogin.setVisibility(View.GONE);
+            layoutNologin.setVisibility(View.VISIBLE);
+        }
+        ;
+
+        if (list == null)
+            getrecommend(PreferenceCache.getToken(), "");
 
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (hidden) {
-
-        } else {
-            if (AppConfig.currSel == 4) {
-                getUser();
-            }
-        }
     }
 
-    BizDataAsyncTask<UserModel> userTask;
+    private void userData() {
+//        userData
+        setLoding(getActivity(), false);
+        new BizDataAsyncTask<UserDataModel>() {
+            @Override
+            protected UserDataModel doExecute() throws ZYException, BizFailure {
+                return UserBiz.userData();
+            }
+
+            @Override
+            protected void onExecuteSucceeded(UserDataModel model) {
+                closeLoding();
+                updUserDataView(model);
+            }
+
+            @Override
+            protected void OnExecuteFailed() {
+                closeLoding();
+            }
+        }.execute();
+    }
+
+    private void addBadge(View v, int cnt) {
+        if (cnt <= 0) {
+            return;
+        }
+        BadgeView badge = new BadgeView(getActivity());
+        badge.setTargetView(v);
+        badge.setBadgeCount(cnt);
+    }
+
+    private void updUserDataView(UserDataModel model) {
+        RelativeLayout rlDaifu = (RelativeLayout) findViewById(R.id.order_daifu);
+        addBadge(rlDaifu.getChildAt(0), model.getDaiFu());
+
+        RelativeLayout rlDaifa = (RelativeLayout) findViewById(R.id.order_daifa);
+        addBadge(rlDaifa.getChildAt(0), model.getDaiFa());
+
+        RelativeLayout rlDaishou = (RelativeLayout) findViewById(R.id.order_daishou);
+        addBadge(rlDaishou.getChildAt(0), model.getDaiShou());
+
+        RelativeLayout rlDaiping = (RelativeLayout) findViewById(R.id.order_daiping);
+        addBadge(rlDaiping.getChildAt(0), model.getDaiPing());
+
+        RelativeLayout rlShouhou = (RelativeLayout) findViewById(R.id.order_shouhou);
+        addBadge(rlShouhou.getChildAt(0), model.getShouHou());
+
+    }
 
     private void getUser() {
-//        setLoding(getActivity(), false);
-        userTask = new BizDataAsyncTask<UserModel>() {
+        setLoding(getActivity(), false);
+        new BizDataAsyncTask<UserModel>() {
             @Override
             protected UserModel doExecute() throws ZYException, BizFailure {
                 return UserBiz.getUser();
@@ -262,7 +351,10 @@ public class FragmentUser extends LazyLoadFragment {
 
             @Override
             protected void onExecuteSucceeded(UserModel userModel) {
-//                closeLoding();
+                closeLoding();
+
+                userData();
+
                 user = userModel;
 
                 jifen.setText("积分：" + userModel.getUSER_POINT() + "分");
@@ -282,17 +374,14 @@ public class FragmentUser extends LazyLoadFragment {
 
             @Override
             protected void OnExecuteFailed() {
-//                closeLoding();
+                closeLoding();
             }
-        };
-        userTask.execute();
+        }.execute();
     }
 
-    BizDataAsyncTask<List<RecommendModel>> recTask;
-
     private void getrecommend(final String token, final String orderid) {
-//        setLoding(getActivity(), false);
-        recTask = new BizDataAsyncTask<List<RecommendModel>>() {
+        setLoding(getActivity(), false);
+        new BizDataAsyncTask<List<RecommendModel>>() {
             @Override
             protected List<RecommendModel> doExecute() throws ZYException, BizFailure {
                 return HomeBiz.getRecommend(token, orderid);
@@ -300,7 +389,7 @@ public class FragmentUser extends LazyLoadFragment {
 
             @Override
             protected void onExecuteSucceeded(List<RecommendModel> recommendModels) {
-//                closeLoding();
+                closeLoding();
                 list = recommendModels;
                 myAdapter.setNewData(list);
                 myAdapter.notifyDataSetChanged();
@@ -308,10 +397,9 @@ public class FragmentUser extends LazyLoadFragment {
 
             @Override
             protected void OnExecuteFailed() {
-//                closeLoding();
+                closeLoding();
             }
-        };
-        recTask.execute();
+        }.execute();
     }
 
 
@@ -336,5 +424,6 @@ public class FragmentUser extends LazyLoadFragment {
 
         }
     }
+
 
 }

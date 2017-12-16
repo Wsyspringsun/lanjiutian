@@ -6,27 +6,39 @@
 
     <TextView
         android:id="@+id/item_dianzibi_electronic_money"
-        style="@style/font_ww_14"
-        android:layout_alignParentLeft="true"
+        style="@style/font_ww_18_red"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/x5"
         android:paddingLeft="@dimen/x5"
         android:paddingTop="@dimen/x5"
-        android:text="@string/holder"
-        android:textColor="@color/font_black2" />
+        android:text="@string/holder" />
 
     <TextView
-        android:id="@+id/item_dianzibi_electronic_useable_money"
+        android:id="@+id/item_dianzibi_electronic_orderid"
         style="@style/font_ww_12"
-        android:text="@string/holder"
         android:layout_width="wrap_content"
-        android:layout_toRightOf="@id/item_dianzibi_electronic_money"
+        android:layout_alignParentLeft="true"
         android:paddingLeft="@dimen/x15"
-        android:paddingTop="@dimen/x5" />
+        android:paddingTop="@dimen/x5"
+        android:text="@string/holder" />
+
+    <TextView
+        android:id="@+id/item_dianzibi_electronic_insdate"
+        style="@style/font_ww_12"
+        android:layout_width="wrap_content"
+        android:layout_alignLeft="@id/item_dianzibi_electronic_orderid"
+        android:layout_below="@id/item_dianzibi_electronic_orderid"
+        android:paddingLeft="@dimen/x15"
+        android:paddingTop="@dimen/x5"
+        android:text="@string/holder" />
 
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/x1"
         android:layout_alignParentBottom="true"
-        android:background="@color/black" />
+        android:layout_marginTop="@dimen/x5"
+        android:background="@color/gray1" />
+
 </RelativeLayout>
 

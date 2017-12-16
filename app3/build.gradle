@@ -53,5 +53,8 @@ dependencies {
     compile project(':easypermissions')
     //图片加载
     compile 'com.facebook.fresco:fresco:0.9.0'
+    //阿里巴巴 使用android版本，否则会报错  fastjson https://github.com/alibaba/fastjson/wiki/Android%E7%89%88%E6%9C%AC
+    compile 'com.alibaba:fastjson:1.1.64.android'
+
     testCompile 'junit:junit:4.12'
 }

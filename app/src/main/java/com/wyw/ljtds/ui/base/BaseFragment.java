@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.ui.user.FragmentUser;
+import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.dialog.LoadingDialogUtils;
 
 import org.xutils.x;
@@ -46,12 +47,20 @@ public class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         injected = true;
-        return x.view().inject(this,inflater,container);
+        return x.view().inject(this, inflater, container);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+//        Utils.log(this.getClass().getName() + "....................");
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+//        Utils.log(this.getClass().getName() + "....................");
         if (!injected) {
             x.view().inject(this, this.getView());
         }
@@ -61,14 +70,22 @@ public class BaseFragment extends Fragment {
         return getView().findViewById(resId);
     }
 
-    public void setLoding(Context context, boolean settime){
+    public void setLoding(Context context, boolean settime) {
+        if (loading) return;
         loading = true;
-        if(settime){
+
+        if (settime) {
             mDialog = LoadingDialogUtils.createLoadingDialog(context, "加载中...");
             mHandler.sendEmptyMessageDelayed(AppConfig.IntentExtraKey.LODING_CONTEXT, 2000);
-        }else {
+        } else {
             mDialog = LoadingDialogUtils.createLoadingDialog(context, "加载中...");
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        closeLoding();
     }
 
     @Override
@@ -77,7 +94,14 @@ public class BaseFragment extends Fragment {
         closeLoding();
     }
 
-    public void closeLoding(){
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        closeLoding();
+    }
+
+    public void closeLoding() {
+        if (!loading) return;
         loading = false;
         LoadingDialogUtils.closeDialog(mDialog);
     }
@@ -85,5 +109,6 @@ public class BaseFragment extends Fragment {
     /**
      * 刷新界面
      */
-    public void Refresh(){}
+    public void Refresh() {
+    }
 }

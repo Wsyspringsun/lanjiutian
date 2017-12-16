@@ -56,6 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/x10"
             android:layout_marginRight="@dimen/x10"
+            android:phoneNumber="true"
             android:hint="@string/phone_number1"/>
 
     </LinearLayout>

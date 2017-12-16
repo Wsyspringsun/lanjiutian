@@ -1,57 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/x55"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/point_item_notes"
-        android:paddingLeft="@dimen/x5"
-        android:paddingTop="@dimen/x5"
-        style="@style/font_ww_14"
-        android:layout_alignParentLeft="true"
-        android:textColor="@color/font_black2" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
-    <TextView
-        android:id="@+id/point_item_execdate"
-        android:layout_width="wrap_content"
-        style="@style/font_ww_12"
-        android:paddingLeft="@dimen/x5"
-        android:paddingTop="@dimen/x5"
-        android:layout_alignLeft="@id/point_item_notes"
-        android:layout_below="@id/point_item_notes"
-        android:maxLines="1"
-        android:text="9999-01-01 00:00:00"
-        android:textColor="@color/gray" />
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/point_item_integrala"
-        style="@style/font_ww_14"
-        android:layout_width="wrap_content"
-        android:layout_alignParentRight="true"
-        android:gravity="right"
-        android:layout_marginRight="@dimen/x20"
-        android:padding="@dimen/x5"
-        android:layout_marginTop="@dimen/x10"
-        android:textColor="@color/font_black2" />
+            <TextView
+                android:id="@+id/point_item_notes"
+                style="@style/font_ww_14"
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="@dimen/x5"
+                android:paddingTop="@dimen/x5"
+                android:textColor="@color/font_black2" />
 
-    <TextView
-        android:id="@+id/point_item_integral"
-        style="@style/font_ww_14"
-        android:gravity="right"
-        android:layout_toLeftOf="@id/point_item_integrala"
-        android:layout_marginRight="@dimen/x60"
-        android:layout_marginTop="@dimen/x10"
-        android:padding="@dimen/x5"
-        android:textColor="@color/font_black2" />
+            <TextView
+                android:id="@+id/point_item_execdate"
+                style="@style/font_ww_12"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/point_item_notes"
+                android:layout_below="@id/point_item_notes"
+                android:maxLines="1"
+                android:paddingLeft="@dimen/x5"
+                android:paddingTop="@dimen/x5"
+                android:text="9999-01-01 00:00:00"
+                android:textColor="@color/gray" />
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/point_item_integral"
+            style="@style/font_ww_18_red"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical|right"
+            android:padding="@dimen/x5"
+            android:text="@string/holder"
+            android:textColor="@color/font_black2" />
+
+        <TextView
+            android:id="@+id/point_item_integrala"
+            style="@style/font_ww_18_red"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical|right"
+            android:padding="@dimen/x5"
+            android:text="@string/holder"
+            android:textColor="@color/font_black2" />
+
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/x2"
         android:layout_alignParentBottom="true"
-        android:background="@color/basebackground" />
-
+        android:layout_marginTop="@dimen/x5"
+        android:background="@color/gray1" />
 
 </RelativeLayout>
-

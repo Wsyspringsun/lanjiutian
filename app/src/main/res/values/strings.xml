@@ -36,6 +36,7 @@
     <string name="xiaoliang">销量</string>
     <string name="jiage">价格</string>
     <string name="pingjia">评价</string>
+    <string name="juli">距离</string>
     <string name="zonghe">综合</string>
     <string name="zuijinsousuo">最近搜索</string>
     <string name="cainixihuan">猜你喜欢</string>
@@ -192,6 +193,7 @@
     <string name="mima">密码</string>
     <string name="mima1">请输入密码</string>
     <string name="login">登陆</string>
+    <string name="no_login">登陆/注册</string>
     <string name="sousuo1">搜索</string>
     <string name="all">全部</string>
     <string name="qingxuanze">请选择商品规格</string>
@@ -240,7 +242,7 @@
     <string name="title_activity_point">PointRecordActivity</string>
     <string name="order_info_tousu">投诉建议</string>
     <string name="title_activity_cart">CartActivity</string>
-    <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_test">Activity</string>
     <string name="gongxi">恭喜您</string>
     <string name="ok">好的</string>
     <string name="tickets_dianzibi">电子币</string>
@@ -250,7 +252,7 @@
     <string name="datespan">有效期限</string>
     <string name="use_dianzibi">使用电子币</string>
     <string name="use_youfeiquan">使用邮费券</string>
-    <string name="password_valid">8-20位字母，数字组成的密码</string>
+    <string name="password_valid">密码设置: 6-20位字母，数字组成的密码</string>
     <string name="confirm_order_cancel">要取消订单吗?</string>
     <string name="confirm_order_del">要删除订单吗?</string>
     <string name="nil">未知</string>
@@ -261,5 +263,29 @@
     <string name="use_youfeiquan_refuse">拒绝使用邮费抵用券</string>
     <string name="shop">店铺</string>
     <string name="shop_nearest">新品上架</string>
+    <string name="confirm_order_submit">是否确认下单</string>
+    <string name="shengshi_error">请选择所在省市</string>
+    <string name="stat_unkwon">未知状态</string>
+    <string name="use">使用</string>
+    <string name="consult_tel">电话联系</string>
+    <string name="consult_kefu">在线客服</string>
+    <string name="tuijianrenTip">推荐人手机号(可选)</string>
+    <string name="send_webpage">分享到微信</string>
+    <string name="huodong_xianshiqiang">限时秒杀</string>
+    <string name="qianggou">去抢购</string>
+    <string name="title_activity_xianshiqiang">限时抢购</string>
+    <string name="holder_price">￥:XXX.XX</string>
+    <string name="huodong_choujiang" >积分抽奖</string>
+    <string name="huodong_maisong">买就送</string>
+    <string name="huodong_tejia">天天特价</string>
+    <string name="myqrcode">我的二维码</string>
+    <string name="postage_msg">本平台暂时只对市区开放,县区请咨询客服</string>
+    <string name="customer_note">买家留言</string>
+    <string name="lingjiang_msg">请在有效期内尽快领取!\r\n\r\n领取时间:</string>
+    <string name="jiang_jilu">获奖记录</string>
+    <string name="shop_addr">商铺地址：</string>
+    <string name="order_userremark">用户留言</string>
+    <string name="wallet_daijinquan">代金券</string>
+    <string name="shoucang">收藏</string>
 
 </resources>

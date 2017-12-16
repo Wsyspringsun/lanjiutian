@@ -26,16 +26,10 @@
         android:layout_below="@id/tv_rt_sendtime"
         android:gravity="right" >
 
-       <cn.xiaoneng.uiview.CustomImageView
+		<include 
             android:id="@+id/iv_rt_userhead"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            style="@style/valuationdialog"
-            android:focusable="false"
-            android:src="@drawable/visitor" 
+            layout="@layout/xn_righthead_include"
             />
-
         <LinearLayout
             android:id="@+id/ll_left_text"
             android:layout_width="wrap_content"

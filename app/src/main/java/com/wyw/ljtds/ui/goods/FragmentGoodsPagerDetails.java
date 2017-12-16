@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
@@ -13,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wyw.ljtds.R;
+import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.model.MedicineDetailsModel;
 import com.wyw.ljtds.ui.base.BaseFragment;
 
 import org.xutils.view.annotation.ContentView;
@@ -52,8 +55,8 @@ public class FragmentGoodsPagerDetails extends BaseFragment {
     private FragmentManager fragmentManager;
 
 
-    @Event(value = {R.id.ll_goods_detail,R.id.ll_goods_config})
-    private void onClick(View v){
+    @Event(value = {R.id.ll_goods_detail, R.id.ll_goods_config})
+    private void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_goods_detail:
                 //商品详情tab
@@ -80,13 +83,14 @@ public class FragmentGoodsPagerDetails extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.e(AppConfig.ERR_TAG,"GoodsPagerDetails   onActivityCreated........");
 
         tabTextList = new ArrayList<>();
         tabTextList.add(tv_goods_detail);
         tabTextList.add(tv_goods_config);
 
-        fragmentGoodsDetails=new FragmentGoodsDetails();
-        fragmentGoodsParameter=new FragmentGoodsParameter();
+        fragmentGoodsDetails = new FragmentGoodsDetails();
+        fragmentGoodsParameter = new FragmentGoodsParameter();
         nowFragment = fragmentGoodsDetails;
         fragmentManager = getChildFragmentManager();
         //默认显示商品详情tab
@@ -113,6 +117,7 @@ public class FragmentGoodsPagerDetails extends BaseFragment {
     /**
      * 切换Fragment
      * <p>(hide、show、add)
+     *
      * @param fromFragment
      * @param toFragment
      */
@@ -126,5 +131,11 @@ public class FragmentGoodsPagerDetails extends BaseFragment {
             }
 
         }
+    }
+
+    public void bindData2View(MedicineDetailsModel medicineModel) {
+        if (medicineModel == null) return;
+        this.fragmentGoodsDetails.bindData2View(medicineModel.getHTML_PATH());
+        this.fragmentGoodsParameter.bindData2View(medicineModel);
     }
 }

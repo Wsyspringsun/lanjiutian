@@ -1,10 +1,12 @@
 package com.wyw.ljtwl.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +30,7 @@ import com.wyw.ljtwl.model.OrderDetail;
 import com.wyw.ljtwl.model.OrderDetailGetModel;
 import com.wyw.ljtwl.model.OrderDetailModel;
 import com.wyw.ljtwl.model.OrderSendModel;
+import com.wyw.ljtwl.model.OrderStatus;
 import com.wyw.ljtwl.utils.StringUtils;
 
 import org.json.JSONArray;
@@ -43,7 +46,9 @@ import org.xutils.x;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2017/7/4 0004.
@@ -71,6 +76,8 @@ public class ActivityOrderInfo extends BaseActivitry {
     private TextView tvSendTime;
     @ViewInject(R.id.courier)
     private TextView tvCourier;
+    @ViewInject(R.id.courierRemark)
+    private TextView tvCourierRemark;
     @ViewInject(R.id.courierMobile)
     private TextView tvCourierMobile;
     @ViewInject(R.id.addressId)
@@ -94,6 +101,24 @@ public class ActivityOrderInfo extends BaseActivitry {
                 break;
 
             case R.id.acvitiy_order_info_btn_arrived:
+                //取消
+                final AlertDialog alert = new AlertDialog.Builder(this).create();
+                alert.setTitle(R.string.alert_tishi);
+                alert.setMessage(getResources().getString(R.string.confirm_curior_arrive));
+                alert.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.alert_queding), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        doArrived();
+                        alert.dismiss();
+                    }
+                });
+                alert.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.alert_quxiao), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        alert.dismiss();
+                    }
+                });
+                alert.show();
                 break;
 
             case R.id.header_return:
@@ -104,6 +129,24 @@ public class ActivityOrderInfo extends BaseActivitry {
                 break;
 
         }
+    }
+
+    private void doArrived() {
+        String url = "/v/order/orderArrived";
+        Map<String, String> data = new HashMap<>();
+        data.put("orderTradeId", orderTradeId);
+        CommonBiz.handle(url, data, new AbstractCommonCallback() {
+            @Override
+            public void handleSuccess(String result) throws Exception {
+                Log.e(AppConfig.TAG_ERR, "doArrived:" + result);
+                Toast.makeText(ActivityOrderInfo.this, "操作成功", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public BaseActivitry getContextActivity() {
+                return ActivityOrderInfo.this;
+            }
+        });
     }
 
     @Override
@@ -131,8 +174,6 @@ public class ActivityOrderInfo extends BaseActivitry {
     protected void onResume() {
         super.onResume();
         title.setText(R.string.order_details);
-
-
         doList();
     }
 
@@ -168,77 +209,74 @@ public class ActivityOrderInfo extends BaseActivitry {
         orderDetailGetModel.setOrderTradeId(orderTradeId);
         orderDetailGetModel.setOidGroupId(oidGroupId);
 
-        CommonBiz.handle("/v/order/orderDetail", orderDetailGetModel, new AbstractCommonCallback<String>() {
+        CommonBiz.handle("/v/order/orderDetail", orderDetailGetModel, new AbstractCommonCallback() {
             @Override
             public void handleSuccess(String result) throws Exception {
+                Log.e(AppConfig.TAG_ERR, "success---" + "success");
+                list = new ArrayList<>();
+                Log.e(AppConfig.TAG_ERR, "result:" + result);
                 JSONObject jsonData = new JSONObject(result);
-                String success = jsonData.getString("success");
-                String msg = jsonData.getString("msg");
-                Log.e(AppConfig.TAG_ERR, "success:" + success);
-                if (success.equals("0")) {
-                    Log.e(AppConfig.TAG_ERR, "success---" + "success");
-                    list = new ArrayList<>();
-                    OrderDetailModel orderDetailModel = new OrderDetailModel();
-                    Long insDate = null;
-                    Log.e(AppConfig.TAG_ERR, "insDate:" + jsonData.get("insDate"));
-                    Log.e(AppConfig.TAG_ERR, "updDate:" + jsonData.get("updDate"));
-                    if (jsonData.get("insDate") != null && jsonData.get("insDate") != JSONObject.NULL) {
-                        insDate = jsonData.getLong("insDate");
-                    }
-                    Long updDate = null;
-                    if (jsonData.get("updDate") != null && jsonData.get("updDate") != JSONObject.NULL) {
-                        updDate = jsonData.getLong("updDate");
-                    }
-                    Log.e(AppConfig.TAG_ERR, insDate + "/" + updDate);
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                OrderDetailModel orderDetailModel = new OrderDetailModel();
+                Long insDate = null;
+                if (jsonData.get("insDate") != null && jsonData.get("insDate") != JSONObject.NULL) {
+                    insDate = jsonData.getLong("insDate");
+                }
+                Long updDate = null;
+                if (jsonData.get("updDate") != null && jsonData.get("updDate") != JSONObject.NULL) {
+                    updDate = jsonData.getLong("updDate");
+                }
+                Log.e(AppConfig.TAG_ERR, insDate + "/" + updDate);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //                        Date date = new Date(insDate);
 //                        String res = sdf.format(insDate);
-                    tvOrderId.setText("订单编号：" + orderTradeId);
-                    Log.e(AppConfig.TAG_ERR, "lll:" + insDate + "/" + updDate);
-                    String dateHolder = "---/----";
-                    if (insDate == null) {
-                        tvInsDate.setText("订单生成时间：" + dateHolder);
-                    } else {
-                        tvInsDate.setText("订单生成时间：" + sdf.format(new Date(insDate)));
-                    }
-                    if (updDate == null) {
-                        tvUpdDate.setText("订单完成时间：" + dateHolder);
-                    } else {
-                        tvUpdDate.setText("订单完成时间：" + sdf.format(new Date(updDate)));
-                    }
-                    tvOrderStatus.setText("订单状态：" + jsonData.getString("groupStatus"));
-                    tvPayStatus.setText("支付方式：" + jsonData.getString("paymentMethod"));
-                    tvSendTime.setText("物流发货时间：" + jsonData.getString("logisticsInsDate"));
-                    tvCourier.setText("快递员：" + jsonData.getString("courier"));
-                    tvCourierMobile.setText(jsonData.getString("courierMobile"));
-                    tvAddressId.setText(jsonData.getString("userAddressId"));
-
-                    if (jsonData.get("detailList") != null && !JSONObject.NULL.equals(jsonData.get("detailList"))) {
-                        JSONArray jsonArray = jsonData.getJSONArray("detailList");
-                        Log.e(AppConfig.TAG_ERR, "length---" + jsonArray.length() + "");
-                        Gson gson = new Gson();
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                            OrderDetail orderDetail = gson.fromJson(jsonObject.toString(), OrderDetail.class);
-                            list.add(orderDetail);
-                        }
-                        Log.e(AppConfig.TAG_ERR, "list:" + gson.toJson(list));
-                    }
-
-                    if (adapter == null) {
-                        adapter = new MyAdapter(list);
-                        recyclerView.setAdapter(adapter);
-                    }
-                    adapter.setNewData(list);
-                    adapter.notifyDataSetChanged();
-
-                } else if (success.equals("2")) {
-                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                tvOrderId.setText("订单编号：" + orderTradeId);
+                Log.e(AppConfig.TAG_ERR, "lll:" + insDate + "/" + updDate);
+                String dateHolder = "---/----";
+                if (insDate == null) {
+                    tvInsDate.setText("订单生成时间：" + dateHolder);
+                } else {
+                    tvInsDate.setText("订单生成时间：" + sdf.format(new Date(insDate)));
                 }
+                if (updDate == null) {
+                    tvUpdDate.setText("订单完成时间：" + dateHolder);
+                } else {
+                    tvUpdDate.setText("订单完成时间：" + sdf.format(new Date(updDate)));
+                }
+
+                tvOrderStatus.setText("订单状态：" + OrderStatus.getStatus(jsonData.getString("groupStatus")));
+                tvPayStatus.setText("支付方式：" + OrderStatus.getPayMethodDisplay(jsonData.getString("paymentMethod")));
+                tvSendTime.setText("物流发货时间：" + jsonData.getString("logisticsInsDate"));
+                tvCourier.setText("快递员：" + jsonData.getString("courier"));
+                String remarks = "";
+                if (!jsonData.isNull("remarks")) {
+                    remarks = jsonData.getString("remarks");
+                }
+                tvCourierRemark.setText("备注：" + remarks);
+                tvCourierMobile.setText(jsonData.getString("courierMobile"));
+                tvAddressId.setText(jsonData.getString("userAddressId"));
+
+                if (jsonData.get("detailList") != null && !JSONObject.NULL.equals(jsonData.get("detailList"))) {
+                    JSONArray jsonArray = jsonData.getJSONArray("detailList");
+                    Log.e(AppConfig.TAG_ERR, "length---" + jsonArray.length() + "");
+                    Gson gson = new Gson();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                        OrderDetail orderDetail = gson.fromJson(jsonObject.toString(), OrderDetail.class);
+                        list.add(orderDetail);
+                    }
+                    Log.e(AppConfig.TAG_ERR, "list:" + gson.toJson(list));
+                }
+
+                if (adapter == null) {
+                    adapter = new MyAdapter(list);
+                    recyclerView.setAdapter(adapter);
+                }
+                adapter.setNewData(list);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
-            public BaseActivitry getActivity() {
+            public BaseActivitry getContextActivity() {
                 return ActivityOrderInfo.this;
             }
         });
@@ -339,26 +377,5 @@ public class ActivityOrderInfo extends BaseActivitry {
 //                Log.e(AppConfig.TAG_ERR, "finished.........");
 //            }
 //        });
-    }
-
-    public void doDelegate() {
-        CommonBiz.handle("/v/order/orderDetail", null, new AbstractCommonCallback<String>() {
-            @Override
-            public void handleSuccess(String result) throws Exception {
-                JSONObject jsonData = new JSONObject(result);
-                String success = jsonData.getString("success");
-                String msg = jsonData.getString("msg");
-                if ("0".equals(success)) {
-                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                } else if (success.equals("2")) {
-                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public BaseActivitry getActivity() {
-                return ActivityOrderInfo.this;
-            }
-        });
     }
 }

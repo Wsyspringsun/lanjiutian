@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -38,14 +38,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="#ffffff"
-                            app:canLoop="true"/>
+                            app:canLoop="true" />
                     </FrameLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/x1"
                         android:alpha="0.4"
-                        android:background="@color/gray1"/>
+                        android:background="@color/gray1" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -76,7 +76,7 @@
                                     android:layout_width="@dimen/x20"
                                     android:layout_height="@dimen/x16"
                                     android:layout_marginRight="@dimen/x2"
-                                    android:scaleType="fitCenter"/>
+                                    android:scaleType="fitCenter" />
 
                                 <TextView
                                     android:id="@+id/tv_goods_title"
@@ -86,7 +86,7 @@
                                     android:ellipsize="end"
                                     android:singleLine="true"
                                     android:textColor="@color/font_black2"
-                                    android:textSize="15sp"/>
+                                    android:textSize="15sp" />
 
                             </LinearLayout>
 
@@ -97,14 +97,14 @@
                                 android:layout_marginTop="@dimen/x3"
                                 android:ellipsize="end"
                                 android:maxLines="1"
-                                android:textColor="@color/gray"/>
+                                android:textColor="@color/gray" />
 
                         </LinearLayout>
 
                         <View
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
-                            android:background="@color/gray1"/>
+                            android:background="@color/gray1" />
 
                         <LinearLayout
                             android:id="@+id/shoucang"
@@ -119,13 +119,13 @@
                                 android:layout_width="@dimen/x21"
                                 android:layout_height="@dimen/x21"
                                 android:scaleType="fitCenter"
-                                android:src="@mipmap/icon_shoucang_weixuan"/>
+                                android:src="@mipmap/icon_shoucang_weixuan" />
 
                             <TextView
                                 style="@style/font_ww_12"
                                 android:layout_marginTop="@dimen/x1"
                                 android:text="收藏"
-                                android:textColor="@color/font_black2"/>
+                                android:textColor="@color/font_black2" />
 
                         </LinearLayout>
 
@@ -147,13 +147,13 @@
                         android:paddingTop="@dimen/x5"
                         android:textColor="@color/font_black2"
                         android:textSize="12sp"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/x1"
                         android:alpha="0.4"
-                        android:background="@color/gray1"/>
+                        android:background="@color/gray1" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -179,7 +179,7 @@
                                 android:text="￥"
                                 android:textColor="@color/base_bar"
                                 android:textSize="14sp"
-                                android:textStyle="bold"/>
+                                android:textStyle="bold" />
 
 
                             <TextView
@@ -189,7 +189,7 @@
                                 android:layout_marginLeft="@dimen/x3"
                                 android:textColor="@color/base_bar"
                                 android:textSize="18sp"
-                                android:textStyle="bold"/>
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/tv_old_price"
@@ -198,7 +198,7 @@
                                 android:layout_marginLeft="@dimen/x8"
                                 android:gravity="center_vertical"
                                 android:textColor="#888888"
-                                android:textSize="13sp"/>
+                                android:textSize="13sp" />
 
 
                         </LinearLayout>
@@ -212,7 +212,7 @@
                         android:layout_height="1px"
                         android:layout_marginTop="1dp"
                         android:alpha="0.4"
-                        android:background="#dddddd"/>
+                        android:background="#dddddd" />
 
                     <!-- 商品保障图 -->
                     <ImageView
@@ -221,15 +221,21 @@
                         android:layout_height="44dp"
                         android:layout_gravity="center_horizontal"
                         android:scaleType="fitXY"
-                        android:src="@mipmap/medicine_info"/>
+                        android:src="@mipmap/medicine_info" />
 
                     <!-- 当前已选的商品 -->
+                    <TextView
+                        android:id="@+id/fragment_info_tv_extramsg"
+                        style="@style/font_ww_18_red"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/postage_msg" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/x8"
                         android:alpha="0.4"
-                        android:background="@color/basebackground"/>
+                        android:background="@color/basebackground" />
 
                     <LinearLayout
                         android:id="@+id/ll_current_goods"
@@ -249,13 +255,13 @@
                             android:layout_weight="1"
                             android:singleLine="true"
                             android:textColor="@color/font_black2"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp" />
 
                         <ImageView
                             android:layout_width="@dimen/x12"
                             android:layout_height="@dimen/x12"
                             android:layout_marginRight="@dimen/x10"
-                            android:src="@mipmap/jiantou_you_hui"/>
+                            android:src="@mipmap/jiantou_you_hui" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -278,13 +284,13 @@
                                 android:layout_width="@dimen/x2"
                                 android:layout_height="@dimen/x12"
                                 android:layout_marginLeft="@dimen/x2"
-                                android:background="@color/base_bar"/>
+                                android:background="@color/base_bar" />
 
                             <TextView
                                 style="@style/font_ww_14"
                                 android:layout_marginLeft="@dimen/x9"
                                 android:text="@string/number"
-                                android:textColor="@color/font_black2"/>
+                                android:textColor="@color/font_black2" />
 
                         </LinearLayout>
 
@@ -292,7 +298,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="1px"
                             android:alpha="0.4"
-                            android:background="#dddddd"/>
+                            android:background="#dddddd" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -307,7 +313,7 @@
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="@dimen/x3"
                                 android:text="@string/heji1"
-                                android:textColor="@color/font_black2"/>
+                                android:textColor="@color/font_black2" />
 
                             <TextView
                                 android:id="@+id/goods_heji"
@@ -315,7 +321,7 @@
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="@dimen/x2"
                                 android:layout_toRightOf="@+id/heji_tv"
-                                android:textColor="@color/base_bar"/>
+                                android:textColor="@color/base_bar" />
 
                             <com.wyw.ljtds.widget.NumberButton
                                 android:id="@+id/number_button"
@@ -337,7 +343,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/x8"
                         android:alpha="0.4"
-                        android:background="@color/basebackground"/>
+                        android:background="@color/basebackground" />
 
                     <LinearLayout
                         android:id="@+id/ll_comment"
@@ -360,7 +366,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="用户点评"
                                 android:textColor="#222222"
-                                android:textSize="13dp"/>
+                                android:textSize="13dp" />
 
                             <TextView
                                 android:id="@+id/tv_goods_info_evaluate_cnt"
@@ -369,7 +375,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:text="(0)"
                                 android:textColor="#222222"
-                                android:textSize="13dp"/>
+                                android:textSize="13dp" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -383,7 +389,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="好评度"
                                 android:textColor="#222222"
-                                android:textSize="13dp"/>
+                                android:textSize="13dp" />
 
                             <TextView
                                 android:id="@+id/tv_good_info_comment"
@@ -392,14 +398,14 @@
                                 android:layout_marginLeft="@dimen/x1"
                                 android:text="100%"
                                 android:textColor="#ec0f38"
-                                android:textSize="13dp"/>
+                                android:textSize="13dp" />
 
                             <ImageView
                                 android:id="@+id/iv_comment_right"
                                 android:layout_width="@dimen/x12"
                                 android:layout_height="@dimen/x12"
                                 android:layout_marginLeft="@dimen/x5"
-                                android:src="@mipmap/jiantou_you_hui"/>
+                                android:src="@mipmap/jiantou_you_hui" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -407,7 +413,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:alpha="0.4"
-                        android:background="#dddddd"/>
+                        android:background="#dddddd" />
 
                     <LinearLayout
                         android:id="@+id/ll_empty_comment"
@@ -427,7 +433,7 @@
                             android:padding="@dimen/x5"
                             android:text="暂无精华评论"
                             android:textColor="#888888"
-                            android:textSize="13dp"/>
+                            android:textSize="13dp" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -439,7 +445,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:overScrollMode="never"
-                                android:visibility="gone"/>
+                                android:visibility="gone" />
 
                         </RelativeLayout>
 
@@ -497,12 +503,12 @@
                             android:layout_marginLeft="6dp"
                             android:text="上拉查看图文详情"
                             android:textColor="#222222"
-                            android:textSize="14dp"/>
+                            android:textSize="14dp" />
                     </LinearLayout>
                 </LinearLayout>
             </ScrollView>
 
-            <include layout="@layout/include_item_tab"/>
+            <include layout="@layout/include_item_tab" />
         </com.wyw.ljtds.widget.goodsinfo.SlideDetailsLayout>
 
         <android.support.design.widget.FloatingActionButton
@@ -515,7 +521,7 @@
             app:backgroundTint="@color/white"
             app:borderWidth="0dp"
             app:fabSize="mini"
-            app:rippleColor="@color/white"/>
+            app:rippleColor="@color/white" />
     </android.support.design.widget.CoordinatorLayout>
 
 </LinearLayout>

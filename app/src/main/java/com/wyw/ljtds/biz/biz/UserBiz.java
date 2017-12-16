@@ -1,5 +1,7 @@
 package com.wyw.ljtds.biz.biz;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -10,18 +12,21 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.AddressModel;
+import com.wyw.ljtds.model.AreaModel;
 import com.wyw.ljtds.model.BalanceRecord;
-import com.wyw.ljtds.model.CityModel;
+import com.wyw.ljtds.model.ChoJiangRec;
 import com.wyw.ljtds.model.DianZiBiLog;
 import com.wyw.ljtds.model.FavoriteModel;
 import com.wyw.ljtds.model.FootprintModel;
 import com.wyw.ljtds.model.MessageModel;
 import com.wyw.ljtds.model.PointRecord;
-import com.wyw.ljtds.model.ProvinceModel;
+import com.wyw.ljtds.model.UserDataModel;
 import com.wyw.ljtds.model.UserModel;
 import com.wyw.ljtds.model.WalletModel;
 import com.wyw.ljtds.model.Ticket;
+import com.wyw.ljtds.ui.user.wallet.ChojiangRecActivity;
 import com.wyw.ljtds.ui.user.wallet.DianZiBiListFragment;
+import com.wyw.ljtds.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +36,8 @@ import java.util.List;
  */
 
 public class UserBiz extends BaseBiz {
+    private static boolean logined;
+
     /**
      * 注册方法
      *
@@ -164,16 +171,16 @@ public class UserBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static List<ProvinceModel> getProvince() throws BizFailure, ZYException {
+    public static List<AreaModel> getProvince() throws BizFailure, ZYException {
         SoapProcessor ksoap2 = new SoapProcessor("Service", "province", false);
 
         JsonElement element = ksoap2.request();
         Gson gson = new GsonBuilder().create();
 
-        TypeToken<List<ProvinceModel>> tt = new TypeToken<List<ProvinceModel>>() {
+        TypeToken<List<AreaModel>> tt = new TypeToken<List<AreaModel>>() {
         };
-        List<ProvinceModel> fs = gson.fromJson(element, tt.getType());
-        List<ProvinceModel> bms = new ArrayList<ProvinceModel>();
+        List<AreaModel> fs = gson.fromJson(element, tt.getType());
+        List<AreaModel> bms = new ArrayList<>();
         bms.addAll(fs);
         return bms;
     }
@@ -187,7 +194,7 @@ public class UserBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static List<CityModel> getcity(int parentId) throws BizFailure, ZYException {
+    public static List<AreaModel> getcity(int parentId) throws BizFailure, ZYException {
         SoapProcessor ksoap2 = new SoapProcessor("Service", "city", false);
 
         ksoap2.setProperty("parentId", parentId, PropertyType.TYPE_INTEGER);
@@ -195,12 +202,24 @@ public class UserBiz extends BaseBiz {
         JsonElement element = ksoap2.request();
         Gson gson = new GsonBuilder().create();
 
-        TypeToken<List<CityModel>> tt = new TypeToken<List<CityModel>>() {
+        TypeToken<List<AreaModel>> tt = new TypeToken<List<AreaModel>>() {
         };
-        List<CityModel> fs = gson.fromJson(element, tt.getType());
-        List<CityModel> bms = new ArrayList<CityModel>();
-        bms.addAll(fs);
-        return bms;
+        List<AreaModel> fs = gson.fromJson(element, tt.getType());
+        return fs;
+    }
+
+    public static List<AreaModel> getDistrict(int parentId) throws BizFailure, ZYException {
+        SoapProcessor ksoap2 = new SoapProcessor("Service", "district", false);
+
+        ksoap2.setProperty("parentId", parentId, PropertyType.TYPE_INTEGER);
+
+        JsonElement element = ksoap2.request();
+        Gson gson = new GsonBuilder().create();
+
+        TypeToken<List<AreaModel>> tt = new TypeToken<List<AreaModel>>() {
+        };
+        List<AreaModel> fs = gson.fromJson(element, tt.getType());
+        return fs;
     }
 
 
@@ -217,20 +236,16 @@ public class UserBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static int addUserAddress(String consigneeName, String consigneeMobile, String consigneeZipCode
-            , String consigneeProvince, String consigneeCity, String consigneeAddress) throws BizFailure, ZYException {
-
-        SoapProcessor ksoap = new SoapProcessor("Service", "addUserAddress", true);
-
-        ksoap.setProperty("consigneeName", consigneeName, PropertyType.TYPE_STRING);
-        ksoap.setProperty("consigneeMobile", consigneeMobile, PropertyType.TYPE_STRING);
-        ksoap.setProperty("consigneeZipCode", consigneeZipCode, PropertyType.TYPE_STRING);
-        ksoap.setProperty("consigneeProvice", consigneeProvince, PropertyType.TYPE_STRING);
-        ksoap.setProperty("consigneeCity", consigneeCity, PropertyType.TYPE_STRING);
-        ksoap.setProperty("consigneeAddress", consigneeAddress, PropertyType.TYPE_STRING);
-
+    public static int addUserAddress(AddressModel model) throws BizFailure, ZYException {
+        SoapProcessor ksoap = new SoapProcessor("Service", "addUserAddress2", true);
+        ksoap.setProperty("consigneeName", model.getCONSIGNEE_NAME(), PropertyType.TYPE_STRING);
+        ksoap.setProperty("consigneeMobile", model.getCONSIGNEE_MOBILE(), PropertyType.TYPE_STRING);
+        ksoap.setProperty("consigneeZipCode", "048000", PropertyType.TYPE_STRING);
+        ksoap.setProperty("consigneeProvice", model.getCONSIGNEE_PROVINCE(), PropertyType.TYPE_STRING);
+        ksoap.setProperty("consigneeCity", model.getCONSIGNEE_CITY(), PropertyType.TYPE_STRING);
+        ksoap.setProperty("consigneeCounty", model.getCONSIGNEE_COUNTY(), PropertyType.TYPE_STRING);
+        ksoap.setProperty("consigneeAddress", model.getCONSIGNEE_ADDRESS(), PropertyType.TYPE_STRING);
         return ksoap.request().getAsInt();
-
     }
 
 
@@ -248,21 +263,19 @@ public class UserBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static int updateUserAddress(String addressId, String consigneeName
-            , String consigneeMobile, String consigneeZipCode, String consigneeProvince, String consigneeCity, String consigneeAddress) throws BizFailure, ZYException {
+    public static int updateUserAddress(AddressModel model) throws BizFailure, ZYException {
 
-        SoapProcessor ksoap = new SoapProcessor("Service", "updateUserAddress", false);
+        SoapProcessor ksoap = new SoapProcessor("Service", "updateUserAddress2", false);
 
-        ksoap.setProperty("addressId", addressId, PropertyType.TYPE_STRING);
-        ksoap.setProperty("consigneeName", consigneeName, PropertyType.TYPE_STRING);
-        ksoap.setProperty("consigneeMobile", consigneeMobile, PropertyType.TYPE_STRING);
-        ksoap.setProperty("consigneeZipCode", consigneeZipCode, PropertyType.TYPE_STRING);
-        ksoap.setProperty("consigneeProvice", consigneeProvince, PropertyType.TYPE_STRING);
-        ksoap.setProperty("consigneeCity", consigneeCity, PropertyType.TYPE_STRING);
-        ksoap.setProperty("consigneeAddress", consigneeAddress, PropertyType.TYPE_STRING);
-
+        ksoap.setProperty("addressId", model.getADDRESS_ID(), PropertyType.TYPE_STRING);
+        ksoap.setProperty("consigneeName", model.getCONSIGNEE_NAME(), PropertyType.TYPE_STRING);
+        ksoap.setProperty("consigneeMobile", model.getCONSIGNEE_MOBILE(), PropertyType.TYPE_STRING);
+        ksoap.setProperty("consigneeZipCode", "048000", PropertyType.TYPE_STRING);
+        ksoap.setProperty("consigneeProvice", model.getCONSIGNEE_PROVINCE(), PropertyType.TYPE_STRING);
+        ksoap.setProperty("consigneeCity", model.getCONSIGNEE_CITY(), PropertyType.TYPE_STRING);
+        ksoap.setProperty("consigneeCounty", model.getCONSIGNEE_COUNTY(), PropertyType.TYPE_STRING);
+        ksoap.setProperty("consigneeAddress", model.getCONSIGNEE_ADDRESS(), PropertyType.TYPE_STRING);
         return ksoap.request().getAsInt();
-
     }
 
 
@@ -284,6 +297,16 @@ public class UserBiz extends BaseBiz {
 
     }
 
+
+    public static int changeDefaultAddress(String addressId) throws BizFailure, ZYException {
+
+        SoapProcessor ksoap = new SoapProcessor("Service", "changeDefaultAddress", true);
+
+        ksoap.setProperty("addressId", addressId, PropertyType.TYPE_STRING);
+
+        return ksoap.request().getAsInt();
+
+    }
 
     /**
      * 获取收货地址
@@ -322,6 +345,17 @@ public class UserBiz extends BaseBiz {
 
     }
 
+    public static UserDataModel userData() throws BizFailure, ZYException {
+        SoapProcessor ksoap = new SoapProcessor("Service", "sumOrderAmount", true);
+        ksoap.setProperty("token", PreferenceCache.getToken(), PropertyType.TYPE_STRING);
+        JsonElement element = ksoap.request();
+
+        Gson gson = new GsonBuilder().create();
+        TypeToken<UserDataModel> tt = new TypeToken<UserDataModel>() {
+        };
+        UserDataModel fs = gson.fromJson(element, tt.getType());
+        return fs;
+    }
 
     /**
      * 获取钱包信息
@@ -622,6 +656,23 @@ public class UserBiz extends BaseBiz {
         TypeToken<List<DianZiBiLog>> tt = new TypeToken<List<DianZiBiLog>>() {
         };
         List<DianZiBiLog> fs = gson.fromJson(element, tt.getType());
+        return fs;
+    }
+
+    public static boolean isLogined() {
+        String token = PreferenceCache.getToken();
+        return !StringUtils.isEmpty(token);
+    }
+
+    public static List<ChoJiangRec> chojiangData() throws ZYException {
+        String method = "getLingJiang";
+        SoapProcessor sp = new SoapProcessor("Service", method, true);
+        JsonElement element = sp.request();
+
+        Gson gson = new GsonBuilder().create();
+        TypeToken<List<ChoJiangRec>> tt = new TypeToken<List<ChoJiangRec>>() {
+        };
+        List<ChoJiangRec> fs = gson.fromJson(element, tt.getType());
         return fs;
     }
 }

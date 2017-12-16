@@ -15,10 +15,14 @@ import com.wyw.ljtds.R;
  */
 
 public class BottomDialog {
+
+    public Dialog getBottomDialog() {
+        return bottomDialog;
+    }
+
     private Dialog bottomDialog;
 
     public BottomDialog(Context context, View contentView) {
-
         bottomDialog = new Dialog( context, R.style.BottomDialog );
 
         bottomDialog.setContentView( contentView );

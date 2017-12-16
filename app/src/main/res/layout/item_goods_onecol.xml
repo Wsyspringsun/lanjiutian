@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/x5"
+    android:paddingLeft="@dimen/x10"
+    android:paddingRight="@dimen/x10"
+    android:paddingTop="@dimen/x5">
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/item_goods_omecol_goods_img"
+            android:layout_width="@dimen/x90"
+            android:layout_height="@dimen/x90"
+            android:scaleType="fitCenter"
+            android:src="@drawable/zhanweitu_lunbo" />
+
+        <TextView
+            style="@style/font_ww_18_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/base_bar"
+            android:text="@string/stat_unkwon"
+            android:textAlignment="center" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/item_goods_omecol_goods_info"
+        style="@style/font_ww_16_black"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:padding="8dp"
+        android:textSize="14dp" />
+
+</LinearLayout>

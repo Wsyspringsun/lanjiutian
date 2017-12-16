@@ -28,10 +28,10 @@ public class NetworkImageHolderView implements Holder<String> {
 
     @Override
     public void UpdateUI(Context context, int position, String data) {
-//        Log.e(AppConfig.ERR_TAG, "createImage:" + data);
         if (!StringUtils.isEmpty(data)) {
             imageView.setImageURI(Uri.parse(data));
         }
 
     }
+
 }

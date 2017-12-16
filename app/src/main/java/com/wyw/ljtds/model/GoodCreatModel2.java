@@ -12,6 +12,7 @@ public class GoodCreatModel2 extends BaseModel {
     private String INVOICE_TYPE;
     private String INVOICE_TITLE;
     private String INVOICE_CONTENT;
+    private String INVOICE_TAX;
     private String OID_GROUP_ID;
     private String OID_GROUP_NAME;
 
@@ -116,5 +117,13 @@ public class GoodCreatModel2 extends BaseModel {
 
     public void setPOST_NUM(String POST_NUM) {
         this.POST_NUM = POST_NUM;
+    }
+
+    public String getINVOICE_TAX() {
+        return INVOICE_TAX;
+    }
+
+    public void setINVOICE_TAX(String INVOICE_TAX) {
+        this.INVOICE_TAX = INVOICE_TAX;
     }
 }

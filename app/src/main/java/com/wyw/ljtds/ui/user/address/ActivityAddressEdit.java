@@ -1,9 +1,12 @@
 package com.wyw.ljtds.ui.user.address;
 
-import android.app.Dialog;
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -14,24 +17,27 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wyw.ljtds.MainActivity;
+import com.google.gson.Gson;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
-import com.wyw.ljtds.config.AppManager;
-import com.wyw.ljtds.config.MyApplication;
-import com.wyw.ljtds.config.PreferenceCache;
+import com.wyw.ljtds.model.AddressModel;
+import com.wyw.ljtds.model.AreaModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.InputMethodUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
+import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+
+import java.util.regex.Pattern;
 
 /**
  * Created by Administrator on 2017/1/7 0007.
@@ -39,6 +45,9 @@ import org.xutils.view.annotation.ViewInject;
 
 @ContentView(R.layout.activity_address_add)
 public class ActivityAddressEdit extends BaseActivity {
+    public static final String TAG_ADDRESS = "com.wyw.ljtds.ui.user.address.ActivityAddressEdit.tag_address";
+    final int REQUEST_PROVICE = 0;
+
     @ViewInject(R.id.header_return_text)
     private TextView title;
     @ViewInject(R.id.header_edit)
@@ -57,44 +66,39 @@ public class ActivityAddressEdit extends BaseActivity {
 
     private int from;//判断是从哪个activity过来的  1新增 2编辑 3订单修改地址 4未填写地址
     private static String address_id = "";
+    private AddressModel addrModel;
+    private boolean creatNew = true;
 
     @Event(value = {R.id.select_shengshi, R.id.header_return, R.id.header_edit, R.id.shanchu})
     private void onClick(View view) {
         Intent it;
         switch (view.getId()) {
             case R.id.header_return:
-                finshThis();
+                finish();
                 break;
 
             case R.id.select_shengshi:
-                it = new Intent(this, ActivityProvince.class);
-                it.putExtra("address_id", address_id);
-                it.putExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, from);
-
-                Bundle bundle = new Bundle();
-                bundle.putString("name", name.getText().toString().trim());
-                bundle.putString("phone", phone.getText().toString().trim());
-                bundle.putString("xiangxi", xiangxi.getText().toString().trim());
-                bundle.putString("shengshi", shengshi.getText().toString());
-//                if (from==2){
-//                    it.putExtra( AppConfig.IntentExtraKey.ADDRESS_FROM, 2 );
-//                }
-                it.putExtra("bundle", bundle);
-                AppManager.addDestoryActivity(ActivityAddressEdit.this, "addressEdit");
-                startActivity(it);
+//                it = new Intent(this, ActivityProvince.class);
+//                it.putExtra("address_id", address_id);
+                it = ActivityArea.getIntent(this, null);
+                startActivityForResult(it, REQUEST_PROVICE);
                 break;
 
             case R.id.header_edit:
                 if (StringUtils.isEmpty(name.getText())) {
                     ToastUtil.show(this, getResources().getString(R.string.realname_error1));
-                } else if (StringUtils.isEmpty(phone.getText())) {
+                } else if (StringUtils.isEmpty(phone.getText().toString().trim()) || !Utils.validPhoneNum(phone.getText().toString().trim())) {
                     ToastUtil.show(this, getResources().getString(R.string.phone_error));
+                } else if (StringUtils.isEmpty(shengshi.getText())) {
+                    ToastUtil.show(this, getResources().getString(R.string.shengshi_error));
                 } else if (StringUtils.isEmpty(xiangxi.getText())) {
                     ToastUtil.show(this, getResources().getString(R.string.address_error));
                 } else {
-                    if (from == 4 || from == 1) {
-                        add(from);
-                    } else if (from == 3 || from == 2) {
+                    //将经过验证的数据放入模型
+                    view2Model();
+                    if (creatNew) {
+                        add();
+                    } else {
                         update();
                     }
                 }
@@ -106,117 +110,96 @@ public class ActivityAddressEdit extends BaseActivity {
         }
     }
 
+    public static Intent getIntent(Context ctx, AddressModel addrModel) {
+        Intent it = new Intent(ctx, ActivityAddressEdit.class);
+        it.putExtra(TAG_ADDRESS, addrModel);
+        return it;
+    }
+
+    private void view2Model() {
+        addrModel.setCONSIGNEE_NAME(name.getText().toString().trim());
+        addrModel.setCONSIGNEE_MOBILE(phone.getText().toString().trim());
+        addrModel.setCONSIGNEE_ADDRESS(xiangxi.getText().toString().trim());
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setLoding(this, false);
-
+        addrModel = new AddressModel();
         title.setText("新增收货地址");
         edit.setText("保存");
         edit.setTextColor(getResources().getColor(R.color.base_bar));
 
-        from = getIntent().getIntExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, 0);
-        Log.e("from", from + "");
-//        if (from == 1 || from == 4) {
-//            shanchu.setVisibility( View.GONE );
-//        }
-
-        if (from == 2 || from == 3) {
-//            shanchu.setVisibility( View.VISIBLE );
-            address_id = getIntent().getStringExtra("address_id");
-            Bundle bundle = getIntent().getBundleExtra("bundle");
-            if (bundle != null) {
-                name.setText(bundle.getString("name"));
-                phone.setText(bundle.getString("phone"));
-                xiangxi.setText(bundle.getString("xiangxi"));
-                shengshi.setText(bundle.getString("shengshi"));
-            }
-        } else if (from == 1 || from == 4) {
-            Bundle bundle = getIntent().getBundleExtra("bundle");
-            if (bundle != null) {
-                name.setText(bundle.getString("name"));
-                phone.setText(bundle.getString("phone"));
-                xiangxi.setText(bundle.getString("xiangxi"));
-                shengshi.setText(getIntent().getStringExtra("name_p") + getIntent().getStringExtra("name_c"));
-            }
+        Intent it = getIntent();
+        Parcelable editAddr = it.getParcelableExtra(TAG_ADDRESS);
+        if (editAddr != null) {
+            //编辑
+            title.setText("编辑收货地址");
+            creatNew = false;
+            addrModel = (AddressModel) editAddr;
+            bindData();
         }
-
-
-        closeLoding();
     }
 
-    BizDataAsyncTask<Integer> addTask;
+    private void bindData() {
+        name.setText(addrModel.getCONSIGNEE_NAME());
+        phone.setText(addrModel.getCONSIGNEE_MOBILE());
+        shengshi.setText(addrModel.getPROVINCE() + "" + addrModel.getCITY() + addrModel.getCOUNTY());
+        xiangxi.setText(addrModel.getCONSIGNEE_ADDRESS());
+    }
 
-    private void add(final int from) {
-        addTask = new BizDataAsyncTask<Integer>() {
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        super.canShowAddress = true;
+    }
+
+
+    private void add() {
+        setLoding(this, false);
+        new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                return UserBiz.addUserAddress(name.getText().toString().trim(), phone.getText().toString().trim(), "048000",
-                        getIntent().getStringExtra("id_p"), getIntent().getStringExtra("id_c"), xiangxi.getText().toString().trim());
+                return UserBiz.addUserAddress(addrModel);
             }
 
             @Override
             protected void onExecuteSucceeded(Integer s) {
+                closeLoding();
                 ToastUtil.show(ActivityAddressEdit.this, getResources().getString(R.string.add_succeed));
                 finish();
-                if (from == 1) {
-                    InputMethodUtils.keyBoxIsShow(ActivityAddressEdit.this);
-                    finish();
-                    startActivity(new Intent(ActivityAddressEdit.this, ActivityAddress.class));
-                } else if (from == 4) {
-                    InputMethodUtils.keyBoxIsShow(ActivityAddressEdit.this);
-                    Intent it = new Intent(AppConfig.AppAction.Base_ACTION_PREFIX + "refresh");
-                    MyApplication.getAppContext().sendBroadcast(it);
-                    finish();
-                }
             }
 
             @Override
             protected void OnExecuteFailed() {
-
+                closeLoding();
             }
-        };
-        addTask.execute();
+        }.execute();
     }
 
-    BizDataAsyncTask<Integer> updateTask;
 
     private void update() {
-        updateTask = new BizDataAsyncTask<Integer>() {
+        setLoding(this, false);
+        new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                Log.e("uodate=====", address_id + ";" + getIntent().getStringExtra("id_p") + ";" + getIntent().getStringExtra("id_c"));
-                return UserBiz.updateUserAddress(address_id, name.getText().toString().trim(),
-                        phone.getText().toString().trim(), "048000", getIntent().getStringExtra("id_p"), getIntent().getStringExtra("id_c"),
-                        xiangxi.getText().toString().trim());
+                Log.e(AppConfig.ERR_TAG, "uodate=====" + GsonUtils.Bean2Json(addrModel));
+                return UserBiz.updateUserAddress(addrModel);
             }
 
             @Override
             protected void onExecuteSucceeded(Integer s) {
+                closeLoding();
                 ToastUtil.show(ActivityAddressEdit.this, getResources().getString(R.string.update_succeed));
-                if (from == 2) {
-                    InputMethodUtils.keyBoxIsShow(ActivityAddressEdit.this);
-//                    setResult( AppConfig.IntentExtraKey.RESULT_OK );
-                    finish();
-                    startActivity(new Intent(ActivityAddressEdit.this, ActivityAddress.class));
-                } else if (from == 3) {
-
-                    InputMethodUtils.keyBoxIsShow(ActivityAddressEdit.this);
-                    Intent mIntent = new Intent();
-                    mIntent.putExtra("refresh", true);
-                    setResult(AppConfig.IntentExtraKey.RESULT_OK, mIntent);
-                    Log.e("aaaaaaaaaaaaaa", "aaaaaaaaaaaaa");
-                    finish();
-                }
+                finish();
             }
 
             @Override
             protected void OnExecuteFailed() {
-
+                closeLoding();
             }
-        };
-        updateTask.execute();
+        }.execute();
     }
 
     BizDataAsyncTask<Integer> deleteTask;
@@ -244,9 +227,33 @@ public class ActivityAddressEdit extends BaseActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) return;
+        if (REQUEST_PROVICE == requestCode) {
+            String jsonSeledArea = data.getStringExtra(ActivityArea.TAG_SELECTED_AREA);
+            AreaModel contryModel = AreaModel.fromJson(jsonSeledArea);
+//            Bundle bundle = data.getBundleExtra(ActivityCity.TAG_SHENGSHI);
+            addrModel.setCONSIGNEE_COUNTY("" + contryModel.getID());
+            addrModel.setCOUNTY(contryModel.getNAME());
+
+            AreaModel cityModel = contryModel.getParentModel();
+            addrModel.setCONSIGNEE_CITY("" + cityModel.getID());
+            addrModel.setCITY(cityModel.getNAME());
+
+
+            AreaModel provinceModel = cityModel.getParentModel();
+            addrModel.setCONSIGNEE_PROVINCE("" + provinceModel.getID());
+            addrModel.setPROVINCE(provinceModel.getNAME());
+
+            shengshi.setText(addrModel.getPROVINCE() + "" + addrModel.getCITY() + addrModel.getCOUNTY());
+        }
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == event.KEYCODE_BACK) {
-            finshThis();
+           finish();
         }
         return super.onKeyDown(keyCode, event);
     }

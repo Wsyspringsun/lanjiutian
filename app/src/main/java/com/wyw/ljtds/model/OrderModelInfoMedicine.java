@@ -9,6 +9,9 @@ import java.util.List;
 
 public class OrderModelInfoMedicine extends BaseModel {
     private XiaoNengData xiaonengData;
+    private String REMARKS;
+    private String ADDRESS; //商铺地址
+    private String CONTACT_MOBILE;
     private String DISTRIBUTION_MODE;
     private int GROUP_EXCHANGE_QUANLITY;
     private BigDecimal POINT_MONEY;
@@ -227,7 +230,31 @@ public class OrderModelInfoMedicine extends BaseModel {
         this.xiaonengData = xiaonengData;
     }
 
-    public class Goods{
+    public String getADDRESS() {
+        return ADDRESS;
+    }
+
+    public void setADDRESS(String ADDRESS) {
+        this.ADDRESS = ADDRESS;
+    }
+
+    public String getCONTACT_MOBILE() {
+        return CONTACT_MOBILE;
+    }
+
+    public void setCONTACT_MOBILE(String CONTACT_MOBILE) {
+        this.CONTACT_MOBILE = CONTACT_MOBILE;
+    }
+
+    public String getREMARKS() {
+        return REMARKS;
+    }
+
+    public void setREMARKS(String REMARKS) {
+        this.REMARKS = REMARKS;
+    }
+
+    public class Goods {
         //商品id
         private String COMMODITY_ID;
         //商品名字

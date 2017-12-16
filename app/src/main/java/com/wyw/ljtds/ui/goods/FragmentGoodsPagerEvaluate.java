@@ -45,8 +45,8 @@ import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
 
 @ContentView(R.layout.fragment_goods_evaluate)
 public class FragmentGoodsPagerEvaluate extends BaseFragment {
-    @ViewInject(R.id.recycler)
-    private RecyclerView recycler;
+    @ViewInject(R.id.fragment_goods_evaluate_data)
+    private RecyclerView rylvData;
 
     private int pageIndex = 1;
     private boolean end = false;
@@ -61,23 +61,21 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        tvGoodComment.setText("1");
-    }
+        tvGoodComment.setText("0");
 
-    public void update(final MedicineDetailsModel model) {
-        Log.e(AppConfig.ERR_TAG, GsonUtils.Bean2Json(model));
-        geteva(model.getWAREID(), true, true);
-
-//        Log.e(AppConfig.ERR_TAG, "evaluate page eva count:" + model.getEVALUATE_CNT() + "");
-        tvGoodComment.setText("(" + model.getEVALUATE_CNT() + ")");
-
-        noData = getActivity().getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recycler.getParent(), false);
+        noData = getActivity().getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) rylvData.getParent(), false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());//必须有
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动
-        recycler.setLayoutManager(linearLayoutManager);
-        recycler.setItemAnimator(new DefaultItemAnimator());
-        recycler.addItemDecoration(new RecycleViewDivider(getActivity(), LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.font_black2)));
+        rylvData.setLayoutManager(linearLayoutManager);
+        rylvData.setItemAnimator(new DefaultItemAnimator());
+        rylvData.addItemDecoration(new RecycleViewDivider(getActivity(), LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.font_black2)));
+    }
 
+    public void bindData2View(final MedicineDetailsModel model) {
+        Log.e(AppConfig.ERR_TAG, GsonUtils.Bean2Json(model));
+        geteva(model.getWAREID(), true, true);
+//        Log.e(AppConfig.ERR_TAG, "evaluate page eva count:" + model.getEVALUATE_CNT() + "");
+        tvGoodComment.setText("(" + model.getEVALUATE_CNT() + ")");
         adapter = new MyAdapter();
         adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
@@ -86,23 +84,12 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
             }
         });
         adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
-        recycler.setAdapter(adapter);
+        rylvData.setAdapter(adapter);
     }
 
     public void update(final CommodityDetailsModel model) {
-        Log.e(AppConfig.ERR_TAG, GsonUtils.Bean2Json(model));
-
-        tvGoodComment.setText("4" + model.getEVALUATE_CNT());
-
+        tvGoodComment.setText("" + model.getEVALUATE_CNT());
         geteva(model.getCommodityId(), true, true);
-
-        noData = getActivity().getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recycler.getParent(), false);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());//必须有
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动
-        recycler.setLayoutManager(linearLayoutManager);
-        recycler.setItemAnimator(new DefaultItemAnimator());
-        recycler.addItemDecoration(new RecycleViewDivider(getActivity(), LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.font_black2)));
-
         adapter = new MyAdapter();
         adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
@@ -111,13 +98,12 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
             }
         });
         adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
-        recycler.setAdapter(adapter);
+        rylvData.setAdapter(adapter);
     }
 
-    BizDataAsyncTask<List<MedicineDetailsEvaluateModel>> evaTask;
-
     private void geteva(final String classid, final boolean loadmore, final boolean refresh) {
-        evaTask = new BizDataAsyncTask<List<MedicineDetailsEvaluateModel>>() {
+        setLoding(getActivity(), false);
+        new BizDataAsyncTask<List<MedicineDetailsEvaluateModel>>() {
             @Override
             protected List<MedicineDetailsEvaluateModel> doExecute() throws ZYException, BizFailure {
                 if (refresh) {
@@ -129,6 +115,7 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
 
             @Override
             protected void onExecuteSucceeded(List<MedicineDetailsEvaluateModel> medicineDetailsEvaluateModels) {
+                closeLoding();
                 if (medicineDetailsEvaluateModels.size() < AppConfig.DEFAULT_PAGE_COUNT) {
                     end = true;
                     //可以加入emptyview
@@ -166,15 +153,13 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
 
             @Override
             protected void OnExecuteFailed() {
-
+                closeLoding();
             }
-        };
-        evaTask.execute();
+        }.execute();
     }
 
     private View getFooterView() {
-        View view = getActivity().getLayoutInflater().inflate(R.layout.main_end_view, (ViewGroup) recycler.getParent(), false);
-
+        View view = getActivity().getLayoutInflater().inflate(R.layout.main_end_view, (ViewGroup) rylvData.getParent(), false);
         return view;
     }
 

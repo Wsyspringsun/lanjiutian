@@ -63,6 +63,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -70,13 +71,15 @@
                     android:layout_height="7dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/button_bg_red" />
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/textView_count_down"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#707070"
+                    android:visibility="gone"
                     android:textSize="14sp" />
             </LinearLayout>
 

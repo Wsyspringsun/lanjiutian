@@ -20,7 +20,7 @@
         android:layout_above="@+id/tianjia"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/reclcyer">
+        android:id="@+id/activity_address_list_rv_addrlist">
 
     </android.support.v7.widget.RecyclerView>
 

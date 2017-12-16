@@ -18,11 +18,16 @@ public class MedicineDetailsModel extends BaseModel {
     private String HTML_PATH;
     //图片
     private String[] IMAGES;
+    //联系手机
+    private String CONTACT_MOBILE;
+    //联系 座机
+    private String CONTACT_TEL;
     //最新会员价
     private BigDecimal MEMPRICE;
     private BigDecimal MEMPRICE2;
     private BigDecimal MEMPRICE3;
     private BigDecimal MEMPRICE4;
+    private String FLG_DETAIL; //活动消费额抵扣 描述
     //处方标识（1处方，其他 非处方）
     private String PRESCRIPTION_FLG;
     //id
@@ -334,5 +339,29 @@ public class MedicineDetailsModel extends BaseModel {
 
     public void setEVALUATE_CNT(int EVALUATE_CNT) {
         this.EVALUATE_CNT = EVALUATE_CNT;
+    }
+
+    public String getCONTACT_TEL() {
+        return CONTACT_TEL;
+    }
+
+    public void setCONTACT_TEL(String CONTACT_TEL) {
+        this.CONTACT_TEL = CONTACT_TEL;
+    }
+
+    public String getCONTACT_MOBILE() {
+        return CONTACT_MOBILE;
+    }
+
+    public void setCONTACT_MOBILE(String CONTACT_MOBILE) {
+        this.CONTACT_MOBILE = CONTACT_MOBILE;
+    }
+
+    public String getFLG_DETAIL() {
+        return FLG_DETAIL;
+    }
+
+    public void setFLG_DETAIL(String FLG_DETAIL) {
+        this.FLG_DETAIL = FLG_DETAIL;
     }
 }
