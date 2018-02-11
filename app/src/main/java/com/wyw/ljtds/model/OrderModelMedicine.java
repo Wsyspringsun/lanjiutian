@@ -7,23 +7,49 @@ import java.util.List;
  * Created by Administrator on 2017/4/21 0021.
  */
 
-public class OrderModelMedicine extends BaseModel {
-    private String DISTRIBUTION_MODE;
+public class OrderModelMedicine extends OrderGroupDto {
+    private String STATUS;
+    private BigDecimal PAY_AMOUNT;
+    private String PAYMENT_METHOD;
+
+    public String getSTATUS() {
+        return STATUS;
+    }
+
+    public void setSTATUS(String STATUS) {
+        this.STATUS = STATUS;
+    }
+
+    public BigDecimal getPAY_AMOUNT() {
+        return PAY_AMOUNT;
+    }
+
+    public void setPAY_AMOUNT(BigDecimal PAY_AMOUNT) {
+        this.PAY_AMOUNT = PAY_AMOUNT;
+    }
+
+    public String getPAYMENT_METHOD() {
+        return PAYMENT_METHOD;
+    }
+
+    public void setPAYMENT_METHOD(String PAYMENT_METHOD) {
+        this.PAYMENT_METHOD = PAYMENT_METHOD;
+    }
+
+
+/*    private String DISTRIBUTION_MODE;
     private int GROUP_EXCHANGE_QUANLITY;
     private BigDecimal GROUP_MONEY_ALL;
     private BigDecimal POINT_MONEY;
-    private BigDecimal PAY_AMOUNT;
     private String INVOICE_CONTENT;
     private String INVOICE_FLG;
     private String INVOICE_TITLE;
     private String INVOICE_TYPE;
-    private String STATUS;
     private String OID_GROUP_ID;
     private String OID_GROUP_NAME;
     private String ORDER_GROUP_ID;
     private String ORDER_TRADE_ID;
     private BigDecimal POSTAGE;
-    private String PAYMENT_METHOD;
     private List<Goods> DETAILS;
 
     public int getGROUP_EXCHANGE_QUANLITY() {
@@ -114,15 +140,7 @@ public class OrderModelMedicine extends BaseModel {
         this.INVOICE_TYPE = INVOICE_TYPE;
     }
 
-    public String getSTATUS() {
-        return STATUS;
-    }
-
-    public void setSTATUS(String STATUS) {
-        this.STATUS = STATUS;
-    }
-
-    public String getORDER_GROUP_ID() {
+   public String getORDER_GROUP_ID() {
         return ORDER_GROUP_ID;
     }
 
@@ -138,13 +156,6 @@ public class OrderModelMedicine extends BaseModel {
         this.ORDER_TRADE_ID = ORDER_TRADE_ID;
     }
 
-    public String getPAYMENT_METHOD() {
-        return PAYMENT_METHOD;
-    }
-
-    public void setPAYMENT_METHOD(String PAYMENT_METHOD) {
-        this.PAYMENT_METHOD = PAYMENT_METHOD;
-    }
 
     public BigDecimal getPOINT_MONEY() {
         return POINT_MONEY;
@@ -154,15 +165,7 @@ public class OrderModelMedicine extends BaseModel {
         this.POINT_MONEY = POINT_MONEY;
     }
 
-    public BigDecimal getPAY_AMOUNT() {
-        return PAY_AMOUNT;
-    }
-
-    public void setPAY_AMOUNT(BigDecimal PAY_AMOUNT) {
-        this.PAY_AMOUNT = PAY_AMOUNT;
-    }
-
-    public class Goods{
+   public class Goods{
         //商品id
         private String COMMODITY_ID;
         //商品名字
@@ -228,5 +231,5 @@ public class OrderModelMedicine extends BaseModel {
         public void setCOST_MONEY(BigDecimal COST_MONEY) {
             this.COST_MONEY = COST_MONEY;
         }
-    }
+    }*/
 }

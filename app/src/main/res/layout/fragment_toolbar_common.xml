@@ -65,7 +65,8 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x10"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_add_shoppingcart" />
+            android:src="@drawable/ic_gouwuche"
+            android:visibility="gone" />
 
         <!--3 微信分享-->
         <ImageView
@@ -74,8 +75,18 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x10"
             android:scaleType="fitCenter"
-            android:src="@drawable/fenxiang" />
+            android:src="@drawable/ic_fenxiang_bai"
+            android:visibility="gone" />
 
+        <!--4 search-->
+        <ImageView
+            android:layout_width="@dimen/x18"
+            android:layout_height="@dimen/x18"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x10"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_sousuo_white"
+            android:visibility="gone" />
 
     </LinearLayout>
 

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/activity_logistic_trace_tv_service"
+            style="@style/font_ww_18_black"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="@dimen/normal_padding"
+            android:text="开始服务" />
+
+
+        <TextView
+            android:id="@+id/activity_logistic_trace_tv_gather"
+            style="@style/font_ww_18_black"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="@dimen/normal_padding"
+            android:text="开始采集" />
+
+        <TextView
+            android:id="@+id/activity_logistic_trace_tv_query"
+            style="@style/font_ww_18_black"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="@dimen/normal_padding"
+            android:text="查询" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/activity_logistic_trace_mapview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            android:clickable="true" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/x100"
+            android:elevation="@dimen/x6">
+
+            <TextView
+                android:id="@+id/activity_logistic_trace_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/textview_border_bottomarrow"
+                android:text="距离您--米"
+                android:textAlignment="center" />
+
+            <ImageView
+                android:layout_width="@dimen/x40"
+                android:layout_height="@dimen/x40"
+                android:layout_below="@id/activity_logistic_trace_distance"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:src="@drawable/ic_logistic_curior" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/activity_logistic_trace_img_cancel"
+            android:layout_width="@dimen/x40"
+            android:layout_height="@dimen/x40"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="@dimen/vertical_margin_mid"
+            android:src="@drawable/ic_action_cancel_solid" />
+
+    </FrameLayout>
+
+</LinearLayout>

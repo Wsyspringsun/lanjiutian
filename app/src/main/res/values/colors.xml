@@ -18,6 +18,7 @@
     <!-- 巧可力色 -->
     <!-- app主色 -->
     <color name="base_bar">#f10215</color>
+    <color name="base_red">#f10215</color>
 
     <!-- 黄色 -->
     <!-- 金色 -->
@@ -42,9 +43,16 @@
     <color name="font_white">#FFFFFF</color>
     <!--文字红色 -->
     <color name="font_yellow">#FFF047</color>
+
+    <color name="font_0">#000</color>
+    <color name="font_1">#333</color>
+    <color name="font_2">#666</color>
+    <color name="font_3">#888</color>
+    <color name="font_4">#999</color>
+    <color name="font_blue">#2b7ff5</color>
     <!-- 茶色 -->
     <!-- 分割线 -->
-    <color name="gray1">#ccc</color>
+    <color name="gray1">#eeeeee</color>
     <!-- 背景色 -->
     <color name="basebackground">#ede9e9</color>
 
@@ -61,7 +69,8 @@
     <!-- 碧绿色 -->
 
     <!--微信-->
-    <color name="blue">#ffccddff</color>
+    <!--<color name="blue">#ffccddff</color>-->
+    <color name="blue">#ff3333ff</color>
     <color name="grey">#58616d</color>
     <color name="darkgrey">#ff404040</color>
     <color name="toasterro">#9fd524</color>

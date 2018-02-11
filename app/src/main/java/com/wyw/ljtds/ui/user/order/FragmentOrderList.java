@@ -26,13 +26,17 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.unionpay.UPPayAssistEx;
 import com.wyw.ljtds.R;
+import com.wyw.ljtds.adapter.CommOrderAdapter;
 import com.wyw.ljtds.biz.biz.GoodsBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.model.OnlinePayModel;
 import com.wyw.ljtds.model.OrderModelMedicine;
 import com.wyw.ljtds.model.OrderTrade;
@@ -49,6 +53,7 @@ import org.json.JSONObject;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,7 +85,7 @@ public class FragmentOrderList extends BaseFragment {
     private static final int ALI_PAY = 1;
     private static final int UP_PAY = 2;
     private String StateCat = "";
-    private String jsonUnion = null;
+    private String jsonUnionOrder = null;
 
     @Nullable
     @Override
@@ -109,10 +114,9 @@ public class FragmentOrderList extends BaseFragment {
     }
 
     public void goEvaluate(String orderId) {
-        Intent it = new Intent(getActivity(), ActivityEvaluate.class);
-        it.putExtra(TAG_GROUP_ORDER_ID, orderId);
+//        Intent it = new Intent(getActivity(), ActivityEvaluateEdit.class);
+        Intent it = ActivityEvaluateEdit.getIntent(getActivity(), orderId);
         startActivity(it);
-//        startActivityForResult(it,REQ_GO_EVALUATE);
     }
 
     private void initRecyclerView() {
@@ -325,13 +329,14 @@ public class FragmentOrderList extends BaseFragment {
 //        recyclerView.setVisibility(View.GONE);
 //    }
 
-    BizDataAsyncTask<List<OrderModelMedicine>> orderTask;
-
     private void getOrder(final String data, final String op) {
-        orderTask = new BizDataAsyncTask<List<OrderModelMedicine>>() {
+        new BizDataAsyncTask<List<OrderModelMedicine>>() {
             @Override
             protected List<OrderModelMedicine> doExecute() throws ZYException, BizFailure {
                 return GoodsBiz.getUserOrder(data, op);
+                //todo:use load
+//                String str = "[{ \"CREATE_DATE\": 1515755562000, \"DETAILS\": [{ \"COMMODITY_COLOR\": \"威海百合生物技术股份有限公司\", \"COMMODITY_ID\": \"005578\", \"COMMODITY_NAME\": \"Y黄芪红景天铬酵母软胶囊（百合康特供）\", \"COMMODITY_ORDER_ID\": \"2018011219100944701001\", \"COMMODITY_SIZE\": \"0.6克*60粒\", \"COST_MONEY\": 96.00, \"EXCHANGE_QUANLITY\": 1, \"IMG_PATH\": \"http://www.lanjiutian.com/upload/images/a81639d4bafa409a8c624352e65ce796/c4ca4238a0b923820dcc509a6f75849b.jpg\", \"ORDER_STATUS\": \"C\" }], \"DISTRIBUTION_DATE\": \"2018/01/12 20:00---2018/01/12 21:00\", \"DISTRIBUTION_MODE\": \"0\", \"ELECTRONIC_MONEY\": 0.00, \"GROUP_EXCHANGE_QUANLITY\": 1, \"GROUP_MONEY_ALL\": 96.00, \"GROUP_STATUS\": \"1\", \"INVOICE_FLG\": \"0\", \"LOGISTICS_COMPANY\": \"市区新市西街店\", \"ORDER_GROUP_ID\": \"2018011219100944701\", \"ORDER_TRADE_ID\": \"20180112191009447\", \"PAYMENT_METHOD\": \"C\", \"PAY_AMOUNT\": 137.80, \"POSTAGE\": 0.00, \"POSTAGE_FLG\": \"0\", \"STATUS\": \"B\", \"USER_ADDRESS_ID\": \"wwww|13122223333|ttttttttt\" }]";
+//                return GsonUtils.Json2ArrayList(str,OrderModelMedicine.class);
             }
 
             @Override
@@ -345,10 +350,8 @@ public class FragmentOrderList extends BaseFragment {
             protected void OnExecuteFailed() {
                 closeLoding();
             }
-        };
-
+        }.execute();
         setLoding(getActivity(), false);
-        orderTask.execute();
     }
 
     public String getStateCat() {
@@ -466,11 +469,12 @@ public class FragmentOrderList extends BaseFragment {
     private class MyAdapter1 extends BaseQuickAdapter<OrderModelMedicine> {
 
         public MyAdapter1() {
-            super(R.layout.item_order_submit_group, list);
+            super(R.layout.item_order_group, list);
         }
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, OrderModelMedicine orderModelMedicine) {
+            baseViewHolder.setText(R.id.item_order_group_groupname, orderModelMedicine.getLOGISTICS_COMPANY());
             String status = "";
             if ("A".equals(orderModelMedicine.getSTATUS())) {
                 status = getResources().getString(R.string.daifu);
@@ -484,7 +488,7 @@ public class FragmentOrderList extends BaseFragment {
                         .addOnClickListener(R.id.button2);
             } else if ("B".equals(orderModelMedicine.getSTATUS())) {
                 status = getResources().getString(R.string.daifa);
-                baseViewHolder.setVisible(R.id.button1, true)
+                baseViewHolder.setVisible(R.id.button1, false)
                         .setText(R.id.button1, R.string.wuliu_chakan)
                         .addOnClickListener(R.id.button1);
                 if (OrderTrade.PAYMTD_MONEY.equals(orderModelMedicine.getPAYMENT_METHOD())) {
@@ -529,27 +533,21 @@ public class FragmentOrderList extends BaseFragment {
                         .addOnClickListener(R.id.button1);
             } else {
                 status = getResources().getString(R.string.stat_unkwon);
-                Log.e(AppConfig.ERR_TAG, this.getClass().getName() + "err status :" + GsonUtils.Bean2Json(orderModelMedicine));
             }
-
-            baseViewHolder.setVisible(R.id.select, false)
-                    .setVisible(R.id.style_order, true)
-                    .setVisible(R.id.anniu, true)
-                    .setText(R.id.textView3, orderModelMedicine.getOID_GROUP_NAME())
-                    .setText(R.id.shuliang, "共计" + orderModelMedicine.getGROUP_EXCHANGE_QUANLITY() + "件商品")
-                    .setText(R.id.xiaoji_money, "￥" + orderModelMedicine.getPAY_AMOUNT())
-                    .setText(R.id.style_order, status);
+            baseViewHolder.setText(R.id.item_order_group_status, status);
+//                    .setVisible(R.id.anniu, true)
+            baseViewHolder.setText(R.id.item_order_group_tv_cost, "共计" + orderModelMedicine.getGROUP_EXCHANGE_QUANLITY() + "件商品" + "￥" + orderModelMedicine.getPAY_AMOUNT());
 
             RecyclerView goods = baseViewHolder.getView(R.id.goods);
             goods.setLayoutManager(new LinearLayoutManager(getActivity()));
             goods.setItemAnimator(new DefaultItemAnimator());
-            goods.setAdapter(new MyAdapter2(orderModelMedicine.getDETAILS()));
+            goods.setAdapter(new CommOrderAdapter(orderModelMedicine.getDETAILS()));
 
         }
     }
 
     //商品adapter
-    private class MyAdapter2 extends BaseQuickAdapter<OrderModelMedicine.Goods> {
+    /*private class MyAdapter2 extends BaseQuickAdapter<OrderModelMedicine.Goods> {
         public MyAdapter2(List<OrderModelMedicine.Goods> lists) {
             super(R.layout.item_order_submit_goods, lists);
         }
@@ -571,15 +569,108 @@ public class FragmentOrderList extends BaseFragment {
             }
 //
         }
-    }
+    }*/
 
     //在线支付
     BizDataAsyncTask<OnlinePayModel> payTask;
 
-    private void goPay(final String str) {
-        payTask = new BizDataAsyncTask<OnlinePayModel>() {
+    private void goPay(final String data) {
+        setLoding(getActivity(), false);
+        new BizDataAsyncTask<String>() {
             @Override
-            protected OnlinePayModel doExecute() throws ZYException, BizFailure {
+            protected String doExecute() throws ZYException, BizFailure {
+                return GoodsBiz.onlinePay(data);
+            }
+
+            @Override
+            protected void onExecuteSucceeded(String data) {
+                closeLoding();
+                Utils.log(data);
+                final OnlinePayModel aliPay;
+                final String orderInfo;
+                if (payModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_WECHAT)) {
+                    setLoding(getActivity(), false);
+                    HashMap<String, String> wechatData = GsonUtils.Json2Bean(data, HashMap.class);
+                    IWXAPI wxApi = ((MyApplication) (getActivity().getApplication())).wxApi;
+                    PayReq request = new PayReq();
+                    request.appId = AppConfig.WEIXIN_APP_ID;
+                    request.partnerId = "" + wechatData.get("mch_id");
+                    request.prepayId = "" + wechatData.get("prepay_id");
+                    request.packageValue = "Sign=WXPay";
+                    request.nonceStr = "" + wechatData.get("nonce_str");
+                    request.timeStamp = System.currentTimeMillis() + "";
+                    request.sign = "" + wechatData.get("sign");
+                    Utils.log("..............................................Begin send Req to Tencent" + GsonUtils.Bean2Json(request));
+                    wxApi.sendReq(request);
+                } else if (payModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_ALI)) {
+                    //支付宝
+                    aliPay = GsonUtils.Json2Bean(data, OnlinePayModel.class);
+                    orderInfo = aliPay.getPay();
+                    if (!StringUtils.isEmpty(orderInfo)) {
+                        Runnable payRunnable = new Runnable() {
+
+                            @Override
+                            public void run() {
+                                //支付宝
+                                PayTask alipay = new PayTask(getActivity());
+                                Map<String, String> result = alipay.payV2(orderInfo, true);
+
+                                Message msg = new Message();
+                                msg.what = ALI_PAY;
+                                msg.obj = result;
+                                mHandler.sendMessage(msg);
+                            }
+                        };
+
+                        Thread payThread = new Thread(payRunnable);
+                        payThread.start();
+
+
+                    }
+                } else if (payModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_UNION)) {
+                    //银联
+                    //union pay
+//                    Runnable payRunnable = new Runnable() {
+//
+//                        @Override
+//                        public void run() {
+                    aliPay = GsonUtils.Json2Bean(data, OnlinePayModel.class);
+                    orderInfo = aliPay.getPay();
+                    Log.e(AppConfig.ERR_TAG, orderInfo);
+//                    mLoadingDialog = ProgressDialog.show(ActivityGoodsSubmit.this, // context
+//                            "", // title
+//                            "正在努力加载,请稍候...", // message
+//                            true); // 进度是否是不确定的，这只和创建进度条有关
+
+                    //调用银联控件
+                    if (!StringUtils.isEmpty(orderInfo)) {
+                        jsonUnionOrder = orderInfo;
+                        Map m = GsonUtils.Json2Bean(jsonUnionOrder, Map.class);
+                        String tn = (String) m.get("tn");
+//                        Log.e("+++++",tn) ;
+                        UPPayAssistEx.startPay(getActivity(), null, null, tn, "00");
+                    }
+//                        }
+//                    };
+//
+//                    Thread payThread = new Thread( payRunnable );
+//                    payThread.start();
+                } else {
+                }
+
+            }
+
+            @Override
+            protected void OnExecuteFailed() {
+                closeLoding();
+            }
+        }.execute();
+    }
+/*
+    private void goPay(final String str) {
+      payTask = new BizDataAsyncTask<OnlinePayModel>() {
+            @Override
+            protected String doExecute() throws ZYException, BizFailure {
 //                Log.e(AppConfig.ERR_TAG, str);
                 return GoodsBiz.onlinePay(str);
             }
@@ -627,7 +718,7 @@ public class FragmentOrderList extends BaseFragment {
         };
         setLoding(activityOrder, false);
         payTask.execute();
-    }
+    }*/
 
 
     //取消订单

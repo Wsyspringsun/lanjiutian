@@ -23,6 +23,7 @@ import com.wyw.ljtds.config.AppManager;
 import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.ui.user.manage.ActivityAmendPassword1;
 import com.wyw.ljtds.utils.InputMethodUtils;
 
@@ -54,6 +55,9 @@ public class ActivityLogin extends BaseActivity {
             case R.id.guanbi:
                 InputMethodUtils.closeSoftKeyboard(this);
 
+                if (AppConfig.currSel == 3 || AppConfig.currSel == 4) {
+                    AppConfig.currSel = AppConfig.DEFAULT_INDEX_FRAGMENT;
+                }
 //                it = new Intent(ActivityLogin.this, MainActivity.class);
 //                startActivity(it);
 
@@ -122,9 +126,10 @@ public class ActivityLogin extends BaseActivity {
                     PreferenceCache.putPhoneNum(ed_phone.getText().toString().trim());
                 }
 
+                Ntalker.getBaseInstance().login(((MyApplication) getApplication()).entityName, ed_phone.getText().toString(), 0);
 
                 ActivityLogin.this.finish();
-                AppManager.destoryActivity("submit");//处理订单页未登录状态
+//                AppManager.destoryActivity("submit");//处理订单页未登录状态
 
 
             }
@@ -162,5 +167,10 @@ public class ActivityLogin extends BaseActivity {
     public static void goLogin(Context context) {
         Intent it = new Intent(context, ActivityLogin.class);
         context.startActivity(it);
+    }
+
+    public static Intent getIntent(Context context) {
+        Intent it = new Intent(context, ActivityLogin.class);
+        return it;
     }
 }

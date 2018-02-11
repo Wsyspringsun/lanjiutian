@@ -190,8 +190,9 @@ public class ActivityGoodsList extends BaseActivity {
         recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                Intent it = new Intent(ActivityGoodsList.this, ActivityGoodsInfo.class);
-                it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getData().get(i).getCommodityId());
+                String id = adapter.getItem(i).getCommodityId();
+                Intent it = ActivityLifeGoodsInfo.getIntent(ActivityGoodsList.this, id);
+//                it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getData().get(i).getCommodityId());
                 startActivity(it);
             }
         });
@@ -279,7 +280,7 @@ public class ActivityGoodsList extends BaseActivity {
             baseViewHolder.setText(R.id.goods_title, StringUtils.deletaFirst(commodityListModel.getTitle()))
                     .setText(R.id.money, commodityListModel.getCostMoney() + "");
 
-            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_head_img);
+            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_goods_grid_sdv);
             if (StringUtils.isEmpty(commodityListModel.getImgPath())) {
                 goods_img.setImageURI(Uri.parse(""));
             } else {

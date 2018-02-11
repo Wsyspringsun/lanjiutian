@@ -7,6 +7,8 @@ import java.util.List;
  */
 
 public class OrderGroupDto {
+    private String COIN_FLG;
+    private String COST_POINT;
     private String ORDER_GROUP_ID;
     private String ORDER_TRADE_ID;
     private String OID_GROUP_ID;
@@ -20,18 +22,26 @@ public class OrderGroupDto {
     private String ELECTRONIC_USEABLE_MONEY;
     private String COUPON_MONEY;
     private String COUPON_USEABLE_MONEY;
+    private String GROUP_EXCHANGE_QUANLITY;
     private String RED_PACKET_MONEY;
     private String RED_PACKET_USEABLE_MONEY;
     private String GROUP_MONEY_ALL;
     private String GROUP_STATUS;
+    private String GROUP_REMARKS;
     private String INVOICE_FLG;
     private String INVOICE_TYPE;
     private String INVOICE_ID;
+    private String INVOICE_TAX;
+    private String INVOICE_TITLE;
+    //发票种类 0：明细  1办公  2：家居   3：药品   4：耗材
+    private String INVOICE_CONTENT;
     private String LOGISTICS_COMPANY;
     private String LOGISTICS_COMPANY_ID;
     private String LOGISTICS_ORDER_ID;
     private String DISTRIBUTION_MODE;
     private String DISTRIBUTION_DATE;
+    private String DISTRIBUTION_DATE_END;
+    private String DISTRIBUTION_DATE_START;
     private String SETTLEMENT_FLG;
     private String DEL_FLG;
     private String INS_USER_ID;
@@ -295,5 +305,77 @@ public class OrderGroupDto {
 
     public void setUPD_DATE(String UPD_DATE) {
         this.UPD_DATE = UPD_DATE;
+    }
+
+    public String getCOST_POINT() {
+        return COST_POINT;
+    }
+
+    public void setCOST_POINT(String COST_POINT) {
+        this.COST_POINT = COST_POINT;
+    }
+
+    public String getCOIN_FLG() {
+        return COIN_FLG;
+    }
+
+    public void setCOIN_FLG(String COIN_FLG) {
+        this.COIN_FLG = COIN_FLG;
+    }
+
+    public String getINVOICE_TAX() {
+        return INVOICE_TAX;
+    }
+
+    public void setINVOICE_TAX(String INVOICE_TAX) {
+        this.INVOICE_TAX = INVOICE_TAX;
+    }
+
+    public String getINVOICE_TITLE() {
+        return INVOICE_TITLE;
+    }
+
+    public void setINVOICE_TITLE(String INVOICE_TITLE) {
+        this.INVOICE_TITLE = INVOICE_TITLE;
+    }
+
+    public String getINVOICE_CONTENT() {
+        return INVOICE_CONTENT;
+    }
+
+    public void setINVOICE_CONTENT(String INVOICE_CONTENT) {
+        this.INVOICE_CONTENT = INVOICE_CONTENT;
+    }
+
+    public String getGROUP_EXCHANGE_QUANLITY() {
+        return GROUP_EXCHANGE_QUANLITY;
+    }
+
+    public void setGROUP_EXCHANGE_QUANLITY(String GROUP_EXCHANGE_QUANLITY) {
+        this.GROUP_EXCHANGE_QUANLITY = GROUP_EXCHANGE_QUANLITY;
+    }
+
+    public String getGROUP_REMARKS() {
+        return GROUP_REMARKS;
+    }
+
+    public void setGROUP_REMARKS(String GROUP_REMARKS) {
+        this.GROUP_REMARKS = GROUP_REMARKS;
+    }
+
+    public String getDISTRIBUTION_DATE_START() {
+        return DISTRIBUTION_DATE_START;
+    }
+
+    public void setDISTRIBUTION_DATE_START(String DISTRIBUTION_DATE_START) {
+        this.DISTRIBUTION_DATE_START = DISTRIBUTION_DATE_START;
+    }
+
+    public String getDISTRIBUTION_DATE_END() {
+        return DISTRIBUTION_DATE_END;
+    }
+
+    public void setDISTRIBUTION_DATE_END(String DISTRIBUTION_DATE_END) {
+        this.DISTRIBUTION_DATE_END = DISTRIBUTION_DATE_END;
     }
 }

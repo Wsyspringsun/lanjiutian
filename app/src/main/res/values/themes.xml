@@ -70,9 +70,13 @@
         <item name="android:preferenceCategoryStyle">@style/MMPreference.Catagory</item>
         <item name="android:checkBoxPreferenceStyle">@style/MMPreference.CheckBoxPreference</item>
         <item name="android:ringtonePreferenceStyle">@style/MMPreference.RingtonePreference</item>
-        <item name="android:yesNoPreferenceStyle">@style/MMPreference.DialogPreference.YesNoPreference</item>
+        <item name="android:yesNoPreferenceStyle">
+            @style/MMPreference.DialogPreference.YesNoPreference
+        </item>
         <item name="android:dialogPreferenceStyle">@style/MMPreference.DialogPreference</item>
-        <item name="android:editTextPreferenceStyle">@style/MMPreference.DialogPreference.EditTextPreference</item>
+        <item name="android:editTextPreferenceStyle">
+            @style/MMPreference.DialogPreference.EditTextPreference
+        </item>
         <item name="android:checkboxStyle">@style/MMCheckBox</item>
     </style>
 
@@ -114,6 +118,10 @@
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="AllScreenWidth_Dialog" parent="@style/Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
 </resources>

@@ -123,23 +123,24 @@ public class ActivityScan extends BaseActivity implements QRCodeView.Delegate, E
 
     //<editor-fold desc="Description">
     BizDataAsyncTask<String> goodsTask;
+
     @Override
     //</editor-fold>
     public void onScanQRCodeSuccess(final String result) {
-        Log.e("error:",result);
+        Log.e("error:", result);
 //        ToastUtil.show(this, result);
         goodsTask = new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
                 String id = GoodsBiz.getGoodsIdByBarcode(result);
-                Log.e("ljt","aaaa");
+                Log.e("ljt", "aaaa");
                 return id;
             }
 
             @Override
             protected void onExecuteSucceeded(String s) {
                 Intent i = new Intent(ActivityScan.this, ActivityMedicinesInfo.class);
-                i.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, s);
+//                i.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, s);
                 finish();
                 startActivity(i);
             }

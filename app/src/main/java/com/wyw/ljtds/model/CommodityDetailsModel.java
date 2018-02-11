@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Administrator on 2017/3/7 0007.
  */
 
-public class CommodityDetailsModel extends BaseModel {
+public class CommodityDetailsModel extends GoodsModel {
     private XiaoNengData xiaonengData;
     //商品id
     private String commodityId;

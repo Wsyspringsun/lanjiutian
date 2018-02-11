@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x33"
+    android:background="@color/white">
+
+    <TextView
+        style="@style/font_ww_14"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x10"
+        android:gravity="center_vertical"
+        android:text="@string/user_dingdan"
+        android:textColor="@color/font_black1" />
+
+    <ImageView
+        android:id="@+id/jiantou_order"
+        android:layout_width="@dimen/x12"
+        android:layout_height="@dimen/x10"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/x10"
+        android:scaleType="fitXY"
+        android:src="@mipmap/jiantou_you_hui" />
+
+
+    <TextView
+        style="@style/font_ww_12"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/x2"
+        android:layout_toLeftOf="@+id/jiantou_order"
+        android:gravity="center_vertical"
+        android:text="查看全部订单"
+        android:textColor="@color/gray" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/gray1" />
+
+</RelativeLayout>
+

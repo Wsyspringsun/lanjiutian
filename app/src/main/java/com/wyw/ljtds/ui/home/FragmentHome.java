@@ -415,7 +415,7 @@ public class FragmentHome extends BaseFragment {
                             Intent it = null;
                             switch (flg) {
                                 case "X":
-                                    it = ActivityGoodsInfo.getIntent(getActivity(), headId);
+//                                    it = ActivityGoodsInfo.getIntent(getActivity(), headId);
                                     break;
                                 case "L":
                                     break;
@@ -627,7 +627,7 @@ public class FragmentHome extends BaseFragment {
                 @Override
                 public void onClick(View view) {
                     Intent it = new Intent(getActivity(), ActivityGoodsInfo.class);
-                    it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, goods.getCommodityId());
+//                    it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, goods.getCommodityId());
                     startActivity(it);
                 }
             });

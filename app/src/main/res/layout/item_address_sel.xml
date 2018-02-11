@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_address_sel_item_address"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/x10">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginRight="@dimen/x10">
+
+        <TextView
+            android:id="@+id/item_address_sel_name"
+            style="@style/font_ww_16"
+            android:text="@string/holder"
+            android:textColor="@color/font_black2" />
+
+        <TextView
+            android:id="@+id/item_address_sel_phone"
+            style="@style/font_ww_16"
+            android:layout_alignParentRight="true"
+            android:text="@string/holder"
+            android:textColor="@color/font_black2" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/item_address_sel_xiangxi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="@dimen/x4"
+        android:maxLines="5"
+        android:padding="@dimen/x10"
+        android:text="@string/holder"
+        android:textColor="@color/font_black2"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginBottom="@dimen/x6"
+        android:background="@color/basebackground" />
+
+</LinearLayout>

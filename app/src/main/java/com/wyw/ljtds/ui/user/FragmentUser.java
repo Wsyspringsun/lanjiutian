@@ -59,7 +59,6 @@ import org.xutils.view.annotation.ViewInject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.wyw.ljtds.ui.user.FragmentUser.TAG_MY_ZUJI;
 
 /**
  * Created by Administrator on 2016/12/9 0009.
@@ -87,9 +86,6 @@ public class FragmentUser extends BaseFragment {
     private RelativeLayout layoutlogin;
     //    @ViewInject( R.id.user )
 //    private RecyclerView user_rec;
-    public static String TAG_MY = "com.wyw.ljtds.ui.user.FragmentUser.tag_my";
-    public static String TAG_MY_SHOUCANG = "tag_shoucang";
-    public static String TAG_MY_ZUJI = "tag_zuji";
 
     private AbstractListViewAdapter<UserGridleModel> adapter;
     private UserModel user;
@@ -99,8 +95,7 @@ public class FragmentUser extends BaseFragment {
     private MyAdapter myAdapter;
 //    private UserAdapter userAdapter;
 
-    @Event(value = {R.id.fragment_user_rl_daifu, R.id.user_img, R.id.order_daifu, R.id.order_daifa, R.id.order_daishou,
-            R.id.order_daiping, R.id.order_shouhou, R.id.zhanghuguanli, R.id.user_xiaoxi, R.id.user_shezhi})
+    @Event(value = {R.id.fragment_user_rl_daifu, R.id.user_img,  R.id.zhanghuguanli, R.id.user_xiaoxi, R.id.user_shezhi})
     private void onclick(View view) {
         if (!UserBiz.isLogined()) {
             ActivityLogin.goLogin(getActivity());
@@ -114,29 +109,7 @@ public class FragmentUser extends BaseFragment {
                     it = ActivityOrder.getIntent(getActivity(), 0);
                     startActivity(it);
                     break;
-                case R.id.order_daifu://待付
-                    it = ActivityOrder.getIntent(getActivity(), 1);
-                    startActivity(it);
-                    break;
 
-                case R.id.order_daifa://待发
-                    it = ActivityOrder.getIntent(getActivity(), 2);
-                    startActivity(it);
-                    break;
-
-                case R.id.order_daishou://待收
-                    it = ActivityOrder.getIntent(getActivity(), 3);
-                    startActivity(it);
-                    break;
-                case R.id.order_daiping://待评
-                    it = ActivityOrder.getIntent(getActivity(), 4);
-                    startActivity(it);
-                    break;
-
-                case R.id.order_shouhou://售后
-                    it = new Intent(getActivity(), ReturnGoodsOrderListActivity.class);
-                    startActivity(it);
-                    break;
 
                 case R.id.user_img://用户头像
                 case R.id.user_shezhi://设置
@@ -181,43 +154,7 @@ public class FragmentUser extends BaseFragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent it;
-                if (i == 3) {
-                    //case 3://帮助中心
-                    it = new Intent(getActivity(), ActivityHelp.class);
-                    it = new Intent(getActivity(), ActivityWebView.class);
-                    startActivity(it);
-                    return;
-                }
 
-                if (!UserBiz.isLogined()) {
-                    //去登录
-                    ActivityLogin.goLogin(getActivity());
-                    return;
-                }
-
-                switch (i) {
-                    case 0://我的收藏
-                        it = new Intent(getActivity(), ActivityCollect.class);
-                        it.putExtra(TAG_MY, TAG_MY_SHOUCANG);
-                        startActivity(it);
-                        break;
-
-                    case 1://足迹
-                        it = new Intent(getActivity(), ActivityCollect.class);
-                        it.putExtra(TAG_MY, TAG_MY_ZUJI);
-                        startActivity(it);
-                        break;
-
-                    case 2://我的钱包 qianbao
-                        it = new Intent(getActivity(), ActivityWallet.class);
-                        startActivity(it);
-                        break;
-                    default:
-                        break;
-
-
-                }
             }
         });
 
@@ -233,8 +170,8 @@ public class FragmentUser extends BaseFragment {
         tuijian.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                Intent it = new Intent(getActivity(), ActivityMedicinesInfo.class);
-                it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, myAdapter.getData().get(i).getWAREID());
+                RecommendModel med = myAdapter.getData().get(i);
+                Intent it = ActivityMedicinesInfo.getIntent(getActivity(), med.getWAREID(), med.getLOGISTICS_COMPANY_ID());
                 startActivity(it);
             }
         });
@@ -265,6 +202,8 @@ public class FragmentUser extends BaseFragment {
 //        if (list == null)
 //            getrecommend(PreferenceCache.getToken(), "");
     }
+
+
 
 
     @Override
@@ -298,7 +237,7 @@ public class FragmentUser extends BaseFragment {
         new BizDataAsyncTask<UserDataModel>() {
             @Override
             protected UserDataModel doExecute() throws ZYException, BizFailure {
-                return UserBiz.userData();
+                return UserBiz.loadUserOrderNumber();
             }
 
             @Override
@@ -323,8 +262,9 @@ public class FragmentUser extends BaseFragment {
         badge.setBadgeCount(cnt);
     }
 
+
     private void updUserDataView(UserDataModel model) {
-        RelativeLayout rlDaifu = (RelativeLayout) findViewById(R.id.order_daifu);
+/*        RelativeLayout rlDaifu = (RelativeLayout) findViewById(R.id.order_daifu);
         addBadge(rlDaifu.getChildAt(0), model.getDaiFu());
 
         RelativeLayout rlDaifa = (RelativeLayout) findViewById(R.id.order_daifa);
@@ -337,7 +277,7 @@ public class FragmentUser extends BaseFragment {
         addBadge(rlDaiping.getChildAt(0), model.getDaiPing());
 
         RelativeLayout rlShouhou = (RelativeLayout) findViewById(R.id.order_shouhou);
-        addBadge(rlShouhou.getChildAt(0), model.getShouHou());
+        addBadge(rlShouhou.getChildAt(0), model.getShouHou());*/
 
     }
 
@@ -363,7 +303,7 @@ public class FragmentUser extends BaseFragment {
                     user_img.setImageURI(Uri.parse(""));
                     user.setUSER_ICON_FILE_ID("");
                 } else {
-                    user_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH + userModel.getUSER_ICON_FILE_ID()));
+                    user_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + userModel.getUSER_ICON_FILE_ID()));
                     user.setUSER_ICON_FILE_ID(userModel.getUSER_ICON_FILE_ID());
                 }
 
@@ -384,7 +324,7 @@ public class FragmentUser extends BaseFragment {
         new BizDataAsyncTask<List<RecommendModel>>() {
             @Override
             protected List<RecommendModel> doExecute() throws ZYException, BizFailure {
-                return HomeBiz.getRecommend(token, orderid);
+                return HomeBiz.getRecommend();
             }
 
             @Override
@@ -415,11 +355,11 @@ public class FragmentUser extends BaseFragment {
             baseViewHolder.setText(R.id.goods_title, StringUtils.deletaFirst(recommendModel.getWARENAME()))
                     .setText(R.id.money, recommendModel.getSALEPRICE() + "");
 
-            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_head_img);
+            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_goods_grid_sdv);
             if (StringUtils.isEmpty(recommendModel.getIMG_PATH())) {
                 goods_img.setImageURI(Uri.parse(""));
             } else {
-                goods_img.setImageURI(Uri.parse(recommendModel.getIMG_PATH()));
+                goods_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + recommendModel.getIMG_PATH()));
             }
 
         }

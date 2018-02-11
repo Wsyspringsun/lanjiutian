@@ -85,9 +85,11 @@ public class LoginDialog {
         });
 
         Button ivNext = (Button) layout.findViewById(R.id.next);
+        Log.e(AppConfig.ERR_TAG,"ivNext");
         ivNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e(AppConfig.ERR_TAG,"ivNext click.......");
                 ((BaseActivity) context).setLoding(context, false);
                 new BizDataAsyncTask<String>() {
                     @Override

@@ -67,7 +67,8 @@ public class BadgeView extends TextView {
         // set default font
         setTextColor(Color.WHITE);
         setTypeface(Typeface.DEFAULT_BOLD);
-        setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+        //wsy change textSize   default 11
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, 7);
         setPadding(dip2Px(5), dip2Px(1), dip2Px(5), dip2Px(1));
 
         // set default background

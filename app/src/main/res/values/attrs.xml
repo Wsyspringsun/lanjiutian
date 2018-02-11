@@ -71,7 +71,7 @@
     <style name="font_ww_14">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">12dp</item>
     </style>
 
 
@@ -85,7 +85,7 @@
     <style name="font_ww_12">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">12dp</item>
     </style>
 
 
@@ -105,8 +105,10 @@
     <!-- 圆形checkbox -->
     <style name="MyCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/checkbox_selected</item>
-        <item name="android:padding">@dimen/x1</item>
+        <item name="android:layout_width">@dimen/x24</item>
+        <item name="android:layout_height">@dimen/x24</item>
     </style>
+
 
     <!--星星控件属性-->
     <declare-styleable name="StarBarView">
@@ -286,5 +288,8 @@
 
     </style>
 
-
+    <!--评价-->
+    <style name="MyRadioButtonEvaHao" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/radio_button_evaluate_hao</item>
+    </style>
 </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--圆形对勾的checkbox-->
+    <item android:drawable="@drawable/bg_title_custom_dialog" android:state_checked="true" /><!--设置选中图片-->
+    <item android:drawable="@drawable/checktext_triangle_normal" android:state_checked="false" /><!--设置未选中图片-->
+    <!--<item android:drawable="@mipmap/icon_checkbox_no" />-->
+</selector>

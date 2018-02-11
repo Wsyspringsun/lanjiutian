@@ -13,16 +13,13 @@ import android.widget.TextView;
 import com.tencent.mm.opensdk.utils.Log;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.utils.ToolbarManager;
 
 /**
  * Created by Administrator on 2016/12/8 0008.
  */
 
 public abstract class BaseActivityFragment extends BaseActivity {
-    public interface IconBtnManager {
-        void initIconBtn(View v, int position);
-    }
-
     private Fragment fragment;
 
     protected abstract Fragment createFragment();
@@ -44,26 +41,11 @@ public abstract class BaseActivityFragment extends BaseActivity {
             fragment = createFragment();
             bt.add(R.id.fragment_con, fragment);
 
-            TextView tvTitle = (TextView)findViewById(R.id.activity_fragment_title);
-            tvTitle.setText(getTitle());
-            //set back button
-            LinearLayout btnBack = (LinearLayout) findViewById(R.id.back);
-            btnBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                   BaseActivityFragment.this.finish();
-                }
-            });
-            //set icon click event
-            LinearLayout llIconBtnlist = (LinearLayout) findViewById(R.id.ll_icon_btnlist);
-            for (int i = 0; i < llIconBtnlist.getChildCount(); i++) {
-                View v = llIconBtnlist.getChildAt(i);
-                //  icon button 's status,visible stat and click event,need fragment instance interface IconBtnManager
-                Log.e(AppConfig.ERR_TAG, "instanceof:" + (fragment instanceof IconBtnManager));
-                if (fragment instanceof IconBtnManager) {
-                    ((IconBtnManager) fragment).initIconBtn(v, i);
-                }
-            }
+            ToolbarManager.IconBtnManager mgr = null;
+            //实现了 工具栏 管理 的 接口
+            if (fragment instanceof ToolbarManager.IconBtnManager)
+                mgr = (ToolbarManager.IconBtnManager) fragment;
+            ToolbarManager.initialToolbar(this, mgr);
         } else {
             bt.show(fragment);
         }

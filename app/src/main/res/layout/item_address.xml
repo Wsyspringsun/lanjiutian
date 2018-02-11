@@ -87,7 +87,7 @@
                 android:layout_width="@dimen/x14"
                 android:layout_height="@dimen/x16"
                 android:scaleType="fitXY"
-                android:src="@mipmap/icon_bianji" />
+                android:src="@drawable/icon_bianji" />
 
             <TextView
                 style="@style/font_ww_14"
@@ -110,7 +110,7 @@
                 android:layout_width="@dimen/x14"
                 android:layout_height="@dimen/x16"
                 android:scaleType="fitXY"
-                android:src="@mipmap/icon_bianji" />
+                android:src="@drawable/icon_bianji" />
 
             <TextView
                 style="@style/font_ww_14"

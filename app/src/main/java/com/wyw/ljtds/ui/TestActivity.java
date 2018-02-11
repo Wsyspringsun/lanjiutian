@@ -1,73 +1,155 @@
 package com.wyw.ljtds.ui;
 
-import android.app.Dialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Path;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
 import android.app.Activity;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.Gravity;
+import android.app.Dialog;
+import android.net.Uri;
+import android.net.http.HttpResponseCache;
+import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 import com.jauker.widget.BadgeView;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.weixin.uikit.MMAlert;
-import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
-import com.wyw.ljtds.biz.biz.UserBiz;
+import com.wyw.ljtds.biz.biz.GoodsBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
-import com.wyw.ljtds.model.Ticket;
-import com.wyw.ljtds.ui.user.ActivityLogin;
-import com.wyw.ljtds.utils.ToastUtil;
+import com.wyw.ljtds.config.MyApplication;
+import com.wyw.ljtds.model.OnlinePayModel;
+import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.ui.goods.SelDefaultAddressFragment;
+import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.Utils;
 
+import org.json.JSONObject;
 import org.xutils.view.annotation.ContentView;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-@ContentView(R.layout.fragment_user_qrcode)
-public class TestActivity extends Activity {
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+public class TestActivity extends BaseActivity {
+    private static final String DIALOG_SEL_ADDR = "DIALOG_SEL_ADDR";
+    TextView tv;
+    private IWXAPI api;
+    private Button btn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_user_qrcode);
 
-        ImageView imageView = (ImageView) findViewById(R.id.fragment_user_qrcode_idcode);
-        String content = "123456";
-        Bitmap bitmap = Utils.getQRCodeBitmap(this, content);
-        if (bitmap != null) {
-            imageView.setImageBitmap(bitmap);
-        }
+        setContentView(R.layout.pay_result);
+        api = WXAPIFactory.createWXAPI(this, "wxb4ba3c02aa476ea1");
+        btn = (Button) findViewById(R.id.pay_result_btn_click);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "http://wxpay.wxutil.com/pub_v2/app/app_pay.php";
+                v.setEnabled(false);
+                try {
+                    byte[] buf = Utils.getHtmlByteArray(url);
+                    if (buf != null && buf.length > 0) {
+                        String content = new String(buf);
+                        Utils.log("get server pay params:" + content);
+                        JSONObject json = new JSONObject(content);
+                        if (null != json && !json.has("retcode")) {
+                            PayReq req = new PayReq();
+                            //req.appId = "wxf8b4f85f3a794e77";  // 测试用appId
+                            req.appId = json.getString("appid");
+                            req.partnerId = json.getString("partnerid");
+                            req.prepayId = json.getString("prepayid");
+                            req.nonceStr = json.getString("noncestr");
+                            req.timeStamp = json.getString("timestamp");
+                            req.packageValue = json.getString("package");
+                            req.sign = json.getString("sign");
+                            req.extData = "app data"; // optional
+                            Toast.makeText(TestActivity.this, "正常调起支付", Toast.LENGTH_SHORT).show();
+                            // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
+                            api.sendReq(req);
+                        } else {
+                            Utils.log("PAY_GET" + "返回错误" + json.getString("retmsg"));
+                            Toast.makeText(TestActivity.this, "返回错误" + json.getString("retmsg"), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Utils.log("PAY_GET" + "服务器请求错误");
+                        Toast.makeText(TestActivity.this, "服务器请求错误", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    Utils.error("异常：" + e.getMessage());
+                }
+                v.setEnabled(true);
+            }
+        });
 
     }
 
 
+    public void getIp() {
+        new BizDataAsyncTask<String>() {
+
+            @Override
+            protected String doExecute() throws ZYException, BizFailure {
+                final StringBuilder sbIp = new StringBuilder();
+                Utils.getHttpResponse("http://2017.ip138.com/ic.asp", new Utils.HttpResCallback() {
+                    @Override
+                    public void handle(BufferedReader reader) {
+                        String line = null;
+                        StringBuilder sb = new StringBuilder();
+                        try {
+                            while ((line = reader.readLine()) != null)
+                                sb.append(line + "\n");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        Utils.log(sb.toString());
+                        Pattern pattern = Pattern
+                                .compile("((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))");
+                        Matcher matcher = pattern.matcher(sb.toString());
+                        if (matcher.find()) {
+                            sbIp.append(matcher.group());
+                        }
+                    }
+
+                    @Override
+                    public void preRequest(HttpURLConnection httpConnection) {
+
+                    }
+                });
+                return sbIp.toString();
+            }
+
+            @Override
+            protected void onExecuteSucceeded(String s) {
+                tv.setText(s);
+            }
+
+            @Override
+            protected void OnExecuteFailed() {
+
+            }
+        }.execute();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-
 
         //Path path = FileSystems.getDefault().getPath(filePath, fileName);
 //        MatrixToImageWriter.writeToPath(bitMatrix, format, path);// 输出图像

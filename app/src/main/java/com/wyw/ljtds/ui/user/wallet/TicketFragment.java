@@ -60,7 +60,7 @@ public class TicketFragment extends BaseFragment {
         return fragment;
     }
 
-    @Event(value = {R.id.sel_ticket_dianzibi, R.id.sel_ticket_mianyouquan})
+    @Event(value = {R.id.sel_ticket_dianzibi, R.id.sel_ticket_mianyouquan,R.id.sel_ticket_daijinquan})
     private void onClick(View v) {
         Intent it = null;
         switch (v.getId()) {
@@ -70,6 +70,10 @@ public class TicketFragment extends BaseFragment {
                 break;
             case R.id.sel_ticket_mianyouquan:
                 it = new Intent(getActivity(),YouHuiQuanActivity.class);
+                startActivity(it);
+                break;
+            case R.id.sel_ticket_daijinquan:
+                it = new Intent(getActivity(),DaiJinQuanListActivity.class);
                 startActivity(it);
                 break;
             default:

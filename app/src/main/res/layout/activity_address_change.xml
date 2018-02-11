@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/fragment_toolbar_common" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray1"
+        android:padding="@dimen/padding2"
+        android:text="当前地址" />
+
+    <RelativeLayout
+        android:id="@+id/activity_address_change_rl_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding3">
+
+        <TextView
+            android:id="@+id/activity_address_change_tv_currentloc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="当前地址xxx" />
+
+        <TextView
+            android:id="@+id/activity_address_change_tv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="重新定位" />
+
+        <ImageView
+            android:id="@+id/activity_address_change_img_location"
+            android:layout_width="@dimen/x14"
+            android:layout_height="@dimen/x14"
+            android:layout_toLeftOf="@id/activity_address_change_tv_location"
+            android:src="@drawable/ic_location_my" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray1"
+        android:padding="@dimen/padding2"
+        android:text="@string/manage_address" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/activity_address_change_rv_addrlist"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/activity_address_change_tv_tianjia"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x35"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/text_border"
+        android:gravity="center"
+        android:padding="@dimen/normal_padding"
+        android:text="@string/address_add"
+        android:textColor="@color/blue"
+        android:textSize="16sp" />
+
+</LinearLayout>

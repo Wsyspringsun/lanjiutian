@@ -28,6 +28,7 @@ import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.ui.user.ActivityLogin;
 import com.wyw.ljtds.ui.user.address.ActivityAddress;
 import com.wyw.ljtds.ui.user.address.ActivityAddressEdit;
+import com.wyw.ljtds.utils.NetUtil;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.LoginDialog;
@@ -78,7 +79,7 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Utils.log(this.getClass().getName() + "................");
+//        Utils.log(this.getClass().getName() + "................");
 
         AppManager.getAppManager().addActivity(this);//activity管理
         x.view().inject(this);//xutils初始化视图
@@ -89,15 +90,13 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
-                Utils.log(action);
                 if (AppConfig.AppAction.ACTION_TOKEN_EXPIRE.equals(action)) {// token过期
-                    LoginDialog.show(BaseActivity.this);
-//                    Intent it = new Intent(context, ActivityLogin.class);
-//                    context.startActivity(it);
+                    context.startActivity(ActivityLogin.getIntent(context));
                 } else if (action.equals(AppConfig.AppAction.ACTION_RESETMAIN)) {
                 }
             }
         };
+
 
     }
 
@@ -105,7 +104,7 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(AppConfig.ERR_TAG, "onResume:" + this.getClass().getName());
+//        Log.e(AppConfig.ERR_TAG, "onResume:" + this.getClass().getName());
         IntentFilter filter = new IntentFilter();
         filter.addAction(AppConfig.AppAction.ACTION_TOKEN_EXPIRE); // token过期
         filter.addAction(AppConfig.AppAction.ACTION_RESETMAIN); // token过期
@@ -116,21 +115,21 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     protected void onPause() {
         super.onPause();
         unregisterReceiver(receiver);
-        Log.e(AppConfig.ERR_TAG, "onPause:" + this.getClass().getName());
+//        Log.e(AppConfig.ERR_TAG, "onPause:" + this.getClass().getName());
         closeLoding();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e(AppConfig.ERR_TAG, "onStart:" + this.getClass().getName());
+//        Log.e(AppConfig.ERR_TAG, "onStart:" + this.getClass().getName());
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.e(AppConfig.ERR_TAG,"onStop:"+this.getClass().getName());
+//        Log.e(AppConfig.ERR_TAG, "onStop:" + this.getClass().getName());
         closeLoding();
     }
 
@@ -154,10 +153,10 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
         if (loading) return;
         loading = true;
         if (settime) {
-            mDialog = LoadingDialogUtils.createLoadingDialog(context, "加载中...");
+            mDialog = LoadingDialogUtils.createLoadingDialog(context, "...");
             mHandler.sendEmptyMessageDelayed(AppConfig.IntentExtraKey.LODING_CONTEXT, 1500);
         } else {
-            mDialog = LoadingDialogUtils.createLoadingDialog(context, "加载中...");
+            mDialog = LoadingDialogUtils.createLoadingDialog(context, "...");
         }
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -235,12 +234,12 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
             }
 
             //判断是否登陆   是否为游客模式
-            if (!StringUtils.isEmpty(PreferenceCache.getToken())) {
-                Ntalker.getInstance().login(PreferenceCache.getPhoneNum(), PreferenceCache.getPhoneNum(), 0);
-            } else {
-                Ntalker.getInstance().logout();
-            }
-            int code = Ntalker.getInstance().startChat(getApplicationContext(), settingid, groupName, null, null, chatparams);
+//            if (!StringUtils.isEmpty(PreferenceCache.getToken())) {
+//                Ntalker.getInstance().login(PreferenceCache.getPhoneNum(), PreferenceCache.getPhoneNum(), 0);
+//            } else {
+//                Ntalker.getInstance().logout();
+//            }
+            int code = Ntalker.getBaseInstance().startChat(getApplicationContext(), settingid, groupName, null);
             Log.e("xiaoneng_code", code + "");
         } else {
             EasyPermissions.requestPermissions(this, "需要以下权限:", REQUEST_CODE_PERMISSION_XIAONENG, perms);
@@ -298,7 +297,6 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
-            Log.e("****", "****");
         }
     }
 
@@ -311,7 +309,6 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-        Log.e("camera", "成功获取权限");
     }
 
     @Override

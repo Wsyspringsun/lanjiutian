@@ -28,6 +28,7 @@ import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.utils.DateUtils;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.RecycleViewDivider;
 
 import org.xutils.view.annotation.ContentView;
@@ -87,7 +88,7 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
         rylvData.setAdapter(adapter);
     }
 
-    public void update(final CommodityDetailsModel model) {
+    public void bindData2View(final CommodityDetailsModel model) {
         tvGoodComment.setText("" + model.getEVALUATE_CNT());
         geteva(model.getCommodityId(), true, true);
         adapter = new MyAdapter();
@@ -181,25 +182,26 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
             if (StringUtils.isEmpty(models.getUSER_ICON_FILE_ID())) {
                 user_img.setImageURI(Uri.parse(""));
             } else {
-                user_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH + models.getUSER_ICON_FILE_ID()));
+//                Utils.log(AppConfig.IMAGE_PATH_LJT + models.getUSER_ICON_FILE_ID());
+                user_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + models.getUSER_ICON_FILE_ID()));
             }
 
 
             ArrayList arrayList = new ArrayList();
             if (!StringUtils.isEmpty(models.getIMG_PATH1())) {
-                arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH1());
+                arrayList.add(AppConfig.IMAGE_PATH_LJT + models.getIMG_PATH1());
             }
             if (!StringUtils.isEmpty(models.getIMG_PATH2())) {
-                arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH2());
+                arrayList.add(AppConfig.IMAGE_PATH_LJT + models.getIMG_PATH2());
             }
             if (!StringUtils.isEmpty(models.getIMG_PATH3())) {
-                arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH3());
+                arrayList.add(AppConfig.IMAGE_PATH_LJT + models.getIMG_PATH3());
             }
             if (!StringUtils.isEmpty(models.getIMG_PATH4())) {
-                arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH4());
+                arrayList.add(AppConfig.IMAGE_PATH_LJT + models.getIMG_PATH4());
             }
             if (!StringUtils.isEmpty(models.getIMG_PATH5())) {
-                arrayList.add(AppConfig.IMAGE_PATH + models.getIMG_PATH5());
+                arrayList.add(AppConfig.IMAGE_PATH_LJT + models.getIMG_PATH5());
             }
             final BGANinePhotoLayout mCurrentClickNpl = baseViewHolder.getView(R.id.item_moment_photos);
             mCurrentClickNpl.setData(arrayList);

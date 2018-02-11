@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x45"
+        android:orientation="horizontal">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/item_goods_evaluate_edit_img"
+            android:layout_width="@dimen/x35"
+            android:layout_height="@dimen/x35"
+            android:layout_marginLeft="@dimen/x10"
+            fresco:actualImageScaleType="fitXY"
+            fresco:fadeDuration="200"
+            fresco:failureImage="@mipmap/zhanweitu"
+            fresco:failureImageScaleType="centerInside"
+            fresco:placeholderImage="@mipmap/zhanweitu" />
+
+        <LinearLayout
+            android:id="@+id/item_goods_evaluate_edit_grade"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x45"
+            android:orientation="horizontal">
+
+            <CheckedTextView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/x44"
+                android:layout_weight="1"
+                android:background="@drawable/radio_button_evaluate_hao"
+                android:checked="true" />
+
+            <CheckedTextView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/x44"
+                android:layout_weight="1"
+                android:background="@drawable/radio_button_evaluate_zhong" />
+
+            <CheckedTextView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/x44"
+                android:layout_weight="1"
+                android:background="@drawable/radio_button_evaluate_cha" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:background="@color/basebackground" />
+
+    <EditText
+        android:id="@+id/item_goods_evaluate_edit_et_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@null"
+        android:gravity="left"
+        android:hint="宝贝满足您的期望吗？说说它的优点和美中不足的地方吧"
+        android:lines="3"
+        android:maxLines="5"
+        android:textColor="@color/font_black2"
+        android:textSize="14sp" />
+
+    <cn.bingoogolapple.photopicker.widget.BGASortableNinePhotoLayout
+        android:id="@+id/item_goods_evaluate_edit_addphoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/x10"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginRight="@dimen/x10"
+        app:bga_snpl_deleteDrawable="@mipmap/bga_pp_ic_delete"
+        app:bga_snpl_deleteDrawableOverlapQuarter="false"
+        app:bga_snpl_editable="true"
+        app:bga_snpl_itemCornerRadius="0dp"
+        app:bga_snpl_itemSpanCount="4"
+        app:bga_snpl_itemWhiteSpacing="6dp"
+        app:bga_snpl_itemWidth="0dp"
+        app:bga_snpl_maxItemCount="5"
+        app:bga_snpl_otherWhiteSpacing="50dp"
+        app:bga_snpl_placeholderDrawable="@mipmap/bga_pp_ic_holder_dark"
+        app:bga_snpl_plusDrawable="@mipmap/bga_pp_ic_plus"
+        app:bga_snpl_plusEnable="true"
+        app:bga_snpl_sortable="true" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x8"
+        android:background="@color/basebackground" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="您的评价能帮助其他小伙伴"
+            android:textColor="@color/font_3" />
+    </RelativeLayout>
+
+</LinearLayout>

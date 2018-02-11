@@ -23,8 +23,11 @@ import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.GoodsHandingModel;
 import com.wyw.ljtds.model.MedicineOrder;
 import com.wyw.ljtds.ui.base.BaseFragment;
+import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
+import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.widget.dialog.LifeGoodsSelectDialog;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -189,17 +192,22 @@ public class ReturnGoodsOrderListFragment extends BaseFragment {
         }
 
         @Override
-        protected void convert(BaseViewHolder baseViewHolder, MedicineOrder goods) {
-            baseViewHolder.setText(R.id.size, " 规格：" + goods.getCommodityColor() + " " + goods.getCommoditySize());
-            baseViewHolder.setText(R.id.title, goods.getCommodityName())
-                    .setText(R.id.money, "￥" + goods.getCostMoney())
-                    .setText(R.id.number, "X" + goods.getExchangeQuanlity());
+        protected void convert(BaseViewHolder baseViewHolder, final MedicineOrder goods) {
+            baseViewHolder.setText(R.id.item_order_submit_goods_size, " 规格：" + goods.getCommodityColor() + " " + goods.getCommoditySize());
+            baseViewHolder.setText(R.id.item_order_submit_goods_title, goods.getCommodityName())
+                    .setText(R.id.item_order_submit_goods_money, "￥" + goods.getCostMoney())
+                    .setText(R.id.item_order_submit_goods_number, "X" + goods.getExchangeQuanlity());
 
-            SimpleDraweeView simpleDraweeView = baseViewHolder.getView(R.id.iv_adapter_list_pic);
+            SimpleDraweeView simpleDraweeView = baseViewHolder.getView(R.id.item_order_submit_goods_pic);
+            simpleDraweeView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(ActivityLifeGoodsInfo.getIntent(getActivity(), goods.getCommodityId()));
+                }
+            });
             Log.e(AppConfig.ERR_TAG, AppConfig.IMAGE_PATH_LJT + goods.getImgPath());
             if (!StringUtils.isEmpty(goods.getImgPath())) {
-                simpleDraweeView.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + goods.getImgPath()))
-                ;
+                simpleDraweeView.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + goods.getImgPath()));
             }
 //
         }

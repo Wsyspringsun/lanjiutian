@@ -15,7 +15,7 @@ public class HomePageModel extends BaseModel {
     private List<Map<String, String>> headImgsList;
     private String[] headImgs;
     //活动 图片
-    private List<activeComms> activeComms;
+    private List<DETAILS> activeComms;
     private List<NewsModel> news;
     //推荐 图片
     private List<CLASS> recommendComms;
@@ -37,11 +37,11 @@ public class HomePageModel extends BaseModel {
         this.news = news;
     }
 
-    public List<HomePageModel.activeComms> getActiveComms() {
+    public List<HomePageModel.DETAILS> getActiveComms() {
         return activeComms;
     }
 
-    public void setActiveComms(List<HomePageModel.activeComms> activeComms) {
+    public void setActiveComms(List<HomePageModel.DETAILS> activeComms) {
         this.activeComms = activeComms;
     }
 
@@ -69,44 +69,9 @@ public class HomePageModel extends BaseModel {
         this.headImgs = headImgs;
     }
 
-    public class activeComms {
-        private String IMG_PATH;
-        private BigDecimal SALEPRICE;
-        private String WAREID;
-        private String WARENAME;
-
-        public String getWAREID() {
-            return WAREID;
-        }
-
-        public void setWAREID(String WAREID) {
-            this.WAREID = WAREID;
-        }
-
-        public String getWARENAME() {
-            return WARENAME;
-        }
-
-        public void setWARENAME(String WARENAME) {
-            this.WARENAME = WARENAME;
-        }
-
-        public BigDecimal getSALEPRICE() {
-            return SALEPRICE;
-        }
-
-        public void setSALEPRICE(BigDecimal SALEPRICE) {
-            this.SALEPRICE = SALEPRICE;
-        }
-
-        public String getIMG_PATH() {
-            return IMG_PATH;
-        }
-
-        public void setIMG_PATH(String IMG_PATH) {
-            this.IMG_PATH = IMG_PATH;
-        }
-    }
+//    public class activeComms extends HomePageModel.DETAILS {
+//
+//    }
 
 
     public class CLASS {
@@ -144,6 +109,24 @@ public class HomePageModel extends BaseModel {
         private String WARENAME;
         private String WAREID;
         private BigDecimal SALEPRICE;
+        private String LOGISTICS_COMPANY_ID;
+        private String LOGISTICS_COMPANY;
+
+        public String getLOGISTICS_COMPANY_ID() {
+            return LOGISTICS_COMPANY_ID;
+        }
+
+        public void setLOGISTICS_COMPANY_ID(String LOGISTICS_COMPANY_ID) {
+            this.LOGISTICS_COMPANY_ID = LOGISTICS_COMPANY_ID;
+        }
+
+        public String getLOGISTICS_COMPANY() {
+            return LOGISTICS_COMPANY;
+        }
+
+        public void setLOGISTICS_COMPANY(String LOGISTICS_COMPANY) {
+            this.LOGISTICS_COMPANY = LOGISTICS_COMPANY;
+        }
 
         public String getIMG_PATH() {
             return IMG_PATH;

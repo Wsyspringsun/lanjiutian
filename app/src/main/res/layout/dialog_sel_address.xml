@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/item_address_sel_item_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/vertical_margin_lg">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/vertical_margin_lg"
+            android:text="@string/sel_address"
+            android:textColor="@color/font_0"
+            android:textSize="@dimen/font_3"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/dialog_sel_address_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/vertical_margin"
+            android:paddingBottom="@dimen/padding1"
+            android:paddingTop="@dimen/padding1"
+            android:text="当前地址"
+            android:textAlignment="center"
+            android:textColor="@color/font_blue"
+            android:textSize="@dimen/font_4" />
+
+        <TextView
+            android:id="@+id/dialog_sel_address_sel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/vertical_margin"
+            android:paddingBottom="@dimen/padding1"
+            android:paddingTop="@dimen/padding1"
+            android:text="@string/sel_address_other"
+            android:textColor="@color/font_3"
+            android:textSize="@dimen/font_4" />
+
+        <ImageButton
+            android:id="@+id/dialog_sel_address_cancel"
+            android:layout_width="@dimen/x30"
+            android:layout_height="@dimen/x30"
+            android:layout_marginBottom="@dimen/vertical_margin_mid"
+            android:layout_marginTop="@dimen/vertical_margin_mid"
+            android:src="@drawable/ic_action_cancel_solid" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/dialog_sel_address_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:elevation="@dimen/x3"
+        android:gravity="center"
+        android:text="@string/loading"
+        android:textSize="@dimen/font_1"
+        android:visibility="gone" />
+</FrameLayout>
+
+

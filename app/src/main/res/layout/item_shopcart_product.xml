@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:fresco="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/all_ll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/x2"
-        android:background="@color/whitesmoke"
+        android:layout_height="@dimen/x100"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:background="@color/white"
         android:orientation="horizontal">
 
         <CheckBox
-            android:id="@+id/check_box"
+            android:id="@+id/item_shopcart_product_chk"
             style="@style/MyCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/x10"
-            android:layout_marginRight="@dimen/x4"
-            android:gravity="center"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/iv_adapter_list_pic"
@@ -35,125 +31,105 @@
             fresco:fadeDuration="200"
             fresco:failureImage="@mipmap/zhanweitu"
             fresco:failureImageScaleType="centerInside"
-            fresco:placeholderImage="@mipmap/zhanweitu"/>
+            fresco:placeholderImage="@mipmap/zhanweitu" />
 
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="@dimen/x10">
+        <LinearLayout
+            android:id="@+id/item_shopcart_product_rl_show"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/normal_padding"
+            android:visibility="gone">
 
             <TextView
-                android:id="@+id/tv_intro"
-                android:layout_width="match_parent"
+                android:id="@+id/item_shopcart_product_tv_info"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:textColor="@color/font_black2"
-                android:textSize="14sp"/>
+                android:layout_weight="1"
+                android:text="商品名称\n\n规格:\n价格:X"
+                android:textSize="@dimen/font_5"
+                android:textStyle="bold" />
 
             <RelativeLayout
-                android:id="@+id/size_select"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/x35"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_intro"
-                android:layout_marginTop="@dimen/x4"
-                android:background="@drawable/normal_bg"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/size1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:ellipsize="end"
-                    android:paddingRight="@dimen/x15"
-                    android:singleLine="true"
-                    android:textColor="@color/gray"
-                    android:textSize="13sp"/>
+                android:paddingBottom="@dimen/normal_padding"
+                android:paddingTop="@dimen/normal_padding">
 
                 <ImageView
-                    android:id="@+id/image_rt"
-                    android:layout_width="@dimen/x10"
-                    android:layout_height="@dimen/x10"
+                    android:id="@+id/item_shopcart_product_btn_edit"
+                    android:layout_width="@dimen/x15"
+                    android:layout_height="@dimen/x15"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/jiantou_xia"/>
+                    android:layout_alignParentTop="true"
+                    android:src="@drawable/icon_bianji" />
 
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/size"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_intro"
-                android:layout_marginTop="@dimen/x4"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/gray"
-                android:textSize="13sp"
-                android:visibility="visible"/>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tv_price"
+                    android:id="@+id/item_shopcart_product_tv_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:singleLine="true"
-                    android:textColor="@color/oragen"
-                    android:textSize="14sp"
-                    android:textStyle="bold"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_reduce"
-                        android:layout_width="@dimen/x20"
-                        android:layout_height="@dimen/x20"
-                        android:background="@color/basebackground"
-                        android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/font_black2"
-                        android:textSize="12sp"/>
-
-                    <TextView
-                        android:id="@+id/tv_num"
-                        android:layout_width="@dimen/x32"
-                        android:layout_height="@dimen/x20"
-                        android:background="@color/white"
-                        android:gravity="center"
-                        android:singleLine="true"
-                        android:text="1"
-                        android:textColor="@color/font_black2"
-                        android:textSize="13sp"/>
-
-                    <TextView
-                        android:id="@+id/tv_add"
-                        android:layout_width="@dimen/x20"
-                        android:layout_height="@dimen/x20"
-                        android:background="@color/basebackground"
-                        android:gravity="center"
-                        android:text="+"
-                        android:textColor="@color/font_black2"
-                        android:textSize="12sp"/>
-                </LinearLayout>
+                    android:text="x000"
+                    android:textSize="@dimen/font_5"
+                    android:textStyle="bold" />
 
             </RelativeLayout>
 
-        </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_shopcart_product_rl_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="@dimen/normal_padding">
+
+                <com.wyw.ljtds.widget.NumberButton
+                    android:id="@+id/item_shopcart_product_btn_num"
+                    android:layout_width="@dimen/x100"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/vertical_margin_mid"
+                    app:editable="true"
+                    app:textColor="@color/font_black2" />
+
+                <TextView
+                    android:id="@+id/item_shopcart_product_tv_edit_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/item_shopcart_product_btn_num"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/vertical_margin_mid"
+                    android:text="商品名称"
+                    android:textSize="@dimen/font_4"
+                    android:textStyle="bold" />
+
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/item_shopcart_product_btn_save"
+                android:layout_width="@dimen/x32"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/item_btn_light"
+                android:text="@string/complete"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray1" />
 </LinearLayout>

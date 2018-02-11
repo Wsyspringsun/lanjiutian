@@ -1,0 +1,214 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x80"
+            android:background="@color/trans">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/dialog_lifegoods_sel_img"
+                android:layout_width="@dimen/x80"
+                android:layout_height="@dimen/x80"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="@dimen/x10"
+                fresco:actualImageScaleType="centerCrop"
+                fresco:fadeDuration="200"
+                fresco:failureImage="@mipmap/zhanweitu"
+                fresco:failureImageScaleType="centerInside"
+                fresco:placeholderImage="@mipmap/zhanweitu" />
+
+            <ImageView
+                android:id="@+id/dialog_lifegoods_sel_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/x10"
+                android:layout_marginTop="@dimen/x8"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_action_cancel_solid" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_toRightOf="@id/dialog_lifegoods_sel_img"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/dialog_lifegoods_sel_money"
+                    style="@style/font_ww_14"
+                    android:text="￥"
+                    android:textColor="@color/base_bar" />
+
+                <TextView
+                    android:id="@+id/dialog_lifegoods_sel_store"
+                    style="@style/font_ww_12"
+                    android:layout_marginTop="@dimen/x4"
+                    android:text="库存111件"
+                    android:textColor="@color/font_black2" />
+
+                <TextView
+                    android:id="@+id/dialog_lifegoods_sel_tv_seled"
+                    style="@style/font_ww_12"
+                    android:layout_marginTop="@dimen/x2"
+                    android:text="请选择尺码、颜色"
+                    android:textColor="@color/font_black2" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginBottom="@dimen/x5"
+            android:layout_marginTop="@dimen/x5"
+            android:background="@color/basebackground" />
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/dialog_lifegoods_sel_tv_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:layout_marginRight="@dimen/x10"
+                    android:text="颜色"
+                    android:textColor="@color/font_black2"
+                    android:textSize="14sp" />
+
+                <RadioGroup
+                    android:id="@+id/dialog_lifegoods_sel_tfl_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/fapiao"
+                    android:layout_marginTop="@dimen/x6"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.google.android.flexbox.FlexboxLayout
+                        android:id="@+id/dialog_lifegoods_sel_fbl_color"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:alignContent="flex_start"
+                        app:alignItems="flex_start"
+                        app:flexWrap="wrap"
+                        app:showDivider="beginning|middle"></com.google.android.flexbox.FlexboxLayout>
+
+
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/dialog_lifegoods_sel_tv_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:layout_marginRight="@dimen/x10"
+                    android:layout_marginTop="@dimen/x7"
+                    android:text="规格"
+                    android:textColor="@color/font_black2"
+                    android:textSize="14sp" />
+
+                <RadioGroup
+                    android:id="@+id/dialog_lifegoods_sel_tfl_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/fapiao"
+                    android:layout_marginTop="@dimen/x6"
+                    android:gravity="center"
+                    android:layoutMode="clipBounds"
+                    android:orientation="horizontal">
+
+                    <com.google.android.flexbox.FlexboxLayout
+                        android:id="@+id/dialog_lifegoods_sel_fbl_size"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:alignContent="flex_start"
+                        app:alignItems="flex_start"
+                        app:flexWrap="wrap"
+                        app:showDivider="beginning|middle"></com.google.android.flexbox.FlexboxLayout>
+
+
+                </RadioGroup>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/flow_layout"
+                    android:layout_margin="@dimen/x10"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="购买数量"
+                        android:textColor="@color/font_black2"
+                        android:textSize="14sp" />
+
+                    <com.wyw.ljtds.widget.NumberButton
+                        android:id="@+id/dialog_lifegoods_sel_num"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_weight="1"
+                        app:editable="true"
+                        app:textColor="@color/font_black2">
+
+                    </com.wyw.ljtds.widget.NumberButton>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x40"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/dialog_lifegoods_sel_btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/base_bar"
+        android:text="@string/confirm"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+</LinearLayout>

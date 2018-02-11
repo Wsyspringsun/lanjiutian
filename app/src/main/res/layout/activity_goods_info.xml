@@ -1,93 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:background="@color/white">
 
-    <include layout="@layout/fragment_toolbar_common" />
-
-    <com.wyw.ljtds.widget.goodsinfo.NoScrollViewPager
-        android:id="@+id/vp_content"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom"
-        android:layout_below="@+id/ll_title_root"
-        android:layout_weight="1"
-        android:background="#FFFFFF" />
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/activity_goods_info_animator_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_launcher_sm" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x50"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/activity_goods_info_tv_shop"
-            style="@style/font_ww_16"
-            android:padding="@dimen/vertical_margin_mid"
-            android:paddingTop="0dp"
-            android:text="@string/shop"
-            android:textAlignment="center"
-            android:textColor="@color/gray"
-            android:textSize="14dp" />
+        <include layout="@layout/fragment_toolbar_common" />
 
-        <TextView
-            android:id="@+id/activity_goods_info_tv_kefu"
-            style="@style/font_ww_12"
-            android:padding="@dimen/vertical_margin_mid"
-            android:paddingTop="0dp"
-            android:text="@string/kefu"
-            android:textAlignment="center"
-            android:textColor="@color/gray"
-            android:textSize="14dp" />
-
-        <TextView
-            android:id="@+id/activity_goods_info_tv_shoucang"
-            style="@style/font_ww_12"
-            android:padding="@dimen/vertical_margin_mid"
-            android:paddingTop="0dp"
-            android:text="@string/shoucang"
-            android:textAlignment="center"
-            android:textColor="@color/gray"
-            android:textSize="14dp" />
-
-        <TextView
-            android:id="@+id/activity_goods_info_tv_addcart"
-            android:layout_width="wrap_content"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/juse"
-            android:gravity="center"
-            android:padding="@dimen/normal_padding"
-            android:text="@string/add_gouwu"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:layout_above="@+id/bottom"
+            android:layout_below="@+id/ll_title_root"
+            android:layout_weight="2"
+            android:background="#FFFFFF" />
 
-        <TextView
-            android:id="@+id/activity_goods_info_tv_goumai"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/base_bar"
-            android:gravity="center"
-            android:padding="@dimen/normal_padding"
-            android:text="@string/xuqiu"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/activity_goods_info_tb_main"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x40">
 
-        <TextView
-            android:id="@+id/activity_goods_info_tv_zixungoumai"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/base_bar"
-            android:gravity="center"
-            android:padding="@dimen/normal_padding"
-            android:text="咨询购买"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            <RelativeLayout
+                android:id="@+id/activity_goods_info_rl_shop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/vertical_margin_slg">
+
+                <TextView
+                    android:id="@+id/activity_goods_info_tv_shop"
+                    style="@style/font_icon_text"
+                    android:text="@string/shop" />
+
+                <ImageView
+                    style="@style/icon_sm"
+                    android:layout_above="@id/activity_goods_info_tv_shop"
+                    android:src="@drawable/ic_dianpu" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/activity_goods_info_rl_kefu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/vertical_margin_slg">
+
+                <TextView
+                    android:id="@+id/activity_goods_info_tv_kefu"
+                    style="@style/font_icon_text"
+                    android:text="@string/kefu" />
+
+                <ImageView
+                    style="@style/icon_sm"
+                    android:layout_above="@+id/activity_goods_info_tv_kefu"
+                    android:src="@drawable/ic_kefu" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/activity_goods_info_rl_shoucang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/vertical_margin_lg">
+
+                <TextView
+                    android:id="@+id/activity_goods_info_tv_shoucang"
+                    style="@style/font_icon_text"
+                    android:text="@string/shoucang" />
+
+                <ImageView
+                    android:id="@+id/activity_goods_info_img_shoucang"
+                    style="@style/icon_sm"
+                    android:layout_above="@id/activity_goods_info_tv_shoucang"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_shoucang" />
+
+
+            </RelativeLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="0dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/activity_goods_info_tv_addcart"
+                        style="@style/text_group_item"
+                        android:layout_weight="1"
+                        android:background="@color/juse"
+                        android:text="@string/add_gouwu" />
+
+                    <TextView
+                        android:id="@+id/activity_goods_info_tv_goumai"
+                        style="@style/text_group_item"
+                        android:layout_weight="1"
+                        android:background="@color/base_bar"
+                        android:text="@string/xuqiu" />
+                </LinearLayout>
+
+                <!-- <View
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:background="@drawable/bg_circle" />
+                 -->
+
+            </FrameLayout>
+
+        </android.support.v7.widget.Toolbar>
 
 
     </LinearLayout>
-
-</LinearLayout>
+</FrameLayout>

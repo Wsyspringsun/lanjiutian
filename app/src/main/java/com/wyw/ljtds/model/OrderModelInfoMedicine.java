@@ -7,52 +7,22 @@ import java.util.List;
  * Created by Administrator on 2017/4/23 0023.
  */
 
-public class OrderModelInfoMedicine extends BaseModel {
+public class OrderModelInfoMedicine extends OrderGroupDto {
     private XiaoNengData xiaonengData;
-    private String REMARKS;
     private String ADDRESS; //商铺地址
-    private String CONTACT_MOBILE;
-    private String DISTRIBUTION_MODE;
-    private int GROUP_EXCHANGE_QUANLITY;
     private BigDecimal POINT_MONEY;
     private BigDecimal PAY_AMOUNT;
-    private BigDecimal GROUP_MONEY_ALL;
-    private String INVOICE_CONTENT;
-    private String INVOICE_FLG;
-    private String INVOICE_TITLE;
-    private String INVOICE_TYPE;
-    private String OID_GROUP_ID;
-    private String OID_GROUP_NAME;
-    private String ORDER_GROUP_ID;
-    private String ORDER_TRADE_ID;
-    private BigDecimal POSTAGE;
     //使用邮费抵用券标识
-    private String POSTAGE_FLG;
     private String STATUS;
     private String USER_ADDRESS_ID;
-    private List<Goods> DETAILS;
+    private String USER_ADDRESS_LOCATION;
     private Long COMPLETE_DATE;
     private Long CREATE_DATE;
-    private String CONTACT_TEL;
+    private String ORG_ADDRESS;
+    private String ORG_MOBILE;
+    private String PAYMENT_METHOD;
     private CreatOrderModel.USER_ADDRESS USER_ADDRESS;
 
-    private String ELECTRONIC_MONEY;
-
-    public String getDISTRIBUTION_MODE() {
-        return DISTRIBUTION_MODE;
-    }
-
-    public void setDISTRIBUTION_MODE(String DISTRIBUTION_MODE) {
-        this.DISTRIBUTION_MODE = DISTRIBUTION_MODE;
-    }
-
-    public int getGROUP_EXCHANGE_QUANLITY() {
-        return GROUP_EXCHANGE_QUANLITY;
-    }
-
-    public void setGROUP_EXCHANGE_QUANLITY(int GROUP_EXCHANGE_QUANLITY) {
-        this.GROUP_EXCHANGE_QUANLITY = GROUP_EXCHANGE_QUANLITY;
-    }
 
     public Long getCOMPLETE_DATE() {
         return COMPLETE_DATE;
@@ -70,120 +40,11 @@ public class OrderModelInfoMedicine extends BaseModel {
         this.CREATE_DATE = CREATE_DATE;
     }
 
-    public String getCONTACT_TEL() {
-        return CONTACT_TEL;
-    }
 
-    public void setCONTACT_TEL(String CONTACT_TEL) {
-        this.CONTACT_TEL = CONTACT_TEL;
-    }
 
-    public BigDecimal getGROUP_MONEY_ALL() {
-        return GROUP_MONEY_ALL;
-    }
-
-    public void setGROUP_MONEY_ALL(BigDecimal GROUP_MONEY_ALL) {
-        this.GROUP_MONEY_ALL = GROUP_MONEY_ALL;
-    }
-
-    public String getINVOICE_CONTENT() {
-        return INVOICE_CONTENT;
-    }
-
-    public void setINVOICE_CONTENT(String INVOICE_CONTENT) {
-        this.INVOICE_CONTENT = INVOICE_CONTENT;
-    }
-
-    public String getINVOICE_FLG() {
-        return INVOICE_FLG;
-    }
-
-    public void setINVOICE_FLG(String INVOICE_FLG) {
-        this.INVOICE_FLG = INVOICE_FLG;
-    }
-
-    public String getINVOICE_TITLE() {
-        return INVOICE_TITLE;
-    }
-
-    public void setINVOICE_TITLE(String INVOICE_TITLE) {
-        this.INVOICE_TITLE = INVOICE_TITLE;
-    }
-
-    public String getINVOICE_TYPE() {
-        return INVOICE_TYPE;
-    }
-
-    public void setINVOICE_TYPE(String INVOICE_TYPE) {
-        this.INVOICE_TYPE = INVOICE_TYPE;
-    }
-
-    public String getOID_GROUP_ID() {
-        return OID_GROUP_ID;
-    }
-
-    public void setOID_GROUP_ID(String OID_GROUP_ID) {
-        this.OID_GROUP_ID = OID_GROUP_ID;
-    }
-
-    public String getOID_GROUP_NAME() {
-        return OID_GROUP_NAME;
-    }
-
-    public void setOID_GROUP_NAME(String OID_GROUP_NAME) {
-        this.OID_GROUP_NAME = OID_GROUP_NAME;
-    }
-
-    public String getORDER_GROUP_ID() {
-        return ORDER_GROUP_ID;
-    }
-
-    public void setORDER_GROUP_ID(String ORDER_GROUP_ID) {
-        this.ORDER_GROUP_ID = ORDER_GROUP_ID;
-    }
-
-    public String getORDER_TRADE_ID() {
-        return ORDER_TRADE_ID;
-    }
-
-    public void setORDER_TRADE_ID(String ORDER_TRADE_ID) {
-        this.ORDER_TRADE_ID = ORDER_TRADE_ID;
-    }
-
-    public BigDecimal getPOSTAGE() {
-        return POSTAGE;
-    }
-
-    public void setPOSTAGE(BigDecimal POSTAGE) {
-        this.POSTAGE = POSTAGE;
-    }
-
-    public String getSTATUS() {
-        return STATUS;
-    }
-
-    public void setSTATUS(String STATUS) {
-        this.STATUS = STATUS;
-    }
-
-    public List<Goods> getDETAILS() {
-        return DETAILS;
-    }
-
-    public void setDETAILS(List<Goods> DETAILS) {
-        this.DETAILS = DETAILS;
-    }
 
     public CreatOrderModel.USER_ADDRESS getUSER_ADDRESS() {
         return USER_ADDRESS;
-    }
-
-    public BigDecimal getPOINT_MONEY() {
-        return POINT_MONEY;
-    }
-
-    public void setPOINT_MONEY(BigDecimal POINT_MONEY) {
-        this.POINT_MONEY = POINT_MONEY;
     }
 
     public BigDecimal getPAY_AMOUNT() {
@@ -206,22 +67,6 @@ public class OrderModelInfoMedicine extends BaseModel {
         this.USER_ADDRESS = USER_ADDRESS;
     }
 
-    public String getELECTRONIC_MONEY() {
-        return ELECTRONIC_MONEY;
-    }
-
-    public void setELECTRONIC_MONEY(String ELECTRONIC_MONEY) {
-        this.ELECTRONIC_MONEY = ELECTRONIC_MONEY;
-    }
-
-    public String getPOSTAGE_FLG() {
-        return POSTAGE_FLG;
-    }
-
-    public void setPOSTAGE_FLG(String POSTAGE_FLG) {
-        this.POSTAGE_FLG = POSTAGE_FLG;
-    }
-
     public XiaoNengData getXiaonengData() {
         return xiaonengData;
     }
@@ -238,109 +83,51 @@ public class OrderModelInfoMedicine extends BaseModel {
         this.ADDRESS = ADDRESS;
     }
 
-    public String getCONTACT_MOBILE() {
-        return CONTACT_MOBILE;
+    public String getORG_ADDRESS() {
+        return ORG_ADDRESS;
     }
 
-    public void setCONTACT_MOBILE(String CONTACT_MOBILE) {
-        this.CONTACT_MOBILE = CONTACT_MOBILE;
+    public void setORG_ADDRESS(String ORG_ADDRESS) {
+        this.ORG_ADDRESS = ORG_ADDRESS;
     }
 
-    public String getREMARKS() {
-        return REMARKS;
+    public String getORG_MOBILE() {
+        return ORG_MOBILE;
     }
 
-    public void setREMARKS(String REMARKS) {
-        this.REMARKS = REMARKS;
+    public void setORG_MOBILE(String ORG_MOBILE) {
+        this.ORG_MOBILE = ORG_MOBILE;
     }
 
-    public class Goods {
-        //商品id
-        private String COMMODITY_ID;
-        //商品名字
-        private String COMMODITY_NAME;
-        private String COMMODITY_COLOR;
-        private String COMMODITY_SIZE;
-        private int EXCHANGE_QUANLITY;
-        private BigDecimal COST_MONEY;
-        private String IMG_PATH;
-        //商品订单号
-        private String COMMODITY_ORDER_ID;
-        //商品订单状态
-        private String ORDER_STATUS;
-
-        public String getIMG_PATH() {
-            return IMG_PATH;
-        }
-
-        public void setIMG_PATH(String IMG_PATH) {
-            this.IMG_PATH = IMG_PATH;
-        }
-
-        public String getCOMMODITY_ID() {
-            return COMMODITY_ID;
-        }
-
-        public void setCOMMODITY_ID(String COMMODITY_ID) {
-            this.COMMODITY_ID = COMMODITY_ID;
-        }
-
-        public String getCOMMODITY_NAME() {
-            return COMMODITY_NAME;
-        }
-
-        public void setCOMMODITY_NAME(String COMMODITY_NAME) {
-            this.COMMODITY_NAME = COMMODITY_NAME;
-        }
-
-        public String getCOMMODITY_COLOR() {
-            return COMMODITY_COLOR;
-        }
-
-        public void setCOMMODITY_COLOR(String COMMODITY_COLOR) {
-            this.COMMODITY_COLOR = COMMODITY_COLOR;
-        }
-
-        public String getCOMMODITY_SIZE() {
-            return COMMODITY_SIZE;
-        }
-
-        public void setCOMMODITY_SIZE(String COMMODITY_SIZE) {
-            this.COMMODITY_SIZE = COMMODITY_SIZE;
-        }
-
-        public int getEXCHANGE_QUANLITY() {
-            return EXCHANGE_QUANLITY;
-        }
-
-        public void setEXCHANGE_QUANLITY(int EXCHANGE_QUANLITY) {
-            this.EXCHANGE_QUANLITY = EXCHANGE_QUANLITY;
-        }
-
-        public BigDecimal getCOST_MONEY() {
-            return COST_MONEY;
-        }
-
-        public void setCOST_MONEY(BigDecimal COST_MONEY) {
-            this.COST_MONEY = COST_MONEY;
-        }
-
-        public String getCOMMODITY_ORDER_ID() {
-            return COMMODITY_ORDER_ID;
-        }
-
-        public void setCOMMODITY_ORDER_ID(String COMMODITY_ORDER_ID) {
-            this.COMMODITY_ORDER_ID = COMMODITY_ORDER_ID;
-        }
-
-        public String getORDER_STATUS() {
-            return ORDER_STATUS;
-        }
-
-        public void setORDER_STATUS(String ORDER_STATUS) {
-            this.ORDER_STATUS = ORDER_STATUS;
-        }
+    public String getPAYMENT_METHOD() {
+        return PAYMENT_METHOD;
     }
 
+    public void setPAYMENT_METHOD(String PAYMENT_METHOD) {
+        this.PAYMENT_METHOD = PAYMENT_METHOD;
+    }
 
+    public BigDecimal getPOINT_MONEY() {
+        return POINT_MONEY;
+    }
+
+    public void setPOINT_MONEY(BigDecimal POINT_MONEY) {
+        this.POINT_MONEY = POINT_MONEY;
+    }
+
+    public String getSTATUS() {
+        return STATUS;
+    }
+
+    public void setSTATUS(String STATUS) {
+        this.STATUS = STATUS;
+    }
+
+    public String getUSER_ADDRESS_LOCATION() {
+        return USER_ADDRESS_LOCATION;
+    }
+
+    public void setUSER_ADDRESS_LOCATION(String USER_ADDRESS_LOCATION) {
+        this.USER_ADDRESS_LOCATION = USER_ADDRESS_LOCATION;
+    }
 }

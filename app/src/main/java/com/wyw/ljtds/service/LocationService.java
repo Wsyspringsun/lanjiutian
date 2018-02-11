@@ -2,7 +2,7 @@ package com.wyw.ljtds.service;
 
 import android.content.Context;
 
-import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
@@ -36,7 +36,7 @@ public class LocationService {
 	 * @return
 	 */
 	
-	public boolean registerListener(BDAbstractLocationListener listener){
+	public boolean registerListener(BDLocationListener listener){
 		boolean isSuccess = false;
 		if(listener != null){
 			client.registerLocationListener(listener);
@@ -45,7 +45,7 @@ public class LocationService {
 		return  isSuccess;
 	}
 
-	public void unregisterListener(BDAbstractLocationListener listener){
+	public void unregisterListener(BDLocationListener listener){
 		if(listener != null){
 			client.unRegisterLocationListener(listener);
 		}

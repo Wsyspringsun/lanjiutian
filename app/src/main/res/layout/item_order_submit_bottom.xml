@@ -2,150 +2,93 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:layout_marginTop="@dimen/vertical_margin_mid"
+    android:background="@color/whitesmoke"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/zzhifu"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/x10">
-
-        <TextView
-            android:id="@+id/zhifu"
-            style="@style/font_ww_16_black"
-            android:text="@string/pay_choice0" />
-
-
-        <TextView
-            android:id="@+id/zhifu_jieguo"
-            style="@style/font_ww_14"
-            android:layout_alignBottom="@+id/zhifu"
-            android:layout_marginRight="@dimen/x7"
-            android:layout_toLeftOf="@+id/zhifu_jt"
-            android:textColor="@color/gray" />
-
-
-        <TextView
-            android:id="@+id/jifen"
-            style="@style/font_ww_16_black"
-            android:layout_below="@+id/zhifu"
-            android:layout_marginTop="@dimen/x7"
-            android:text="@string/jifendikou" />
-
-        <TextView
-            android:id="@+id/yuan"
-            style="@style/font_ww_14"
-            android:layout_alignBottom="@+id/jifen"
-            android:layout_marginRight="@dimen/x7"
-            android:layout_toLeftOf="@+id/zhifu_jt"
-            android:text="元"
-            android:textColor="@color/gray" />
-
-        <TextView
-            android:id="@+id/jifen_jieguo"
-            style="@style/font_ww_14"
-            android:layout_alignBottom="@+id/jifen"
-            android:layout_toLeftOf="@+id/yuan"
-            android:textColor="@color/gray" />
-
-        <ImageView
-            android:id="@+id/zhifu_jt"
-            android:layout_width="@dimen/x12"
-            android:layout_height="@dimen/x12"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/jiantou_you_hei" />
-
-    </RelativeLayout>
+        android:layout_height="2dp"
+        android:layout_marginTop="@dimen/vertical_margin" />
 
     <RelativeLayout
+        android:id="@+id/item_order_submit_bottom_invoice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/x10">
-
-        <CheckBox
-            android:id="@+id/chk_use_dianzibi"
-            style="@style/MyCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text=" " />
-
+        android:layout_margin="@dimen/vertical_margin"
+        android:layout_marginBottom="1dp"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/padding2"
+        android:paddingRight="@dimen/padding2">
 
         <TextView
-            style="@style/font_ww_16_black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/chk_use_dianzibi"
+            android:id="@+id/item_order_submit_bottom_invoice_title"
+            style="@style/textview_title"
             android:layout_alignParentLeft="true"
-            android:text="@string/use_dianzibi" />
-
+            android:text="发票信息"
+            android:textColor="@color/font_1"
+            android:textSize="@dimen/font_5" />
 
         <TextView
-            android:id="@+id/tv_dianzibi_show"
-            style="@style/font_ww_18_black"
-            android:layout_alignBaseline="@id/chk_use_dianzibi"
-            android:layout_marginRight="@dimen/x7"
-            android:layout_toLeftOf="@id/chk_use_dianzibi"
-            android:visibility="gone" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/x10">
-
-        <CheckBox
-            android:id="@+id/chk_use_youfeiquan"
-            style="@style/MyCheckBox"
+            android:id="@+id/item_order_submit_bottom_invoice_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text=" " />
+            android:text=" >"
+            android:textAlignment="viewEnd"
+            android:textSize="@dimen/font_1" />
 
         <TextView
-            style="@style/font_ww_16_black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/chk_use_youfeiquan"
-            android:layout_alignParentLeft="true"
-            android:text="@string/use_youfeiquan" />
+            android:id="@+id/item_order_submit_bottom_invoice_content"
+            style="@style/textview_title"
+            android:layout_toLeftOf="@id/item_order_submit_bottom_invoice_more"
+            android:layout_toStartOf="@id/item_order_submit_bottom_invoice_more"
+            android:text="不开发票"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/font_1"
+            android:textSize="@dimen/font_5" />
 
-
-        <TextView
-            android:id="@+id/tv_youfeiquan_show"
-            style="@style/font_ww_18_black"
-            android:layout_alignBaseline="@id/chk_use_youfeiquan"
-            android:layout_marginRight="@dimen/x7"
-            android:layout_toLeftOf="@id/chk_use_youfeiquan"
-            android:visibility="gone" />
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/item_order_submit_bottom_paymethod"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/x10">
-
-        <EditText
-            android:id="@+id/order_submit_ed_customernote"
-            style="@style/edtxt_single"
-            android:layout_width="@dimen/x200"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:hint="@string/customer_note" />
+        android:layout_margin="@dimen/vertical_margin"
+        android:layout_marginBottom="1dp"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/padding2"
+        android:paddingRight="@dimen/padding2">
 
         <TextView
-            style="@style/font_ww_16_black"
+            android:id="@+id/item_order_submit_bottom_paymethod_title"
+            style="@style/textview_title"
+            android:layout_alignParentLeft="true"
+            android:lineSpacingMultiplier="1.5"
+            android:text="配送方式\n支付方式"
+            android:textColor="@color/font_1"
+            android:textSize="@dimen/font_5" />
+
+        <TextView
+            android:id="@+id/item_order_submit_bottom_paymethod_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/order_submit_ed_customernote"
-            android:layout_alignParentLeft="true"
-            android:text="@string/customer_note" />
+            android:layout_alignParentRight="true"
+            android:text=" >"
+            android:textAlignment="viewEnd"
+            android:textSize="@dimen/font_1" />
 
+        <TextView
+            android:id="@+id/item_order_submit_bottom_paymethod_content"
+            style="@style/textview_title"
+            android:layout_toLeftOf="@+id/item_order_submit_bottom_paymethod_more"
+            android:layout_toStartOf="@+id/item_order_submit_bottom_paymethod_more"
+            android:lineSpacingMultiplier="1.5"
+            android:text="配送方式\n付款方式"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/font_1"
+            android:textSize="@dimen/font_5" />
 
     </RelativeLayout>
-
 
 </LinearLayout>

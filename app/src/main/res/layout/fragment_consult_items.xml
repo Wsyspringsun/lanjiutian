@@ -13,8 +13,8 @@
         android:padding="@dimen/x3">
 
         <ImageView
-            android:layout_width="@dimen/x36"
-            android:layout_height="@dimen/x36"
+            android:layout_width="@dimen/x32"
+            android:layout_height="@dimen/x32"
             android:src="@mipmap/zixun_sel" />
     </LinearLayout>
 
@@ -26,8 +26,8 @@
         android:padding="@dimen/x3">
 
         <ImageView
-            android:layout_width="@dimen/x36"
-            android:layout_height="@dimen/x36"
+            android:layout_width="@dimen/x32"
+            android:layout_height="@dimen/x32"
             android:src="@mipmap/rexian_sel" />
 
     </LinearLayout>

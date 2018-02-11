@@ -1,8 +1,10 @@
 package com.wyw.ljtds.ui.home;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,9 +14,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
-import com.baidu.location.Poi;
+import com.baidu.location.BDLocationListener;
+import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.adapter.LifeIndexAdapter;
 import com.wyw.ljtds.biz.biz.HomeBiz;
@@ -23,13 +25,16 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.MyApplication;
+import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.HomePageModel1;
-import com.wyw.ljtds.service.LocationService;
+import com.wyw.ljtds.model.MyLocation;
+import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.ui.category.ActivityScan;
 import com.wyw.ljtds.ui.goods.ActivityGoodsList;
 import com.wyw.ljtds.ui.user.ActivityMessage;
-import com.wyw.ljtds.utils.Utils;
+import com.wyw.ljtds.ui.user.address.AddressSelActivity;
+import com.wyw.ljtds.utils.ToastUtil;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -47,45 +52,22 @@ public class FragmentLifeIndex extends BaseFragment {
     LinearLayout llLifeHeader;
     @ViewInject(R.id.main_header_location)
     TextView tvLocation;
-    private LocationService locationService;
 
     //存储首页数据
     private HomePageModel1 homePageModel;
-
-
-
-    // Location listener
-    private BDAbstractLocationListener mListener = new BDAbstractLocationListener() {
+    BDLocationListener locationListner = new BDLocationListener() {
         @Override
         public void onReceiveLocation(BDLocation location) {
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-                StringBuffer sb = new StringBuffer(256);
-                Utils.setIconText(getActivity(), tvLocation, "");
-                sb.append("\ue622");
-                sb.append(location.getAddrStr());
-                if (location.getPoiList() != null && !location.getPoiList().isEmpty()) {
-//                    for (int i = 0; i < location.getPoiList().size(); i++) {
-//                        Poi poi = location.getPoiList().get(i);
-//                        sb.append(poi.getName() + "");
-//                    }
-                } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
-                } else if (location.getLocType() == BDLocation.TypeOffLineLocation) {// 离线定位结果
-                    sb.append("离线定位成功，离线定位结果也是有效的");
-                } else if (location.getLocType() == BDLocation.TypeServerError) {
-                    sb.append("服务端网络定位失败，可以反馈IMEI号和大体定位时间到loc-bugs@baidu.com，会有人追查原因");
-                } else if (location.getLocType() == BDLocation.TypeNetWorkException) {
-                    sb.append("网络不同导致定位失败，请检查网络是否通畅");
-                } else if (location.getLocType() == BDLocation.TypeCriteriaException) {
-                    sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
-                }
-                tvLocation.setText(sb.toString());
-//                Log.e(AppConfig.ERR_TAG, "Location Info：" + sb.toString());
+                MyLocation loc = MyLocation.newInstance(location.getLatitude(), location.getLongitude(), location.getAddrStr());
+                SingleCurrentUser.updateLocation(loc);
+                ((MyApplication) getActivity().getApplication()).locationService.unregisterListener(locationListner); //注销掉监听
+                tvLocation.setText(SingleCurrentUser.location.getAddrStr());
             }
         }
-
     };
 
-
+    private static final int REQUEST_CHANGE_LOCATION = 1;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -100,19 +82,11 @@ public class FragmentLifeIndex extends BaseFragment {
     public void onStart() {
         super.onStart();
         loadhomeData();
-        // -----------location config ------------
-        locationService = ((MyApplication) getActivity().getApplication()).locationService;
-        //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
-        locationService.registerListener(mListener);
 
-        locationService.setLocationOption(locationService.getDefaultLocationClientOption());
-        locationService.start();// 定位SDK
     }
 
     @Override
     public void onStop() {
-        locationService.unregisterListener(mListener); //注销掉监听
-        locationService.stop(); //停止定位服务
         super.onStop();
     }
 
@@ -155,6 +129,17 @@ public class FragmentLifeIndex extends BaseFragment {
     }
 
     private void initView() {
+        //location info
+        tvLocation.setText("定位中...");
+        setLocation();
+        tvLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = AddressSelActivity.getIntent(getActivity(), true);
+                startActivityForResult(it, REQUEST_CHANGE_LOCATION);
+            }
+        });
+
         //12 columns grid
         GridLayoutManager layoutManger = new GridLayoutManager(getActivity(), 12);
         rylvIndexMain.setLayoutManager(layoutManger);
@@ -179,16 +164,7 @@ public class FragmentLifeIndex extends BaseFragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-//                Log.e(AppConfig.ERR_TAG, "onScrolled:" + recyclerView.getScrollState() + dy);
-//                if (adapter1 == null)
-//                    return;
-//                int cnt = adapter1.getItemCount();
-////                int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-//                int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-//                if (!end && !loading && (lastVisibleItem) >= cnt) {
-//                    page = page + 1;
-//                    loadDianzibiLog();
-//                }
+//
             }
         });
     }
@@ -242,4 +218,45 @@ public class FragmentLifeIndex extends BaseFragment {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CHANGE_LOCATION:
+                    if (data != null) {
+                        Parcelable paddr = data.getParcelableExtra(AddressSelActivity.TAG_SELECTED_ADDRESS);
+                        if (paddr != null) {
+                            AddressModel addr = (AddressModel) paddr;
+                            if (addr != null) {
+                                String sLoc = addr.getADDRESS_LOCATION();
+                                StringBuilder err = new StringBuilder();
+                                MyLocation loc = AddressModel.parseLocation(err, sLoc);
+                                if (err.length() > 0) {
+                                    ToastUtil.show(getActivity(), err.toString());
+                                    return;
+                                }
+                                SingleCurrentUser.location = loc;
+                            }
+                        }
+                    }
+
+                    tvLocation.setText(SingleCurrentUser.location.getAddrStr());
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            setLocation();
+        }
+    }
+
+    public void setLocation() {
+        if (SingleCurrentUser.location != null) {
+            tvLocation.setText(SingleCurrentUser.location.getAddrStr());
+        }
+    }
 }

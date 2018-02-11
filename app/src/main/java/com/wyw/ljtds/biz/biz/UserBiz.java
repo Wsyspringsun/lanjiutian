@@ -27,6 +27,7 @@ import com.wyw.ljtds.model.Ticket;
 import com.wyw.ljtds.ui.user.wallet.ChojiangRecActivity;
 import com.wyw.ljtds.ui.user.wallet.DianZiBiListFragment;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +84,6 @@ public class UserBiz extends BaseBiz {
         ksoap.setProperty("userName", userName, PropertyType.TYPE_STRING);
         ksoap.setProperty("passWord", password, PropertyType.TYPE_STRING);
         ksoap.setProperty("terminalType", terminalType, PropertyType.TYPE_STRING);
-
         return ksoap.request().getAsString();
     }
 
@@ -245,6 +245,9 @@ public class UserBiz extends BaseBiz {
         ksoap.setProperty("consigneeCity", model.getCONSIGNEE_CITY(), PropertyType.TYPE_STRING);
         ksoap.setProperty("consigneeCounty", model.getCONSIGNEE_COUNTY(), PropertyType.TYPE_STRING);
         ksoap.setProperty("consigneeAddress", model.getCONSIGNEE_ADDRESS(), PropertyType.TYPE_STRING);
+        ksoap.setProperty("addressLocation", model.getADDRESS_LOCATION(), PropertyType.TYPE_STRING);
+
+
         return ksoap.request().getAsInt();
     }
 
@@ -345,7 +348,7 @@ public class UserBiz extends BaseBiz {
 
     }
 
-    public static UserDataModel userData() throws BizFailure, ZYException {
+    public static UserDataModel loadUserOrderNumber() throws BizFailure, ZYException {
         SoapProcessor ksoap = new SoapProcessor("Service", "sumOrderAmount", true);
         ksoap.setProperty("token", PreferenceCache.getToken(), PropertyType.TYPE_STRING);
         JsonElement element = ksoap.request();
@@ -661,6 +664,7 @@ public class UserBiz extends BaseBiz {
 
     public static boolean isLogined() {
         String token = PreferenceCache.getToken();
+        Utils.log("" + !StringUtils.isEmpty(token));
         return !StringUtils.isEmpty(token);
     }
 

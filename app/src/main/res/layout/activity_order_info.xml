@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:orientation="vertical">
 
         <include layout="@layout/main_header_return" />
 
     </LinearLayout>
 
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:visibility="gone">
+
+
+    </RelativeLayout>
+
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/footer"
-        android:layout_below="@+id/header"
-        android:background="@color/basebackground"
+        android:layout_above="@id/footer"
+        android:layout_below="@id/header"
         android:scrollbars="none">
 
         <LinearLayout
@@ -52,7 +63,7 @@
 
             <include layout="@layout/item_order_submit_address" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x30"
                 android:background="@color/white"
@@ -60,19 +71,35 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/activity_order_info_shop_pic"
                     android:layout_width="@dimen/x16"
                     android:layout_height="@dimen/x16"
+                    android:layout_alignParentLeft="true"
                     android:layout_marginLeft="@dimen/x10"
                     android:scaleType="fitCenter"
                     android:src="@mipmap/icon_dianpu" />
 
                 <TextView
-                    android:id="@+id/dianpu"
+                    android:id="@+id/activity_order_info_dianpu"
                     style="@style/font_ww_14"
                     android:layout_marginLeft="@dimen/x7"
+                    android:layout_toRightOf="@id/activity_order_info_shop_pic"
+                    android:text="店铺名称"
                     android:textColor="@color/font_black2" />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/order_fuwu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="@dimen/vertical_margin_mid"
+                    android:background="@drawable/background_text_button"
+                    android:text="@string/shouhou_shenqing"
+                    android:textColor="@color/base_bar"
+                    android:textSize="@dimen/font_5" />
+
+            </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/reclcyer"
@@ -109,43 +136,6 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/x4">
-
-                    <TextView
-                        style="@style/font_ww_14"
-                        android:text="@string/order_yunfei"
-                        android:textColor="@color/gray" />
-
-                    <TextView
-                        android:id="@+id/yunfei"
-                        style="@style/font_ww_14"
-                        android:layout_alignParentRight="true"
-                        android:textColor="@color/gray" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/x4"
-                    android:layout_marginTop="@dimen/x4">
-
-                    <TextView
-                        style="@style/font_ww_14"
-                        android:text="@string/order_dianzibi"
-                        android:textColor="@color/gray" />
-
-                    <TextView
-                        android:id="@+id/tv_orderinfo_dianzibi"
-                        style="@style/font_ww_14"
-                        android:layout_alignParentRight="true"
-                        android:textColor="@color/gray" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/x4"
                     android:layout_marginTop="@dimen/x4">
 
@@ -159,6 +149,25 @@
                         style="@style/font_ww_14"
                         android:layout_alignParentRight="true"
                         android:textColor="@color/gray" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/x4">
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:text="@string/order_yunfei"
+                        android:textColor="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/yunfei"
+                        style="@style/font_ww_14"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/gray" />
+
 
                 </RelativeLayout>
 
@@ -182,6 +191,24 @@
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="39dp"
+                    android:layout_marginTop="9dp">
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:text="@string/order_dianzibi"
+                        android:textColor="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/tv_orderinfo_dianzibi"
+                        style="@style/font_ww_14"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/gray" />
+
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -202,32 +229,6 @@
                         android:textColor="@color/base_bar" />
 
                 </RelativeLayout>
-
-                <!--
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/x1"
-                    android:layout_marginBottom="@dimen/x8"
-                    android:layout_marginTop="@dimen/x8"
-                    android:background="@color/gray1" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        style="@style/font_ww_16"
-                        android:text="@string/order_xufu"
-                        android:textColor="@color/font_black2" />
-
-                    <TextView
-                        style="@style/font_ww_16"
-                        android:layout_alignParentRight="true"
-                        android:text="@string/meiqian"
-                        android:textColor="@color/base_bar" />
-
-                </RelativeLayout>
-                -->
 
             </LinearLayout>
 
@@ -313,108 +314,9 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/tuijian_ll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/x10"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:paddingBottom="@dimen/x10">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/x40"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/hengxian"
-                        android:textColor="@color/base_bar"
-                        android:textSize="@dimen/x14" />
-
-                    <TextView
-                        style="@style/font_ww_14"
-                        android:layout_marginLeft="@dimen/x10"
-                        android:layout_marginRight="@dimen/x10"
-                        android:text="@string/tuijian_cai"
-                        android:textColor="@color/font_black1" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/hengxian"
-                        android:textColor="@color/base_bar"
-                        android:textSize="@dimen/x14" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/x1"
-                    android:background="@color/gray" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:descendantFocusability="blocksDescendants">
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/tuijian"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/white" />
-
-                </RelativeLayout>
-
-            </LinearLayout>
 
         </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-    </ScrollView>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x1"
-        android:background="@color/gray1" />
-
-
-    <RelativeLayout
-        android:id="@+id/footer"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x35"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white">
-
-        <LinearLayout
-            android:id="@+id/ly_order_info_bg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/x1">
-
-            <TextView
-                android:id="@+id/order_fuwu"
-                style="@style/font_ww_14"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/x10"
-                android:background="@drawable/background_text_button"
-                android:padding="@dimen/x5"
-                android:text="@string/shouhou_shenqing"
-                android:textColor="@color/base_bar" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/x1"
-            android:layout_alignParentBottom="true"
-            android:background="@color/gray1" />
-
-    </RelativeLayout>
 
 </RelativeLayout>

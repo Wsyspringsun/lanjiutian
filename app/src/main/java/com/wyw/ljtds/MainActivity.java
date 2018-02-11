@@ -1,5 +1,7 @@
 package com.wyw.ljtds;
 
+import android.*;
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -7,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,19 +20,33 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
 import com.baidu.mobstat.StatService;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.wyw.ljtds.biz.biz.UserBiz;
+import com.wyw.ljtds.biz.exception.BizFailure;
+import com.wyw.ljtds.biz.exception.ZYException;
+import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.config.MyApplication;
+import com.wyw.ljtds.model.AddressModel;
+import com.wyw.ljtds.model.MyLocation;
+import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.model.UpdateAppModel;
+import com.wyw.ljtds.service.LocationService;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.cart.FragmentCart;
 import com.wyw.ljtds.ui.category.FragmentCategory;
 import com.wyw.ljtds.ui.find.FragmentFind;
 import com.wyw.ljtds.ui.home.FragmentLifeIndex;
-import com.wyw.ljtds.ui.user.FragmentUser;
+import com.wyw.ljtds.ui.home.FragmentUserIndex;
+import com.wyw.ljtds.ui.user.ActivityLogin;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.ToastUtil;
+import com.wyw.ljtds.utils.Utils;
+import com.wyw.ljtds.widget.MyCallback;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -39,12 +56,14 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @ContentView(R.layout.activity_main)//setcontextview
 public class MainActivity extends BaseActivity {
-    private static final String TAG_POSITION = "TAG_POSITION";
-    private IWXAPI wxApi;
+    public static final String TAG_POSITION = "TAG_POSITION";
+    //    private IWXAPI wxApi;
     @ViewInject(R.id.home)
     private RelativeLayout home;
     @ViewInject(R.id.category)
@@ -76,21 +95,38 @@ public class MainActivity extends BaseActivity {
     @ViewInject(R.id.iv_user)
     private ImageView iv_user;
 
-
-    //fragment相关
-    public static int index = AppConfig.DEFAULT_INDEX_FRAGMENT;
-    private FragmentManager fragmentManager;
     //    private FragmentHome fragmentHome;
     private FragmentLifeIndex fragmentHome;
     private FragmentCategory fragmentCategory;
     private FragmentFind fragmentFind;
     private FragmentCart fragmentCart;
-    private FragmentUser fragmentUser;
+    private FragmentUserIndex fragmentUser;
 
     private UpdateAppModel updateAppModel;
+    private BDLocationListener locationListner = new BDLocationListener() {
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            closeLoding();
+            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+                //update location to addr
+                MyLocation loc = MyLocation.newInstance(location.getLatitude(), location.getLongitude(), location.getAddrStr());
+                initAddr(loc);
+            } else {
+                //update default location to addr
+                MyLocation loc = MyLocation.newInstance(SingleCurrentUser.defaultLat, SingleCurrentUser.defaultLng, SingleCurrentUser.defaultAddrStr);
+                initAddr(loc);
+                ToastUtil.show(MainActivity.this, MainActivity.this.getString(R.string.err_location));
+            }
+            ((MyApplication) MainActivity.this.getApplication()).locationService.unregisterListener(locationListner); //注销掉监听
+        }
+    };
+    private List<AddressModel> addrlist;
+    private Bundle savedInstanceState;
+    private FragmentTransaction fragmentTransaction;
 
     @Event(value = {R.id.home, R.id.category, R.id.find, R.id.shopping_cart, R.id.user})
     private void setlect(View v) {
+        int index = 0;
         switch (v.getId()) {
             case R.id.home:
                 index = 0;
@@ -109,32 +145,36 @@ public class MainActivity extends BaseActivity {
                 break;
         }
 //        AppConfig.currSel = index;
-        addFragmentToStack(index);
+        AppConfig.currSel = index;
+        addFragmentToStack(AppConfig.currSel);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(TAG_POSITION, index);
+        outState.putInt(TAG_POSITION, AppConfig.currSel);
+    }
+
+    public void initAddr(MyLocation loc) {
+        SingleCurrentUser.updateLocation(loc);
+        if (fragmentHome != null && fragmentHome.isAdded()){
+            fragmentHome.setLocation();
+        }
+        if (fragmentFind != null && fragmentFind.isAdded()){
+            fragmentFind.setLocation();
+        }
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        final IWXAPI api = WXAPIFactory.createWXAPI(this, null);
-        api.registerApp(AppConfig.WEIXIN_APP_ID);
-        Log.e(AppConfig.ERR_TAG, "registerApp  WEIXIN_APP_ID...................");
-        //注册微信
-        StatService.start(this);
-
-
-        fragmentManager = getSupportFragmentManager();
+        callback();
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (savedInstanceState == null) {
+            AppConfig.currSel = AppConfig.DEFAULT_INDEX_FRAGMENT;
             //默认
-            index = AppConfig.DEFAULT_INDEX_FRAGMENT;
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            switch (index) {
+            switch (AppConfig.currSel) {
                 case 0:
                     fragmentHome = FragmentLifeIndex.newInstance();
                     fragmentTransaction.replace(R.id.fragment_container, fragmentHome, fragmentHome.getClass().getName()).commit();
@@ -143,26 +183,71 @@ public class MainActivity extends BaseActivity {
                     fragmentFind = new FragmentFind();
                     fragmentTransaction.replace(R.id.fragment_container, fragmentFind, fragmentFind.getClass().getName()).commit();
                     break;
-                default:
-                    index = 0;
-                    break;
             }
         } else {
-            index = savedInstanceState.getInt(TAG_POSITION);
-            addFragmentToStack(index);
+            AppConfig.currSel = savedInstanceState.getInt(TAG_POSITION);
         }
-        callback();
+
+
+        setLoding(this, false);
+        if (UserBiz.isLogined()) {
+            loadUserAddr();
+        } else {
+            ((MyApplication) this.getApplication()).locationService.registerListener(locationListner); //注销掉监听
+        }
+
+        final IWXAPI api = WXAPIFactory.createWXAPI(this, null);
+        api.registerApp(AppConfig.WEIXIN_APP_ID);
+        //注册微信
+        StatService.start(this);
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ((MyApplication) getApplication()).onDestory();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // 适配android M，检查权限
+        List<String> permissions = new ArrayList<>();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isNeedRequestPermissions(permissions)) {
+            requestPermissions(permissions.toArray(new String[permissions.size()]), 0);
+        }
+
+        ((MyApplication) getApplication()).locationService.start();// 定位SDK
+
+        //other page point a fragment index
+        if (AppConfig.currSel != -1) {
+            addFragmentToStack(AppConfig.currSel);
+        }
+    }
+
+    private boolean isNeedRequestPermissions(List<String> permissions) {
+        // 定位精确位置
+//        addPermission(permissions, Manifest.permission.WRITE_SETTINGS);
+        // 定位精确位置
+        addPermission(permissions, android.Manifest.permission.ACCESS_FINE_LOCATION);
+        // 存储权限
+        addPermission(permissions, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        // 读取手机状态
+        addPermission(permissions, android.Manifest.permission.READ_PHONE_STATE);
+        return permissions.size() > 0;
+    }
+
+    private void addPermission(List<String> permissionsList, String permission) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+            permissionsList.add(permission);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        addFragmentToStack(index);
     }
 
     /**
@@ -170,8 +255,8 @@ public class MainActivity extends BaseActivity {
      *
      * @param cur
      */
-    private void addFragmentToStack(int cur) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    void addFragmentToStack(int cur) {
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
         hideFragments(fragmentTransaction);
         cur = cur % 5;
         switch (cur) {
@@ -179,8 +264,7 @@ public class MainActivity extends BaseActivity {
                 tv_home.setTextColor(getResources().getColor(R.color.base_bar));
                 iv_home.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_home_yes));
 
-//                fragmentHome = (FragmentHome) fragmentManager.findFragmentByTag(FragmentHome.class.getName());
-                fragmentHome = (FragmentLifeIndex) fragmentManager.findFragmentByTag(FragmentLifeIndex.class.getName());
+                fragmentHome = (FragmentLifeIndex) getSupportFragmentManager().findFragmentByTag(FragmentLifeIndex.class.getName());
                 if (fragmentHome == null) {
 //                    fragmentHome = new FragmentHome();
                     fragmentHome = FragmentLifeIndex.newInstance();
@@ -191,7 +275,7 @@ public class MainActivity extends BaseActivity {
                 tv_category.setTextColor(getResources().getColor(R.color.base_bar));
                 iv_category.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_fenlei_yes));
 
-                fragmentCategory = (FragmentCategory) fragmentManager.findFragmentByTag(FragmentCategory.class.getName());
+                fragmentCategory = (FragmentCategory) getSupportFragmentManager().findFragmentByTag(FragmentCategory.class.getName());
                 if (fragmentCategory == null) {
                     fragmentCategory = new FragmentCategory();
                 }
@@ -202,7 +286,7 @@ public class MainActivity extends BaseActivity {
                 tv_find.setTextColor(getResources().getColor(R.color.base_bar));
                 iv_find.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_yiyao_yes));
 
-                fragmentFind = (FragmentFind) fragmentManager.findFragmentByTag(FragmentFind.class.getName());
+                fragmentFind = (FragmentFind) getSupportFragmentManager().findFragmentByTag(FragmentFind.class.getName());
                 if (fragmentFind == null) {
                     fragmentFind = new FragmentFind();
                 }
@@ -213,7 +297,7 @@ public class MainActivity extends BaseActivity {
                 tv_cart.setTextColor(getResources().getColor(R.color.base_bar));
                 iv_cart.setImageDrawable(getResources().getDrawable(R.drawable.icon_home_gouwuche_yes));
 
-                fragmentCart = (FragmentCart) fragmentManager.findFragmentByTag(FragmentCart.class.getName());
+                fragmentCart = (FragmentCart) getSupportFragmentManager().findFragmentByTag(FragmentCart.class.getName());
                 if (fragmentCart == null) {
                     fragmentCart = new FragmentCart();
                 }
@@ -224,9 +308,9 @@ public class MainActivity extends BaseActivity {
                 tv_user.setTextColor(getResources().getColor(R.color.base_bar));
                 iv_user.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_user_yes));
 
-                fragmentUser = (FragmentUser) fragmentManager.findFragmentByTag(FragmentUser.class.getName());
+                fragmentUser = (FragmentUserIndex) getSupportFragmentManager().findFragmentByTag(FragmentUserIndex.class.getName());
                 if (fragmentUser == null) {
-                    fragmentUser = new FragmentUser();
+                    fragmentUser = new FragmentUserIndex();
                 }
                 selectFragment(fragmentUser, fragmentTransaction);
                 break;
@@ -415,4 +499,41 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
+
+    private void loadUserAddr() {
+        new BizDataAsyncTask<List<AddressModel>>() {
+            @Override
+            protected List<AddressModel> doExecute() throws ZYException, BizFailure {
+                return UserBiz.selectUserAddress();
+            }
+
+            @Override
+            protected void onExecuteSucceeded(List<AddressModel> addressModels) {
+                addrlist = addressModels;
+                if (addrlist == null || addrlist.size() <= 0) {
+                    ((MyApplication) MainActivity.this.getApplication()).locationService.registerListener(locationListner); //注销掉监听
+                } else {
+                    AddressModel model = addrlist.get(0);
+                    String addr = model.getADDRESS_LOCATION();
+                    StringBuilder err = new StringBuilder();
+                    MyLocation loc = AddressModel.parseLocation(err, addr);
+                    if(err.length()>0){
+                        Utils.log(err.toString());
+                        ((MyApplication) MainActivity.this.getApplication()).locationService.registerListener(locationListner); //注销掉监听
+                    }else{
+                        //upd addr
+                        initAddr(loc);
+                        closeLoding();
+                    }
+                }
+            }
+
+            @Override
+            protected void OnExecuteFailed() {
+                closeLoding();
+            }
+        }.execute();
+
+    }
+
 }

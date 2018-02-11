@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/x12">
+
+        <TextView
+            style="@style/font_ww_16_black"
+            android:layout_centerInParent="true"
+            android:text="店铺优惠" />
+
+        <ImageView
+            android:id="@+id/dialog_discount_quxiao"
+            android:layout_width="@dimen/x15"
+            android:layout_height="@dimen/x15"
+            android:layout_alignParentRight="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_chahao" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/x10">
+
+            <CheckBox
+                android:id="@+id/dialog_discount_chk_use_youfeiquan"
+                style="@style/MyCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text=" " />
+
+            <TextView
+                style="@style/font_ww_16_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/dialog_discount_chk_use_youfeiquan"
+                android:layout_alignParentLeft="true"
+                android:text="@string/use_youfeiquan" />
+
+            <TextView
+                android:id="@+id/tv_youfeiquan_show"
+                style="@style/font_ww_18_black"
+                android:layout_alignBaseline="@id/dialog_discount_chk_use_youfeiquan"
+                android:layout_marginRight="@dimen/x7"
+                android:layout_toLeftOf="@id/dialog_discount_chk_use_youfeiquan"
+                android:text="无可用"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/x10">
+
+            <CheckBox
+                android:id="@+id/dialog_discount_chk_use_dianzibi"
+                style="@style/MyCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text=" " />
+
+
+            <TextView
+                style="@style/font_ww_16_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/dialog_discount_chk_use_dianzibi"
+                android:layout_alignParentLeft="true"
+                android:text="@string/use_dianzibi" />
+
+            <TextView
+                android:id="@+id/tv_dianzibi_show"
+                style="@style/font_ww_18_black"
+                android:layout_alignBaseline="@id/dialog_discount_chk_use_dianzibi"
+                android:layout_marginRight="@dimen/x7"
+                android:layout_toLeftOf="@id/dialog_discount_chk_use_dianzibi"
+                android:text="无可用"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/x10">
+
+            <CheckBox
+                android:id="@+id/dialog_discount_chk_use_youhuiquan"
+                style="@style/MyCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text=" " />
+
+
+            <TextView
+                style="@style/font_ww_16_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/dialog_discount_chk_use_youhuiquan"
+                android:layout_alignParentLeft="true"
+                android:text="@string/use_dianzibi" />
+
+            <TextView
+                android:id="@+id/tv_youhuiquan_show"
+                style="@style/font_ww_18_black"
+                android:layout_alignBaseline="@id/dialog_discount_chk_use_youhuiquan"
+                android:layout_marginRight="@dimen/x7"
+                android:layout_toLeftOf="@id/dialog_discount_chk_use_youhuiquan"
+                android:text="无可用"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/dialog_discount_ll_point"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/x5"
+            android:paddingLeft="@dimen/x10"
+            android:paddingRight="@dimen/x10"
+            android:paddingTop="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_16_black"
+                android:text="积分优惠：" />
+
+            <RadioGroup
+                android:id="@+id/dialog_discount_rg_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x10"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/dialog_discount_jifen_rb1"
+                    android:layout_width="@dimen/x64"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/select_btn_order"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:padding="@dimen/x5"
+                    android:text="不用积分"
+                    android:textColor="@color/select_btn_order_text"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/dialog_discount_jifen_rb2"
+                    android:layout_width="@dimen/x64"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:background="@drawable/select_btn_order"
+                    android:button="@drawable/select_btn_order"
+                    android:gravity="center"
+                    android:padding="@dimen/x5"
+                    android:text="100积分"
+                    android:textColor="@color/select_btn_order_text"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/dialog_discount_jifen_rb3"
+                    android:layout_width="@dimen/x64"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:background="@drawable/select_btn_order"
+                    android:button="@drawable/select_btn_order"
+                    android:gravity="center"
+                    android:padding="@dimen/x5"
+                    android:text="200积分"
+                    android:textColor="@color/select_btn_order_text"
+                    android:textSize="14sp" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/x5">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_marginRight="@dimen/x30"
+                android:layout_marginTop="@dimen/x10"
+                android:background="@drawable/pay_choice_text_background"
+                android:gravity="center"
+                android:paddingTop="@dimen/x5"
+                android:text="积分邮费及兑换说明"
+                android:textColor="@color/font_black2"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/dialog_discount_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/background_submit_yuan"
+        android:text="@string/alert_queding"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+</LinearLayout>

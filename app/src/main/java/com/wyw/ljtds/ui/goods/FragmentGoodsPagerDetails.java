@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.model.CommodityDetailsModel;
 import com.wyw.ljtds.model.MedicineDetailsModel;
 import com.wyw.ljtds.ui.base.BaseFragment;
 
@@ -83,7 +84,7 @@ public class FragmentGoodsPagerDetails extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.e(AppConfig.ERR_TAG,"GoodsPagerDetails   onActivityCreated........");
+        Log.e(AppConfig.ERR_TAG, "GoodsPagerDetails   onActivityCreated........");
 
         tabTextList = new ArrayList<>();
         tabTextList.add(tv_goods_detail);
@@ -137,5 +138,11 @@ public class FragmentGoodsPagerDetails extends BaseFragment {
         if (medicineModel == null) return;
         this.fragmentGoodsDetails.bindData2View(medicineModel.getHTML_PATH());
         this.fragmentGoodsParameter.bindData2View(medicineModel);
+    }
+
+    public void bindData2View(CommodityDetailsModel commodityModel) {
+        if (commodityModel == null) return;
+        this.fragmentGoodsDetails.bindData2View(commodityModel.getHtmlPath());
+        this.fragmentGoodsParameter.bindData2View(commodityModel);
     }
 }

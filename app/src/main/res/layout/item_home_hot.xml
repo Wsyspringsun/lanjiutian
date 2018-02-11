@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_width="@dimen/x320"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/x150">
 
         <!--<com.facebook.drawee.view.SimpleDraweeView-->
@@ -22,6 +22,7 @@
             android:id="@+id/sdv_item_head_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="fitXY"
             android:src="@drawable/zhanweitu_lunbo"/>
 
         <RelativeLayout

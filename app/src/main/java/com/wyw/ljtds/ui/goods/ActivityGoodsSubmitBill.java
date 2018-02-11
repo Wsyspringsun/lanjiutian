@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.Business;
+import com.wyw.ljtds.model.OrderGroupDto;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
@@ -76,17 +77,29 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
 //                mIntent.putExtra("fapiao_flg2", "0");
 //                mIntent.putExtra("fapiao_flg4", fapiao4);
 //                mIntent.putExtra("fapiao_flg3", editText.getText().toString().trim());
-
-                orderModel.setINVOICE_TAX(edCompanyId.getText().toString());
-                if (StringUtils.isEmpty(edTitle.getText().toString().trim())) {
-                    ToastUtil.show(this, "请填写发票抬头信息");
-                } else {
-                    orderModel.setINVOICE_TITLE(edTitle.getText().toString().trim());
+                if (rbgFapiao.getCheckedRadioButtonId() == R.id.activity_orderbill_rb_fapiao_no) {
+                    orderModel.setINVOICE_TAX("");
+                    orderModel.setINVOICE_TITLE("");
+                    orderModel.setINVOICE_CONTENT("");
+                    orderModel.setINVOICE_TYPE("");
                     String jsonStr = GsonUtils.Bean2Json(orderModel);
                     mIntent.putExtra(TAG_ORDER, jsonStr);
                     setResult(AppConfig.IntentExtraKey.RESULT_OK, mIntent);
                     finish();
+                } else {
+                    orderModel.setINVOICE_TAX(edCompanyId.getText().toString());
+                    if (StringUtils.isEmpty(edTitle.getText().toString().trim())) {
+                        ToastUtil.show(this, "请填写发票抬头信息");
+                    } else {
+                        orderModel.setINVOICE_TITLE(edTitle.getText().toString().trim());
+                        String jsonStr = GsonUtils.Bean2Json(orderModel);
+                        mIntent.putExtra(TAG_ORDER, jsonStr);
+                        setResult(AppConfig.IntentExtraKey.RESULT_OK, mIntent);
+                        finish();
+                    }
                 }
+
+
                 break;
 
             case R.id.activity_orderbill_rb_fapiao_no:
@@ -220,7 +233,7 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
         }
     }
 
-    public static Intent getIntent(Context context, Business biz) {
+    public static Intent getIntent(Context context, OrderGroupDto biz) {
         Intent it = new Intent(context, ActivityGoodsSubmitBill.class);
         String jsonStr = GsonUtils.Bean2Json(biz);
         it.putExtra(TAG_ORDER, jsonStr);

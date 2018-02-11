@@ -1,28 +1,31 @@
 package com.wyw.ljtds.ui.goods;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
-import android.util.StringBuilderPrinter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.CategoryBiz;
@@ -30,21 +33,22 @@ import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.model.MedicineListModel;
+import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.ui.base.BaseActivity;
-import com.wyw.ljtds.ui.find.FragmentFind;
+import com.wyw.ljtds.ui.category.ActivityScan;
 import com.wyw.ljtds.ui.home.ActivitySearch;
 import com.wyw.ljtds.ui.user.ActivityMessage;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
-import com.wyw.ljtds.widget.DividerGridItemDecoration;
+import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.SpaceItemDecoration;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,11 +57,20 @@ import java.util.List;
 
 @ContentView(R.layout.activity_goods_list)
 public class ActivityMedicineList extends BaseActivity {
+    public static final String ARG_MTD_FIND = "1";
+    public static final String ARG_MTD_GET = "0";
     public static final String TAG_LIST_FROM = "com.wyw.ljtds.ui.goods.ActivityMedicineList.tag_list_from";
+    public static final String TAG_PARAM_CLASSID = "com.wyw.ljtds.ui.goods.ActivityMedicineList.TAG_PARAM_CLASSID";
+    public static final String TAG_PARAM_TYPE = "com.wyw.ljtds.ui.goods.ActivityMedicineList.TAG_PARAM_TYPE";
+    public static final String TAG_PARAM_KEYWORD = "com.wyw.ljtds.ui.goods.ActivityMedicineList.TAG_PARAM_KEYWORD";
     @ViewInject(R.id.recyclerView)
     private RecyclerView recyclerView; //药品列表
     @ViewInject(R.id.back)
     private ImageView back;
+    @ViewInject(R.id.zxing)
+    private LinearLayout zxing;
+    @ViewInject(R.id.ll_message)
+    private LinearLayout llMessage;
     @ViewInject(R.id.edHeader)
     private TextView search;
     @ViewInject(R.id.xiaoxi)
@@ -74,6 +87,9 @@ public class ActivityMedicineList extends BaseActivity {
     private ImageView paixu3_iv;
     @ViewInject(R.id.paixu4_tv)
     private TextView paixu4_tv;
+    @ViewInject(R.id.main_header_location)
+    TextView tvLocation;
+
 
     //无数据时的界面
     private View noData;
@@ -81,26 +97,29 @@ public class ActivityMedicineList extends BaseActivity {
     private List<MedicineListModel> list;
     private MyAdapter adapter;
     private boolean end = false;
-    private String listFrom = "";
+
 
     /*8
     params for load data
      */
+    String lat = "", lng = "";
+    private String mtdtype = "";
     private String keyword = "";//搜索的关键字
     private String classId = "";//分类的typeid
     private String orderby = "";
     private int pageIndex = 1;
     private String topFlg = "";
-    private Object activeList;
 
-    @Event(value = {R.id.back, R.id.edHeader, R.id.xiaoxi, R.id.paixu1, R.id.paixu2, R.id.paixu3, R.id.paixu4})
+    @Event(value = {R.id.back, R.id.zxing, R.id.edHeader, R.id.xiaoxi, R.id.paixu1, R.id.paixu2, R.id.paixu3, R.id.paixu4})
     private void onclick(View view) {
         Intent it;
         switch (view.getId()) {
             case R.id.back:
                 finish();
                 break;
-
+            case R.id.zxing:
+                startActivity(new Intent(this, ActivityScan.class));
+                break;
             case R.id.edHeader:
                 it = new Intent(this, ActivitySearch.class);
                 it.putExtra("from", 0);
@@ -124,7 +143,7 @@ public class ActivityMedicineList extends BaseActivity {
             case R.id.paixu2:
                 reset();
                 paixu2_tv.setTextColor(getResources().getColor(R.color.base_bar));
-                orderby = "SALE_NUM";
+                orderby = "1";
                 sortData();
                 break;
             case R.id.paixu3:
@@ -133,75 +152,73 @@ public class ActivityMedicineList extends BaseActivity {
                     paixu3_tv.setTextColor(getResources().getColor(R.color.base_bar));
                     paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_4));
                     isRise = false;
-                    orderby = "SALEPRICE";
+                    orderby = "2";
                 } else {
                     paixu3_tv.setTextColor(getResources().getColor(R.color.base_bar));
                     paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_5));
                     isRise = true;
-                    orderby = "SALEPRICE desc";
+                    orderby = "3";
                 }
                 sortData();
                 break;
             case R.id.paixu4:
                 reset();
                 paixu4_tv.setTextColor(getResources().getColor(R.color.base_bar));
-                orderby = "EVALUATE_CNT";
+                orderby = "5";
                 sortData();
                 break;
         }
     }
 
     private void sortData() {
-        Log.e(AppConfig.ERR_TAG, "sortData");
-        adapter = new MyAdapter();
-        adapter.setNewData(new ArrayList<MedicineListModel>());
-        adapter.notifyDataSetChanged();
-        recyclerView.setAdapter(adapter);
         pageIndex = 1;
-        loadData();
+        getlist();
     }
 
-    private void loadData() {
-        if (FragmentFind.FIND_MTD_QUICK.equals(listFrom)) {
-            findlist();
-        } else {
-            getlist();
-        }
+    public static Intent getIntent(Context context, String type, String topFlg, String classId, String keyword) {
+        Intent it = new Intent(context, ActivityMedicineList.class);
+        it.putExtra(TAG_PARAM_TYPE, type);
+        it.putExtra(TAG_PARAM_CLASSID, classId);
+        it.putExtra(TAG_PARAM_KEYWORD, keyword);
+        return it;
     }
 
     void initParams() {
-//        this.listFrom = getIntent().getStringExtra(FragmentFind.TAG_FIND_MTD);
-        this.listFrom = getIntent().getStringExtra(TAG_LIST_FROM);
-        Log.e(AppConfig.ERR_TAG, "find data mtd:" + listFrom);
-        if (FragmentFind.FIND_MTD_QUICK.equals(listFrom)) {
-            classId = getIntent().getStringExtra(FragmentFind.TAG_MTD_QUICK_PARAM);
-        } else if (FragmentFind.FIND_MTD_QUICK2.equals(listFrom)) {
-            classId = getIntent().getStringExtra(FragmentFind.TAG_MTD_QUICK_PARAM);
-        } else if (FragmentFind.FIND_MTD_QUICK3.equals(listFrom)) {
-            topFlg = getIntent().getStringExtra(FragmentFind.TAG_MTD_QUICK_PARAM);
-        } else {
-            keyword = getIntent().getStringExtra("search");
-            if (!StringUtils.isEmpty(keyword)) {
-                search.setText(keyword);
-            }
-
-            classId = getIntent().getStringExtra("typeid");
+        Intent it = getIntent();
+        lat = "" + SingleCurrentUser.defaultLat;
+        lng = "" + SingleCurrentUser.defaultLng;
+        if (SingleCurrentUser.location != null) {
+            lat = "" + SingleCurrentUser.location.getLatitude();
+            lng = "" + SingleCurrentUser.location.getLongitude();
         }
-        Log.e(AppConfig.ERR_TAG, "params:[" + classId + "," + keyword + "]");
+        mtdtype = it.getStringExtra(TAG_PARAM_TYPE);
+        classId = it.getStringExtra(TAG_PARAM_CLASSID);
+        keyword = it.getStringExtra(TAG_PARAM_KEYWORD);
+        if (!StringUtils.isEmpty(keyword)) {
+            search.setText(keyword);
+        }
         pageIndex = 1;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final GridLayoutManager glm = new GridLayoutManager(this, 1);
+
+        back.setVisibility(View.VISIBLE);
+        llMessage.setVisibility(View.GONE);
+        zxing.setVisibility(View.GONE);
+
+//        final GridLayoutManager glm = new GridLayoutManager(this, 1);
+        final LinearLayoutManager glm = new LinearLayoutManager(this);
+        setLocation();
         recyclerView.setLayoutManager(glm);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new SpaceItemDecoration(10));
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        recyclerView.addItemDecoration(new SpaceItemDecoration(10));
         recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                Intent it = ActivityMedicinesInfo.getIntent(ActivityMedicineList.this, adapter.getData().get(i).getWAREID());
+                MedicineListModel detail = adapter.getData().get(i);
+                Intent it = ActivityMedicinesInfo.getIntent(ActivityMedicineList.this, detail.getWAREID(), detail.getLOGISTICS_COMPANY_ID());
                 startActivity(it);
             }
         });
@@ -215,40 +232,37 @@ public class ActivityMedicineList extends BaseActivity {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int cnt = adapter.getItemCount();
-                int totalItemCount = glm.getItemCount();
+//                int totalItemCount = glm.getItemCount();
                 int lastVisibleItem = glm.findLastVisibleItemPosition();
                 if (!end && !loading && (lastVisibleItem + 1) >= cnt) {
                     pageIndex = pageIndex + 1;
-                    loadData();
+                    getlist();
                 }
             }
         });
         adapter = new MyAdapter();
-        recyclerView.setAdapter(adapter);
-
         noData = getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
-
-        initParams();
-        loadData();
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有
-//        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动
-
-//        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-//            @Override
-//            public void onLoadMoreRequested() {
-//                getlist(classId, true, false, orderby, keyword);
-//            }
-//        });
+        adapter.setEmptyView(noData);
+        recyclerView.setAdapter(adapter);
 
     }
 
-    BizDataAsyncTask<List<MedicineListModel>> getListTask;
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        initParams();
+        getlist();
+    }
 
     private void getlist() {
-        getListTask = new BizDataAsyncTask<List<MedicineListModel>>() {
+        setLoding(this, false);
+        new BizDataAsyncTask<List<MedicineListModel>>(this) {
             @Override
             protected List<MedicineListModel> doExecute() throws ZYException, BizFailure {
-                return CategoryBiz.getMedicineList(topFlg, classId, orderby, keyword, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "");
+//                String lat = "" + SingleCurrentUser.defaultLat, lng = "" + SingleCurrentUser.defaultLng;
+                Utils.log("getMedicineList:" + mtdtype + "-" + topFlg + "-" + classId + "-" + orderby + "-" + keyword + "-" + pageIndex + "" + "-" + AppConfig.DEFAULT_PAGE_COUNT + "" + "-" + lat + "-" + lng);
+                return CategoryBiz.getMedicineList(mtdtype, topFlg, classId, orderby, keyword, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "", lat, lng);
             }
 
             @Override
@@ -257,14 +271,10 @@ public class ActivityMedicineList extends BaseActivity {
                 closeLoding();
                 if (medicineListModel == null || medicineListModel.size() <= 0) {
                     end = true;
-                    adapter.setEmptyView(noData);
                 }
 
                 list = medicineListModel;
-                Log.e(AppConfig.ERR_TAG, "before load adapter:" + adapter.getItemCount());
-                adapter.addData(list);
-                adapter.notifyDataSetChanged();
-                Log.e(AppConfig.ERR_TAG, "load adapter:" + adapter.getItemCount());
+                bindData2View();
             }
 
             @Override
@@ -272,18 +282,27 @@ public class ActivityMedicineList extends BaseActivity {
                 closeLoding();
                 adapter.setEmptyView(noData);
             }
-        };
-        setLoding(this, false);
-        getListTask.execute();
+        }.execute();
+    }
+
+    private void bindData2View() {
+        if (pageIndex == 1) {
+            adapter.setNewData(list);
+        } else {
+            adapter.addData(list);
+        }
+        adapter.notifyDataSetChanged();
     }
 
 
     private void findlist() {
-        BizDataAsyncTask<List<MedicineListModel>> findListTask = new BizDataAsyncTask<List<MedicineListModel>>() {
+        setLoding(this, false);
+        new BizDataAsyncTask<List<MedicineListModel>>() {
             @Override
             protected List<MedicineListModel> doExecute() throws ZYException, BizFailure {
                 Log.e(AppConfig.ERR_TAG, classId + "/" + orderby + pageIndex);
-                return CategoryBiz.findMedicineList(classId, orderby, pageIndex + "", "" + AppConfig.DEFAULT_PAGE_COUNT);
+//                return CategoryBiz.findMedicineList(classId, orderby, pageIndex + "", "" + AppConfig.DEFAULT_PAGE_COUNT);
+                return GsonUtils.Json2ArrayList("[ { \"WAREID\": \"005968\", \"WARENAME\": \"Y螺旋藻片（百合康）\", \"WARETYPE\": \"031001\", \"PRESCRIPTION_FLG\": \"3\", \"WARESPEC\": \"250mg*2000片\", \"WAREUNIT\": \"瓶\", \"PROD_ADD\": \"                                                            \", \"PRODUCER\": \"荣成百合生物技术有限公司\", \"SALEPRICE\": 318, \"MEMPRICE\": 0, \"PARITYWARE\": \",\", \"CLICK_NUM\": 630, \"SALE_NUM\": 0, \"VALID_FLG\": \"1\", \"UPD_DATE\": 1508801493000, \"PROMPRICE\": 74.4, \"MEMPROMPRICE\": 318, \"BEGINTIME\": 1505404800000, \"ENDTIME\": 1505491199000, \"TOP_FLG\": \"0\", \"COMMODITY_SORT\": 0, \"PROFIT_MARGIN\": 0.77, \"RECOMMEND_SORT\": 0, \"ADMIN_USER_NAME\": \"邱守哲\", \"SUMQTY\": 1, \"OID_GROUP_ID\": \"sxljt\", \"GROUP_NAME\": \"山西蓝九天药业连锁有限公司\", \"LOGISTICS_COMPANY\": \"沁水中村店\", \"LOGISTICS_COMPANY_ID\": \"021\", \"ORG_PRINCIPAL\": \"姚书庭\", \"ORG_MOBILE\": \"15713563517\", \"AREA\": \"6\", \"LNG\": 111.998017, \"LAT\": 35.570456, \"BUSAVLID_FLG\": \"0\", \"DEL_FLG\": \"0\", \"DISTANCE\": 11993438, \"DISTANCE_TEXT\": \"106.3公里\", \"DURATION_TEXT\": \"1444分钟\", \"QISONG\": \"￥58起送\", \"BAOYOU\": \"￥108包邮\", \"POSTAGE\": \"配送费￥0\" } ]", MedicineListModel.class);
             }
 
             @Override
@@ -304,9 +323,7 @@ public class ActivityMedicineList extends BaseActivity {
                 adapter.setEmptyView(noData);
                 closeLoding();
             }
-        };
-        setLoding(this, false);
-        findListTask.execute();
+        }.execute();
     }
 
     private View getFooterView() {
@@ -325,18 +342,36 @@ public class ActivityMedicineList extends BaseActivity {
         @Override
         protected void convert(BaseViewHolder baseViewHolder, MedicineListModel medicineListModel) {
             String wareName = StringUtils.deletaFirst(medicineListModel.getWARENAME()),
-                    brand = "白云山",
-                    detailFlg = "[买而送一]",
-                    size = "10g ^ 29里\n\n",
-                    postage = "问仓冻结点 配送费4元\n\n",
-                    price = "￥" + medicineListModel.getSALEPRICE();
-            StringBuilder sb = new StringBuilder(detailFlg).append(brand).append(wareName).append(size).append(postage).append(price);
-            int priceStart = sb.length() - price.length();
-            SpannableString sbs = new SpannableString(sb.toString());
-            sbs.setSpan(new ForegroundColorSpan(Color.RED), 0, detailFlg.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    brand = medicineListModel.getCOMMODITY_BRAND(),
+                    detailFlg = StringUtils.isEmpty(medicineListModel.getCOMMODITY_PARAMETER()) ? "" : "[" + medicineListModel.getCOMMODITY_PARAMETER() + "]",
+                    size = medicineListModel.getWARESPEC(),
+                    shopname = medicineListModel.getLOGISTICS_COMPANY(),
+                    distanceText = medicineListModel.getDISTANCE_TEXT() + "|",
+                    durationText = medicineListModel.getDURATION_TEXT() + "   ",
+                    qisong = "￥" + medicineListModel.getQISONG() + "配送|",
+                    baoyou = "￥" + medicineListModel.getBAOYOU() + "包邮",
+                    postage = "   配送费￥" + medicineListModel.getPOSTAGE() + "\n",
+                    price = "￥" + medicineListModel.getSALEPRICE() + "\n";
 
-            sbs.setSpan(new AbsoluteSizeSpan(50), priceStart, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            sbs.setSpan(new ForegroundColorSpan(Color.RED), priceStart, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            StringBuilder sbName = new StringBuilder().append(detailFlg).append(brand + " ").append(wareName).append(size);
+            baseViewHolder.setText(R.id.item_goods_omecol_goods_name, sbName);
+
+            StringBuilder sb = new StringBuilder()
+                    .append(price).append(shopname).append(postage)
+                    .append(distanceText)
+                    .append(durationText)
+                    .append(qisong).append(baoyou);
+            int priceStart = sb.indexOf(price);
+            int priceEnd = priceStart + price.length();
+            int shopnameStart = sb.indexOf(shopname), shopnameEnd = shopnameStart + shopname.length();
+
+            SpannableString sbs = new SpannableString(sb.toString());
+//            sbs.setSpan(new ForegroundColorSpan(Color.RED), 0, detailFlg.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sbs.setSpan(new RelativeSizeSpan(1.2f), priceStart, priceEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sbs.setSpan(new RelativeSizeSpan(0.9f), shopnameEnd, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sbs.setSpan(new ForegroundColorSpan(Color.RED), priceStart, priceEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sbs.setSpan(new ForegroundColorSpan(ActivityCompat.getColor(ActivityMedicineList.this, R.color.font_1)), shopnameStart, shopnameEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             baseViewHolder.setText(R.id.item_goods_omecol_goods_info, sbs);
 //                    .setText(R.id.money, medicineListModel.getSALEPRICE());
 
@@ -344,6 +379,15 @@ public class ActivityMedicineList extends BaseActivity {
             if (!StringUtils.isEmpty(medicineListModel.getIMG_PATH())) {
                 Picasso.with(ActivityMedicineList.this).load(Uri.parse(medicineListModel.getIMG_PATH())).into(goodsImg);
             }
+            TextView goodsBizStat = baseViewHolder.getView(R.id.item_goods_omecol_goods_bizstat);
+            if ("0".equals(medicineListModel.getBUSAVLID_FLG())) {
+                goodsBizStat.setText(getString(R.string.biz_stat_on));
+                goodsBizStat.setVisibility(View.GONE);
+            } else if ("1".equals(medicineListModel.getBUSAVLID_FLG())) {
+                goodsBizStat.setText(getString(R.string.biz_stat_off));
+                goodsBizStat.setVisibility(View.VISIBLE);
+            }
+
 
         }
     }
@@ -359,4 +403,9 @@ public class ActivityMedicineList extends BaseActivity {
 //        isRise = true;
     }
 
+    private void setLocation() {
+        if (SingleCurrentUser.location != null) {
+            tvLocation.setText(SingleCurrentUser.location.getAddrStr());
+        }
+    }
 }

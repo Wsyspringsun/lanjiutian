@@ -63,7 +63,7 @@ public class QrCodeFragment extends BaseFragment {
                 txtName.setText(user.getUSER_NAME());
             }
             if (!StringUtils.isEmpty(user.getUSER_ICON_FILE_ID())) {
-                Picasso.with(getActivity()).load(Uri.parse(AppConfig.IMAGE_PATH + user.getUSER_ICON_FILE_ID())).into(imgPhoto);
+                Picasso.with(getActivity()).load(Uri.parse(AppConfig.IMAGE_PATH_LJT + user.getUSER_ICON_FILE_ID())).into(imgPhoto);
             }
             String id = user.getOID_USER_ID();
             Bitmap bitmap = Utils.getQRCodeBitmap(getActivity(), id);

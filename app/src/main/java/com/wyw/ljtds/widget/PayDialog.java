@@ -63,6 +63,7 @@ public class PayDialog {
         LinearLayout select1 = (LinearLayout) viewSelOnlinePayMtd.findViewById(R.id.select1);
         LinearLayout select2 = (LinearLayout) viewSelOnlinePayMtd.findViewById(R.id.select2);
         LinearLayout select3 = (LinearLayout) viewSelOnlinePayMtd.findViewById(R.id.select3);
+        LinearLayout select4 = (LinearLayout) viewSelOnlinePayMtd.findViewById(R.id.dialog_pay_select_wechat);
         //账户余额 支付
         final CheckBox checkBox1 = (CheckBox) viewSelOnlinePayMtd.findViewById(R.id.check1);
         chkList.put(OrderTrade.PAYMTD_ACCOUNT, checkBox1);
@@ -72,6 +73,9 @@ public class PayDialog {
         //银联 支付
         final CheckBox checkBox3 = (CheckBox) viewSelOnlinePayMtd.findViewById(R.id.check3);
         chkList.put(OrderTrade.PAYMTD_UNION, checkBox3);
+        //微信 支付
+        final CheckBox checkBox4 = (CheckBox) viewSelOnlinePayMtd.findViewById(R.id.dialog_pay_chk_wechat);
+        chkList.put(OrderTrade.PAYMTD_WECHAT, checkBox4);
 
         resetChk();
 
@@ -108,6 +112,14 @@ public class PayDialog {
             @Override
             public void onClick(View view) {
                 orderTrade.setPaymentMethod(OrderTrade.PAYMTD_UNION);
+                resetChk();
+            }
+        });
+
+        select4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                orderTrade.setPaymentMethod(OrderTrade.PAYMTD_WECHAT);
                 resetChk();
             }
         });

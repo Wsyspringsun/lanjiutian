@@ -14,7 +14,7 @@ import java.util.Map;
  * Created by Administrator on 2017/4/5 0005.
  */
 
-public class Business extends BaseModel {
+public class Business extends OrderGroupDto {
     public static Map<String, String> mapFapiaoCatText = new HashMap<>();
 
     static {
@@ -24,7 +24,7 @@ public class Business extends BaseModel {
         mapFapiaoCatText.put("3", "药品");
         mapFapiaoCatText.put("4", "耗材");
     }
-
+/*
     //配送方式  0送货上门  1门店自取
     private String DISTRIBUTION_MODE;
     //店铺价格小计
@@ -172,5 +172,5 @@ public class Business extends BaseModel {
 
     public void setINVOICE_TAX(String INVOICE_TAX) {
         this.INVOICE_TAX = INVOICE_TAX;
-    }
+    }*/
 }

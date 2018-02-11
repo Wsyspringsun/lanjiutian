@@ -8,33 +8,71 @@ import java.io.File;
  * Created by Administrator on 2016-10-05.
  */
 public class AppConfig {
-
+    public static final float MAP_ZOOM = 18.0f;//地图 缩放比例尺
     public static final String ERR_TAG = "err";
     public static final String ERR_EXCEPTION = "www.ljt.com.exeption";
     public static final String GROUP_LJT = "sxljt";
-    public static final int RESPONSE_OK = 1;
+    public static final String GROUP_LIFE = "ljtlife";
+    //客服
+    public static String CHAT_XN_LJT_TITLE = "蓝九天药师";// 客服组默认名称
+    public static String CHAT_XN_LJT_SETTINGID2 = "lj_1000_1495596285901";
+    public static final String ADDRESS_LOCATION_SEP = "\\|";
     public static final String LJG_TEL = "0356-5681888";
     public static final int DEFAULT_INDEX_FRAGMENT = 2;
     public static final String WEIXIN_APP_ID = "wxc245fe43d076d9d3";//微信appid
-    public static final String WEB_APP_URL = "http://www.lanjiutian.com/mobile";
-    public static final long OUT_TIME = 12000;
+    public static final int OUT_TIME = 22000;
+    public static final int TAG_TRACE = 1;
     //是否测试环境
-    public static boolean debug = true;
-    //    public static boolean test = true;
-    public static boolean test = false; // http://192.168.2.102:8080
-    //http://124.164.246.214:8011
-    public static final String WS_DOMAIN = test ? "http://192.168.2.110:8080" : "http://www.lanjiutian.com";
-    public static final String VIRTUAL_PATH = debug ? "/e-commerce_platform_WebService" : "/WebService";
-    public static String WS_BASE_URL = test ? WS_DOMAIN + VIRTUAL_PATH + "/services/" : "http://www.lanjiutian.com/WebService/services/";
-    public static final String WS_BASE_HTML_URL = test ? WS_DOMAIN + VIRTUAL_PATH + "/html/" : "http://www.lanjiutian.com/WebService/html/";
-    public static final String WS_BASE_JSP_URL = test ? WS_DOMAIN + VIRTUAL_PATH + "/jsp/" : "http://www.lanjiutian.com/WebService/jsp/";
+    private static int TAG_DOMAIN = 2 ;
+    public static String WEB_APP_URL = "";
+    public static String WEB_DOMAIN = "";
+    public static String WS_BASE_URL = "";
+
+
+    public static String WS_BASE_HTML_URL = "";
+    public static String WS_BASE_JSP_URL = "";
+    public static String APP_UPDATE_URL = "";
+    //    public static String IMAGE_PATH = WEB_DOMAIN + "/upload/images";
+    public static String IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";
+    public static int MAx_UPLOAD_IMG_CNT = 5;
+
+    static {
+        switch (TAG_DOMAIN) {
+            case 1:
+                WEB_DOMAIN = "http://192.168.2.102:8080";
+                WS_BASE_URL = WEB_DOMAIN + "/e-commerce_platform_WebService" + "/services/";
+                WS_BASE_HTML_URL = WEB_DOMAIN + "/e-commerce_platform_WebService" + "/html/";
+                WS_BASE_JSP_URL = WEB_DOMAIN + "/e-commerce_platform_WebService" + "/jsp/";
+                APP_UPDATE_URL = WEB_DOMAIN + "/e-commerce_platform_WebService/version.json";
+                WEB_APP_URL = "http://cs.lanjiutian.com/mobile";
+//                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/ecommerce/images";
+                break;
+            case 2:
+                WEB_APP_URL = "http://cs.lanjiutian.com/mobile";
+                WEB_DOMAIN = "http://cs.lanjiutian.com";
+                WS_BASE_URL = WEB_DOMAIN + "/WebService" + "/services/";
+                WS_BASE_HTML_URL = WEB_DOMAIN + "/WebService" + "/html/";
+                WS_BASE_JSP_URL = WEB_DOMAIN + "/WebService" + "/jsp/";
+                APP_UPDATE_URL = WEB_DOMAIN + "/WebService/version.json";
+                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/upload/images";
+//                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/ecommerce/images";
+                break;
+            case 3:
+                WEB_APP_URL = "http://www.lanjiutian.com/mobile";
+                WEB_DOMAIN = "http://app.lanjiutian.com";
+                WS_BASE_URL = WEB_DOMAIN + "/WebService" + "/services/";
+                WS_BASE_HTML_URL = WEB_DOMAIN + "/WebService" + "/html/";
+                WS_BASE_JSP_URL = WEB_DOMAIN + "/WebService" + "/jsp/";
+//                IMAGE_PATH_LJT = "http://www.lanjiutian.com/ecommerce/images";
+                break;
+        }
+    }
+
+    boolean debug = false;
     public static String BLANK_URL = AppConfig.WS_BASE_HTML_URL + "blank.html";
-    public static final String IMAGE_PATH = test ? WS_DOMAIN + "/upload/images" : "http://www.lanjiutian.com/upload/images";
-    public static final String IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";
     // 命名空间
     public static final String WS_NAME_SPACE = "http://impl.service.ds.ljt.com";
     //APP更新路径
-    public static final String APP_UPDATE_URL = test ? WS_DOMAIN + "/e-commerce_platform_WebService/version.json" : "http://www.lanjiutian.com/WebService/version.json";
 
     public static class AppAction {
         /**
@@ -67,8 +105,8 @@ public class AppConfig {
     /**
      * 选中哪个主菜单
      */
-    public static int currSel = 2;
-    public static final int DEFAULT_CURRSEL = 2;
+    public static int currSel = AppConfig.DEFAULT_INDEX_FRAGMENT;
+    public static final int DEFAULT_CURRSEL = 1;
 
 
     /**
@@ -114,7 +152,6 @@ public class AppConfig {
         public static final String ORDER_INDEX = "order_index";
         public static final String ADDRESS_FROM = "adress_from";//判断从哪里进入的省市列表
         public static final String MEDICINE_INFO_FROM = "medicine_info_from";//进入商品详情页时的key  生活馆 医药馆
-        public static final String MEDICINE_INFO_ID = "medicine_info_id";//进入商品详情页时的id   生活馆 医药馆
         public static final String LOGIN_FROM_MAIN = "login_from_main";//从mainactivity登陆
         public static final int RESULT_OK = 0356;//activityforresult  成功code
         public static final int RESULT_FAILURE = 2;//activityforresult  失败code

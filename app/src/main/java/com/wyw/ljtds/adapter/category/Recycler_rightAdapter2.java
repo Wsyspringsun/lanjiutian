@@ -19,8 +19,6 @@ import java.util.List;
  * 邮箱：gcpzdl@mail.com
  * 说明：
  */
-
-
 public class Recycler_rightAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     List<MedicineTypeSecondModel> mChildrenBeanXes;
@@ -42,6 +40,7 @@ public class Recycler_rightAdapter2 extends RecyclerView.Adapter<RecyclerView.Vi
         MyViewHolder myViewHolder = (MyViewHolder) holder;
         myViewHolder.mTextView.setText( mChildrenBeanXes.get( position ).getCLASSNAME() );
 
+        //third level category
         GridAdapter2 gridAdapter = new GridAdapter2( mContext, mChildrenBeanXes.get( position ).getCHILDREN() );
         myViewHolder.mGridview.setAdapter( gridAdapter );
 

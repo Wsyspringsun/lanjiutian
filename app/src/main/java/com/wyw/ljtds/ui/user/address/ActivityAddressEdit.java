@@ -78,9 +78,7 @@ public class ActivityAddressEdit extends BaseActivity {
                 break;
 
             case R.id.select_shengshi:
-//                it = new Intent(this, ActivityProvince.class);
-//                it.putExtra("address_id", address_id);
-                it = ActivityArea.getIntent(this, null);
+                it = AddressMapActivity.getIntent(this);
                 startActivityForResult(it, REQUEST_PROVICE);
                 break;
 
@@ -144,7 +142,7 @@ public class ActivityAddressEdit extends BaseActivity {
     private void bindData() {
         name.setText(addrModel.getCONSIGNEE_NAME());
         phone.setText(addrModel.getCONSIGNEE_MOBILE());
-        shengshi.setText(addrModel.getPROVINCE() + "" + addrModel.getCITY() + addrModel.getCOUNTY());
+        shengshi.setText(addrModel.getLOCATION());
         xiangxi.setText(addrModel.getCONSIGNEE_ADDRESS());
     }
 
@@ -231,29 +229,19 @@ public class ActivityAddressEdit extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_OK) return;
         if (REQUEST_PROVICE == requestCode) {
-            String jsonSeledArea = data.getStringExtra(ActivityArea.TAG_SELECTED_AREA);
-            AreaModel contryModel = AreaModel.fromJson(jsonSeledArea);
-//            Bundle bundle = data.getBundleExtra(ActivityCity.TAG_SHENGSHI);
-            addrModel.setCONSIGNEE_COUNTY("" + contryModel.getID());
-            addrModel.setCOUNTY(contryModel.getNAME());
+            String addr = data.getStringExtra(AddressMapActivity.TAG_ADDRESS_POI_ADDRESS);
+            String lat = data.getStringExtra(AddressMapActivity.TAG_ADDRESS_POI_LAT);
+            shengshi.setText(addr);
 
-            AreaModel cityModel = contryModel.getParentModel();
-            addrModel.setCONSIGNEE_CITY("" + cityModel.getID());
-            addrModel.setCITY(cityModel.getNAME());
-
-
-            AreaModel provinceModel = cityModel.getParentModel();
-            addrModel.setCONSIGNEE_PROVINCE("" + provinceModel.getID());
-            addrModel.setPROVINCE(provinceModel.getNAME());
-
-            shengshi.setText(addrModel.getPROVINCE() + "" + addrModel.getCITY() + addrModel.getCOUNTY());
+            addrModel.setLOCATION(addr);
+            addrModel.setADDRESS_LOCATION(addr + lat);
         }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == event.KEYCODE_BACK) {
-           finish();
+            finish();
         }
         return super.onKeyDown(keyCode, event);
     }

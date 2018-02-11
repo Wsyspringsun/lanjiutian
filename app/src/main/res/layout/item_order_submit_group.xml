@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@color/white"
-              android:orientation="vertical">
-
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/vertical_margin"
+    android:layout_marginTop="@dimen/vertical_margin"
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,194 +14,200 @@
         android:paddingTop="@dimen/x5">
 
         <ImageView
-            android:layout_centerVertical="true"
             android:id="@+id/jiantou"
             android:layout_width="@dimen/x16"
             android:layout_height="@dimen/x16"
-            android:layout_marginLeft="@dimen/x10"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/vertical_margin_lg"
             android:scaleType="fitCenter"
-            android:src="@mipmap/icon_dianpu"/>
+            android:src="@drawable/ic_biaozhi" />
 
         <TextView
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/jiantou"
-            android:id="@+id/textView3"
+            android:id="@+id/item_order_submit_group_groupname"
             style="@style/font_ww_14"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x5"
-            android:text="兰花超市"
-            android:textColor="@color/font_black2"/>
-
-        <ImageView
-            android:layout_marginLeft="@dimen/x3"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/textView3"
-            android:layout_width="@dimen/x10"
-            android:layout_height="@dimen/x12"
-            android:scaleType="fitXY"
-            android:src="@mipmap/jiantou_you_hei"/>
-
-        <TextView
-            android:visibility="invisible"
-            android:layout_marginRight="@dimen/x10"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            style="@style/font_ww_14"
-            android:textColor="@color/base_bar"
-            android:id="@+id/style_order"/>
+            android:layout_toRightOf="@+id/jiantou"
+            android:text="蓝九天"
+            android:textColor="@color/font_black2" />
 
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/goods"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/goods">
-
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
     <RelativeLayout
-        android:id="@+id/select"
+        android:id="@+id/item_order_submit_group_discount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/x10">
+        android:layout_marginTop="@dimen/vertical_margin_lg"
+        android:layout_marginBottom="@dimen/vertical_margin_lg"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/padding2"
+        android:paddingRight="@dimen/padding2">
 
         <TextView
-            android:id="@+id/peisong"
-            style="@style/font_ww_14"
-            android:text="@string/peisong"
-            android:textColor="@color/font_black2"/>
-
-
-        <TextView
-            android:id="@+id/peisong_xuanze"
-            style="@style/font_ww_14"
-            android:layout_alignBottom="@+id/peisong"
-            android:layout_marginRight="@dimen/x7"
-            android:layout_toLeftOf="@+id/peisong_jt"
-            android:textColor="@color/gray"/>
-
+            android:id="@+id/textview_title"
+            style="@style/textview_title"
+            android:layout_alignParentLeft="true"
+            android:text="@string/app_name"
+            android:textColor="@color/font_1"
+            android:textSize="@dimen/font_5" />
 
         <TextView
-            android:id="@+id/fapiao"
-            style="@style/font_ww_14"
-            android:layout_below="@+id/peisong"
-            android:layout_marginTop="@dimen/x7"
-            android:text="@string/fapiao"
-            android:textColor="@color/font_black2"/>
-
-        <TextView
-            android:id="@+id/fapiao_xuanze"
-            style="@style/font_ww_14"
-            android:layout_alignBottom="@+id/fapiao"
-            android:layout_marginRight="@dimen/x7"
-            android:layout_toLeftOf="@+id/peisong_jt"
-            android:textColor="@color/gray"/>
-
-        <ImageView
-            android:id="@+id/peisong_jt"
-            android:layout_width="@dimen/x12"
-            android:layout_height="@dimen/x12"
+            android:id="@+id/textview_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/jiantou_you_hei"/>
+            android:text=">"
+            android:textAlignment="viewEnd"
+            android:textSize="@dimen/font_5" />
+
+        <TextView
+            android:id="@+id/textview_content"
+            style="@style/textview_title"
+            android:layout_toStartOf="@+id/textview_more"
+            android:text="@string/app_name"
+            android:textAlignment="viewEnd"
+            android:textSize="@dimen/font_5" />
+
 
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x1"
-        android:background="@color/basebackground"/>
-
+        android:layout_height="1dp"
+        android:background="@color/gray1" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/x10">
+        android:layout_marginBottom="@dimen/vertical_margin_lg"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/padding2"
+        android:paddingRight="@dimen/padding2">
 
         <TextView
-            android:id="@+id/xiaoji_money"
-            style="@style/font_ww_16"
+            style="@style/textview_title"
+            android:layout_alignParentLeft="true"
+            android:text="预计送达时间"
+            android:textColor="@color/font_1"
+            android:textSize="@dimen/font_5" />
+
+        <TextView
+            android:id="@+id/item_order_submit_group_arrivedate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:textColor="@color/base_bar"/>
-
-        <TextView
-            android:id="@+id/xiaoji"
-            style="@style/font_ww_14"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/xiaoji_money"
-            android:text="@string/xiaoji"
-            android:textColor="@color/font_black2"/>
-
-        <TextView
-            android:id="@+id/shuliang"
-            style="@style/font_ww_14"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x11"
-            android:layout_toLeftOf="@+id/xiaoji"
-            android:textColor="@color/font_black2"/>
+            android:text="XX-XX"
+            android:textAlignment="viewEnd"
+            android:textSize="@dimen/font_5" />
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/anniu"
-        android:layout_marginTop="@dimen/x6"
-        android:layout_marginRight="@dimen/x10"
-        android:layout_marginBottom="@dimen/x10"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="1dp"
+        android:background="@color/gray1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/vertical_margin_lg"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/padding2"
+        android:paddingRight="@dimen/padding2">
 
         <TextView
-            android:visibility="gone"
+            style="@style/textview_title"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="@dimen/vertical_margin"
+            android:text="买家留言"
+            android:textColor="@color/font_1"
+            android:textSize="@dimen/font_5" />
+
+        <EditText
+            android:id="@+id/item_order_submit_group_edremark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint=" (选填)对本次交易的说明"
+            android:textColor="@color/white"
+            android:textColorHint="@color/font_2"
+            android:textColorLink="@color/white"
+            android:textSize="@dimen/font_5" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray1" />
+
+    <TextView
+        android:id="@+id/item_order_submit_group_tv_cost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginRight="@dimen/vertical_margin_lg"
+        android:text="共0件商品   小计:￥0" />
+
+
+    <RelativeLayout
+        android:id="@+id/anniu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/x10"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_marginTop="@dimen/x6"
+        android:visibility="gone">
+
+        <TextView
             android:id="@+id/button1"
-            android:textSize="14sp"
-            android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/background_submit_yuan"
+            android:paddingBottom="@dimen/x4"
             android:paddingLeft="@dimen/x10"
             android:paddingRight="@dimen/x10"
-            android:paddingBottom="@dimen/x4"
             android:paddingTop="@dimen/x4"
-            android:background="@drawable/background_submit_yuan"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:visibility="gone" />
 
         <TextView
-            android:visibility="gone"
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/x6"
             android:layout_toLeftOf="@+id/button1"
-            android:id="@+id/button2"
-            android:textSize="14sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:background="@drawable/background_text_gray"
+            android:paddingBottom="@dimen/x4"
             android:paddingLeft="@dimen/x10"
             android:paddingRight="@dimen/x10"
-            android:paddingBottom="@dimen/x4"
             android:paddingTop="@dimen/x4"
-            android:background="@drawable/background_text_gray"
-            android:textColor="@color/font_black2"/>
+            android:textColor="@color/font_black2"
+            android:textSize="14sp"
+            android:visibility="gone" />
 
         <TextView
-            android:visibility="gone"
-            android:layout_marginRight="@dimen/x6"
-            android:layout_toLeftOf="@+id/button2"
             android:id="@+id/button3"
-            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/x6"
+            android:layout_toLeftOf="@+id/button2"
+            android:background="@drawable/background_text_gray"
+            android:paddingBottom="@dimen/x4"
             android:paddingLeft="@dimen/x10"
             android:paddingRight="@dimen/x10"
-            android:paddingBottom="@dimen/x4"
             android:paddingTop="@dimen/x4"
-            android:background="@drawable/background_text_gray"
-            android:textColor="@color/font_black2"/>
+            android:textColor="@color/font_black2"
+            android:textSize="14sp"
+            android:visibility="gone" />
 
     </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x10"
-        android:background="@color/basebackground"/>
-
 
 </LinearLayout>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/activity_shopinfo_nsv_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/activity_shopinfo_img_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x135"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/shop_beijing" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="@dimen/vertical_margin_lg"
+                    android:layout_marginLeft="@dimen/vertical_margin">
+
+                    <ImageView
+                        android:id="@+id/activity_shopinfo_logo"
+                        android:layout_width="@dimen/x45"
+                        android:layout_height="@dimen/x45"
+                        android:layout_alignParentLeft="true"
+                        android:src="@drawable/ic_dianputubiao" />
+
+                    <TextView
+                        android:id="@+id/activity_goods_info_tv_shopname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/vertical_margin_lg"
+                        android:layout_marginRight="@dimen/vertical_margin"
+                        android:layout_marginTop="@dimen/vertical_margin_lg"
+                        android:layout_toRightOf="@id/activity_shopinfo_logo"
+                        android:text="蓝九天大药房"
+                        android:textSize="@dimen/font_3"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/activity_goods_info_tv_shopinfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/activity_goods_info_tv_shopname"
+                        android:layout_marginRight="@dimen/vertical_margin_slg"
+                        android:layout_marginTop="@dimen/vertical_margin_mid"
+                        android:layout_toRightOf="@id/activity_shopinfo_logo"
+                        android:text="蓝九天大药房"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/font_1"
+                        android:textSize="@dimen/font_6" />
+
+                </RelativeLayout>
+
+            </FrameLayout>
+
+
+            <com.gxz.PagerSlidingTabStrip
+                android:id="@+id/fragment_shopimg_tab_main"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x35"
+                android:layout_marginTop="-5dp"
+                android:textColor="@color/font_black2"
+                android:textSize="@dimen/font_6"
+                app:pstsDividerColor="@color/gray1"
+                app:pstsIndicatorColor="@color/base_bar"
+                app:pstsIndicatorHeight="@dimen/x2"
+                app:pstsScaleZoomMax="0.2"
+                app:pstsShouldExpand="true"
+                app:pstsTextSelectedColor="@color/base_bar"
+                app:pstsUnderlineColor="@color/whitesmoke" />
+
+            <com.wyw.ljtds.widget.goodsinfo.NoScrollViewPager
+                android:id="@+id/fragment_shopimg_vp_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></com.wyw.ljtds.widget.goodsinfo.NoScrollViewPager>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+    <!--fragment_shopping_head-->
+
+    <!--fragment_shopping_head white background-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:elevation="@dimen/x3"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/fragment_shopimg_ll_header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x45"
+            android:layout_marginRight="@dimen/vertical_margin_lg"
+            android:elevation="@dimen/x3"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/padding3">
+
+            <ImageView
+                android:id="@+id/fragment_shopimg_img_previous"
+                android:layout_width="@dimen/x20"
+                android:layout_height="@dimen/x20"
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_houtui_bai" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/vertical_margin"
+                android:layout_marginRight="@dimen/vertical_margin"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+
+                <!--编辑区-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/vertical_margin_lg"
+                    android:layout_marginRight="@dimen/vertical_margin_lg"
+                    android:background="@drawable/bg_edittext_bottom_white_line"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/fragment_shopimg_img_sou"
+                        android:layout_width="@dimen/x21"
+                        android:layout_height="@dimen/x21"
+                        android:src="@drawable/ic_sousuo_white" />
+
+                    <com.wyw.ljtds.widget.ClearEditText
+                        android:id="@+id/fragment_shopimg_search"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="@string/sousuo"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="@dimen/font_5" />
+
+                </LinearLayout>
+
+                <!--
+                                <View
+                                    android:id="@+id/fragment_shop_bottomline"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_gravity="bottom"
+                                    android:background="@color/white" />
+                -->
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/fragment_shopimg_catlist"
+                android:layout_width="@dimen/x20"
+                android:layout_height="@dimen/x20"
+                android:src="@drawable/ic_fenlei_bai" />
+
+        </LinearLayout>
+
+        <com.gxz.PagerSlidingTabStrip
+            android:id="@+id/fragment_shopimg_tab_main_top"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x35"
+            android:background="@color/white"
+            android:textColor="@color/font_black2"
+            android:textSize="@dimen/font_6"
+            app:pstsDividerColor="@color/gray1"
+            app:pstsIndicatorColor="@color/base_bar"
+            app:pstsIndicatorHeight="@dimen/x2"
+            app:pstsShouldExpand="true"
+            app:pstsTextSelectedColor="@color/base_bar"
+            app:pstsUnderlineColor="@color/whitesmoke" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

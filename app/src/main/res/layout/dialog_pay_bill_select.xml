@@ -23,7 +23,7 @@
             android:layout_height="@dimen/x15"
             android:layout_alignParentRight="true"
             android:scaleType="fitCenter"
-            android:src="@mipmap/icon_chahao" />
+            android:src="@drawable/icon_chahao" />
 
 
     </RelativeLayout>

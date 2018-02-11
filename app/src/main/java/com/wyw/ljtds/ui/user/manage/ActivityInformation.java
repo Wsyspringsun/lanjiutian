@@ -162,7 +162,7 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
 
         user = getIntent().getParcelableExtra(ActivityManage.TAG_USER);
         name.setText(user.getMOBILE());
-        sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH + user.getUSER_ICON_FILE_ID()));
+        sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + user.getUSER_ICON_FILE_ID()));
         nicheng_tv.setText(user.getNICKNAME());
         if (user.getBIRTHDAY() != 0) {
             birthday_tv.setText(DateUtils.parseTime(user.getBIRTHDAY() + ""));
@@ -281,7 +281,7 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
             @Override
             protected void onExecuteSucceeded(final String s) {
                 user.setUSER_ICON_FILE_ID(s);
-                sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH + s));
+                sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + s));
                 closeLoding();
             }
 

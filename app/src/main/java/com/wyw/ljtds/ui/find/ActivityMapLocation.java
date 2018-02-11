@@ -1,5 +1,4 @@
 package com.wyw.ljtds.ui.find;
-
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.Poi;
@@ -142,7 +140,7 @@ public class ActivityMapLocation extends Activity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private BDAbstractLocationListener mListener = new BDAbstractLocationListener() {
+    private BDLocationListener mListener = new BDLocationListener() {
 
         @Override
         public void onReceiveLocation(BDLocation location) {

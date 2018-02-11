@@ -12,11 +12,18 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.WindowManager;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.NetWorkNotAvailableException;
 import com.wyw.ljtds.biz.exception.OperationTimeOutException;
@@ -25,6 +32,7 @@ import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.utils.Base64;
+import com.wyw.ljtds.utils.NetUtil;
 import com.wyw.ljtds.utils.NetworkDetector;
 import com.wyw.ljtds.utils.Utils;
 
@@ -120,8 +128,6 @@ public class SoapProcessor {
         String result = response.getProperty("return").toString();
 
         // LogUtil.e(result);
-        Log.e(AppConfig.ERR_TAG, result);
-
         return result;
     }
 
@@ -130,7 +136,7 @@ public class SoapProcessor {
         if (!NetworkDetector.isNetworkAvailable(MyApplication.getAppContext())) {
             throw new NetWorkNotAvailableException();
         }
-        HttpTransportSE androidHttpTransport = new HttpTransportSE(mUrl, 10000);
+        HttpTransportSE androidHttpTransport = new HttpTransportSE(mUrl, AppConfig.OUT_TIME);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
                 SoapEnvelope.VER11);
 
@@ -169,7 +175,7 @@ public class SoapProcessor {
         String result = response.getProperty("return").toString();
 
         // LogUtil.e(result);
-        Utils.log("soap response:" + result);
+        Utils.log("soap " + this.mMethodName + " response:" + result);
 
         return parseResponse(result);
     }

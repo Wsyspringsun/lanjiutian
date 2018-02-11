@@ -66,7 +66,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
     @Override
     public void onResp(BaseResp resp) {
-        Log.e(AppConfig.ERR_TAG, resp.getType() + "");
+        Log.i(AppConfig.ERR_TAG, resp.getType() + "wechat entry on Resp..............");
     }
 
 }

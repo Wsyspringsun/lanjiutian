@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/x120"
     android:background="#FFFFFF"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/x5"
@@ -10,35 +10,58 @@
     android:paddingTop="@dimen/x5">
 
     <FrameLayout
-        android:layout_width="0dp"
+        android:id="@+id/item_goods_omecol_goods_fl_img"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_alignParentLeft="true">
 
         <ImageView
             android:id="@+id/item_goods_omecol_goods_img"
-            android:layout_width="@dimen/x90"
-            android:layout_height="@dimen/x90"
-            android:scaleType="fitCenter"
+            android:layout_width="@dimen/x100"
+            android:layout_height="@dimen/x100"
+            android:scaleType="fitXY"
             android:src="@drawable/zhanweitu_lunbo" />
 
         <TextView
-            style="@style/font_ww_18_white"
+            android:id="@+id/item_goods_omecol_goods_bizstat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/base_bar"
+            android:background="@drawable/textview_isbiz_flg"
             android:text="@string/stat_unkwon"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="10dp" />
 
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/item_goods_omecol_goods_info"
-        style="@style/font_ww_16_black"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:padding="8dp"
-        android:textSize="14dp" />
+        android:layout_alignTop="@id/item_goods_omecol_goods_fl_img"
+        android:layout_marginLeft="@dimen/vertical_margin"
+        android:layout_marginTop="@dimen/vertical_margin_mid"
+        android:layout_toRightOf="@id/item_goods_omecol_goods_fl_img"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/item_goods_omecol_goods_name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:maxLines="2"
+            android:text="未知\n未知--\n"
+            android:textColor="@color/font_1"
+            android:textSize="@dimen/font_5" />
+
+        <TextView
+            android:id="@+id/item_goods_omecol_goods_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lineSpacingMultiplier="1.2"
+            android:text="未知--\n未知--\n未知--"
+            android:textColor="@color/font_2"
+            android:textSize="@dimen/font_5" />
+    </LinearLayout>
+
+
+</RelativeLayout>

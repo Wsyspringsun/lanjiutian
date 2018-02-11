@@ -19,6 +19,26 @@ public class ShoppingCartAddModel extends BaseModel {
     private String COMMODITY_COLOR_ID;
     private String COMMODITY_SIZE_ID;
 
+    private String BUSNO;
+    private String BUSNAME;
+    private String ORDER_SOURCE = "0";
+
+    public String getBUSNO() {
+        return BUSNO;
+    }
+
+    public void setBUSNO(String BUSNO) {
+        this.BUSNO = BUSNO;
+    }
+
+    public String getBUSNAME() {
+        return BUSNAME;
+    }
+
+    public void setBUSNAME(String BUSNAME) {
+        this.BUSNAME = BUSNAME;
+    }
+
     public String getCOMMODITY_COLOR_ID() {
         return COMMODITY_COLOR_ID;
     }
@@ -73,5 +93,13 @@ public class ShoppingCartAddModel extends BaseModel {
 
     public void setINS_USER_ID(String INS_USER_ID) {
         this.INS_USER_ID = INS_USER_ID;
+    }
+
+    public String getORDER_SOURCE() {
+        return ORDER_SOURCE;
+    }
+
+    public void setORDER_SOURCE(String ORDER_SOURCE) {
+        this.ORDER_SOURCE = ORDER_SOURCE;
     }
 }

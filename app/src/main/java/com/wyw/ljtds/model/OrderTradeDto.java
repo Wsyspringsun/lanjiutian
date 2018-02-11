@@ -17,13 +17,17 @@ public class OrderTradeDto {
     private String PAY_AMOUNT; //实际 支付 总额度
     private String POINT_MONEY; //积分抵用的 现金数量
     private String POSTAGE_FLG; //是否使用 邮费抵用券
+    private String POSTAGE_ALL; //总运费
     private String TRADE_MONEY_ALL;//额度汇总
-
+    private String INS_USER_ID;  //sxljt药品 , ljtLife 商品
+    private String LAT;
+    private String LNG;
+    private String ORDER_SOURCE = "0";
     private String USABLE_AMOUNT; //可用的电子币额度
-
+    private String LOCATION;
     private String USER_ADDRESS_ID; //客户地址概要
     private String USER_POINT; //客户积分数量
-
+    private String USER_ADDRESS_LOCATION;
     private AddressModel USER_ADDRESS; //客户 地址
     List<OrderGroupDto> DETAILS; //包含的商铺
 
@@ -153,5 +157,61 @@ public class OrderTradeDto {
 
     public void setDETAILS(List<OrderGroupDto> DETAILS) {
         this.DETAILS = DETAILS;
+    }
+
+    public String getINS_USER_ID() {
+        return INS_USER_ID;
+    }
+
+    public void setINS_USER_ID(String INS_USER_ID) {
+        this.INS_USER_ID = INS_USER_ID;
+    }
+
+    public String getLAT() {
+        return LAT;
+    }
+
+    public void setLAT(String LAT) {
+        this.LAT = LAT;
+    }
+
+    public String getLNG() {
+        return LNG;
+    }
+
+    public void setLNG(String LNG) {
+        this.LNG = LNG;
+    }
+
+    public String getORDER_SOURCE() {
+        return ORDER_SOURCE;
+    }
+
+    public void setORDER_SOURCE(String ORDER_SOURCE) {
+        this.ORDER_SOURCE = ORDER_SOURCE;
+    }
+
+    public String getUSER_ADDRESS_LOCATION() {
+        return USER_ADDRESS_LOCATION;
+    }
+
+    public void setUSER_ADDRESS_LOCATION(String USER_ADDRESS_LOCATION) {
+        this.USER_ADDRESS_LOCATION = USER_ADDRESS_LOCATION;
+    }
+
+    public String getLOCATION() {
+        return LOCATION;
+    }
+
+    public void setLOCATION(String LOCATION) {
+        this.LOCATION = LOCATION;
+    }
+
+    public String getPOSTAGE_ALL() {
+        return POSTAGE_ALL;
+    }
+
+    public void setPOSTAGE_ALL(String POSTAGE_ALL) {
+        this.POSTAGE_ALL = POSTAGE_ALL;
     }
 }

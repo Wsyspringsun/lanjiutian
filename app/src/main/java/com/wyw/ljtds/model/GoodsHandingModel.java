@@ -10,6 +10,7 @@ public class GoodsHandingModel extends BaseModel {
     private String returnGoodsHandingId;
     private String orderTradeId;
     private String orderGroupId;
+    private String commodityOrderId;
     private List<MedicineOrder> commodityOrderList;
     private String oidGroupId;
     private String groupName;
@@ -250,5 +251,13 @@ public class GoodsHandingModel extends BaseModel {
 
     public void setCommodityOrderList(List<MedicineOrder> commodityOrderList) {
         this.commodityOrderList = commodityOrderList;
+    }
+
+    public String getCommodityOrderId() {
+        return commodityOrderId;
+    }
+
+    public void setCommodityOrderId(String commodityOrderId) {
+        this.commodityOrderId = commodityOrderId;
     }
 }

@@ -1,6 +1,7 @@
 package com.wyw.ljtds.ui.user.order;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -43,12 +44,17 @@ import cn.bingoogolapple.photopicker.widget.BGASortableNinePhotoLayout;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+
 /**
  * Created by Administrator on 2017/1/23 0023.
  */
 
 @ContentView(R.layout.activity_aftermarket)
 public class ActivityAfterMarket extends BaseActivity implements BGASortableNinePhotoLayout.Delegate, EasyPermissions.PermissionCallbacks {
+    public static final String TAG_ORDER_INFO_ID = "com.wyw.ljtds.ui.user.order.ActivityOrderInfo.TAG_ORDER_INFO_ID";
+    public static final String TAG_COMM_ORDER_INFO_ID = "com.wyw.ljtds.ui.user.order.ActivityOrderInfo.TAG_COMM_ORDER_INFO_ID";
+    public static final String TAG_ORDER_INFO_LOGISTIC_ID = "com.wyw.ljtds.ui.user.order.ActivityOrderInfo.TAG_ORDER_INFO_LOGISTIC_ID";
+
     @ViewInject(R.id.header_return_text)
     private TextView title;
     @ViewInject(R.id.header_edit)
@@ -77,6 +83,7 @@ public class ActivityAfterMarket extends BaseActivity implements BGASortableNine
     private int index = 1;
     private GoodsHandingModel goodsHandingModel;
     private String orderId;
+    private String commOrderId;
 
     @Event(value = {R.id.header_return, R.id.header_edit})
     private void onClick(View view) {
@@ -101,10 +108,13 @@ public class ActivityAfterMarket extends BaseActivity implements BGASortableNine
                     image[i] = str;
                 }
 
+                String logisticComId = getIntent().getStringExtra(TAG_ORDER_INFO_LOGISTIC_ID);
                 goodsHandingModel = new GoodsHandingModel();
+                goodsHandingModel.setOidGroupId(logisticComId);
                 goodsHandingModel.setImgs(image);
 //                goodsHandingModel.setCommodityOrderId(getIntent().getStringExtra("good_id"));
                 goodsHandingModel.setOrderGroupId(orderId);
+                goodsHandingModel.setCommodityOrderId(commOrderId);
                 String rOc = ((KeyValue) spReturnCat.getSelectedItem()).getK();
                 goodsHandingModel.setReturnOrChange(rOc);
                 String returnReason = ((KeyValue) spReturnReason.getSelectedItem()).getK();
@@ -122,7 +132,8 @@ public class ActivityAfterMarket extends BaseActivity implements BGASortableNine
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        orderId = getIntent().getStringExtra(ActivityOrderInfo.TAG_ORDER_INFO_ID);
+        orderId = getIntent().getStringExtra(TAG_ORDER_INFO_ID);
+        commOrderId = getIntent().getStringExtra(TAG_COMM_ORDER_INFO_ID);
 
         title.setText("申请售后");
         submit.setText(getString(R.string.tijiao));
@@ -181,6 +192,7 @@ public class ActivityAfterMarket extends BaseActivity implements BGASortableNine
     BizDataAsyncTask<Object> task;
 
     private void read(final String data) {
+        setLoding(this, true);
         task = new BizDataAsyncTask<Object>() {
             @Override
             protected Object doExecute() throws ZYException, BizFailure {
@@ -189,6 +201,7 @@ public class ActivityAfterMarket extends BaseActivity implements BGASortableNine
 
             @Override
             protected void onExecuteSucceeded(Object o) {
+                closeLoding();
                 Log.e(AppConfig.ERR_TAG, "........returngoodsSubmit:" + o);
                 if ("1".equals(o + "")) {
                     Intent it = new Intent(ActivityAfterMarket.this, ReturnGoodsOrderListActivity.class);
@@ -199,7 +212,7 @@ public class ActivityAfterMarket extends BaseActivity implements BGASortableNine
 
             @Override
             protected void OnExecuteFailed() {
-
+                closeLoding();
             }
         };
         task.execute();
@@ -260,5 +273,12 @@ public class ActivityAfterMarket extends BaseActivity implements BGASortableNine
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
+    public static Intent getIntent(Context context, String orderId, String commOrderId, String logisticComId) {
+        Intent it = new Intent(context, ActivityAfterMarket.class);
+        it.putExtra(TAG_ORDER_INFO_ID, orderId);
+        it.putExtra(TAG_COMM_ORDER_INFO_ID, commOrderId);
+        it.putExtra(TAG_ORDER_INFO_LOGISTIC_ID, logisticComId);
+        return it;
+    }
 
 }

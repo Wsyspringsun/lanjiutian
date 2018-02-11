@@ -3,38 +3,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--<LinearLayout-->
-        <!--android:id="@+id/top_bar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<include layout="@layout/main_header_return" />-->
-
-    <!--</LinearLayout>-->
-
     <LinearLayout
         android:id="@+id/fragment_user_nologin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_marginTop="@dimen/x120"
+        android:gravity="top|center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <ImageView
-            android:layout_width="@dimen/x150"
-            android:layout_height="@dimen/x150"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x100"
             android:scaleType="fitCenter"
-            android:src="@drawable/icon_login" />
+            android:src="@drawable/ic_gouwucheweidenglu" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/x150"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/vertical_margin_slg"
             android:background="@drawable/text_border"
             android:gravity="center"
+            android:padding="@dimen/padding1"
+            android:paddingLeft="@dimen/padding3"
+            android:paddingRight="@dimen/padding3"
             android:text="@string/no_login"
-            android:textColor="@color/black"
-            android:textSize="18dp" />
+            android:textColor="@color/font_2"
+            android:textSize="@dimen/font_2" />
 
     </LinearLayout>
 
@@ -52,86 +47,67 @@
             android:layout_weight="1"
             android:overScrollMode="never" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/x1"
-            android:background="@color/basebackground" />
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/x40"
+            android:layout_height="@dimen/x32"
             android:background="@color/white"
             android:orientation="horizontal">
 
             <RelativeLayout
                 android:layout_width="0dp"
+                android:layout_marginRight="@dimen/vertical_margin_mid"
                 android:layout_height="match_parent"
                 android:layout_weight="2.5">
 
-                <!--
-                <CheckBox
-                    android:enabled="false"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/all_chekbox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/x10"
-                    android:layout_marginRight="@dimen/x4"
-                    style="@style/MyCheckBox"
-                    android:gravity="center"
-                    android:visibility="visible" />
-
                 <TextView
-                    android:textColor="@color/font_black2"
-                    android:layout_toRightOf="@+id/all_chekbox"
-                    android:layout_centerVertical="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/quanxuan"
-                    android:textSize="14sp"
-                    android:id="@+id/textView4"/>
-                    -->
-
-                <LinearLayout
+                    android:id="@+id/tv_total_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/x10"
-                    android:gravity="right"
-                    android:orientation="vertical">
+                    android:text="￥0.00"
+                    android:textColor="@color/base_bar"
+                    android:textSize="15sp" />
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/tv_total_price"
+                    android:text="不含运费"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/font_7" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="合计："
-                            android:textColor="@color/font_black2"
-                            android:textSize="15sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/tv_total_price"
+                    android:layout_alignBaseline="@id/tv_total_price"
+                    android:text="合计："
+                    android:textColor="@color/font_black2"
+                    android:textSize="@dimen/font_6" />
 
-                        <TextView
-                            android:id="@+id/tv_total_price"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="￥0.00"
-                            android:textColor="@color/base_bar"
-                            android:textSize="15sp" />
 
-                    </LinearLayout>
+                <!--
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginRight="@dimen/x10"
+                                    android:gravity="right"
+                                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="不含运费"
-                        android:textColor="@color/gray"
-                        android:textSize="12sp" />
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
 
-                </LinearLayout>
+
+                                    </LinearLayout>
+
+
+                                </LinearLayout>
+                -->
 
             </RelativeLayout>
 
@@ -139,23 +115,28 @@
                 android:id="@+id/tv_delete"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:background="@color/juse"
                 android:clickable="true"
                 android:gravity="center"
                 android:text="@string/shanchu"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_4" />
 
             <TextView
                 android:id="@+id/tv_go_to_pay"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:background="@color/base_bar"
                 android:clickable="true"
                 android:gravity="center"
-                android:text="结算(0)"
-                android:textColor="@color/white" />
+                android:text="结算"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_4" />
+
         </LinearLayout>
 
     </LinearLayout>

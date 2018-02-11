@@ -2,16 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#40000000"
+    android:background="#00000000"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/main_header_location"
-        style="@style/font_ww_18_white"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="定位位置"
-        android:textAlignment="center" />
+        android:layout_marginBottom="@dimen/x1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/main_header_location"
+            style="@style/font_ww_12_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:maxLines="1"
+            android:text="定位位置"
+            android:textAlignment="center" />
+
+
+        <ImageView
+            android:layout_width="@dimen/x11"
+            android:layout_height="@dimen/x11"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/vertical_margin"
+            android:layout_toLeftOf="@+id/main_header_location"
+            android:src="@drawable/ic_dingwei_bai" />
+
+    </RelativeLayout>
+
 
     <LinearLayout
         android:id="@+id/llHeadr"
@@ -27,7 +49,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x10"
             android:scaleType="fitCenter"
-            android:src="@mipmap/jiantou_zuo_bai" />
+            android:src="@mipmap/jiantou_zuo_bai"
+            android:visibility="gone" />
 
         <!--二维码扫描-->
         <LinearLayout
@@ -75,15 +98,15 @@
                 android:lines="1"
                 android:paddingLeft="@dimen/x15"
                 android:text="@string/sousuo"
-                android:textColor="@color/black"
-                android:textSize="11sp" />
+                android:textColor="@color/font_2"
+                android:textSize="@dimen/font_5" />
 
             <ImageView
                 android:layout_width="0dp"
-                android:layout_height="@dimen/x18"
+                android:layout_height="15dp"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/icon_sousuo" />
+                android:src="@drawable/ic_sousuo" />
 
         </LinearLayout>
         <!--站内消息-->

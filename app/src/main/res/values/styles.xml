@@ -3,8 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/whitesmoke</item>
-        <item name="colorPrimaryDark">@color/base_bar</item>
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/base_bar</item>
         <item name="windowNoTitle">true</item>
         <item name="homeAsUpIndicator">@drawable/ic_nav_previous</item>
@@ -475,5 +475,39 @@
         <item name="android:textColor">@color/font_black2</item>
         <item name="android:textSize">14sp</item>
     </style>
+
+    <style name="textview_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">@dimen/vertical_margin</item>
+    </style>
     <!--微信 end-->
+
+    <style name="font_icon_text">
+        <item name="android:layout_marginBottom">@dimen/x3</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/x12</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textSize">@dimen/x8</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+
+    <style name="icon_sm">
+        <item name="android:layout_width">@dimen/x18</item>
+        <item name="android:layout_height">@dimen/x18</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="text_group_item">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>

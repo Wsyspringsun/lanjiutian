@@ -1,5 +1,11 @@
 package com.wyw.ljtds.ui.goods;
 
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
+import com.tencent.mm.opensdk.modelbase.BaseReq;
+import com.tencent.mm.opensdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.wyw.ljtds.R;
 
 import android.app.Activity;
@@ -19,13 +25,18 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alipay.PayResult;
@@ -35,6 +46,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.unionpay.UPPayAssistEx;
+import com.wyw.ljtds.adapter.CommOrderAdapter;
 import com.wyw.ljtds.biz.biz.GoodsBiz;
 import com.wyw.ljtds.biz.biz.OrderBiz;
 import com.wyw.ljtds.biz.biz.UserBiz;
@@ -43,15 +55,16 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.AppManager;
+import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.Business;
 import com.wyw.ljtds.model.CreatOrderModel;
-import com.wyw.ljtds.model.Good;
 import com.wyw.ljtds.model.GoodCreatModel1;
 import com.wyw.ljtds.model.GoodCreatModel2;
 import com.wyw.ljtds.model.GoodCreatModel3;
 import com.wyw.ljtds.model.GoodSubmitModel1;
 import com.wyw.ljtds.model.MedicineDetailsModel;
+import com.wyw.ljtds.model.MyLocation;
 import com.wyw.ljtds.model.OnlinePayModel;
 import com.wyw.ljtds.model.OrderCommDto;
 import com.wyw.ljtds.model.OrderGroupDto;
@@ -60,12 +73,16 @@ import com.wyw.ljtds.model.OrderTradeDto;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.user.address.ActivityAddress;
 import com.wyw.ljtds.ui.user.address.ActivityAddressEdit;
+import com.wyw.ljtds.ui.user.address.AddressActivity;
 import com.wyw.ljtds.ui.user.order.ActivityOrder;
+import com.wyw.ljtds.utils.DateUtils;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.Utils;
+import com.wyw.ljtds.widget.MyCallback;
 import com.wyw.ljtds.widget.PayDialog;
+import com.wyw.ljtds.widget.dialog.DiscountDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,6 +92,7 @@ import org.xutils.view.annotation.ViewInject;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,11 +107,13 @@ import static com.wyw.ljtds.ui.goods.ActivityGoodsSubmitBill.TAG_ORDER;
  */
 @ContentView(R.layout.activity_order_submit)
 public class ActivityGoodsSubmit extends BaseActivity {
+    public IWXAPI wxApi;
     public static final String TAG_INFO_SOURCE = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmit.TAG_INFO_SOURCE";
+    private static final int REQUEST_SETTING = 0;
     private static final int REQUEST_FAPIAO = 1;
     private static final int REQUEST_SELECT_ADDRESS = 2;
     private static final String TAG_SELLERID = "com.wyw.ljtds.ui.goods.tag_sellerid";
-    private static final String TAG_ORDER_DATA = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmit.TAG_ORDER_DATA" ;
+    private static final String TAG_ORDER_DATA = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmit.TAG_ORDER_DATA";
     private String flgInfoSrc = "";
     private String PAYMTD_C = "C";
 
@@ -101,21 +121,18 @@ public class ActivityGoodsSubmit extends BaseActivity {
     private TextView title;
     @ViewInject(R.id.group)
     private RecyclerView recyclerView;//gr order
-    @ViewInject(R.id.money)
+    @ViewInject(R.id.activity_order_submit_money)
     private TextView money_all;
     private EditText edCustomerNote;
+    TextView tvAddrInfo;
 
+    RelativeLayout rlInvoice;
+    TextView tvInvoiceTitle;
+    RelativeLayout rlZhifu;
 
-    private GoodCreatModel1 model;
-    private List<Business> list_business;
-    private MyAdapter adapter;
-    private String zhifu_s = "";//支付方式
-    private String jifen_money = "";//积分抵用金额
-    private String jifen = "";
-    private String disDateStart = "";
-    private String disDateEnd = "";
-    private String data = "";//从购物车和商品详情页传递来的数据
-    private String peisong = "送货上门";
+    //    private GoodCreatModel1 model;
+//    private List<Business> list_business;
+    private OrderGroupAdapter adapter;
     private String fapiao_flg1 = "不开发票";
     private String fapiao_flg2 = "";
     private String fapiao_flg3 = "";
@@ -139,6 +156,11 @@ public class ActivityGoodsSubmit extends BaseActivity {
 
     //小能
     String sellerid = "";
+    private TextView tvInvoiceMore;
+    private TextView tvInvoiceContent;
+    private TextView tvZhifuTitle;
+    private TextView tvZhifuMore;
+    private TextView tvZhifuContent;
 
 
     @Event(value = {R.id.header_return, R.id.submit})
@@ -149,17 +171,19 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 break;
 
             case R.id.submit:
+                if (cOrderModel == null) {
+                    ToastUtil.show(this, "抱歉,生成订单失败");
+                    return;
+                }
                 final AlertDialog alert = new AlertDialog.Builder(this).create();
                 alert.setTitle(R.string.alert_tishi);
                 alert.setMessage(getResources().getString(R.string.confirm_order_submit));
                 alert.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.alert_queding), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (!StringUtils.isEmpty(edCustomerNote.getText().toString())) {
-                            model.setREMARKS(edCustomerNote.getText().toString());
-                            Log.e(AppConfig.ERR_TAG, "getREMARKS:" + model.getREMARKS());
-                        }
-                        submitOrder(GsonUtils.Bean2Json(model), "create");
+                        view2Data();
+                        Utils.log("submit:" + GsonUtils.Bean2Json(cOrderModel));
+                        submitOrder(GsonUtils.Bean2Json(cOrderModel), "create");
                     }
                 });
                 alert.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.alert_quxiao), new DialogInterface.OnClickListener() {
@@ -173,6 +197,21 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 break;
 
 
+        }
+    }
+
+    private void view2Data() {
+        if (cOrderModel == null) return;
+        for (OrderGroupDto group : cOrderModel.getDETAILS()) {
+            if ("1".equals(cOrderModel.getINVOICE_FLG())) {
+                group.setINVOICE_FLG(cOrderModel.getINVOICE_FLG());
+                group.setINVOICE_TYPE(cOrderModel.getINVOICE_TYPE());
+                group.setINVOICE_TITLE(cOrderModel.getINVOICE_TITLE());
+                group.setINVOICE_CONTENT(cOrderModel.getINVOICE_CONTENT());
+                group.setINVOICE_TAX(cOrderModel.getINVOICE_TAX());
+            }
+
+            group.setDISTRIBUTION_MODE(cOrderModel.getDISTRIBUTION_MODE());
         }
     }
 
@@ -239,34 +278,41 @@ public class ActivityGoodsSubmit extends BaseActivity {
 
         AppManager.addDestoryActivity(this, "submit");
 
-        title.setText(R.string.order_queren);
+        initView();
 
+        sellerid = getIntent().getStringExtra(TAG_SELLERID);
+
+    }
+
+    private void initView() {
+        title.setText(R.string.order_queren);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter = new MyAdapter();
+        adapter = new OrderGroupAdapter();
         adapter.addHeaderView(getHeaderView(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = ActivityAddress.getIntent(ActivityGoodsSubmit.this, true);
+                Intent it = AddressActivity.getIntent(ActivityGoodsSubmit.this, true);
                 startActivityForResult(it, REQUEST_SELECT_ADDRESS);
             }
         }));
         adapter.addFooterView(getFooterView(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent it;
                 switch (view.getId()) {
-                    case R.id.zzhifu:
-                        Intent it = new Intent(ActivityGoodsSubmit.this, ActivityGoodsSubmitChoice.class);
-                        String json = GsonUtils.Bean2Json(cOrderModel);
+                    case R.id.item_order_submit_bottom_invoice:
+                        Log.e(AppConfig.ERR_TAG, "item_order_submit_bottom_invoice.......");
+                        it = ActivityGoodsSubmitBill.getIntent(ActivityGoodsSubmit.this, adapter.getData().get(0));
+                        startActivityForResult(it, REQUEST_FAPIAO);
+                        break;
+                    case R.id.item_order_submit_bottom_paymethod:
+                        it = ActivityGoodsSubmitChoice.getIntent(ActivityGoodsSubmit.this);
 //                        old
-                        it.putExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE, ActivityGoodsSubmit.this.flgInfoSrc);
-                        it.putExtra(ActivityGoodsSubmitChoice.TAG_CREATE_ORDER_MODEL, json);
-//                it.putExtra("pay", zhifu_s);
-//                it.putExtra("jifen_money", jifen_money);
-//                it.putExtra("jifen", jifen);
-
-                        startActivityForResult(it, 0);
+//                        it.putExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE, ActivityGoodsSubmit.this.flgInfoSrc);
+//                        it.putExtra(ActivityGoodsSubmitChoice.TAG_CREATE_ORDER_MODEL, json);
+                        startActivityForResult(it, REQUEST_SETTING);
                         break;
                     default:
                         break;
@@ -277,18 +323,13 @@ public class ActivityGoodsSubmit extends BaseActivity {
         recyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
             @Override
             public void SimpleOnItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                Log.e(AppConfig.ERR_TAG, "position:" + i);
-                switch (view.getId()) {
-                    case R.id.select:
-                        Intent it = ActivityGoodsSubmitBill.getIntent(ActivityGoodsSubmit.this, adapter.getData().get(i));
-                        startActivityForResult(it, REQUEST_FAPIAO);
-                }
+//                Log.e(AppConfig.ERR_TAG, "position:" + i);
+//                switch (view.getId()) {
+//                }
             }
         });
 
         recyclerView.setAdapter(adapter);
-
-        sellerid = getIntent().getStringExtra(TAG_SELLERID);
 
     }
 
@@ -301,7 +342,8 @@ public class ActivityGoodsSubmit extends BaseActivity {
         Intent it = getIntent();
 //        flgInfoSrc = it.getStringExtra(TAG_INFO_SOURCE);
 
-        data = it.getStringExtra(TAG_ORDER_DATA);
+        String data = it.getStringExtra(TAG_ORDER_DATA);
+//        String data = "{\"DETAILS\":[{\"DETAILS\":[{\"COMMODITY_COLOR\":\"百合康\",\"COMMODITY_ID\":\"005578\",\"COMMODITY_NAME\":\"\",\"COMMODITY_SIZE\":\"0.6克*60粒\",\"EXCHANGE_QUANLITY\":1}],\"LOGISTICS_COMPANY\":\"市区新市西街店\",\"LOGISTICS_COMPANY_ID\":\"002\"},{\"DETAILS\":[{\"COMMODITY_COLOR\":\"\",\"COMMODITY_ID\":\"000100\",\"COMMODITY_NAME\":\"\",\"COMMODITY_SIZE\":\"0.3g*24片*3盒\",\"EXCHANGE_QUANLITY\":1}],\"LOGISTICS_COMPANY\":\"市区观巷店\",\"LOGISTICS_COMPANY_ID\":\"040\"}],\"INS_USER_ID\":\"sxljt\",\"LAT\":\"35.489784\",\"LNG\":\"112.865275\",\"ORDER_SOURCE\":\"0\"}";
         Log.e(AppConfig.ERR_TAG, "orderData:" + data);
         if (!StringUtils.isEmpty(data))
             showOrder(data, "showOrder");
@@ -370,7 +412,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
 //    }
     private View getHeaderView(View.OnClickListener listener) {
         View view = getLayoutInflater().inflate(R.layout.item_order_submit_address, (ViewGroup) recyclerView.getParent(), false);
-
+        tvAddrInfo = (TextView) view.findViewById(R.id.item_order_submit_address_info);
         view.setOnClickListener(listener);
 
         return view;
@@ -380,10 +422,22 @@ public class ActivityGoodsSubmit extends BaseActivity {
 //        Log.e(AppConfig.ERR_TAG, "getFooterView");
         View view = getLayoutInflater().inflate(R.layout.item_order_submit_bottom, (ViewGroup) recyclerView.getParent(), false);
 
-        View zzhifu = view.findViewById(R.id.zzhifu);
-
-        zzhifu.setOnClickListener(listener);
-
+        rlInvoice = (RelativeLayout) view.findViewById(R.id.item_order_submit_bottom_invoice);
+        tvInvoiceTitle = (TextView) view.findViewById(R.id.item_order_submit_bottom_invoice_title);
+        tvInvoiceTitle.setText("发票信息");
+        tvInvoiceMore = (TextView) view.findViewById(R.id.item_order_submit_bottom_invoice_more);
+        tvInvoiceContent = (TextView) view.findViewById(R.id.item_order_submit_bottom_invoice_content);
+        setInvoiceData("");
+//        initTextViewTItle(rlInvoice, "发票信息");
+        rlZhifu = (RelativeLayout) view.findViewById(R.id.item_order_submit_bottom_paymethod);
+        tvZhifuTitle = (TextView) view.findViewById(R.id.item_order_submit_bottom_paymethod_title);
+        tvZhifuTitle.setText("配送方式\n支付方式");
+        tvZhifuMore = (TextView) view.findViewById(R.id.item_order_submit_bottom_paymethod_more);
+        tvZhifuContent = (TextView) view.findViewById(R.id.item_order_submit_bottom_paymethod_content);
+//        initTextViewTItle(rlZhifu, "配送方式\n支付方式");
+        rlZhifu.setOnClickListener(listener);
+        rlInvoice.setOnClickListener(listener);
+/*
         CheckBox tbDianZiBi = (CheckBox) view.findViewById(R.id.chk_use_dianzibi);
         final TextView tvDianzibi = (TextView) view.findViewById(R.id.tv_dianzibi_show);
         tvDianzibi.setText("");
@@ -424,7 +478,23 @@ public class ActivityGoodsSubmit extends BaseActivity {
         });
 
         edCustomerNote = (EditText) view.findViewById(R.id.order_submit_ed_customernote);
+        */
         return view;
+    }
+
+    private void setInvoiceData(String content) {
+        tvInvoiceContent.setText(content);
+    }
+
+    private void setTextViewContent(RelativeLayout invoice, String content) {
+        TextView tvContent = (TextView) invoice.findViewById(R.id.textview_content);
+        tvContent.setText(content);
+    }
+
+    private void initTextViewTItle(RelativeLayout rl, String title) {
+        TextView tvTitle = (TextView) rl.findViewById(R.id.textview_title);
+        tvTitle.setText(title);
+        setTextViewContent(rl, "");
     }
 
     private BizDataAsyncTask<String> submitTask;
@@ -447,7 +517,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 String url = "http://www.lanjiutian.com/user/medicine/orderDetail.html?&wareid=002204&paramOrderGroupId=" + tradeOrderId;
                 Ntalker.getBaseInstance().startAction_order("蓝九天电商", url, sellerid, "", tradeOrderId, cOrderModel.getPAY_AMOUNT());
 
-                if (PAYMTD_C.equals(model.getPAYMENT_METHOD())) {
+                if (PAYMTD_C.equals(cOrderModel.getPAYMENT_METHOD())) {
                     ActivityGoodsSubmit.this.goOrderList();
                 } else {
                     OrderTrade orderTrade = new OrderTrade();
@@ -458,6 +528,8 @@ public class ActivityGoodsSubmit extends BaseActivity {
 //                            Log.e(AppConfig.ERR_TAG, order.getPaymentMethod());
                             payModel.setPAYMENT_METHOD(order.getPaymentMethod());
                             payModel.setORDER_TRADE_ID(tradeOrderId);
+                            payModel.setIp(Utils.getIPAddress(ActivityGoodsSubmit.this));
+                            payModel.setDevice(Utils.getImei(ActivityGoodsSubmit.this));
                             goPay(GsonUtils.Bean2Json(payModel));
                         }
 
@@ -480,12 +552,6 @@ public class ActivityGoodsSubmit extends BaseActivity {
         submitTask.execute();
     }
 
-    private void loadOrder(String tradeOrderId) {
-
-
-    }
-
-
     /**
      * 进入 rlist
      */
@@ -498,7 +564,8 @@ public class ActivityGoodsSubmit extends BaseActivity {
     private BizDataAsyncTask<CreatOrderModel> orderTask;
 
     private void showOrder(final String str, final String op) {
-        orderTask = new BizDataAsyncTask<CreatOrderModel>() {
+        setLoding(this, false);
+        new BizDataAsyncTask<CreatOrderModel>() {
             @Override
             protected CreatOrderModel doExecute() throws ZYException, BizFailure {
                 CreatOrderModel rlt = GoodsBiz.getOrderShow(str, op);
@@ -508,92 +575,9 @@ public class ActivityGoodsSubmit extends BaseActivity {
             @Override
             protected void onExecuteSucceeded(CreatOrderModel creatOrderModel) {
                 closeLoding();
-                ActivityGoodsSubmit.this.cOrderModel = creatOrderModel;
-                list_business = new ArrayList<>();
-                model = new GoodCreatModel1();
-                model.setADDRESS_ID(creatOrderModel.getADDRESS_ID());
-                model.setCOIN_FLG(creatOrderModel.getCOIN_FLG());
-                model.setPOSTAGE_FLG(creatOrderModel.getPOSTAGE_FLG());
-                model.setCOST_POINT(creatOrderModel.getCOST_POINT());
-                model.setPAYMENT_METHOD(creatOrderModel.getPAYMENT_METHOD());
-                model.setDISTRIBUTION_DATE_START(creatOrderModel.getDISTRIBUTION_DATE_START());
-                model.setDISTRIBUTION_DATE_END(creatOrderModel.getDISTRIBUTION_DATE_END());
+                cOrderModel = creatOrderModel;
+                bindData2View();
 
-                List<GoodCreatModel2> lists_group = new ArrayList<>();
-
-                for (int i = 0; i < creatOrderModel.getDETAILS().size(); i++) {
-                    GoodCreatModel2 goodCreatModel2 = new GoodCreatModel2();
-                    Business business = creatOrderModel.getDETAILS().get(i);
-                    //表明 是否 是 医药馆
-                    ActivityGoodsSubmit.this.flgInfoSrc = business.getOID_GROUP_ID();
-                    goodCreatModel2.setOID_GROUP_NAME(business.getOID_GROUP_NAME());
-                    goodCreatModel2.setOID_GROUP_ID(business.getOID_GROUP_ID());
-                    goodCreatModel2.setDISTRIBUTION_MODE(business.getDISTRIBUTION_MODE());
-                    goodCreatModel2.setINVOICE_CONTENT(business.getINVOICE_CONTENT());
-                    goodCreatModel2.setINVOICE_FLG(business.getINVOICE_FLG());
-                    goodCreatModel2.setINVOICE_TITLE(business.getINVOICE_TITLE());
-                    goodCreatModel2.setINVOICE_TYPE(business.getINVOICE_TYPE());
-                    goodCreatModel2.setPOSTAGE(business.getPOSTAGE());
-                    goodCreatModel2.setPOST_NUM(business.getPOST_NUM());
-                    goodCreatModel2.setELECTRONIC_MONEY(business.getELECTRONIC_MONEY());
-                    goodCreatModel2.setELECTRONIC_USEABLE_MONEY(business.getELECTRONIC_USEABLE_MONEY());
-
-                    List<GoodCreatModel3> lists_good = new ArrayList<>();
-                    List<Good> goods = business.getDETAILS();
-                    for (int j = 0; j < goods.size(); j++) {
-                        Good good = goods.get(j);
-                        GoodCreatModel3 goodCreatModel3 = new GoodCreatModel3();
-                        goodCreatModel3.setCOMMODITY_COLOR(good.getCOMMODITY_COLOR());
-                        goodCreatModel3.setCOMMODITY_ID(good.getCOMMODITY_ID());
-                        goodCreatModel3.setCOMMODITY_COLOR_ID(good.getCOMMODITY_COLOR_ID());
-                        goodCreatModel3.setCOMMODITY_SIZE_ID(good.getCOMMODITY_SIZE_ID());
-                        goodCreatModel3.setCOMMODITY_NAME(good.getCOMMODITY_NAME());
-                        goodCreatModel3.setCOMMODITY_SIZE(good.getCOMMODITY_SIZE());
-                        goodCreatModel3.setEXCHANGE_QUANLITY(Integer.parseInt(good.getEXCHANGE_QUANLITY()));
-                        goodCreatModel3.setCOMMODITY_ORDER_ID(good.getCOMMODITY_ORDER_ID());
-
-                        lists_good.add(goodCreatModel3);
-                    }
-
-                    goodCreatModel2.setDETAILS(lists_good);
-                    lists_group.add(goodCreatModel2);
-                }
-
-                model.setDETAILS(lists_group);
-
-
-                list_business = creatOrderModel.getDETAILS();
-                if (creatOrderModel.getPAYMENT_METHOD().equals("0")) {
-                    zhifu_s = "在线支付";
-                } else if (creatOrderModel.getPAYMENT_METHOD().equals(PAYMTD_C)) {
-                    zhifu_s = "货到付款";
-                }
-                model.setPAYMENT_METHOD(creatOrderModel.getPAYMENT_METHOD());
-                //--记录发送数据
-                jifen_money = creatOrderModel.getPOINT_MONEY();
-                jifen = creatOrderModel.getUSER_POINT();
-                address_id = creatOrderModel.getUSER_ADDRESS().getADDRESS_ID() + "";
-                bundle = new Bundle();
-                bundle.putString("id_p", creatOrderModel.getUSER_ADDRESS().getCONSIGNEE_PROVINCE() + "");
-                bundle.putString("id_c", creatOrderModel.getUSER_ADDRESS().getCONSIGNEE_CITY() + "");
-                bundle.putString("name", creatOrderModel.getUSER_ADDRESS().getCONSIGNEE_NAME());
-                bundle.putString("phone", creatOrderModel.getUSER_ADDRESS().getCONSIGNEE_MOBILE());
-                bundle.putString("xiangxi", creatOrderModel.getUSER_ADDRESS().getCONSIGNEE_ADDRESS());
-                bundle.putString("shengshi", creatOrderModel.getUSER_ADDRESS().getPROVINCE() + creatOrderModel.getUSER_ADDRESS().getCITY());
-
-
-                updFooter();
-
-                addressInfo = creatOrderModel.getUSER_ADDRESS();
-                ((TextView) adapter.getHeaderLayout().findViewById(R.id.name)).setText(creatOrderModel.getUSER_ADDRESS().getCONSIGNEE_NAME());
-                ((TextView) adapter.getHeaderLayout().findViewById(R.id.phone)).setText(creatOrderModel.getUSER_ADDRESS().getCONSIGNEE_MOBILE());
-                ((TextView) adapter.getHeaderLayout().findViewById(R.id.shouhuo_dizhi)).setText(creatOrderModel.getUSER_ADDRESS().getADDRESS_DETAIL());
-                ((TextView) adapter.getFooterLayout().findViewById(R.id.zhifu_jieguo)).setText(zhifu_s);
-                ((TextView) adapter.getFooterLayout().findViewById(R.id.jifen_jieguo)).setText(jifen_money);
-                money_all.setText("￥" + creatOrderModel.getPAY_AMOUNT());
-
-                adapter.setNewData(list_business);
-                adapter.notifyDataSetChanged();
 
             }
 
@@ -602,14 +586,53 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 Log.e(AppConfig.ERR_TAG, ActivityGoodsSubmit.this.getClass().getName() + "OnExecuteFailed");
                 closeLoding();
             }
-        };
-        setLoding(this, false);
-        orderTask.execute();
+        }.execute();
     }
 
-    private void updFooter() {
+    private void bindData2View() {
+        //ordertrade data show
+        String strrlZhifu = "";
+        if ("1".equals(cOrderModel.getDISTRIBUTION_MODE())) {
+            strrlZhifu = "门店自取";
+        } else {
+            strrlZhifu = "送货上门";
+        }
+
+        if (PAYMTD_C.equals(cOrderModel.getPAYMENT_METHOD())) {
+            strrlZhifu += "\n货到付款";
+        } else {
+            strrlZhifu += "\n在线支付";
+        }
+        tvZhifuContent.setText(strrlZhifu);
+//        setTextViewContent(rlZhifu, strrlZhifu);
+
+        if ("1".equals(cOrderModel.getINVOICE_FLG())) {
+            tvInvoiceContent.setText(cOrderModel.getINVOICE_TITLE());
+//            setTextViewContent(rlInvoice, cOrderModel.getINVOICE_TITLE());
+        } else {
+            tvInvoiceContent.setText("不开发票");
+//            setTextViewContent(rlInvoice, "不开发票");
+        }
+
+        AddressModel addr = cOrderModel.getUSER_ADDRESS();
+        if (addr != null) {
+            StringBuilder err = new StringBuilder();
+            MyLocation location = AddressModel.parseLocation(err, addr.getADDRESS_LOCATION());
+            String addrLocation = "未知";
+            if (err.length() <= 0) {
+                addrLocation = location.getAddrStr();
+            }
+            tvAddrInfo.setText(addr.getCONSIGNEE_NAME() + "      " + addr.getCONSIGNEE_MOBILE() + "\n" + addrLocation + addr.getCONSIGNEE_ADDRESS());
+        }
+
+        money_all.setText("合计: ￥" + cOrderModel.getPAY_AMOUNT() + "(含运费" + cOrderModel.getPOSTAGE_ALL() + ")");
+
+        adapter.setNewData(cOrderModel.getDETAILS());
+        adapter.notifyDataSetChanged();
+    }
+
+    /*private void updFooter() {
         isUpdFooter = true;
-        Log.e(AppConfig.ERR_TAG, "updFooter");
         if (model == null) return;
         if (model.getDETAILS() == null) return;
         if (model.getDETAILS().size() <= 0) return;
@@ -621,7 +644,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
         if (!StringUtils.isEmpty(postage)) {
             iPostage = new BigDecimal(postage);
         }
-        CheckBox tbDianZiBi = (CheckBox) adapter.getFooterLayout().findViewById(R.id.chk_use_dianzibi);
+        *//*CheckBox tbDianZiBi = (CheckBox) adapter.getFooterLayout().findViewById(R.id.chk_use_dianzibi);
         TextView tvDianzibi = (TextView) adapter.getFooterLayout().findViewById(R.id.tv_dianzibi_show);
         tvDianzibi.setVisibility(View.VISIBLE);
         tvDianzibi.setText("已用" + ELECTRONIC_MONEY + "剩余" + ELECTRONIC_USEABLE_MONEY);
@@ -635,8 +658,8 @@ public class ActivityGoodsSubmit extends BaseActivity {
             }
         }
 
-
-        String postnum = firstGroupOrder.getPOST_NUM();
+*//*
+        *//*String postnum = firstGroupOrder.getPOST_NUM();
         BigDecimal iPostnum = new BigDecimal(postnum);
         CheckBox tbYoufeiquan = (CheckBox) adapter.getFooterLayout().findViewById(R.id.chk_use_youfeiquan);
         TextView tvYoufeiquan = (TextView) adapter.getFooterLayout().findViewById(R.id.tv_youfeiquan_show);
@@ -648,23 +671,21 @@ public class ActivityGoodsSubmit extends BaseActivity {
 
         if ("1".equals(model.getPOSTAGE_FLG())) {
             tbYoufeiquan.setChecked(true);
-        }
+        }*//*
         isUpdFooter = false;
-    }
+    }*/
 
     //店铺adapter
-    private class MyAdapter extends BaseQuickAdapter<Business> {
+    private class OrderGroupAdapter extends BaseQuickAdapter<OrderGroupDto> {
 
-        public MyAdapter() {
-            super(R.layout.item_order_submit_group, list_business);
+        public OrderGroupAdapter() {
+            super(R.layout.item_order_submit_group, null);
         }
 
-
         @Override
-        protected void convert(BaseViewHolder baseViewHolder, Business group) {
-            String fapiao1 = "";
+        protected void convert(BaseViewHolder baseViewHolder, final OrderGroupDto group) {
+            /*String fapiao1 = "";
             String peisong = "";
-            Log.e(AppConfig.ERR_TAG, "group:" + GsonUtils.Bean2Json(group));
             if (group.getINVOICE_FLG().equals("0")) {
                 fapiao1 = "不开发票";
             } else {
@@ -676,50 +697,99 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 peisong = "送货上门（运费：￥" + group.getPOSTAGE() + "）";
             } else if (group.getDISTRIBUTION_MODE().equals(PAYMTD_C)) {
                 peisong = "门店自取";
-            }
+            }*/
+            View.OnClickListener groupListener = new View.OnClickListener() {
+                public DiscountDialog dialog;
 
-            baseViewHolder.addOnClickListener(R.id.select)
-                    .setText(R.id.textView3, group.getOID_GROUP_NAME())
-                    .setText(R.id.peisong_xuanze, peisong)
-                    .setText(R.id.shuliang, "共计" + group.getGROUP_EXCHANGE_QUANLITY() + "件商品")
-//                    .setText( R.id.fapiao_xuanze, group.getFapiao1()+group.getFapiao2()+group.getFapiao3() )
-                    .setText(R.id.fapiao_xuanze, fapiao1)
-                    .setText(R.id.xiaoji_money, "￥" + group.getGROUP_MONEY_ALL());
+                private void showDiscountDialog() {
+                    dialog = new DiscountDialog(ActivityGoodsSubmit.this);
+                    dialog.setCallback(new MyCallback() {
+                        @Override
+                        public void callback(Object... params) {
+                            final CheckBox youfeiquan = (CheckBox) params[0];
+                            if (youfeiquan.isChecked()) {
+                                group.setPOSTAGE_FLG("1");
+                            } else {
+                                group.setPOSTAGE_FLG("0");
+                            }
+                            final CheckBox dianzibi = (CheckBox) params[1];
+                            if (dianzibi.isChecked()) {
+                                group.setCOIN_FLG("1");
+                            } else {
+                                group.setCOIN_FLG("0");
+                            }
+                            final CheckBox youhuiquan = (CheckBox) params[2];
+                            if (youhuiquan.isChecked()) {
+                                group.setPREFERENTIAL_FLG("1");
+                            } else {
+                                group.setPREFERENTIAL_FLG("0");
+                            }
+                            final RadioGroup rgPoint = (RadioGroup) params[3];
+                            switch (rgPoint.getCheckedRadioButtonId()) {
+                                case R.id.dialog_discount_jifen_rb2:
+                                    group.setCOST_POINT("100");
+                                    break;
+                                case R.id.dialog_discount_jifen_rb3:
+                                    group.setCOST_POINT("200");
+                                    break;
+                                default:
+                                    group.setCOST_POINT("0");
+                                    break;
+                            }
+//                            group.
+                            showOrder(GsonUtils.Bean2Json(cOrderModel), "changeOrder");
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
+                }
+
+                @Override
+                public void onClick(View v) {
+                    switch (v.getId()) {
+                        case R.id.item_order_submit_group_discount:
+                            //show discount
+                            showDiscountDialog();
+                            break;
+                    }
+                }
+            };
+
+            RelativeLayout vDiscount = baseViewHolder.getView(R.id.item_order_submit_group_discount);
+            vDiscount.setOnClickListener(groupListener);
+            initTextViewTItle(vDiscount, "店铺优惠");
+
+            baseViewHolder.setText(R.id.item_order_submit_group_tv_cost, "共" + group.getGROUP_EXCHANGE_QUANLITY() + "件商品  小计:￥" + group.getGROUP_MONEY_ALL())
+                    .setText(R.id.item_order_submit_group_groupname, group.getLOGISTICS_COMPANY())
+                    .setText(R.id.item_order_submit_group_arrivedate, group.getDISTRIBUTION_DATE_END());
+
+            EditText edRemark = baseViewHolder.getView(R.id.item_order_submit_group_edremark);
+            edRemark.setText(group.getGROUP_REMARKS());
+            edRemark.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    group.setGROUP_REMARKS(s.toString());
+                }
+            });
 
 
             RecyclerView goods = baseViewHolder.getView(R.id.goods);
             goods.setLayoutManager(new LinearLayoutManager(ActivityGoodsSubmit.this));
             goods.setItemAnimator(new DefaultItemAnimator());
-            goods.setAdapter(new MyAdapter1(group.getDETAILS()));
+            goods.setAdapter(new CommOrderAdapter(group.getDETAILS()));
 
         }
     }
-
-    //商品adapter
-    private class MyAdapter1 extends BaseQuickAdapter<Good> {
-        public MyAdapter1(List<Good> lists) {
-            super(R.layout.item_order_submit_goods, lists);
-        }
-
-        @Override
-        protected void convert(BaseViewHolder baseViewHolder, Good goods) {
-            if (StringUtils.isEmpty(goods.getCOMMODITY_COLOR())) {
-                baseViewHolder.setText(R.id.size, " 规格：" + goods.getCOMMODITY_SIZE());
-            } else {
-                baseViewHolder.setText(R.id.size, "产地：" + goods.getCOMMODITY_COLOR() + " ;规格：" + goods.getCOMMODITY_SIZE());
-            }
-            baseViewHolder.setText(R.id.title, StringUtils.deletaFirst(goods.getCOMMODITY_NAME()))
-                    .setText(R.id.money, "￥" + goods.getCOST_MONEY())
-                    .setText(R.id.number, "X" + goods.getEXCHANGE_QUANLITY());
-
-            SimpleDraweeView simpleDraweeView = baseViewHolder.getView(R.id.iv_adapter_list_pic);
-            if (!StringUtils.isEmpty(goods.getIMG_PATH())) {
-                simpleDraweeView.setImageURI(Uri.parse(goods.getIMG_PATH()));
-            }
-        }
-    }
-
-    BizDataAsyncTask<OnlinePayModel> payTask;
 
     /**
      * 进行支付
@@ -727,18 +797,39 @@ public class ActivityGoodsSubmit extends BaseActivity {
      * @param data online pay data
      */
     private void goPay(final String data) {
-        payTask = new BizDataAsyncTask<OnlinePayModel>() {
+        setLoding(ActivityGoodsSubmit.this, false);
+        new BizDataAsyncTask<String>() {
             @Override
-            protected OnlinePayModel doExecute() throws ZYException, BizFailure {
+            protected String doExecute() throws ZYException, BizFailure {
                 return GoodsBiz.onlinePay(data);
             }
 
             @Override
-            protected void onExecuteSucceeded(OnlinePayModel aliPay) {
+            protected void onExecuteSucceeded(String data) {
                 closeLoding();
-                final String orderInfo = aliPay.getPay();
-                if (payModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_ALI)) {
+                final OnlinePayModel aliPay;
+                final String orderInfo;
+                if (payModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_WECHAT)) {
+                    Utils.log(data);
+                    setLoding(ActivityGoodsSubmit.this, false);
+                    Map dataMap = GsonUtils.Json2Bean(data, HashMap.class);
+                    Map wechatData = (Map) dataMap.get("result");
+                    wxApi = ((MyApplication) getApplication()).wxApi;
+
+                    PayReq request = new PayReq();
+                    request.appId = AppConfig.WEIXIN_APP_ID;
+                    request.partnerId = wechatData.get("partnerid").toString();
+                    request.prepayId = wechatData.get("prepayid").toString();
+                    request.packageValue = "Sign=WXPay";
+                    request.nonceStr = "" + wechatData.get("noncestr");
+                    request.timeStamp = wechatData.get("timestamp").toString();
+                    request.sign = "" + wechatData.get("sign");
+
+                    wxApi.sendReq(request);
+                } else if (payModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_ALI)) {
                     //支付宝
+                    aliPay = GsonUtils.Json2Bean(data, OnlinePayModel.class);
+                    orderInfo = aliPay.getPay();
                     if (!StringUtils.isEmpty(orderInfo)) {
                         Runnable payRunnable = new Runnable() {
 
@@ -767,6 +858,8 @@ public class ActivityGoodsSubmit extends BaseActivity {
 //
 //                        @Override
 //                        public void run() {
+                    aliPay = GsonUtils.Json2Bean(data, OnlinePayModel.class);
+                    orderInfo = aliPay.getPay();
                     Log.e(AppConfig.ERR_TAG, orderInfo);
 //                    mLoadingDialog = ProgressDialog.show(ActivityGoodsSubmit.this, // context
 //                            "", // title
@@ -795,9 +888,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
             protected void OnExecuteFailed() {
                 closeLoding();
             }
-        };
-        setLoding(ActivityGoodsSubmit.this, false);
-        payTask.execute();
+        }.execute();
     }
 
     //更改数据  刷新页面
@@ -811,69 +902,63 @@ public class ActivityGoodsSubmit extends BaseActivity {
                     Parcelable addr = data.getParcelableExtra(ActivityAddress.TAG_SELECTED_ADDRESS);
                     if (addr != null) {
                         int addrId = ((AddressModel) addr).getADDRESS_ID();
-                        model.setADDRESS_ID(addrId + "");
-                        String str = GsonUtils.Bean2Json(model);
+                        cOrderModel.setADDRESS_ID(addrId + "");
+
+                        String str = GsonUtils.Bean2Json(cOrderModel);
                         showOrder(str, "changeOrder");
                     }
                     break;
             }
         } else if (resultCode == AppConfig.IntentExtraKey.RESULT_OK) {
             switch (requestCode) {
-                case 0:
-                    zhifu_s = data.getStringExtra("pay");
-                    jifen_money = data.getStringExtra("jifen_money");
-                    jifen = data.getStringExtra("jifen");
-                    model.setCOST_POINT(jifen);
-                    if (zhifu_s.equals("在线支付")) {
-                        model.setPAYMENT_METHOD("0");
-                    } else if (zhifu_s.equals("货到付款")) {
-                        model.setPAYMENT_METHOD(PAYMTD_C);
-                    }
-
-                    String strCOrderModel = data.getStringExtra(ActivityGoodsSubmitChoice.TAG_CREATE_ORDER_MODEL);
-                    cOrderModel = GsonUtils.Json2Bean(strCOrderModel, CreatOrderModel.class);
-                    model.setDISTRIBUTION_DATE_START(cOrderModel.getDISTRIBUTION_DATE_START());
-                    model.setDISTRIBUTION_DATE_END(cOrderModel.getDISTRIBUTION_DATE_END());
-                    String str = GsonUtils.Bean2Json(model);
-                    showOrder(str, "changeOrder");
-
+                case REQUEST_SETTING:
+                    String zhifu_s = data.getStringExtra(ActivityGoodsSubmitChoice.TAG_ZHIFU);
+                    cOrderModel.setPAYMENT_METHOD(zhifu_s);
+                    String peisong = data.getStringExtra(ActivityGoodsSubmitChoice.TAG_PEISONG);
+                    cOrderModel.setDISTRIBUTION_MODE(peisong);
+                    String dateStart = data.getStringExtra(ActivityGoodsSubmitChoice.TAG_IIME_START);
+                    String dateEnd = data.getStringExtra(ActivityGoodsSubmitChoice.TAG_IIME_END);
+                    cOrderModel.setDISTRIBUTION_DATE_START(dateStart);
+                    cOrderModel.setDISTRIBUTION_DATE_END(dateEnd);
+                    bindData2View();
                     break;
 
                 case REQUEST_FAPIAO:
                     //配送信息 和 发票信息
-                    //int index = data.getIntExtra("possition", 0);
-                    int index = 0;
-//                    peisong = data.getStringExtra("peisong");
-//                    fapiao_flg1 = data.getStringExtra("fapiao_flg1");
-//                    fapiao_flg2 = data.getStringExtra("fapiao_flg2");
-//                    fapiao_flg3 = data.getStringExtra("fapiao_flg3");
-//                    fapiao_flg4 = data.getStringExtra("fapiao_flg4");
                     String jsonStr = data.getStringExtra(TAG_ORDER);
                     Business fapiaoModel = GsonUtils.Json2Bean(jsonStr, Business.class);
-                    Log.e(AppConfig.ERR_TAG, "jsonStr:" + jsonStr);
 
-//                    Business bizFirst = list_business.get(index);
-//                    bizFirst.setINVOICE_FLG(fapiaoModel.getINVOICE_FLG());
-                    //model.getDETAILS().get(index).setINVOICE_FLG(fapiaoModel.getINVOICE_FLG());
                     if (!"0".equals(fapiaoModel.getINVOICE_FLG())) {
                         //如果开发票
-//                        bizFirst.setINVOICE_TYPE(fapiaoModel.getINVOICE_TYPE());
-//                        bizFirst.setINVOICE_TITLE(fapiaoModel.getINVOICE_TITLE());
-//                        bizFirst.setINVOICE_CONTENT(fapiaoModel.getINVOICE_CONTENT());
-//                        bizFirst.setINVOICE_TAX(fapiaoModel.getINVOICE_CONTENT());
-
-                        model.getDETAILS().get(index).setINVOICE_FLG(fapiaoModel.getINVOICE_FLG());
-                        model.getDETAILS().get(index).setINVOICE_TYPE(fapiaoModel.getINVOICE_TYPE());
-                        model.getDETAILS().get(index).setINVOICE_TITLE(fapiaoModel.getINVOICE_TITLE());
-                        model.getDETAILS().get(index).setINVOICE_CONTENT(fapiaoModel.getINVOICE_CONTENT());
-                        model.getDETAILS().get(index).setINVOICE_TAX(fapiaoModel.getINVOICE_TAX());
-//                        model.getDETAILS().get(index).setDISTRIBUTION_MODE(fapiaoModel.get);
+                        cOrderModel.setINVOICE_FLG(fapiaoModel.getINVOICE_FLG());
+                        cOrderModel.setINVOICE_TYPE(fapiaoModel.getINVOICE_TYPE());
+                        cOrderModel.setINVOICE_TITLE(fapiaoModel.getINVOICE_TITLE());
+                        cOrderModel.setINVOICE_CONTENT(fapiaoModel.getINVOICE_CONTENT());
+                        cOrderModel.setINVOICE_TAX(fapiaoModel.getINVOICE_TAX());
+                        for (OrderGroupDto groupItem : cOrderModel.getDETAILS()) {
+                            groupItem.setINVOICE_FLG(fapiaoModel.getINVOICE_FLG());
+                            groupItem.setINVOICE_TYPE(fapiaoModel.getINVOICE_TYPE());
+                            groupItem.setINVOICE_TITLE(fapiaoModel.getINVOICE_TITLE());
+                            groupItem.setINVOICE_CONTENT(fapiaoModel.getINVOICE_CONTENT());
+                            groupItem.setINVOICE_TAX(fapiaoModel.getINVOICE_TAX());
+                        }
+                    } else {
+                        //如果not开发票
+                        cOrderModel.setINVOICE_FLG(fapiaoModel.getINVOICE_FLG());
+                        cOrderModel.setINVOICE_TYPE("");
+                        cOrderModel.setINVOICE_TITLE("");
+                        cOrderModel.setINVOICE_CONTENT("");
+                        cOrderModel.setINVOICE_TAX("");
+                        for (OrderGroupDto groupItem : cOrderModel.getDETAILS()) {
+                            groupItem.setINVOICE_FLG("");
+                            groupItem.setINVOICE_TYPE("");
+                            groupItem.setINVOICE_TITLE("");
+                            groupItem.setINVOICE_CONTENT("");
+                            groupItem.setINVOICE_TAX("");
+                        }
                     }
-                    //adapter.setNewData(list_business);
                     adapter.notifyDataSetChanged();
-//                    String str1 = GsonUtils.Bean2Json(model);
-//                    Log.e(AppConfig.ERR_TAG, "str1:" + str1);
-//                    showOrder(str1, "changeOrder");
+                    bindData2View();
                     break;
             }
         } else {
@@ -912,7 +997,6 @@ public class ActivityGoodsSubmit extends BaseActivity {
                     } else {
                         // 未收到签名信息
                         // 建议通过商户后台查询支付结果
-                        Log.e(AppConfig.ERR_TAG, "payresult .....2:");
                         ToastUtil.show(ActivityGoodsSubmit.this, getResources().getString(R.string.pay_success));
                     }
 
@@ -1007,6 +1091,24 @@ public class ActivityGoodsSubmit extends BaseActivity {
     public class PayModel {
         private String ORDER_TRADE_ID;
         private String PAYMENT_METHOD;
+        private String device;
+        private String ip;
+
+        public String getDevice() {
+            return device;
+        }
+
+        public void setDevice(String device) {
+            this.device = device;
+        }
+
+        public String getIp() {
+            return ip;
+        }
+
+        public void setIp(String ip) {
+            this.ip = ip;
+        }
 
         public String getORDER_TRADE_ID() {
             return ORDER_TRADE_ID;
@@ -1043,7 +1145,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
     }
 
 
-    public static Intent getIntent(Context context, OrderTradeDto order, String sellerid) {
+    public static Intent getIntent(Context context, OrderTradeDto order) {
         Intent it = new Intent(context, ActivityGoodsSubmit.class);
         it.putExtra(TAG_ORDER_DATA, GsonUtils.Bean2Json(order));
         it.putExtra(TAG_SELLERID, GsonUtils.Bean2Json(order));

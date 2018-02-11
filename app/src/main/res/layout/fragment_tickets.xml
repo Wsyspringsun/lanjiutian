@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/basebackground"
     android:orientation="vertical">
+
     <RelativeLayout
         android:id="@+id/sel_ticket_dianzibi"
         android:layout_width="match_parent"
@@ -46,42 +47,83 @@
 
     <RelativeLayout
         android:id="@+id/sel_ticket_mianyouquan"
-        android:layout_marginTop="@dimen/x10"
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x42"
+        android:layout_marginTop="@dimen/x10"
+        android:background="@color/white"
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_marginLeft="@dimen/x10"
-            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x10"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="@dimen/x22"
                 android:layout_height="@dimen/x22"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/icon_ticket_mianyouquan"/>
+                android:src="@mipmap/icon_ticket_mianyouquan" />
 
             <TextView
-                android:layout_marginLeft="@dimen/x5"
                 style="@style/font_ww_14"
+                android:layout_marginLeft="@dimen/x5"
                 android:text="@string/tickets_diyouquan"
-                android:textColor="@color/font_black2"/>
+                android:textColor="@color/font_black2" />
 
         </LinearLayout>
 
         <ImageView
+            android:layout_width="@dimen/x18"
+            android:layout_height="@dimen/x12"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x10"
             android:scaleType="fitXY"
+            android:src="@mipmap/jiantou_you_hei" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/sel_ticket_daijinquan"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x42"
+        android:layout_marginTop="@dimen/x10"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x10"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/x22"
+                android:layout_height="@dimen/x22"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/icon_ticket_mianyouquan" />
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_marginLeft="@dimen/x5"
+                android:text="@string/tickets_daijinquan"
+                android:textColor="@color/font_black2" />
+
+        </LinearLayout>
+
+        <ImageView
             android:layout_width="@dimen/x18"
             android:layout_height="@dimen/x12"
-            android:src="@mipmap/jiantou_you_hei"/>
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x10"
+            android:scaleType="fitXY"
+            android:src="@mipmap/jiantou_you_hei" />
 
     </RelativeLayout>
 

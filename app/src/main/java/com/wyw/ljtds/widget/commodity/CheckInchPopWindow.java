@@ -85,130 +85,130 @@ public class CheckInchPopWindow implements OnDismissListener, OnClickListener {
         this.context = context;
         this.color = commodityDetailsModel.getColorList();
         this.activity = (Activity) context;
-        this.mInflater = LayoutInflater.from( context );
+        this.mInflater = LayoutInflater.from(context);
 
 
-        ViewGroup view = (ViewGroup) LayoutInflater.from( context ).inflate( R.layout.adapter_popwindow, null, true );
+        ViewGroup view = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.adapter_popwindow, null, true);
 
 
 //        flow_layout1 = (FlowTagLayout) view.findViewById( R.id.flow_layout1 );
 //        flow_layout2 = (FlowTagLayout) view.findViewById( R.id.flow_layout2 );
-        flowLayout1 = (TagFlowLayout) view.findViewById( R.id.flow_layout1 );
-        flowLayout2 = (TagFlowLayout) view.findViewById( R.id.flow_layout2 );
-        ok_tv = (Button) view.findViewById( R.id.ok_tv );
-        add_car = (Button) view.findViewById( R.id.add_car );
+        flowLayout1 = (TagFlowLayout) view.findViewById(R.id.flow_layout1);
+        flowLayout2 = (TagFlowLayout) view.findViewById(R.id.flow_layout2);
+        ok_tv = (Button) view.findViewById(R.id.ok_tv);
+        add_car = (Button) view.findViewById(R.id.add_car);
 
-        pop_del = (ImageView) view.findViewById( R.id.pop_del );
-        inventory_tv = (TextView) view.findViewById( R.id.inventory_tv );
-        real_price_tv = (TextView) view.findViewById( R.id.real_price_tv );
-        has_choose_tv = (TextView) view.findViewById( R.id.has_choose_tv );
-        iv_adapter_grid_pic = (SimpleDraweeView) view.findViewById( R.id.iv_adapter_grid_pic );
-        number_button = (NumberButton) view.findViewById( R.id.number_button );
+        pop_del = (ImageView) view.findViewById(R.id.pop_del);
+        inventory_tv = (TextView) view.findViewById(R.id.inventory_tv);
+        real_price_tv = (TextView) view.findViewById(R.id.real_price_tv);
+        has_choose_tv = (TextView) view.findViewById(R.id.has_choose_tv);
+        iv_adapter_grid_pic = (SimpleDraweeView) view.findViewById(R.id.iv_adapter_grid_pic);
+        number_button = (NumberButton) view.findViewById(R.id.number_button);
 
-        pop_del.setOnClickListener( this );
-        ok_tv.setOnClickListener( this );
-        add_car.setOnClickListener( this );
+        pop_del.setOnClickListener(this);
+        ok_tv.setOnClickListener(this);
+        add_car.setOnClickListener(this);
 
-        popupWindow = new PopupWindow( view, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true );
-        popupWindow.setAnimationStyle( R.style.popWindow_anim_style );
-        ColorDrawable colorDrawable = new ColorDrawable( Color.WHITE );
-        popupWindow.setBackgroundDrawable( colorDrawable );
-        backgroundAlpha( activity, 0.5f );//0.0-1.0
-        popupWindow.setOnDismissListener( this );
+        popupWindow = new PopupWindow(view, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
+        popupWindow.setAnimationStyle(R.style.popWindow_anim_style);
+        ColorDrawable colorDrawable = new ColorDrawable(Color.WHITE);
+        popupWindow.setBackgroundDrawable(colorDrawable);
+        backgroundAlpha(activity, 0.5f);//0.0-1.0
+        popupWindow.setOnDismissListener(this);
 
         if (color != null && !color.isEmpty()) {
             for (int i = 0; i < color.size(); i++) {
-                if (color.get( i ).getSizeList() != null && !color.get( i ).getSizeList().isEmpty()) {
-                    color1.add( color.get( i ) );
+                if (color.get(i).getSizeList() != null && !color.get(i).getSizeList().isEmpty()) {
+                    color1.add(color.get(i));
                 }
             }
         }
 
         mColorListStr = new ArrayList<>();
         for (int i = 0; i < color1.size(); i++) {
-            mColorListStr.add( color1.get( i ).getColorName() );
+            mColorListStr.add(color1.get(i).getColorName());
         }
 
 
-        adapter1 = new com.zhy.view.flowlayout.TagAdapter<String>( mColorListStr ) {
+        adapter1 = new com.zhy.view.flowlayout.TagAdapter<String>(mColorListStr) {
             @Override
             public View getView(FlowLayout parent, int position, String o) {
-                TextView textView = (TextView) LayoutInflater.from( context ).inflate( R.layout.tag_item, flowLayout1, false );
-                textView.setText( o );
+                TextView textView = (TextView) LayoutInflater.from(context).inflate(R.layout.tag_item, flowLayout1, false);
+                textView.setText(o);
                 return textView;
             }
         };
-        flowLayout1.setAdapter( adapter1 );
-        flowLayout1.setOnTagClickListener( new TagFlowLayout.OnTagClickListener() {
+        flowLayout1.setAdapter(adapter1);
+        flowLayout1.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-                adapter2.clearAndAddAll( getsize( position ) );
-                reslut.setCololr( adapter1.getItem( position ).toString() );
-                adapter2.setSelectedList( 0 );
-                reslut.setColor_option( position );//设置默认的选中项
-                reslut.setColor_id( color1.get( position ).getCommodityColorId() );
+                adapter2.clearAndAddAll(getsize(position));
+                reslut.setCololr(adapter1.getItem(position).toString());
+                adapter2.setSelectedList(0);
+                reslut.setColor_option(position);//设置默认的选中项
+                reslut.setColor_id(color1.get(position).getCommodityColorId());
 
                 if (mSizeListStr != null && !mSizeListStr.isEmpty()) {
-                    reslut.setSize( mSizeListStr.get( 0 ) );//设置默认的选中项
-                    reslut.setSize_option( 0 );//设置默认的选中项
-                    reslut.setSize_id( size.get( 0 ).getCommoditySizeId() );
-                    update( 0 );
+                    reslut.setSize(mSizeListStr.get(0));//设置默认的选中项
+                    reslut.setSize_option(0);//设置默认的选中项
+                    reslut.setSize_id(size.get(0).getCommoditySizeId());
+                    update(0);
                 }
-                getResult2Show( reslut );
+                getResult2Show(reslut);
                 return true;
             }
-        } );
-        adapter1.setSelectedList( 0 );
-        reslut.setCololr( adapter1.getItem( 0 ).toString() );//设置默认的选中项
-        reslut.setColor_option( 0 );//设置默认的选中项
-        reslut.setColor_id( color1.get( 0 ).getCommodityColorId() );
+        });
+        adapter1.setSelectedList(0);
+        reslut.setCololr(adapter1.getItem(0).toString());//设置默认的选中项
+        reslut.setColor_option(0);//设置默认的选中项
+        reslut.setColor_id(color1.get(0).getCommodityColorId());
 
-        adapter2 = new com.zhy.view.flowlayout.TagAdapter<String>( getsize( 0 ) ) {
+        adapter2 = new com.zhy.view.flowlayout.TagAdapter<String>(getsize(0)) {
             @Override
             public View getView(FlowLayout parent, int position, String o) {
-                TextView textView = (TextView) LayoutInflater.from( context ).inflate( R.layout.tag_item, flowLayout1, false );
-                textView.setText( o );
+                TextView textView = (TextView) LayoutInflater.from(context).inflate(R.layout.tag_item, flowLayout1, false);
+                textView.setText(o);
                 return textView;
             }
         };
-        flowLayout2.setAdapter( adapter2 );
-        flowLayout2.setOnTagClickListener( new TagFlowLayout.OnTagClickListener() {
+        flowLayout2.setAdapter(adapter2);
+        flowLayout2.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-                reslut.setSize( adapter2.getItem( position ).toString() );
-                reslut.setSize_option( position );//设置默认的选中项
-                reslut.setSize_id( size.get( position ).getCommoditySizeId() );
-                update( position );
-                getResult2Show( reslut );
+                reslut.setSize(adapter2.getItem(position).toString());
+                reslut.setSize_option(position);//设置默认的选中项
+                reslut.setSize_id(size.get(position).getCommoditySizeId());
+                update(position);
+                getResult2Show(reslut);
                 return true;
             }
-        } );
-        adapter2.setSelectedList( 0 );
-        reslut.setSize( adapter2.getItem( 0 ).toString() );//设置默认的选中项
-        reslut.setSize_option( 0 );//设置默认的选中项
-        reslut.setSize_id( size.get( 0 ).getCommoditySizeId() );
-        update( 0 );
+        });
+        adapter2.setSelectedList(0);
+        reslut.setSize(adapter2.getItem(0).toString());//设置默认的选中项
+        reslut.setSize_option(0);//设置默认的选中项
+        reslut.setSize_id(size.get(0).getCommoditySizeId());
+        update(0);
 
-        reslut.setNum( 1 );
-        number_button.setBuyMax( 999 ).setInventory( reslut.getUsable() ).setCurrentNumber( 1 )
-                .setOnWarnListener( new NumberButton.OnWarnListener() {
+        reslut.setNum(1);
+        number_button.setBuyMax(999).setInventory(reslut.getUsable()).setCurrentNumber(1)
+                .setOnWarnListener(new NumberButton.OnWarnListener() {
 
                     @Override
                     public void onWarningForInventory(int inventory) {//超过库存
-                        ToastUtil.show( context, "您最多只能购买这么多了" );
+                        ToastUtil.show(context, "您最多只能购买这么多了");
                     }
 
                     @Override
                     public void onWarningForBuyMax(int max) {//超过最大可购买数量
-                        ToastUtil.show( context, "您最多只能购买这么多了" );
+                        ToastUtil.show(context, "您最多只能购买这么多了");
                     }
-                } )
-                .setOnNumberListener( new NumberButton.OnNumberListener() {
+                })
+                .setOnNumberListener(new NumberButton.OnNumberListener() {
                     @Override
                     public void OnNumberChange(int num) {
-                        reslut.setNum( num );
+                        reslut.setNum(num);
                     }
-                } );
+                });
 
 //            adapter1 = new TagAdapter<String>( context );
 //            flow_layout1.setAdapter( adapter1 );
@@ -275,9 +275,9 @@ public class CheckInchPopWindow implements OnDismissListener, OnClickListener {
      */
 
     public void showAsDropDown(View parent) {
-        popupWindow.showAtLocation( parent, Gravity.BOTTOM, 0, 0 );
-        popupWindow.setFocusable( true );
-        popupWindow.setOutsideTouchable( true );
+        popupWindow.showAtLocation(parent, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
         popupWindow.update();
     }
 
@@ -289,20 +289,20 @@ public class CheckInchPopWindow implements OnDismissListener, OnClickListener {
     public void backgroundAlpha(Activity context, float bgAlpha) {
         WindowManager.LayoutParams lp = context.getWindow().getAttributes();
         lp.alpha = bgAlpha;
-        context.getWindow().addFlags( WindowManager.LayoutParams.FLAG_DIM_BEHIND );
-        context.getWindow().setAttributes( lp );
+        context.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        context.getWindow().setAttributes(lp);
     }
 
     @Override
     public void onDismiss() {
-        getResult2Show( reslut );
-        backgroundAlpha( activity, 1f );
+        getResult2Show(reslut);
+        backgroundAlpha(activity, 1f);
     }
 
     public void dissmiss() {
 
         if (popupWindow != null && popupWindow.isShowing()) {
-            getResult2Show( reslut );
+            getResult2Show(reslut);
             popupWindow.dismiss();
         }
     }
@@ -310,10 +310,10 @@ public class CheckInchPopWindow implements OnDismissListener, OnClickListener {
     private List<String> getsize(int index) {
         mSizeListStr = new ArrayList<>();
         mSizeListStr.clear();
-        size = color1.get( index ).getSizeList();
+        size = color1.get(index).getSizeList();
 
         for (int j = 0; j < size.size(); j++) {
-            mSizeListStr.add( size.get( j ).getCommoditySize() );
+            mSizeListStr.add(size.get(j).getCommoditySize());
 //            Log.e( "*********",mSizeListStr.size()+"" );
         }
 
@@ -327,47 +327,47 @@ public class CheckInchPopWindow implements OnDismissListener, OnClickListener {
 
     private void update(int index) {
         if (size != null && !size.isEmpty()) {
-            reslut.setNew_money( size.get( index ).getCostMoney() );
-            reslut.setOld_money( size.get( index ).getMarketPrice() );
-            reslut.setUsable( size.get( index ).getQuanlityUsable() );
+            reslut.setNew_money(size.get(index).getCostMoney());
+            reslut.setOld_money(size.get(index).getMarketPrice());
+            reslut.setUsable(size.get(index).getQuanlityUsable());
             String img[] = new String[6];
-            if (!StringUtils.isEmpty( size.get( index ).getImgPath() )) {
-                img[0] = "http://www.lanjiutian.com/upload/images" + size.get( index ).getImgPath();
+            if (!StringUtils.isEmpty(size.get(index).getImgPath())) {
+                img[0] = "http://www.lanjiutian.com/upload/images" + size.get(index).getImgPath();
             } else {
                 img[0] = "";
             }
 
-            if (!StringUtils.isEmpty( size.get( index ).getImgPath2() )) {
-                img[1] = "http://www.lanjiutian.com/upload/images" + size.get( index ).getImgPath2();
+            if (!StringUtils.isEmpty(size.get(index).getImgPath2())) {
+                img[1] = "http://www.lanjiutian.com/upload/images" + size.get(index).getImgPath2();
             } else {
                 img[1] = "";
             }
 
-            if (!StringUtils.isEmpty( size.get( index ).getImgPath3() )) {
-                img[2] = "http://www.lanjiutian.com/upload/images" + size.get( index ).getImgPath3();
+            if (!StringUtils.isEmpty(size.get(index).getImgPath3())) {
+                img[2] = "http://www.lanjiutian.com/upload/images" + size.get(index).getImgPath3();
             } else {
                 img[2] = "";
             }
 
-            if (!StringUtils.isEmpty( size.get( index ).getImgPath4() )) {
-                img[3] = "http://www.lanjiutian.com/upload/images" + size.get( index ).getImgPath4();
+            if (!StringUtils.isEmpty(size.get(index).getImgPath4())) {
+                img[3] = "http://www.lanjiutian.com/upload/images" + size.get(index).getImgPath4();
             } else {
                 img[3] = "";
             }
 
-            if (!StringUtils.isEmpty( size.get( index ).getImgPath5() )) {
-                img[4] = "http://www.lanjiutian.com/upload/images" + size.get( index ).getImgPath5();
+            if (!StringUtils.isEmpty(size.get(index).getImgPath5())) {
+                img[4] = "http://www.lanjiutian.com/upload/images" + size.get(index).getImgPath5();
             } else {
                 img[4] = "";
             }
 
-            if (!StringUtils.isEmpty( size.get( index ).getImgPath6() )) {
-                img[5] = "http://www.lanjiutian.com/upload/images" + size.get( index ).getImgPath6();
+            if (!StringUtils.isEmpty(size.get(index).getImgPath6())) {
+                img[5] = "http://www.lanjiutian.com/upload/images" + size.get(index).getImgPath6();
             } else {
                 img[5] = "";
             }
-            reslut.setImage( img );
-            getResult2Show( reslut );
+            reslut.setImage(img);
+            getResult2Show(reslut);
         }
     }
 
@@ -375,18 +375,18 @@ public class CheckInchPopWindow implements OnDismissListener, OnClickListener {
     private void getResult2Show(final CheckInchModel result) {
         if (result == null) {
 
-            Toast.makeText( context, "选择的对象为空", Toast.LENGTH_SHORT ).show();
+            Toast.makeText(context, "选择的对象为空", Toast.LENGTH_SHORT).show();
 
         } else {
             if (onSelectedCompleteListener != null) {
-                onSelectedCompleteListener.onComplete( result );
+                onSelectedCompleteListener.onComplete(result);
             }
 
 
-            real_price_tv.setText( "￥" + result.getNew_money() );
-            inventory_tv.setText( "库存" + result.getUsable() );
-            has_choose_tv.setText( "已选择：" + "\"" + result.getCololr() + "\"  \"" + result.getSize() + "\"" );
-            iv_adapter_grid_pic.setImageURI( Uri.parse( result.getImage()[0] ) );
+            real_price_tv.setText("￥" + result.getNew_money());
+            inventory_tv.setText("库存" + result.getUsable());
+            has_choose_tv.setText("已选择：" + "\"" + result.getCololr() + "\"  \"" + result.getSize() + "\"");
+            iv_adapter_grid_pic.setImageURI(Uri.parse(result.getImage()[0]));
         }
     }
 
@@ -399,17 +399,17 @@ public class CheckInchPopWindow implements OnDismissListener, OnClickListener {
     }
 
     public void setSelect(CheckInchModel checkInchModel) {
-        adapter1.setSelectedList( checkInchModel.getColor_option() );
-        adapter2.setSelectedList( checkInchModel.getSize_option() );
-        adapter2.clearAndAddAll( getsize( checkInchModel.getColor_option() ) );
-        reslut.setCololr( adapter1.getItem( checkInchModel.getColor_option() ).toString() );
-        reslut.setSize( adapter2.getItem( checkInchModel.getSize_option() ).toString() );
-        reslut.setColor_option(checkInchModel.getColor_option() );
-        reslut.setSize_option( checkInchModel.getSize_option() );
-        reslut.setColor_id( checkInchModel.getColor_id() );
-        reslut.setSize_id( checkInchModel.getSize_id() );
-        number_button.setCurrentNumber( checkInchModel.getNum() );
-        reslut.setNum( checkInchModel.getNum() );
+        adapter1.setSelectedList(checkInchModel.getColor_option());
+        adapter2.setSelectedList(checkInchModel.getSize_option());
+        adapter2.clearAndAddAll(getsize(checkInchModel.getColor_option()));
+        reslut.setCololr(adapter1.getItem(checkInchModel.getColor_option()).toString());
+        reslut.setSize(adapter2.getItem(checkInchModel.getSize_option()).toString());
+        reslut.setColor_option(checkInchModel.getColor_option());
+        reslut.setSize_option(checkInchModel.getSize_option());
+        reslut.setColor_id(checkInchModel.getColor_id());
+        reslut.setSize_id(checkInchModel.getSize_id());
+        number_button.setCurrentNumber(checkInchModel.getNum());
+        reslut.setNum(checkInchModel.getNum());
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -428,12 +428,12 @@ public class CheckInchPopWindow implements OnDismissListener, OnClickListener {
 
             //购买
             case R.id.ok_tv:
-                listener.onClickBuyNow( reslut );
+                listener.onClickBuyNow(reslut);
                 break;
 
             //加入购物车
             case R.id.add_car:
-                listener.onClickAdd2Car( reslut );
+                listener.onClickAdd2Car(reslut);
                 break;
         }
     }

@@ -5,9 +5,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -17,20 +23,32 @@ import com.google.zxing.common.BitMatrix;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.SoapProcessor;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.ui.user.order.LogisticTraceActivity;
 
 import junit.framework.Assert;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -109,6 +127,48 @@ public class Utils {
         return inSampleSize;
     }
 
+
+    public interface HttpResCallback {
+        void handle(BufferedReader reader);
+
+        void preRequest(HttpURLConnection httpConnection);
+    }
+
+    public static void getHttpResponse(String urlPath, HttpResCallback callback) {
+        URL infoUrl = null;
+        InputStream inStream = null;
+        HttpURLConnection httpConnection = null;
+        try {
+            infoUrl = new URL(urlPath);
+            URLConnection connection = infoUrl.openConnection();
+            httpConnection = (HttpURLConnection) connection;
+
+            if (callback != null) {
+                callback.preRequest(httpConnection);
+            }
+            int responseCode = httpConnection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                inStream = httpConnection.getInputStream();
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(inStream, "utf-8"));
+                callback.handle(reader);
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (inStream != null)
+                    inStream.close();
+                if (httpConnection != null)
+                    httpConnection.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static byte[] getBytesFromUrl(String urlPath) throws IOException {
         URL url = new URL(urlPath);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -130,7 +190,6 @@ public class Utils {
         } finally {
             conn.disconnect();
         }
-
     }
 
 
@@ -159,10 +218,11 @@ public class Utils {
         return BitmapFactory.decodeFile(filePath, options);
     }
 
+
     public static String formatFee(String val) {
         if (StringUtils.isEmpty(val))
             return "";
-        DecimalFormat df = new DecimalFormat("0.00");
+        DecimalFormat df = new DecimalFormat("0.#");
         BigDecimal bVal = new BigDecimal(val);
         return df.format(bVal);
     }
@@ -171,7 +231,7 @@ public class Utils {
         return Pattern.matches(REG_PATTERN_PHONE, phone);
     }
 
-    public static void log(String content) {
+    public static void error(String content) {
 //        if (!AppConfig.test) return;
         StackTraceElement[] trace = new Throwable().getStackTrace();
         if (trace != null && trace.length > 1) {
@@ -187,6 +247,46 @@ public class Utils {
                     Log.e(AppConfig.ERR_TAG, "> " + logContent);
                 }
                 Log.e(AppConfig.ERR_TAG, " > " + content);
+            }
+        }
+    }
+
+    public static void log(String content) {
+//        if (!AppConfig.test) return;
+        StackTraceElement[] trace = new Throwable().getStackTrace();
+        if (trace != null && trace.length > 1) {
+            int segmentSize = 3 * 1024;
+            long length = content.length();
+            if (length <= segmentSize) {// 长度小于等于限制直接打印
+                Log.i(AppConfig.ERR_TAG, trace[1].getClassName() + "#" + trace[1].getMethodName() + " > " + trace[1].getLineNumber() + " :" + content);
+            } else {
+                Log.i(AppConfig.ERR_TAG, trace[1].getClassName() + "#" + trace[1].getMethodName() + " > " + trace[1].getLineNumber() + " :");
+                while (content.length() > segmentSize) {// 循环分段打印日志
+                    String logContent = content.substring(0, segmentSize);
+                    content = content.replace(logContent, "");
+                    Log.i(AppConfig.ERR_TAG, "> " + logContent);
+                }
+                Log.i(AppConfig.ERR_TAG, " > " + content);
+            }
+        }
+    }
+
+    public static void debug(String content) {
+//        if (!AppConfig.test) return;
+        StackTraceElement[] trace = new Throwable().getStackTrace();
+        if (trace != null && trace.length > 1) {
+            int segmentSize = 3 * 1024;
+            long length = content.length();
+            if (length <= segmentSize) {// 长度小于等于限制直接打印
+                Log.d(AppConfig.ERR_TAG, trace[1].getClassName() + "#" + trace[1].getMethodName() + " > " + trace[1].getLineNumber() + " :" + content);
+            } else {
+                Log.d(AppConfig.ERR_TAG, trace[1].getClassName() + "#" + trace[1].getMethodName() + " > " + trace[1].getLineNumber() + " :");
+                while (content.length() > segmentSize) {// 循环分段打印日志
+                    String logContent = content.substring(0, segmentSize);
+                    content = content.replace(logContent, "");
+                    Log.d(AppConfig.ERR_TAG, "> " + logContent);
+                }
+                Log.d(AppConfig.ERR_TAG, " > " + content);
             }
         }
     }
@@ -222,8 +322,10 @@ public class Utils {
                 inStream = httpConnection.getInputStream();
             }
         } catch (MalformedURLException e) {
+            Utils.error(e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
+            Utils.error(e.getMessage());
             e.printStackTrace();
         }
         byte[] data = inputStreamToByte(inStream);
@@ -412,5 +514,137 @@ public class Utils {
         Typeface iconfont = Typeface.createFromAsset(context.getAssets(), "iconfont/iconfont.ttf");
         tv.setTypeface(iconfont);
         tv.setText(txt);
+    }
+
+    /**
+     * 获取设备唯一编号
+     *
+     * @param context
+     * @return
+     */
+    public static String getImei(Context context) {
+        String imei;
+        try {
+            imei = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+        } catch (Exception e) {
+            imei = "wsyTrace";
+        }
+        return imei;
+    }
+
+    public static String trim(String val) {
+        if (StringUtils.isEmpty(val)) return "";
+        return val.trim();
+    }
+
+    /**
+     * 将数据存入    * @param context
+     *
+     * @param cacheFileName
+     * @param mode
+     * @param content
+     */
+    public static void setCache2File(Context context, String cacheFileName, int mode, String content) {
+        FileOutputStream fos = null;
+        try {
+            //打开文件输出流，接收参数是文件名和模式
+            fos = context.openFileOutput(cacheFileName, mode);
+            fos.write(content.getBytes());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 从 File 读取
+     *
+     * @param context
+     * @param cacheFileName
+     * @return
+     */
+    public static String getCache2File(Context context, String cacheFileName) {
+        FileInputStream fis = null;
+        StringBuffer sBuf = new StringBuffer();
+        try {
+            fis = context.openFileInput(cacheFileName);
+            int len = 0;
+            byte[] buf = new byte[1024];
+            while ((len = fis.read(buf)) != -1) {
+                sBuf.append(new String(buf, 0, len));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (sBuf != null) {
+            return sBuf.toString();
+        }
+        return null;
+    }
+
+    public static String getIPAddress(Context context) {
+        NetworkInfo info = ((ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        if (info != null && info.isConnected()) {
+            if (info.getType() == ConnectivityManager.TYPE_MOBILE) {//当前使用2G/3G/4G网络
+                try {
+                    //Enumeration<NetworkInterface> en=NetworkInterface.getNetworkInterfaces();
+                    for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+                        NetworkInterface intf = en.nextElement();
+                        for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                            InetAddress inetAddress = enumIpAddr.nextElement();
+                            Utils.log("data:" + inetAddress.getHostAddress());
+                            if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+                                return inetAddress.getHostAddress();
+                            }
+                        }
+                    }
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (info.getType() == ConnectivityManager.TYPE_WIFI) {//当前使用无线网络
+                WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+                WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                String ipAddress = intIP2StringIP(wifiInfo.getIpAddress());//得到IPV4地址
+                return ipAddress;
+            }
+        } else {
+            //当前无网络连接,请在设置中打开网络
+            Toast.makeText(context, "当前无网络连接", Toast.LENGTH_LONG);
+        }
+        return "";
+    }
+
+    /**
+     * 将得到的int类型的IP转换为String类型
+     *
+     * @param ip
+     * @return
+     */
+    public static String intIP2StringIP(int ip) {
+        return (ip & 0xFF) + "." +
+                ((ip >> 8) & 0xFF) + "." +
+                ((ip >> 16) & 0xFF) + "." +
+                (ip >> 24 & 0xFF);
     }
 }

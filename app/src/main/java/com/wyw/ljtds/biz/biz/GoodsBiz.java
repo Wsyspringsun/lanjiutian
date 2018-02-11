@@ -1,11 +1,14 @@
 package com.wyw.ljtds.biz.biz;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
+import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.CommodityDetailsModel;
 import com.wyw.ljtds.model.CreatOrderModel;
@@ -13,10 +16,14 @@ import com.wyw.ljtds.model.KeyValue;
 import com.wyw.ljtds.model.LogisticsModel;
 import com.wyw.ljtds.model.MedicineDetailsEvaluateModel;
 import com.wyw.ljtds.model.MedicineDetailsModel;
+import com.wyw.ljtds.model.MedicineListModel;
+import com.wyw.ljtds.model.MedicineShop;
 import com.wyw.ljtds.model.OnlinePayModel;
 import com.wyw.ljtds.model.OrderModelInfoMedicine;
 import com.wyw.ljtds.model.OrderModelMedicine;
 import com.wyw.ljtds.model.ShopImg;
+import com.wyw.ljtds.model.ShopModel;
+import com.wyw.ljtds.model.ShoppingCartModel;
 import com.wyw.ljtds.ui.goods.ActivityGoodsSubmit;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.Utils;
@@ -69,10 +76,19 @@ public class GoodsBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static MedicineDetailsModel getMedicine(String id) throws BizFailure, ZYException {
-        SoapProcessor ksoap = new SoapProcessor("Service", "getMedicine", true);
-
+    public static MedicineDetailsModel getMedicine(String id, String logiId, String lat, String lng, String addrId) throws BizFailure, ZYException {
+        SoapProcessor ksoap = null;
+        if (!StringUtils.isEmpty(PreferenceCache.getToken())) {
+            ksoap = new SoapProcessor("Service", "getMedicine", true);
+        } else {
+            ksoap = new SoapProcessor("Service", "getMedicine", false);
+            ksoap.setProperty("token", "", SoapProcessor.PropertyType.TYPE_STRING);
+        }
         ksoap.setProperty("wareId", id, SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("logisticsCompanyId", logiId, SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("lat", lat, SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("lng", lng, SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("addressId", addrId, SoapProcessor.PropertyType.TYPE_STRING);
 
         JsonElement element = ksoap.request();
         Gson gson = new GsonBuilder().create();
@@ -157,15 +173,15 @@ public class GoodsBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static OnlinePayModel onlinePay(String data) throws BizFailure, ZYException {
+    public static String onlinePay(String data) throws BizFailure, ZYException {
         SoapProcessor ksoap = new SoapProcessor("Service", "order", true);
 
         ksoap.setProperty("op", "onlinePay", SoapProcessor.PropertyType.TYPE_STRING);
         ksoap.setProperty("data", data, SoapProcessor.PropertyType.TYPE_STRING);
-
-        JsonElement element = ksoap.request();
-        Gson gson = new GsonBuilder().create();
-        return gson.fromJson(element, OnlinePayModel.class);
+        return ksoap.requestStr();
+//        JsonElement element = ksoap.request();
+//        Gson gson = new GsonBuilder().create();
+//        return gson.fromJson(element, OnlinePayModel.class);
     }
 
 
@@ -215,13 +231,18 @@ public class GoodsBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static String showCart(String data, String op) throws BizFailure, ZYException {
+    public static ShoppingCartModel showCart(String data, String op) throws BizFailure, ZYException {
         SoapProcessor ksoap = new SoapProcessor("Service", "shoppingcart", true);
 
         ksoap.setProperty("op", op, SoapProcessor.PropertyType.TYPE_STRING);
         ksoap.setProperty("data", data, SoapProcessor.PropertyType.TYPE_STRING);
-
-        return ksoap.requestStr();
+        Log.e(AppConfig.ERR_TAG, "data:" + data);
+        JsonElement el = ksoap.request();
+        Gson gson = new GsonBuilder().create();
+        TypeToken<ShoppingCartModel> tt = new TypeToken<ShoppingCartModel>() {
+        };
+        ShoppingCartModel fs = gson.fromJson(el, tt.getType());
+        return fs;
     }
 
 
@@ -261,10 +282,10 @@ public class GoodsBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static OrderModelInfoMedicine getOrderInfo(String data, String op) throws BizFailure, ZYException {
+    public static OrderModelInfoMedicine getOrderInfo(String data) throws BizFailure, ZYException {
         SoapProcessor ksoap = new SoapProcessor("Service", "order", true);
 
-        ksoap.setProperty("op", op, SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("op", "orderDetail", SoapProcessor.PropertyType.TYPE_STRING);
         ksoap.setProperty("data", data, SoapProcessor.PropertyType.TYPE_STRING);
 
         JsonElement element = ksoap.request();
@@ -286,6 +307,15 @@ public class GoodsBiz extends BaseBiz {
         SoapProcessor ksoap = new SoapProcessor("Service", "evaluate", true);
 
         ksoap.setProperty("op", op, SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("data", data, SoapProcessor.PropertyType.TYPE_STRING);
+        JsonElement req = ksoap.request();
+        Gson gson = new GsonBuilder().create();
+        return gson.fromJson(req, String.class);
+    }
+
+    public static String publishEvaluate(String data) throws BizFailure, ZYException {
+        SoapProcessor ksoap = new SoapProcessor("Service", "evaluate", true);
+        ksoap.setProperty("op", "create", SoapProcessor.PropertyType.TYPE_STRING);
         ksoap.setProperty("data", data, SoapProcessor.PropertyType.TYPE_STRING);
         JsonElement req = ksoap.request();
         Gson gson = new GsonBuilder().create();
@@ -362,6 +392,63 @@ public class GoodsBiz extends BaseBiz {
         TypeToken<List<ShopImg>> tt = new TypeToken<List<ShopImg>>() {
         };
         List<ShopImg> fs = gson.fromJson(element, tt.getType());
+        return fs;
+    }
+
+    public static List<MedicineShop> readMedicineShop(String wareId, String lat, String lng) throws BizFailure, ZYException {
+        SoapProcessor ksoap = new SoapProcessor("Service", "getGroupList", false);
+        ksoap.setProperty("wareId", wareId, SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("lat", lat, SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("lng", lng, SoapProcessor.PropertyType.TYPE_STRING);
+        JsonElement element = ksoap.request();
+        Gson gson = new GsonBuilder().create();
+        TypeToken<List<MedicineShop>> tt = new TypeToken<List<MedicineShop>>() {
+        };
+        List<MedicineShop> fs = gson.fromJson(element, tt.getType());
+        return fs;
+    }
+
+    public static List<MedicineListModel> loadGoodsOfShop(String data) throws BizFailure, ZYException {
+        SoapProcessor ksoap = new SoapProcessor("Service", "shop", false);
+        ksoap.setProperty("op", "shopMedicineList", SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("data", data, SoapProcessor.PropertyType.TYPE_STRING);
+        JsonElement element = ksoap.request();
+        Gson gson = new GsonBuilder().create();
+        TypeToken<List<MedicineListModel>> tt = new TypeToken<List<MedicineListModel>>() {
+        };
+        List<MedicineListModel> fs = gson.fromJson(element, tt.getType());
+        return fs;
+    }
+
+    /**
+     * 获取全店推荐商品列表
+     *
+     * @param data
+     * @return
+     * @throws BizFailure
+     * @throws ZYException
+     */
+    public static List<MedicineListModel> loadGoodsOfHot(String data) throws BizFailure, ZYException {
+        SoapProcessor ksoap = new SoapProcessor("Service", "shop", false);
+        ksoap.setProperty("op", "shopHotMedicineList", SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("data", data, SoapProcessor.PropertyType.TYPE_STRING);
+        JsonElement element = ksoap.request();
+        Gson gson = new GsonBuilder().create();
+        TypeToken<List<MedicineListModel>> tt = new TypeToken<List<MedicineListModel>>() {
+        };
+        List<MedicineListModel> fs = gson.fromJson(element, tt.getType());
+        return fs;
+    }
+
+    public static ShopModel loadShopInfo(String data) throws BizFailure, ZYException {
+        SoapProcessor ksoap = new SoapProcessor("Service", "shop", false);
+        ksoap.setProperty("op", "shopParameters", SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("data", data, SoapProcessor.PropertyType.TYPE_STRING);
+        JsonElement element = ksoap.request();
+        Gson gson = new GsonBuilder().create();
+        TypeToken<ShopModel> tt = new TypeToken<ShopModel>() {
+        };
+        ShopModel fs = gson.fromJson(element, tt.getType());
         return fs;
     }
 }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/tuijian_ll"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:orientation="vertical"
-              android:paddingBottom="@dimen/x2"
-              android:paddingTop="@dimen/x2">
+    android:id="@+id/tuijian_ll"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/x2"
+    android:paddingTop="@dimen/x2">
 
     <TextView
         android:id="@+id/text"
@@ -16,7 +16,7 @@
         android:ellipsize="end"
         android:padding="@dimen/x5"
         android:singleLine="true"
-        android:textColor="@color/font_black2"/>
+        android:textColor="@color/font_black2" />
 
     <View
         android:id="@+id/views"
@@ -24,6 +24,6 @@
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/x3"
         android:background="@color/base_bar"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
 </LinearLayout>

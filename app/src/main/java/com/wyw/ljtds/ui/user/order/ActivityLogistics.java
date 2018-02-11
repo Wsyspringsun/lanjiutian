@@ -20,6 +20,8 @@ import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -67,6 +69,8 @@ public class ActivityLogistics extends BaseActivity {
     private TextView dingdan;
     @ViewInject(R.id.reclcyer)
     private RecyclerView recyclerView;
+    @ViewInject(R.id.activity_logistic_info)
+    private RelativeLayout logisticInfo;
 
 
     private List<LogisticsModel.Goods> list;
@@ -128,10 +132,26 @@ public class ActivityLogistics extends BaseActivity {
             }
 
             @Override
-            protected void onExecuteSucceeded(LogisticsModel logisticsModel) {
+            protected void onExecuteSucceeded(final LogisticsModel logisticsModel) {
                 closeLoding();
-                Log.e(AppConfig.ERR_TAG, GsonUtils.Bean2Json(logisticsModel));
-                if(logisticsModel.getORDER() == null){
+                if (logisticsModel == null) return;
+                if (!StringUtils.isEmpty(logisticsModel.getCOURIER())) {
+                    logisticInfo.setVisibility(View.VISIBLE);
+                    TextView tvCurior = (TextView) logisticInfo.findViewById(R.id.activity_logistic_tv_curior);
+                    tvCurior.setText("快递员\n" + logisticsModel.getCOURIER());
+
+                    LinearLayout telRegion = (LinearLayout) findViewById(R.id.activity_logistic_tel);
+
+                    CuriorListener cl = new CuriorListener(logisticsModel.getCOURIER_MOBILE());
+                    telRegion.setOnClickListener(cl);
+                    LinearLayout traceRegion = (LinearLayout) findViewById(R.id.activity_logistic_trace);
+                    traceRegion.setOnClickListener(cl);
+
+
+                } else {
+                    logisticInfo.setVisibility(View.GONE);
+                }
+                if (logisticsModel.getORDER() == null) {
 //                    ToastUtil.show(ActivityLogistics.this,getResources().getString(R.string.logistic_null));
 //                    finish();
                     return;
@@ -143,7 +163,6 @@ public class ActivityLogistics extends BaseActivity {
                 }
                 wuliu.setText("物流单号：" + logisticsModel.getLOGISTICS_ORDER_ID());
                 dingdan.setText("订单编号：" + logisticsModel.getCOMMODITY_ORDER_ID());
-
 
                 logisticsDataList = new ArrayList<>();
                 if (logisticsModel.getDETAILS() != null && !logisticsModel.getDETAILS().isEmpty()) {
@@ -195,15 +214,15 @@ public class ActivityLogistics extends BaseActivity {
         @Override
         protected void convert(BaseViewHolder baseViewHolder, LogisticsModel.Goods goods) {
             if (StringUtils.isEmpty(goods.getCOMMODITY_COLOR())) {
-                baseViewHolder.setText(R.id.size, " 规格：" + goods.getCOMMODITY_SIZE());
+                baseViewHolder.setText(R.id.item_order_submit_goods_size, " 规格：" + goods.getCOMMODITY_SIZE());
             } else {
-                baseViewHolder.setText(R.id.size, "产地：" + goods.getCOMMODITY_COLOR() + " ;规格：" + goods.getCOMMODITY_SIZE());
+                baseViewHolder.setText(R.id.item_order_submit_goods_size, "产地：" + goods.getCOMMODITY_COLOR() + " ;规格：" + goods.getCOMMODITY_SIZE());
             }
-            baseViewHolder.setText(R.id.title, goods.getCOMMODITY_NAME())
-                    .setText(R.id.money, "￥" + goods.getCOST_MONEY())
-                    .setText(R.id.number, "X" + goods.getEXCHANGE_QUANLITY());
+            baseViewHolder.setText(R.id.item_order_submit_goods_title, goods.getCOMMODITY_NAME())
+                    .setText(R.id.item_order_submit_goods_money, "￥" + goods.getCOST_MONEY())
+                    .setText(R.id.item_order_submit_goods_number, "X" + goods.getEXCHANGE_QUANLITY());
 
-            SimpleDraweeView simpleDraweeView = baseViewHolder.getView(R.id.iv_adapter_list_pic);
+            SimpleDraweeView simpleDraweeView = baseViewHolder.getView(R.id.item_order_submit_goods_pic);
             if (!StringUtils.isEmpty(goods.getIMG_PATH())) {
                 simpleDraweeView.setImageURI(Uri.parse(goods.getIMG_PATH()));
             }
@@ -266,4 +285,25 @@ public class ActivityLogistics extends BaseActivity {
         return value;
     }
 
+    class CuriorListener implements View.OnClickListener {
+        private String mobile;
+
+        public CuriorListener(String mobile) {
+            this.mobile = mobile;
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.activity_logistic_tel:
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mobile));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    break;
+                case R.id.activity_logistic_trace:
+                    startActivity(LogisticTraceActivity.getIntent(ActivityLogistics.this, mobile));
+                    break;
+            }
+        }
+    }
 }

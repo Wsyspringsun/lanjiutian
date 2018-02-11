@@ -93,7 +93,7 @@ public class ShopcartExpandableListViewAdapter extends BaseExpandableListAdapter
         if (convertView == null) {
             gholder = new GroupHolder();
             convertView = View.inflate(context, R.layout.item_shopcart_group, null);
-            gholder.cb_check = (CheckBox) convertView.findViewById(R.id.determine_chekbox);
+            gholder.cb_check = (CheckBox) convertView.findViewById(R.id.item_shopcart_group_chk);
             gholder.tv_group_name = (TextView) convertView.findViewById(R.id.tv_source_name);
             //groupMap.put(groupPosition, convertView);
             convertView.setTag(gholder);
@@ -120,14 +120,14 @@ public class ShopcartExpandableListViewAdapter extends BaseExpandableListAdapter
 
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        SlideView slideView = null;
+/*        SlideView slideView = null;
         final ChildHolder cholder;
         if (convertView == null) {
             cholder = new ChildHolder();
             View view = View.inflate(context, R.layout.item_shopcart_product, null);
             slideView = new SlideView(context, context.getResources(), view);
             convertView = slideView;
-            cholder.cb_check = (CheckBox) convertView.findViewById(R.id.check_box);
+            cholder.cb_check = (CheckBox) convertView.findViewById(R.id.item_shopcart_group_chk);
 
             cholder.tv_product_desc = (TextView) convertView.findViewById(R.id.tv_intro);
             cholder.tv_price = (TextView) convertView.findViewById(R.id.tv_price);
@@ -183,7 +183,8 @@ public class ShopcartExpandableListViewAdapter extends BaseExpandableListAdapter
                 notifyDataSetChanged();
             }
         });
-        return convertView;
+        return convertView;*/
+        return null;
     }
 
     @Override

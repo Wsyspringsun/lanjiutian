@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x35"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_marginLeft="@dimen/vertical_margin"
+        android:layout_marginRight="@dimen/vertical_margin"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x5"
+            android:orientation="vertical"
+            android:padding="@dimen/x5">
+
+            <ImageView
+                android:id="@+id/activity_evaluate_edit_back"
+                android:layout_width="@dimen/x18"
+                android:layout_height="@dimen/x18"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/jiantou_zuo_hei" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/activity_fragment_title"
+            style="@style/font_ww_16"
+            android:layout_centerInParent="true"
+            android:text="发表评论"
+            android:textColor="@color/font_1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x5"
+            android:orientation="horizontal"
+            android:padding="@dimen/x5">
+
+            <TextView
+                android:id="@+id/activity_evaluate_edit_publish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_toolbar_publish"
+                android:paddingBottom="1dp"
+                android:paddingLeft="@dimen/normal_padding"
+                android:paddingRight="@dimen/normal_padding"
+                android:paddingTop="1dp"
+                android:text="发布"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/vertical_margin"
+        android:layout_marginRight="@dimen/vertical_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/activity_evaluate_edit_goods"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/padding3"
+                android:paddingTop="@dimen/padding3">
+
+                <ImageView
+                    android:id="@+id/activity_evaluate_edit_imgshop"
+                    android:layout_width="@dimen/x20"
+                    android:layout_height="@dimen/x20"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/icon_dianpu" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/vertical_margin"
+                    android:layout_toRightOf="@id/activity_evaluate_edit_imgshop"
+                    android:text="店铺评价"
+                    android:textColor="@color/font_0"
+                    android:textSize="@dimen/font_2" />
+
+                <TextView
+                    android:id="@+id/group_name"
+                    style="@style/font_ww_14"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="店铺名称"
+                    android:textColor="@color/font_black2" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginTop="@dimen/vertical_margin_mid"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/font_ww_14"
+                    android:text="@string/order_pf1"
+                    android:textColor="@color/font_black2" />
+
+                <RatingBar
+                    android:id="@+id/activity_evaluate_edit_star_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="33dp"
+                    android:layout_marginLeft="@dimen/vertical_margin_lg"
+                    android:numStars="5"
+                    android:progressDrawable="@drawable/bg_starbar"
+                    android:rating="5" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginTop="@dimen/vertical_margin_mid"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/font_ww_14"
+                    android:text="@string/order_pf2"
+                    android:textColor="@color/font_black2" />
+
+                <RatingBar
+                    android:id="@+id/activity_evaluate_edit_star_logistic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="33dp"
+                    android:layout_marginLeft="@dimen/vertical_margin_lg"
+                    android:numStars="5"
+                    android:progressDrawable="@drawable/bg_starbar"
+                    android:rating="5" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginTop="@dimen/vertical_margin_mid"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/font_ww_14"
+                    android:text="@string/order_pf3"
+                    android:textColor="@color/font_black2" />
+
+                <RatingBar
+                    android:id="@+id/activity_evaluate_edit_star_service"
+                    android:layout_width="wrap_content"
+                    android:layout_height="33dp"
+                    android:layout_marginLeft="@dimen/vertical_margin_lg"
+                    android:numStars="5"
+                    android:progressDrawable="@drawable/bg_starbar"
+                    android:rating="5" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

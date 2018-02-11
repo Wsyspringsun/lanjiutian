@@ -1,9 +1,9 @@
 package com.wyw.ljtds.biz.task;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.wyw.ljtds.R;
@@ -14,7 +14,8 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.config.PreferenceCache;
-import com.wyw.ljtds.ui.user.address.ActivityAddressEdit;
+import com.wyw.ljtds.utils.NetUtil;
+import com.wyw.ljtds.utils.Utils;
 
 
 /**
@@ -25,23 +26,25 @@ import com.wyw.ljtds.ui.user.address.ActivityAddressEdit;
  */
 public abstract class BizDataAsyncTask<Result> extends
         AsyncTask<Void, Void, Boolean> {
+    private Context context = null;
     private Result mResult;
 
     private ZYException mException;
 
     private BizFailure mFailure;
 
+    public BizDataAsyncTask(Activity activity) {
+        super();
+        this.context = activity;
+    }
 
     public BizDataAsyncTask() {
         super();
     }
 
 
-
-
     @Override
     protected final Boolean doInBackground(Void... params) {
-        Log.e(AppConfig.ERR_TAG, "task Instance:" + this.getClass().getName());
         try {
             mResult = doExecute();
             return true;
@@ -62,6 +65,15 @@ public abstract class BizDataAsyncTask<Result> extends
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        if (context == null) return;
+        if (context instanceof Activity) {
+            if (!NetUtil.isNetworkAvailable(context)) {
+                NetUtil.showNetSettingDialog((Activity) context);
+                cancel(true);
+                return;
+            }
+        }
+
     }
 
     @Override
@@ -106,9 +118,9 @@ public abstract class BizDataAsyncTask<Result> extends
     }
 
     protected void onExecuteFailure(BizFailure failure) {
-        Log.e(AppConfig.ERR_TAG, this.getClass().getName() + " BizTask onExecuteFailure.......:" + failure.getMessage());
+        Utils.log(this.getClass().getName() + " BizTask onExecuteFailure.......:" + failure.getMessage());
         OnExecuteFailed();
-        if (mFailure.getMessage().contains("新旧Token不一致") || mFailure.getMessage().contains("用户名密码") || mFailure.getMessage().contains("Token不一致") || mFailure.getMessage().contains("Token为空")) {// token认证失败
+        if (mFailure.getMessage().contains("Token") || mFailure.getMessage().contains("用户名密码")) {// token认证失败
             Toast.makeText(MyApplication.getAppContext(), R.string.auth_expire,
                     Toast.LENGTH_LONG).show();
             PreferenceCache.putToken("");
@@ -117,7 +129,6 @@ public abstract class BizDataAsyncTask<Result> extends
             Intent i = new Intent(AppConfig.AppAction.ACTION_TOKEN_EXPIRE);
             MyApplication.getAppContext().sendBroadcast(i);
         } else if (mFailure.getMessage().contains("地址为空") || mFailure.getMessage().contains("获取地址为空")) {//没有地址
-            Log.e(AppConfig.ERR_TAG, "地址为空:" + AppConfig.AppAction.ACTION_ADDRESS_EXPIRE);
             Intent i = new Intent(AppConfig.AppAction.ACTION_ADDRESS_EXPIRE);
             MyApplication.getAppContext().sendBroadcast(i);
 //            Intent it = new Intent(MyApplication.getAppContext(), ActivityAddressEdit.class);

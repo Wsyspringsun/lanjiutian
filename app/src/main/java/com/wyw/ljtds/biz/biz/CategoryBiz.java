@@ -181,7 +181,29 @@ public class CategoryBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static List<MedicineListModel> getMedicineList(String topFlg,String classId, String orderby, String keyword, String startIdx, String pageSize)
+    public static List<MedicineListModel> getMedicineList(String type, String topFlg, String classId, String orderby, String keyword, String startIdx, String pageSize, String lat, String lng)
+            throws BizFailure, ZYException {
+        SoapProcessor ksoap2 = new SoapProcessor("Service", "getMedicineList", false);
+        ksoap2.setProperty("type", type, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("topFlg", topFlg, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("classId", classId, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("orderby", orderby, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("keyword", keyword, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("startIdx", startIdx, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("pageSize", pageSize, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("lat", lat, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("lng", lng, PropertyType.TYPE_STRING);
+
+        JsonElement element = ksoap2.request();
+        Gson gson = new GsonBuilder().create();
+
+        TypeToken<List<MedicineListModel>> tt = new TypeToken<List<MedicineListModel>>() {
+        };
+        List<MedicineListModel> fs = gson.fromJson(element, tt.getType());
+        return fs;
+    }
+
+    public static List<MedicineListModel> getMedicineList(String topFlg, String classId, String orderby, String keyword, String startIdx, String pageSize)
             throws BizFailure, ZYException {
         SoapProcessor ksoap2 = new SoapProcessor("Service", "getMedicineList", false);
         ksoap2.setProperty("topFlg", topFlg, PropertyType.TYPE_STRING);
@@ -201,6 +223,7 @@ public class CategoryBiz extends BaseBiz {
         bms.addAll(fs);
         return bms;
     }
+
 
     public static List<MedicineListModel> findMedicineList(String classId, String orderby, String startIdx, String pageSize)
             throws BizFailure, ZYException {

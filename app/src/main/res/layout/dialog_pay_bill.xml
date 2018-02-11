@@ -11,61 +11,6 @@
 
         <include layout="@layout/main_header_return" />
 
-        <!--配送方式 -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingBottom="@dimen/x8"
-            android:paddingLeft="@dimen/x10"
-            android:paddingRight="@dimen/x10"
-            android:paddingTop="@dimen/x10"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/peisong"
-                style="@style/font_ww_14"
-                android:text="@string/peisong"
-                android:textColor="@color/font_black2" />
-
-            <RadioGroup
-                android:id="@+id/peisong_rg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/peisong"
-                android:layout_marginTop="@dimen/x6"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/peisong_rb1"
-                    android:layout_width="@dimen/x64"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/select_btn_order"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:padding="@dimen/x5"
-                    android:text="@string/peisong1"
-                    android:textColor="@color/select_btn_order_text"
-                    android:textSize="14sp" />
-
-                <RadioButton
-                    android:id="@+id/peisong_rb2"
-                    android:layout_width="@dimen/x64"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x15"
-                    android:background="@drawable/select_btn_order"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:padding="@dimen/x5"
-                    android:text="@string/peisong2"
-                    android:textColor="@color/select_btn_order_text"
-                    android:textSize="14sp" />
-
-            </RadioGroup>
-
-        </RelativeLayout>
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

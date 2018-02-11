@@ -13,9 +13,11 @@ import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.HomeBiz;
 import com.wyw.ljtds.biz.biz.SoapProcessor;
+import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
+import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.HomePageModel;
 import com.wyw.ljtds.ui.user.ActivityLogin;
@@ -47,12 +49,12 @@ public class ActivitySplash extends AppCompatActivity {
 
             @Override
             protected void onExecuteSucceeded(HomePageModel homePageModel) {
-
+                ((MyApplication) getApplication()).isServerOk = true;
             }
 
             @Override
             protected void OnExecuteFailed() {
-
+                ((MyApplication) getApplication()).isServerOk = false;
             }
         }.execute();
     }
@@ -61,8 +63,11 @@ public class ActivitySplash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final boolean guidePage = PreferenceCache.getGuidePage();
-        Log.e("guidePage", guidePage + "");
+        if(UserBiz.isLogined()){
+            MyApplication.initLoginer();
+        }
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -70,12 +75,9 @@ public class ActivitySplash extends AppCompatActivity {
                     return;
                 }
                 getHome();
-
-//                if (guidePage) {
-//                    Intent intent = new Intent( ActivitySplash.this, MainActivity.class );
                 Intent intent = new Intent(ActivitySplash.this, MainActivity.class);
-                finish();
                 startActivity(intent);
+                finish();
             }
         }, 2000);
     }

@@ -71,12 +71,6 @@
                                 android:orientation="horizontal"
                                 android:paddingRight="@dimen/x5">
 
-                                <ImageView
-                                    android:id="@+id/flag_otc"
-                                    android:layout_width="@dimen/x20"
-                                    android:layout_height="@dimen/x16"
-                                    android:layout_marginRight="@dimen/x2"
-                                    android:scaleType="fitCenter" />
 
                                 <TextView
                                     android:id="@+id/tv_goods_title"
@@ -84,27 +78,24 @@
                                     android:layout_height="wrap_content"
                                     android:layout_toRightOf="@+id/flag_otc"
                                     android:ellipsize="end"
-                                    android:singleLine="true"
-                                    android:textColor="@color/font_black2"
-                                    android:textSize="15sp" />
+                                    android:maxLines="2"
+                                    android:text="商品名称"
+                                    android:textColor="@color/font_1"
+                                    android:textSize="@dimen/font_5" />
+
+                                <TextView
+                                    android:id="@+id/goods_changjia"
+                                    style="@style/font_ww_14"
+                                    android:layout_below="@+id/tv_goods_title"
+                                    android:layout_marginTop="@dimen/x3"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:textColor="@color/gray" />
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/goods_changjia"
-                                style="@style/font_ww_14"
-                                android:layout_below="@+id/tv_goods_title"
-                                android:layout_marginTop="@dimen/x3"
-                                android:ellipsize="end"
-                                android:maxLines="1"
-                                android:textColor="@color/gray" />
 
                         </LinearLayout>
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/gray1" />
 
                         <LinearLayout
                             android:id="@+id/shoucang"
@@ -112,7 +103,8 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <ImageView
                                 android:id="@+id/shoucang_img"
@@ -149,26 +141,18 @@
                         android:textSize="12sp"
                         android:visibility="gone" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/x1"
-                        android:alpha="0.4"
-                        android:background="@color/gray1" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:orientation="vertical"
-                        android:paddingLeft="@dimen/x10"
-                        android:paddingTop="@dimen/x2">
+                        android:paddingLeft="@dimen/x10">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/x11"
-                            android:layout_marginTop="@dimen/x11"
-                            android:gravity="bottom"
+                            android:gravity="center_vertical"
                             android:minHeight="25dp"
                             android:orientation="horizontal"
                             android:paddingRight="12dp">
@@ -186,18 +170,17 @@
                                 android:id="@+id/tv_new_price"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/x3"
-                                android:textColor="@color/base_bar"
-                                android:textSize="18sp"
+                                android:text="0"
+                                android:textColor="@color/base_red"
+                                android:textSize="14sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/tv_old_price"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/x8"
                                 android:gravity="center_vertical"
-                                android:textColor="#888888"
+                                android:textColor="@color/base_red"
                                 android:textSize="13sp" />
 
 
@@ -205,35 +188,33 @@
 
 
                     </LinearLayout>
-
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:layout_marginTop="1dp"
-                        android:alpha="0.4"
-                        android:background="#dddddd" />
-
                     <!-- 商品保障图 -->
                     <ImageView
                         android:id="@+id/iv_ensure"
                         android:layout_width="match_parent"
-                        android:layout_height="44dp"
+                        android:layout_height="@dimen/x32"
                         android:layout_gravity="center_horizontal"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/medicine_info" />
+                        android:background="@color/white"
+                        android:scaleType="fitStart"
+                        android:src="@drawable/ic_zhiyoujialian" />
 
                     <!-- 当前已选的商品 -->
                     <TextView
                         android:id="@+id/fragment_info_tv_extramsg"
-                        style="@style/font_ww_18_red"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/postage_msg" />
+                        android:layout_marginTop="@dimen/vertical_margin"
+                        android:background="@color/white"
+                        android:paddingBottom="@dimen/padding2"
+                        android:paddingLeft="@dimen/padding2"
+                        android:paddingTop="@dimen/padding2"
+                        android:text="@string/postage_msg"
+                        android:textColor="@color/font_1"
+                        android:textSize="@dimen/font_5" />
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/x8"
+                        android:layout_height="1dp"
                         android:alpha="0.4"
                         android:background="@color/basebackground" />
 
@@ -244,99 +225,24 @@
                         android:background="@color/white"
                         android:paddingBottom="@dimen/x12"
                         android:paddingLeft="@dimen/x10"
-                        android:paddingTop="@dimen/x12"
-                        android:visibility="gone">
-
+                        android:paddingTop="@dimen/x12">
 
                         <TextView
                             android:id="@+id/tv_current_goods"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:singleLine="true"
-                            android:textColor="@color/font_black2"
-                            android:textSize="14sp" />
+                            android:text="选择颜色规格"
+                            android:textColor="@color/font_1"
+                            android:textSize="@dimen/font_5" />
 
                         <ImageView
                             android:layout_width="@dimen/x12"
                             android:layout_height="@dimen/x12"
-                            android:layout_marginRight="@dimen/x10"
+                            android:layout_marginRight="@dimen/vertical_margin"
                             android:src="@mipmap/jiantou_you_hui" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_current_number"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="visible">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingBottom="@dimen/x5"
-                            android:paddingTop="@dimen/x7">
-
-                            <View
-                                android:layout_width="@dimen/x2"
-                                android:layout_height="@dimen/x12"
-                                android:layout_marginLeft="@dimen/x2"
-                                android:background="@color/base_bar" />
-
-                            <TextView
-                                style="@style/font_ww_14"
-                                android:layout_marginLeft="@dimen/x9"
-                                android:text="@string/number"
-                                android:textColor="@color/font_black2" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1px"
-                            android:alpha="0.4"
-                            android:background="#dddddd" />
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:gravity="center_vertical"
-                            android:padding="@dimen/x7">
-
-                            <TextView
-                                android:id="@+id/heji_tv"
-                                style="@style/font_ww_14"
-                                android:layout_centerVertical="true"
-                                android:layout_marginLeft="@dimen/x3"
-                                android:text="@string/heji1"
-                                android:textColor="@color/font_black2" />
-
-                            <TextView
-                                android:id="@+id/goods_heji"
-                                style="@style/font_ww_14"
-                                android:layout_centerVertical="true"
-                                android:layout_marginLeft="@dimen/x2"
-                                android:layout_toRightOf="@+id/heji_tv"
-                                android:textColor="@color/base_bar" />
-
-                            <com.wyw.ljtds.widget.NumberButton
-                                android:id="@+id/number_button"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                app:editable="true"
-                                app:textColor="@color/font_black2">
-
-                            </com.wyw.ljtds.widget.NumberButton>
-
-                        </RelativeLayout>
 
                     </LinearLayout>
-
 
                     <!-- 用户点评 -->
                     <View
@@ -366,13 +272,12 @@
                                 android:layout_height="wrap_content"
                                 android:text="用户点评"
                                 android:textColor="#222222"
-                                android:textSize="13dp" />
+                                android:textSize="@dimen/font_5" />
 
                             <TextView
                                 android:id="@+id/tv_goods_info_evaluate_cnt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
                                 android:text="(0)"
                                 android:textColor="#222222"
                                 android:textSize="13dp" />
@@ -389,22 +294,20 @@
                                 android:layout_height="wrap_content"
                                 android:text="好评度"
                                 android:textColor="#222222"
-                                android:textSize="13dp" />
+                                android:textSize="@dimen/font_5" />
 
                             <TextView
                                 android:id="@+id/tv_good_info_comment"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/x1"
                                 android:text="100%"
                                 android:textColor="#ec0f38"
-                                android:textSize="13dp" />
+                                android:textSize="@dimen/font_5" />
 
                             <ImageView
                                 android:id="@+id/iv_comment_right"
                                 android:layout_width="@dimen/x12"
                                 android:layout_height="@dimen/x12"
-                                android:layout_marginLeft="@dimen/x5"
                                 android:src="@mipmap/jiantou_you_hui" />
                         </LinearLayout>
                     </LinearLayout>
@@ -500,10 +403,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="6dp"
                             android:text="上拉查看图文详情"
                             android:textColor="#222222"
-                            android:textSize="14dp" />
+                            android:textSize="@dimen/font_5" />
                     </LinearLayout>
                 </LinearLayout>
             </ScrollView>
@@ -516,7 +418,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_margin="30dp"
             android:src="@mipmap/go_top"
             app:backgroundTint="@color/white"
             app:borderWidth="0dp"

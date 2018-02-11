@@ -1,5 +1,7 @@
 package com.wyw.ljtds.ui.user;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,6 +24,7 @@ import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.MessageModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.ui.find.FragmentFind;
 import com.wyw.ljtds.utils.DateUtils;
 
 import org.xutils.view.annotation.ContentView;
@@ -193,6 +196,11 @@ public class ActivityMessage extends BaseActivity {
             viewEnd.setGravity(Gravity.CENTER);
         }
         return viewEnd;
+    }
+
+    public static Intent getIntent(Context context) {
+        Intent it = new Intent(context, ActivityMessage.class);
+        return it;
     }
 
 

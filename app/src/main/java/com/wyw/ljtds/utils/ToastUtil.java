@@ -14,7 +14,7 @@ public class ToastUtil {
     public static void show(Context context, String message) {
         if (context == null || TextUtils.isEmpty(message)) return;
         int duration;
-        if (message.length() > 10) {
+        if (message.length() > 3) {
             duration = Toast.LENGTH_LONG; //如果字符串比较长，那么显示的时间也长一些。
         } else {
             duration = Toast.LENGTH_SHORT;

@@ -67,4 +67,5 @@
     <dimen name="x270">911.25px</dimen>
     <dimen name="x300">1012.5px</dimen>
     <dimen name="x320">1080px</dimen>
+    <dimen name="x480">1620px</dimen>
 </resources>

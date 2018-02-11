@@ -36,12 +36,10 @@ public class ActivityFindCategort extends BaseActivity {
                 break;
 
             case R.id.fenlei:
-//                Intent it = new Intent( this, MainActivity.class );
-//                AppConfig.currSel = 1;
-//                it.putExtra( AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel );
-                MainActivity.index = 1;
-                finish();
+//                Intent it = new Intent(this, MainActivity.class);
 //                startActivity(it);
+                AppConfig.currSel = 1;
+                finish();
                 break;
 
         }

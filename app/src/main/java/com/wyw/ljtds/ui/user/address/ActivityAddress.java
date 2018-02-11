@@ -54,7 +54,7 @@ public class ActivityAddress extends BaseActivity {
     private RecyclerView recyclerView;
     @ViewInject(R.id.header_return_text)
     private TextView title;
-    @ViewInject(R.id.tianjia)
+    @ViewInject(R.id.activity_address_list_tv_tianjia)
     private TextView add;
 
     //无数据时的界面
@@ -62,11 +62,11 @@ public class ActivityAddress extends BaseActivity {
     private List<AddressModel> list = new ArrayList<>();
     private AddressAdapter adapter;
 
-    @Event(value = {R.id.tianjia, R.id.header_return})
+    @Event(value = {R.id.activity_address_list_tv_tianjia, R.id.header_return})
     private void onClick(View view) {
         Intent it;
         switch (view.getId()) {
-            case R.id.tianjia:
+            case R.id.activity_address_list_tv_tianjia:
                 Log.e(AppConfig.ERR_TAG, "edit................");
                 it = new Intent(this, ActivityAddressEdit.class);
                 it.putExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, 1);

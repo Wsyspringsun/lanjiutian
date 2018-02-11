@@ -10,6 +10,7 @@ import android.os.Parcelable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -20,10 +21,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.wyw.ljtds.R;
+import com.wyw.ljtds.config.AppConfig;
 
 
 @SuppressWarnings("unused")
 public class SlideDetailsLayout extends ViewGroup {
+
+    public boolean isTopViewInBottom = false;
+    public boolean isBottomViewInTop = false;
 
     /**
      * Callback for panel OPEN-CLOSE status changed.
@@ -38,9 +43,13 @@ public class SlideDetailsLayout extends ViewGroup {
     }
 
     public enum Status {
-        /** Panel is closed */
+        /**
+         * Panel is closed
+         */
         CLOSE,
-        /** Panel is opened */
+        /**
+         * Panel is opened
+         */
         OPEN;
 
         public static Status valueOf(int stats) {
@@ -168,7 +177,7 @@ public class SlideDetailsLayout extends ViewGroup {
 
         // set behindview's visibility to GONE before show.
         //mBehindView.setVisibility(GONE);
-        if(mDefaultPanel == 1){
+        if (mDefaultPanel == 1) {
             post(new Runnable() {
                 @Override
                 public void run() {
@@ -261,8 +270,10 @@ public class SlideDetailsLayout extends ViewGroup {
                 final float yDiff = y - mInitMotionY;
 
                 if (canChildScrollVertically((int) yDiff)) {
+                    Log.e(AppConfig.ERR_TAG, "can scroll : " + yDiff);
                     shouldIntercept = false;
                 } else {
+                    Log.e(AppConfig.ERR_TAG, "can not scroll : " + yDiff);
                     final float xDiffabs = Math.abs(xDiff);
                     final float yDiffabs = Math.abs(yDiff);
 
@@ -271,11 +282,14 @@ public class SlideDetailsLayout extends ViewGroup {
                     // 2. Panel stauts is CLOSE：slide up
                     // 3. Panel status is OPEN：slide down
                     if (yDiffabs > mTouchSlop && yDiffabs >= xDiffabs
-                        && !(mStatus == Status.CLOSE && yDiff > 0
-                             || mStatus == Status.OPEN && yDiff < 0)) {
+                            && !(mStatus == Status.CLOSE && yDiff > 0
+                            || mStatus == Status.OPEN && yDiff < 0)) {
                         shouldIntercept = true;
                     }
                 }
+
+                Log.e(AppConfig.ERR_TAG, "mTouchSlop : " + mTouchSlop);
+                Log.e(AppConfig.ERR_TAG, "shouldIntercept : " + shouldIntercept);
                 break;
             }
             case MotionEvent.ACTION_UP:
@@ -478,15 +492,23 @@ public class SlideDetailsLayout extends ViewGroup {
      * Check child view can srcollable in vertical direction.
      *
      * @param direction Negative to check scrolling up, positive to check scrolling down.
-     *
      * @return true if this view can be scrolled in the specified direction, false otherwise.
      */
     protected boolean canChildScrollVertically(int direction) {
+        if (mTarget != null) {
+            Log.e(AppConfig.ERR_TAG, "mTarget.getId:" + mTarget.getId());
+        }
+        if (mFrontView != null) {
+            Log.e(AppConfig.ERR_TAG, "mFrontView:" + mFrontView.getId());
+        }
+        if (mBehindView != null) {
+            Log.e(AppConfig.ERR_TAG, "mBehindView:" + mFrontView.getId());
+        }
         if (mTarget instanceof AbsListView) {
             return canListViewSroll((AbsListView) mTarget);
         } else if (mTarget instanceof FrameLayout ||
-                   mTarget instanceof RelativeLayout ||
-                   mTarget instanceof LinearLayout) {
+                mTarget instanceof RelativeLayout ||
+                mTarget instanceof LinearLayout) {
             View child;
             for (int i = 0; i < ((ViewGroup) mTarget).getChildCount(); i++) {
                 child = ((ViewGroup) mTarget).getChildAt(i);
@@ -506,15 +528,15 @@ public class SlideDetailsLayout extends ViewGroup {
     protected boolean canListViewSroll(AbsListView absListView) {
         if (mStatus == Status.OPEN) {
             return absListView.getChildCount() > 0
-                   && (absListView.getFirstVisiblePosition() > 0 || absListView.getChildAt(0)
-                                                                               .getTop() <
-                                                                    absListView.getPaddingTop());
+                    && (absListView.getFirstVisiblePosition() > 0 || absListView.getChildAt(0)
+                    .getTop() <
+                    absListView.getPaddingTop());
         } else {
             final int count = absListView.getChildCount();
             return count > 0
-                   && (absListView.getLastVisiblePosition() < count - 1
-                       || absListView.getChildAt(count - 1)
-                                     .getBottom() > absListView.getMeasuredHeight());
+                    && (absListView.getLastVisiblePosition() < count - 1
+                    || absListView.getChildAt(count - 1)
+                    .getBottom() > absListView.getMeasuredHeight());
         }
     }
 

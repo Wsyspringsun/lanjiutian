@@ -10,6 +10,7 @@ import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.HomePageModel;
 import com.wyw.ljtds.model.HomePageModel1;
 import com.wyw.ljtds.model.RecommendModel;
+import com.wyw.ljtds.model.SingleCurrentUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,11 +61,17 @@ public class HomeBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static List<RecommendModel> getRecommend(String token, String orderId) throws BizFailure, ZYException {
+    public static List<RecommendModel> getRecommend() throws BizFailure, ZYException {
         SoapProcessor ksoap = new SoapProcessor("Service", "getRecommandComm", false);
-
-        ksoap.setProperty("token", token, SoapProcessor.PropertyType.TYPE_STRING);
-        ksoap.setProperty("orderId", orderId, SoapProcessor.PropertyType.TYPE_STRING);
+        String lat = SingleCurrentUser.defaultLat + "", lng = SingleCurrentUser.defaultLng + "";
+        if (SingleCurrentUser.location != null) {
+            lat = SingleCurrentUser.location.getLatitude() + "";
+            lng = SingleCurrentUser.location.getLongitude() + "";
+        }
+        ksoap.setProperty("lat", lat, SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("lng", lng, SoapProcessor.PropertyType.TYPE_STRING);
+//        ksoap.setProperty("token", token, SoapProcessor.PropertyType.TYPE_STRING);
+//        ksoap.setProperty("orderId", orderId, SoapProcessor.PropertyType.TYPE_STRING);
 
         JsonElement element = ksoap.request();
         Gson gson = new GsonBuilder().create();
@@ -72,9 +79,7 @@ public class HomeBiz extends BaseBiz {
         TypeToken<List<RecommendModel>> tt = new TypeToken<List<RecommendModel>>() {
         };
         List<RecommendModel> fs = gson.fromJson(element, tt.getType());
-        List<RecommendModel> bms = new ArrayList<RecommendModel>();
-        bms.addAll(fs);
-        return bms;
+        return fs;
     }
 
     public static String chouJiang() throws BizFailure, ZYException {

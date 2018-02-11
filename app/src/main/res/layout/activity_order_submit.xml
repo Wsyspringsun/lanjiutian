@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/header"
@@ -16,12 +15,12 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:overScrollMode="never"
         android:id="@+id/group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/footer"
-        android:layout_below="@+id/header">
+        android:layout_below="@+id/header"
+        android:overScrollMode="never">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -34,33 +33,27 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:background="@color/basebackground"/>
+            android:background="@color/basebackground" />
 
         <TextView
             android:id="@+id/submit"
             android:layout_width="@dimen/x90"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
+            android:background="@color/base_bar"
             android:gravity="center"
             android:text="@string/order_tijiao"
-            android:background="@color/base_bar"
             android:textColor="@color/white"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/money"
+            android:id="@+id/activity_order_submit_money"
             style="@style/font_ww_16"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x10"
-            android:layout_toLeftOf="@+id/submit"
-            android:textColor="@color/base_bar"/>
+            android:layout_marginLeft="@dimen/vertical_margin"
+            android:text="合计:0"
+            android:textColor="@color/base_bar" />
 
-        <TextView
-            style="@style/font_ww_16"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/money"
-            android:text="@string/heji1"
-            android:textColor="@color/font_black2"/>
 
     </RelativeLayout>
 

@@ -43,7 +43,7 @@ public class UserModel extends BaseModel implements Parcelable {
     //地址信息
     private Address DEFAULT_ADDRESS;
     //生日
-    private Long BIRTHDAY;
+    private Long BIRTHDAY = Long.MIN_VALUE ;
 
     public Long getBIRTHDAY() {
         return BIRTHDAY;

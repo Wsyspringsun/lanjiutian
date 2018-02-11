@@ -36,7 +36,7 @@ public class FragmentCategory extends BaseFragment {
     private ArrayList<String> titles = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
     private FragmentLife fragmentLife;
-    private FragmentMedicine fragmentMedicine;
+    private FragmentMedicineCategory fragmentMedicine;
 
     @Event(value = {R.id.ll_search, R.id.zxing, R.id.ll_message})
     private void onclick(View view) {
@@ -73,7 +73,7 @@ public class FragmentCategory extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         fragmentLife = new FragmentLife();
-        fragmentMedicine = new FragmentMedicine();
+        fragmentMedicine = new FragmentMedicineCategory();
         fragmentList.add(fragmentLife);
         fragmentList.add(fragmentMedicine);
         titles.add("生活馆");

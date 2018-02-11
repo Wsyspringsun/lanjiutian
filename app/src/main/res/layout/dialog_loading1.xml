@@ -27,6 +27,7 @@
             android:indeterminateOnly="true" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/tipTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -73,18 +73,18 @@ public class ActivitySearch extends BaseActivity {
     }
 
     private void goSearchRlt() {
+        String keyword = edHeader.getText().toString().trim();
+        KeywordsStore.add(keyword);
         Intent it = null;
         if (getIntent().getIntExtra("from", 0) == 1) {
             //搜索 商品
             it = new Intent(ActivitySearch.this, ActivityGoodsList.class);
+            it.putExtra("search", keyword);
+            it.putExtra("typeid", "");
         } else {
             //搜索 药品
-            it = new Intent(ActivitySearch.this, ActivityMedicineList.class);
+            it = ActivityMedicineList.getIntent(ActivitySearch.this, "0", "", "", keyword);
         }
-        String keyword = edHeader.getText().toString().trim();
-        KeywordsStore.add(keyword);
-        it.putExtra("search", keyword);
-        it.putExtra("typeid", "");
         startActivity(it);
         finish();
     }

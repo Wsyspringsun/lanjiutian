@@ -21,6 +21,7 @@ import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.UserModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.user.address.ActivityAddress;
+import com.wyw.ljtds.ui.user.address.AddressActivity;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 
@@ -62,7 +63,7 @@ public class ActivityManage extends BaseActivity {
 
             case R.id.address:
                 Log.e(AppConfig.ERR_TAG, "click...................");
-                it = new Intent(ActivityManage.this, ActivityAddress.class);
+                it = new Intent(ActivityManage.this, AddressActivity.class);
                 startActivity(it);
                 break;
 
@@ -95,7 +96,7 @@ public class ActivityManage extends BaseActivity {
 
             case R.id.sdv_item_head_img:
                 ArrayList<String> arrayList = new ArrayList<>();
-                arrayList.add(AppConfig.IMAGE_PATH + user.getUSER_ICON_FILE_ID());
+                arrayList.add(AppConfig.IMAGE_PATH_LJT + user.getUSER_ICON_FILE_ID());
                 it = new Intent(ActivityManage.this, ActivityBigImage.class);
                 it.putStringArrayListExtra("imgs", arrayList);
                 startActivity(it);
@@ -110,6 +111,7 @@ public class ActivityManage extends BaseActivity {
                         PreferenceCache.putToken("");
                         PreferenceCache.putUsername("");
                         PreferenceCache.putPhoneNum("");
+                        AppConfig.currSel = AppConfig.DEFAULT_INDEX_FRAGMENT;
 
                         finish();
                         Intent it = new Intent(AppConfig.AppAction.ACTION_TOKEN_EXPIRE);
@@ -151,7 +153,7 @@ public class ActivityManage extends BaseActivity {
 
     private void updView() {
         name.setText("用户名：" + user.getMOBILE());
-        sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH + user.getUSER_ICON_FILE_ID()));
+        sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + user.getUSER_ICON_FILE_ID()));
 
         if (StringUtils.isEmpty(user.getNICKNAME())) {
             nicheng.setText("昵称：保密");
@@ -176,7 +178,7 @@ public class ActivityManage extends BaseActivity {
             updView();
 
             name.setText("用户名：" + user.getMOBILE().substring(0, user.getMOBILE().length() - (user.getMOBILE().substring(3)).length()) + "****" + user.getMOBILE().substring(7));
-            sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH + user.getUSER_ICON_FILE_ID()));
+            sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + user.getUSER_ICON_FILE_ID()));
             if (StringUtils.isEmpty(user.getNICKNAME())) {
                 nicheng.setText("昵称：保密");
             } else {

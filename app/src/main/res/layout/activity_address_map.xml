@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:elevation="@dimen/x1">
+
+        <include layout="@layout/fragment_toolbar_common" />
+    </FrameLayout>
+
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/activity_address_map_mapview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:clickable="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:elevation="@dimen/x1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择这里" />
+
+        <ImageView
+            android:layout_width="@dimen/x30"
+            android:layout_height="@dimen/x30"
+            android:src="@drawable/ic_location_on" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:elevation="@dimen/x1">
+
+        <Button
+            android:id="@+id/activity_address_map_btn_confirm"
+            style="@style/font_ww_18_black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/vertical_margin"
+            android:text="@string/confirm" />
+
+        <TextView
+            android:id="@+id/activity_address_map_tv_mylocation"
+            style="@style/font_ww_18_black"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/activity_address_map_btn_confirm"
+            android:layout_marginLeft="@dimen/vertical_margin"
+            android:layout_marginRight="@dimen/vertical_margin"
+            android:paddingLeft="@dimen/normal_padding"
+            android:text="@string/searchposition" />
+
+
+        <ImageButton
+            android:id="@+id/activity_address_map_btn_location"
+            android:layout_width="@dimen/x30"
+            android:layout_height="@dimen/x30"
+            android:layout_above="@id/activity_address_map_tv_mylocation"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_location_my" />
+
+
+    </RelativeLayout>
+
+
+</FrameLayout>

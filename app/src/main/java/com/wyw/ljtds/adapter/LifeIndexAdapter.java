@@ -38,10 +38,12 @@ import com.wyw.ljtds.model.HomePageModel1;
 import com.wyw.ljtds.model.IConCatInfo;
 import com.wyw.ljtds.ui.goods.ActivityGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityGoodsList;
+import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
 import com.wyw.ljtds.ui.goods.ShopActivity;
 import com.wyw.ljtds.ui.home.ActivityHomeWeb;
 import com.wyw.ljtds.ui.home.HuoDongActivity;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -141,7 +143,7 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
 
             case WEBACTIVITY:
                 WebView wvActivity = new WebView(context);
-                String url = AppConfig.WS_BASE_HTML_URL + "huodongindex.html";
+                String url = AppConfig.WS_BASE_HTML_URL + "huodongindex.html?dt=" + System.currentTimeMillis();
                 Log.e(AppConfig.ERR_TAG, "url:" + url);
                 wvActivity.loadUrl(url);
                 initWebView(wvActivity);
@@ -150,11 +152,9 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
                 View itemTuijian = inflater.inflate(R.layout.item_home_hot, parent, false);
                 return new TuiJianHolder(itemTuijian);
             case TITLE:
-                TextView vTitle = new TextView(context);
-//                vTitle.setText("");
-//                vTitle.setHeight(85);
-                vTitle.setBackground(context.getResources().getDrawable(R.drawable.ic_home_hot));
-                return new SimpleViewHolder(vTitle);
+                View hotTitle = inflater.inflate(R.layout.fragment_life_index_hot_title, parent, false);
+//                vTitle.setBackground(context.getResources().getDrawable(R.drawable.ic_home_hot));
+                return new SimpleViewHolder(hotTitle);
             default:
                 return null;
         }
@@ -181,6 +181,7 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
         holder.tvCatName.setText(iconData.getName());
 //            holder.sdvIcon.setImageURI(Uri.parse(itemData.getImgPath()));
         String imgUrl = iconData.getImgPath();
+        Utils.log("imgUrl:" + imgUrl);
         Picasso.with(context).load(imgUrl).into(holder.sdvIcon);
     }
 
@@ -207,6 +208,7 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
             holder.tvNumber.setText("" + recComm.getCommodityList().size() + "\n单品");
         }
 //        holder.imgCat.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + recComm.getImgPath()));
+        Utils.log("recComm:" + AppConfig.IMAGE_PATH_LJT + recComm.getImgPath());
         Picasso.with(context).load(Uri.parse(AppConfig.IMAGE_PATH_LJT + recComm.getImgPath())).into(holder.imgCat);
 
         holder.bindCommList(recComm.getCommodityList());
@@ -317,6 +319,7 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
                     public Object createHolder() {
                         return new Holder<Map<String, String>>() {
                             private ImageView iv;
+
                             @Override
                             public View createView(Context context) {
                                 iv = new ImageView(context);
@@ -348,7 +351,7 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
                         Intent it = null;
                         switch (flg) {
                             case "X":
-                                it = ActivityGoodsInfo.getIntent(context, headId);
+//                                it = ActivityGoodsInfo.getIntent(context, headId);
                                 break;
                             case "L":
                                 break;
@@ -494,8 +497,8 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
             baseViewHolder.setOnClickListener(R.id.image, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent it = new Intent(context, ActivityGoodsInfo.class);
-                    it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, goods.getCommodityId());
+                    Intent it = ActivityLifeGoodsInfo.getIntent(context, goods.getCommodityId());
+//                    it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, );
                     context.startActivity(it);
                 }
             });

@@ -6,6 +6,8 @@ import java.util.List;
 public class LogisticsModel {
     private String COMMODITY_ORDER_ID;
     private String LOGISTICS_ORDER_ID;
+    private String COURIER;
+    private String COURIER_MOBILE;
     private Order ORDER;
     private List<NodeProgress> DETAILS;
 
@@ -41,7 +43,23 @@ public class LogisticsModel {
         this.DETAILS = DETAILS;
     }
 
-    public class Order{
+    public String getCOURIER_MOBILE() {
+        return COURIER_MOBILE;
+    }
+
+    public void setCOURIER_MOBILE(String COURIER_MOBILE) {
+        this.COURIER_MOBILE = COURIER_MOBILE;
+    }
+
+    public String getCOURIER() {
+        return COURIER;
+    }
+
+    public void setCOURIER(String COURIER) {
+        this.COURIER = COURIER;
+    }
+
+    public class Order {
         private String STATUS;
         private BigDecimal POSTAGE;
         private String OID_GROUP_NAME;
@@ -89,7 +107,7 @@ public class LogisticsModel {
         }
     }
 
-    public class Goods{
+    public class Goods {
         //商品id
         private String COMMODITY_ID;
         //商品名字

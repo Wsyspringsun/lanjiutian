@@ -127,11 +127,11 @@ public class ActivityFavorite extends BaseActivity {
                 if (index==0){
                     if (adapter.getItem( i ).getGroup().equals( "sxljt" )){
                         Intent it=new Intent( ActivityFavorite.this,ActivityMedicinesInfo.class );
-                        it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID,adapter.getItem( i ).getId() );
+//                        it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID,adapter.getItem( i ).getId() );
                         startActivity( it );
                     }else {
                         Intent it=new Intent( ActivityFavorite.this,ActivityGoodsInfo.class );
-                        it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID,adapter.getItem( i ).getId() );
+//                        it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID,adapter.getItem( i ).getId() );
                         startActivity( it );
                     }
 
@@ -170,7 +170,7 @@ public class ActivityFavorite extends BaseActivity {
         @Override
         protected void convert(final BaseViewHolder baseViewHolder, final SqlFavoritesModel messageModel) {
             final Intent it=new Intent( ActivityFavorite.this,ActivityMedicinesInfo.class );
-            it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID,messageModel.getId() );
+//            it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID,messageModel.getId() );
             if (index==0){
                 date=null;
                 baseViewHolder.setVisible( R.id.check,false );

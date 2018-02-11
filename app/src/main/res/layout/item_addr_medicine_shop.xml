@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/vertical_margin"
+    android:background="@color/white">
+
+    <CheckedTextView
+        android:id="@+id/item_addr_medicine_shop_tv_name"
+        style="@style/font_ww_18_black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/checktext_triangle"
+        android:checked="true"
+        android:padding="@dimen/normal_padding_lg"
+        android:text="蓝九天店铺"
+        android:textSize="@dimen/font_5"
+        android:textAlignment="center" />
+
+</FrameLayout>

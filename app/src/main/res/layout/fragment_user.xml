@@ -24,37 +24,38 @@
 
                 <ImageView
                     android:id="@+id/pull_img"
-                    android:layout_width="match_parent"
+                    android:visibility="invisible"
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/x135"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/user_background" />
+                    android:scaleType="fitXY" />
 
-                <include layout="@layout/fragment_nologin" />
+                <!--<include layout="@layout/fragment_nologin" />-->
 
-                <LinearLayout
-                    android:id="@+id/fragment_user_nologin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                <!--
+                                <LinearLayout
+                                    android:id="@+id/fragment_user_nologin"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="@dimen/x100"
-                        android:layout_height="@dimen/x100"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/icon_login" />
+                                    <ImageView
+                                        android:layout_width="@dimen/x100"
+                                        android:layout_height="@dimen/x100"
+                                        android:scaleType="fitCenter"
+                                        android:src="@drawable/icon_login" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/no_login"
-                        android:textColor="@color/white"
-                        android:textSize="18dp" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:text="@string/no_login"
+                                        android:textColor="@color/white"
+                                        android:textSize="18dp" />
 
 
-                </LinearLayout>
+                                </LinearLayout>
+                -->
 
 
                 <RelativeLayout
@@ -211,139 +212,6 @@
                     android:layout_height="@dimen/x1"
                     android:background="@color/gray1" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:paddingBottom="@dimen/x8">
-
-                    <RelativeLayout
-                        android:id="@+id/order_daifu"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x24"
-                            android:layout_height="@dimen/x24"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/x3"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/icon_daifu" />
-
-                        <TextView
-                            style="@style/font_ww_10"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/x15"
-                            android:layout_marginTop="@dimen/x3"
-                            android:background="@drawable/user_order_number"
-                            android:gravity="center"
-                            android:text="9"
-                            android:textColor="@color/base_bar"
-                            android:visibility="gone" />
-
-                        <TextView
-                            style="@style/font_ww_12"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/daifu"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/order_daifa"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x24"
-                            android:layout_height="@dimen/x24"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/x3"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/icon_daifa" />
-
-                        <TextView
-                            style="@style/font_ww_12"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/daifa"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/order_daishou"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x24"
-                            android:layout_height="@dimen/x24"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/x3"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/icon_daishou" />
-
-                        <TextView
-                            style="@style/font_ww_12"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/daishou"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/order_daiping"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x25"
-                            android:layout_height="@dimen/x25"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/x3"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/icon_daiping" />
-
-                        <TextView
-                            style="@style/font_ww_12"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/daiping"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/order_shouhou"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x24"
-                            android:layout_height="@dimen/x24"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/x3"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/icon_shouhou" />
-
-                        <TextView
-                            style="@style/font_ww_12"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/shohou"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                </LinearLayout>
 
             </LinearLayout>
 

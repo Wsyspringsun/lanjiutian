@@ -7,9 +7,8 @@ import java.util.List;
  * Created by Administrator on 2017/3/30 0030.
  */
 
-public class MedicineDetailsModel extends BaseModel {
-    //点击数量
-    private int CLICK_NUM;
+public class MedicineDetailsModel extends MedicineListModel {
+    public static final String PRESCRIPTION_FLG_OTC = "1";
     //商品折扣
     private int COMMODITY_DISCOUNT;
     //批准文号
@@ -22,6 +21,10 @@ public class MedicineDetailsModel extends BaseModel {
     private String CONTACT_MOBILE;
     //联系 座机
     private String CONTACT_TEL;
+    private AddressModel USER_ADDRESS_OBJ;
+
+
+    private String USER_ADDRESS;
     //最新会员价
     private BigDecimal MEMPRICE;
     private BigDecimal MEMPRICE2;
@@ -30,20 +33,12 @@ public class MedicineDetailsModel extends BaseModel {
     private String FLG_DETAIL; //活动消费额抵扣 描述
     //处方标识（1处方，其他 非处方）
     private String PRESCRIPTION_FLG;
-    //id
-    private String WAREID;
-    //名称
-    private String WARENAME;
-    //最新售价
-    private BigDecimal SALEPRICE;
     //销售积分
     private BigDecimal PILE;
     //销量
     private int SALE_NUM;
     //营销标识    0:新品,1：置顶,2:推荐,3:活动，4：品牌，5：折扣，6：医药，7:热卖
     private String TOP_FLG;
-    //药品规格
-    private String WARESPEC;
     //计量单位
     private String WAREUNIT;
     //产地
@@ -52,54 +47,19 @@ public class MedicineDetailsModel extends BaseModel {
     private String PRODUCER;
     //储存环境
     private String STORE_REQ;
-    //功能疗效
-    private String TREATMENT;
     //活动结束时间
     private String ACTIVE_END_DATE;
     //活动开始时间
     private String ACTIVE_START_DATE;
-    //品牌
-    private String COMMODITY_BRAND;
     //主要成分
     private String MAIN_ELEMENT;
     //说明书
     private String EXPLAINS;
-    // 商家id
-    private String GROUPID;
-    //商家名字
-    private String GROUPNAME;
     //概要
     private String DESCRIPTION;
-    //0没有收藏 1 是收藏
-    private String favorited;
     private int EVALUATE_CNT;
     //评论
     private List<MedicineDetailsEvaluateModel> EVALUATE;
-
-
-    public String getWAREID() {
-        return WAREID;
-    }
-
-    public void setWAREID(String WAREID) {
-        this.WAREID = WAREID;
-    }
-
-    public String getWARENAME() {
-        return WARENAME;
-    }
-
-    public void setWARENAME(String WARENAME) {
-        this.WARENAME = WARENAME;
-    }
-
-    public String getWARESPEC() {
-        return WARESPEC;
-    }
-
-    public void setWARESPEC(String WARESPEC) {
-        this.WARESPEC = WARESPEC;
-    }
 
     public String getWAREUNIT() {
         return WAREUNIT;
@@ -141,13 +101,6 @@ public class MedicineDetailsModel extends BaseModel {
         this.STORE_REQ = STORE_REQ;
     }
 
-    public int getCLICK_NUM() {
-        return CLICK_NUM;
-    }
-
-    public void setCLICK_NUM(int CLICK_NUM) {
-        this.CLICK_NUM = CLICK_NUM;
-    }
 
     public int getCOMMODITY_DISCOUNT() {
         return COMMODITY_DISCOUNT;
@@ -157,13 +110,6 @@ public class MedicineDetailsModel extends BaseModel {
         this.COMMODITY_DISCOUNT = COMMODITY_DISCOUNT;
     }
 
-    public String getFavorited() {
-        return favorited;
-    }
-
-    public void setFavorited(String favorited) {
-        this.favorited = favorited;
-    }
 
     public String getHTML_PATH() {
         return HTML_PATH;
@@ -197,14 +143,6 @@ public class MedicineDetailsModel extends BaseModel {
         this.PRESCRIPTION_FLG = PRESCRIPTION_FLG;
     }
 
-    public BigDecimal getSALEPRICE() {
-        return SALEPRICE;
-    }
-
-    public void setSALEPRICE(BigDecimal SALEPRICE) {
-        this.SALEPRICE = SALEPRICE;
-    }
-
     public int getSALE_NUM() {
         return SALE_NUM;
     }
@@ -221,20 +159,8 @@ public class MedicineDetailsModel extends BaseModel {
         this.TOP_FLG = TOP_FLG;
     }
 
-    public String getTREATMENT() {
-        return TREATMENT;
-    }
-
-    public void setTREATMENT(String TREATMENT) {
-        this.TREATMENT = TREATMENT;
-    }
-
     public BigDecimal getMEMPRICE2() {
         return MEMPRICE2;
-    }
-
-    public void setMEMPRICE2(BigDecimal MEMPRICE2) {
-        this.MEMPRICE2 = MEMPRICE2;
     }
 
     public BigDecimal getMEMPRICE3() {
@@ -277,13 +203,6 @@ public class MedicineDetailsModel extends BaseModel {
         this.ACTIVE_START_DATE = ACTIVE_START_DATE;
     }
 
-    public String getCOMMODITY_BRAND() {
-        return COMMODITY_BRAND;
-    }
-
-    public void setCOMMODITY_BRAND(String COMMODITY_BRAND) {
-        this.COMMODITY_BRAND = COMMODITY_BRAND;
-    }
 
     public String getMAIN_ELEMENT() {
         return MAIN_ELEMENT;
@@ -299,22 +218,6 @@ public class MedicineDetailsModel extends BaseModel {
 
     public void setEXPLAINS(String EXPLAINS) {
         this.EXPLAINS = EXPLAINS;
-    }
-
-    public String getGROUPID() {
-        return GROUPID;
-    }
-
-    public void setGROUPID(String GROUPID) {
-        this.GROUPID = GROUPID;
-    }
-
-    public String getGROUPNAME() {
-        return GROUPNAME;
-    }
-
-    public void setGROUPNAME(String GROUPNAME) {
-        this.GROUPNAME = GROUPNAME;
     }
 
     public String getDESCRIPTION() {
@@ -364,4 +267,22 @@ public class MedicineDetailsModel extends BaseModel {
     public void setFLG_DETAIL(String FLG_DETAIL) {
         this.FLG_DETAIL = FLG_DETAIL;
     }
+
+    public AddressModel getUSER_ADDRESS_OBJ() {
+        return USER_ADDRESS_OBJ;
+    }
+
+    public void setUSER_ADDRESS_OBJ(AddressModel USER_ADDRESS_OBJ) {
+        this.USER_ADDRESS_OBJ = USER_ADDRESS_OBJ;
+    }
+
+    public String getUSER_ADDRESS() {
+        return USER_ADDRESS;
+    }
+
+    public void setUSER_ADDRESS(String USER_ADDRESS) {
+        this.USER_ADDRESS = USER_ADDRESS;
+    }
+
+
 }

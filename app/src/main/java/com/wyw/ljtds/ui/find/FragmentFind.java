@@ -1,16 +1,19 @@
 package com.wyw.ljtds.ui.find;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.test.SingleLaunchActivityTestCase;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,6 +25,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -34,23 +39,34 @@ import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.adapter.goodsinfo.NetworkImageHolderView;
 import com.wyw.ljtds.biz.biz.HomeBiz;
+import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.config.MyApplication;
+import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.HomePageModel;
 import com.wyw.ljtds.model.IConCatInfo;
+import com.wyw.ljtds.model.MyLocation;
 import com.wyw.ljtds.model.NewsModel;
+import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.ui.category.ActivityScan;
 import com.wyw.ljtds.ui.goods.ActivityMedicineList;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
+import com.wyw.ljtds.ui.goods.SelDefaultAddressFragment;
 import com.wyw.ljtds.ui.goods.ShopActivity;
 import com.wyw.ljtds.ui.home.ActivityHomeWeb;
 import com.wyw.ljtds.ui.home.ActivitySearch;
 import com.wyw.ljtds.ui.home.HuoDongActivity;
+import com.wyw.ljtds.ui.user.ActivityMessage;
+import com.wyw.ljtds.ui.user.address.ActivityAddress;
+import com.wyw.ljtds.ui.user.address.AddressMapActivity;
+import com.wyw.ljtds.ui.user.address.AddressSelActivity;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.MyScrollView;
 
@@ -71,11 +87,15 @@ public class FragmentFind extends BaseFragment {
 
     //    public static final String TAG_FIND_MTD = "com.wyw.ljtds.ui.find.FragmentFind.TAG_FIND_MTD";
     public static final String FIND_MTD_QUICK = "1";
-    public static final String FIND_MTD_QUICK2 = "2";
-    public static final String FIND_MTD_QUICK3 = "3";
-    public static final String TAG_MTD_QUICK_PARAM = "com.wyw.ljtds.ui.find.FragmentFind.TAG_MTD_QUICK_PARAM";
+    public static final String FIND_MTD_QUICK2 = "0";
+    public static final String FIND_MTD_QUICK3 = "3"; //活动
+    private static final int REQUEST_CHANGE_LOCATION = 1;
+    private static final int REQUEST_SEL_LOCATION = 2;
+    private static final String DIALOG_SEL_ADDR = "DIALOG_SEL_ADDR";
 
 
+    @ViewInject(R.id.main_header_location)
+    TextView tvLocation;
     @ViewInject(R.id.ll_message)
     private LinearLayout llMsg;
 
@@ -83,7 +103,6 @@ public class FragmentFind extends BaseFragment {
     private TextView right_text;
     @ViewInject(R.id.tv_jt_djs)
     private TextView tvYqq;
-
     @ViewInject(R.id.right_img)
     private ImageView right_img;
     @ViewInject(R.id.sv)
@@ -96,7 +115,7 @@ public class FragmentFind extends BaseFragment {
 //    private SnapUpCountDownTimerView snapUpCountDownTimerView;
     @ViewInject(R.id.qianggou_rv)
     private RecyclerView recyclerView; //一起抢区域
-    @ViewInject(R.id.reclcyer)
+    @ViewInject(R.id.fragment_find_ryv_recommand)
     private RecyclerView reclcyer;
     @ViewInject(R.id.reclcyer1)
     private RecyclerView reclcyer1;
@@ -113,7 +132,8 @@ public class FragmentFind extends BaseFragment {
 
     //咨询客服 的图标按钮
     @ViewInject(R.id.fragment_find_btn_consult)
-    private FloatingActionButton btnConsult;
+//    private FloatingActionButton btnConsult;
+    private ImageView btnConsult;
 
 
     // 轮播部分
@@ -121,7 +141,7 @@ public class FragmentFind extends BaseFragment {
     //广播部分
     private List<String> data;
     //活动药品
-    private List<HomePageModel.activeComms> list;
+    private List<HomePageModel.DETAILS> list;
     private MyAdapter adapter;
     //推荐药品
     private List<HomePageModel.CLASS> list1;
@@ -130,17 +150,15 @@ public class FragmentFind extends BaseFragment {
     private MyAdapter2 adapter2;
 
     private MainActivity activity;
-    //客服
-    String groupName = "蓝九天医师";// 客服组默认名称
-    String settingid1 = "lj_1000_1495596285901";
 
     private String index = "";//推荐分类选中
     private HomePageModel homePageData;
     private Dialog dialogConsult;
 
+
     @Event(value = {R.id.ll_search, R.id.zxing, R.id.ll_message, R.id.button1, R.id.button2, R.id.button3,
             R.id.button4, R.id.button5, R.id.button6, R.id.button7, R.id.btn_kefu, R.id.sel_yigan, R.id.sel_yangwei,
-            R.id.sel_fengshi, R.id.sel_xiaochuan, R.id.sel_tuofa, R.id.sel_yiyu, R.id.jt_djs, R.id.tv_jt_djs})
+            R.id.sel_fengshi, R.id.sel_xiaochuan, R.id.sel_tuofa, R.id.sel_yiyu, R.id.tv_jt_djs})
     private void onclick(View view) {
         Intent it;
         String classId = "";
@@ -156,7 +174,7 @@ public class FragmentFind extends BaseFragment {
                 break;
 
             case R.id.ll_message:
-                startActivity(new Intent(getActivity(), ActivityMapLocation.class));
+                startActivity(ActivityMessage.getIntent(getActivity()));
                 break;
 
             case R.id.button1:
@@ -164,117 +182,91 @@ public class FragmentFind extends BaseFragment {
                 break;
 
             case R.id.button2:
-                it = new Intent(getActivity(), ActivityMedicineList.class);
                 //男性
 //                classId = "2025";
                 classId = "2731";
-                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FIND_MTD_QUICK);
-                it.putExtra(TAG_MTD_QUICK_PARAM, classId);
+                it = ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK, "", classId, "");
                 startActivity(it);
                 break;
 
             case R.id.button3:
-                it = new Intent(getActivity(), ActivityMedicineList.class);
                 //女性
 //                classId = "2024";
                 classId = "2732";
-                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FIND_MTD_QUICK);
-                it.putExtra(TAG_MTD_QUICK_PARAM, classId);
+                it = ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK, "", classId, "");
                 startActivity(it);
                 break;
 
             case R.id.button4:
                 //慢性
                 classId = "0205";
-                it = new Intent(getActivity(), ActivityMedicineList.class);
-                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FIND_MTD_QUICK2);
-                it.putExtra(TAG_MTD_QUICK_PARAM, classId);
+                it = ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK2, "", classId, "");
                 startActivity(it);
                 break;
             case R.id.button5:
                 //保健
-                it = new Intent(getActivity(), ActivityMedicineList.class);
                 classId = "03";
-                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FIND_MTD_QUICK2);
-                it.putExtra(TAG_MTD_QUICK_PARAM, classId);
+                it = ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK2, "", classId, "");
                 startActivity(it);
                 break;
             case R.id.button6:
                 //器械
-                it = new Intent(getActivity(), ActivityMedicineList.class);
                 classId = "05";
-                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FIND_MTD_QUICK2);
-                it.putExtra(TAG_MTD_QUICK_PARAM, classId);
+                it = ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK2, "", classId, "");
                 startActivity(it);
                 break;
             case R.id.button7:
                 //成人
                 classId = "12";
-                it = new Intent(getActivity(), ActivityMedicineList.class);
-                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FIND_MTD_QUICK2);
-                it.putExtra(TAG_MTD_QUICK_PARAM, classId);
+                it = ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK2, "", classId, "");
                 startActivity(it);
                 break;
             case R.id.sel_yangwei:
                 //阳痿
                 classId = "2703";
-                it = new Intent(getActivity(), ActivityMedicineList.class);
-                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FIND_MTD_QUICK);
-                it.putExtra(TAG_MTD_QUICK_PARAM, classId);
+                it = ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK, "", classId, "");
                 startActivity(it);
                 break;
             case R.id.sel_yigan:
                 //乙肝
                 classId = "3715";
-                it = new Intent(getActivity(), ActivityMedicineList.class);
-                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FIND_MTD_QUICK);
-                it.putExtra(TAG_MTD_QUICK_PARAM, classId);
+                it = ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK, "", classId, "");
                 startActivity(it);
                 break;
             case R.id.sel_fengshi:
                 classId = "2695";
-                it = new Intent(getActivity(), ActivityMedicineList.class);
-                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FIND_MTD_QUICK);
-                it.putExtra(TAG_MTD_QUICK_PARAM, classId);
+                it = ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK, "", classId, "");
                 startActivity(it);
                 break;
             case R.id.sel_xiaochuan:
                 classId = "3716";
-                it = new Intent(getActivity(), ActivityMedicineList.class);
-                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FIND_MTD_QUICK);
-                it.putExtra(TAG_MTD_QUICK_PARAM, classId);
+                it = ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK, "", classId, "");
                 startActivity(it);
                 break;
             case R.id.sel_tuofa:
                 classId = "3714";
-                it = new Intent(getActivity(), ActivityMedicineList.class);
-                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FIND_MTD_QUICK);
-                it.putExtra(TAG_MTD_QUICK_PARAM, classId);
+                it = ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK, "", classId, "");
                 startActivity(it);
                 break;
             case R.id.sel_yiyu:
                 classId = "2699";
-                it = new Intent(getActivity(), ActivityMedicineList.class);
-                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FIND_MTD_QUICK);
-                it.putExtra(TAG_MTD_QUICK_PARAM, classId);
+                it = ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK, "", classId, "");
                 startActivity(it);
                 break;
             case R.id.btn_kefu:
-                activity.openChat("首页咨询", "", settingid1, groupName, false, "");
+                activity.openChat("首页咨询", "", AppConfig.CHAT_XN_LJT_SETTINGID2, AppConfig.CHAT_XN_LJT_TITLE, false, "");
                 break;
-            case R.id.jt_djs:
             case R.id.tv_jt_djs:
                 //活动 --- 更多
-//                it = new Intent(getActivity(), ActivityMedicineList.class);
+                it = ActivityMedicineList.getIntent(getActivity(), "", "3", "", "");
 //                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FIND_MTD_QUICK3);
 //                it.putExtra(TAG_MTD_QUICK_PARAM, "3");
-//                startActivity(it);
+                startActivity(it);
 
                 //进入一起抢 秒杀活动
-
-                it = HuoDongActivity.getIntent(getActivity(), "4");
-                getActivity().startActivity(it);
-                break;
+                //it = HuoDongActivity.getIntent(getActivity(), "4");
+                //getActivity().startActivity(it);
+                //break;
             default:
                 break;
         }
@@ -319,17 +311,23 @@ public class FragmentFind extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        llMsg.setVisibility(View.GONE);
+        //confirm addr
+        SelDefaultAddressFragment frag = SelDefaultAddressFragment.newInstance();
+        frag.setTargetFragment(this, REQUEST_SEL_LOCATION);
+        frag.show(getActivity().getSupportFragmentManager(), DIALOG_SEL_ADDR);
 
-        Utils.setIconText(getActivity(), tvYqq, "\ue660");
+        tvLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = AddressSelActivity.getIntent(getActivity(), true);
+                startActivityForResult(it, REQUEST_CHANGE_LOCATION);
+            }
+        });
 
-        right_img.setImageResource(R.mipmap.icon_dingwei);
-        right_text.setText("定位");
+//        Utils.setIconText(getActivity(), tvYqq, "\ue660");
+
 
         myScrollView.setVerticalScrollBarEnabled(false);
-
-
-        getHome();
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());//必须有
@@ -342,8 +340,8 @@ public class FragmentFind extends BaseFragment {
         recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                Intent it = new Intent(getActivity(), ActivityMedicinesInfo.class);
-                it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getData().get(i).getWAREID());
+                HomePageModel.DETAILS detail = adapter.getData().get(i);
+                Intent it = ActivityMedicinesInfo.getIntent(getActivity(), detail.getWAREID(), detail.getLOGISTICS_COMPANY_ID());
                 startActivity(it);
             }
         });
@@ -360,13 +358,15 @@ public class FragmentFind extends BaseFragment {
         linearLayoutManager2.setOrientation(LinearLayoutManager.HORIZONTAL);//设置方向滑动
         reclcyer1.setLayoutManager(linearLayoutManager2);
 
+        setLocation();
+
         adapter2 = new MyAdapter2();
         reclcyer1.setAdapter(adapter2);
         reclcyer1.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                Intent it = new Intent(getActivity(), ActivityMedicinesInfo.class);
-                it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter2.getData().get(i).getWAREID());
+                HomePageModel.DETAILS comm = adapter2.getData().get(i);
+                Intent it = ActivityMedicinesInfo.getIntent(getActivity(), comm.getWAREID(), comm.getLOGISTICS_COMPANY_ID());
                 startActivity(it);
             }
         });
@@ -399,7 +399,9 @@ public class FragmentFind extends BaseFragment {
         btnConsult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentFind.this.showConsultImtes((int) v.getX(), (int) v.getY());
+                int[] point = new int[2];
+                v.getLocationOnScreen(point);
+                FragmentFind.this.showConsultImtes(point[0], point[1]);
             }
         });
 
@@ -409,6 +411,7 @@ public class FragmentFind extends BaseFragment {
 //        updHuodongAdapter();
 
 
+        getHome();
     }
 
 //    private void updHuodongAdapter() {
@@ -447,6 +450,8 @@ public class FragmentFind extends BaseFragment {
             if (marqueeView != null) {
                 marqueeView.stopFlipping();
             }
+        } else {
+            setLocation();
         }
     }
 
@@ -468,6 +473,44 @@ public class FragmentFind extends BaseFragment {
 
         if (dialogConsult != null) {
             dialogConsult.dismiss();
+        }
+    }
+
+
+    //更改数据  刷新页面
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e(AppConfig.ERR_TAG, "onActivityResult:");
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CHANGE_LOCATION:
+                    if (data != null) {
+                        Parcelable paddr = data.getParcelableExtra(AddressSelActivity.TAG_SELECTED_ADDRESS);
+                        if (paddr != null) {
+                            AddressModel addr = (AddressModel) paddr;
+                            if (addr != null) {
+                                Log.e(AppConfig.ERR_TAG, "getADDRESS_LOCATION:" + addr.getADDRESS_LOCATION());
+                                String sLoc = addr.getADDRESS_LOCATION();
+                                StringBuilder err = new StringBuilder();
+                                MyLocation loc = AddressModel.parseLocation(err, sLoc);
+                                if (err.length() > 0) {
+                                    ToastUtil.show(getActivity(), err.toString());
+                                    return;
+                                }
+                                SingleCurrentUser.location = loc;
+                            }
+                        }
+                    }
+
+                    tvLocation.setText(SingleCurrentUser.location.getAddrStr());
+                    break;
+                case REQUEST_SEL_LOCATION:
+                    if (data == null) {
+                        Intent it = AddressSelActivity.getIntent(getActivity(), true);
+                        startActivityForResult(it, REQUEST_CHANGE_LOCATION);
+                    }
+                    break;
+            }
         }
     }
 
@@ -520,7 +563,7 @@ public class FragmentFind extends BaseFragment {
                             Intent it = null;
                             switch (flg) {
                                 case "X":
-                                    it = ActivityMedicinesInfo.getIntent(getActivity(), headId);
+//                                    it = ActivityMedicinesInfo.getIntent(getActivity(), headId);
                                     break;
                                 case "L":
                                     break;
@@ -554,8 +597,14 @@ public class FragmentFind extends BaseFragment {
 
                 //广播新闻
                 data = new ArrayList<>();
+                final int textLen = 22;
                 for (int i = 0; i < homePageModel.getNews().size(); i++) {
-                    data.add(homePageModel.getNews().get(i).getTITLE());
+                    NewsModel news = homePageModel.getNews().get(i);
+                    String eli = news.getTITLE_SUMMARY();
+                    if (eli.length() > textLen) {
+                        eli = eli.substring(0, textLen) + "...";
+                    }
+                    data.add(news.getTITLE() + "\n" + eli);
                 }
                 marqueeView.startWithList(data);
 
@@ -600,13 +649,13 @@ public class FragmentFind extends BaseFragment {
                 }
 
                 //simpleDraweeView1.setOnClickListener(new ActiveListner("3", FIND_MTD_QUICK3));
-                simpleDraweeView1.setOnClickListener(new ActiveListner("3", "1"));
+                simpleDraweeView1.setOnClickListener(new ActiveListner("1"));
                 // 保健 03
                 //simpleDraweeView2.setOnClickListener(new ActiveListner("03", FIND_MTD_QUICK2));
-                simpleDraweeView2.setOnClickListener(new ActiveListner("03", "3"));
+                simpleDraweeView2.setOnClickListener(new ActiveListner("3"));
                 // 母婴     13
 //                simpleDraweeView3.setOnClickListener(new ActiveListner("13", FIND_MTD_QUICK2));
-                simpleDraweeView3.setOnClickListener(new ActiveListner("13", "2"));
+                simpleDraweeView3.setOnClickListener(new ActiveListner("2"));
 
 
             }
@@ -621,15 +670,15 @@ public class FragmentFind extends BaseFragment {
     }
 
 
-    private class MyAdapter extends BaseQuickAdapter<HomePageModel.activeComms> {
+    private class MyAdapter extends BaseQuickAdapter<HomePageModel.DETAILS> {
         public MyAdapter() {
             super(R.layout.item_find_snap, list);
         }
 
         @Override
-        protected void convert(BaseViewHolder baseViewHolder, HomePageModel.activeComms activeComms) {
+        protected void convert(BaseViewHolder baseViewHolder, HomePageModel.DETAILS activeComms) {
             baseViewHolder.setText(R.id.name, StringUtils.deletaFirst(activeComms.getWARENAME()))
-                    .setText(R.id.money, "￥" + activeComms.getSALEPRICE() + "");
+                    .setText(R.id.money, "￥" + Utils.formatFee(activeComms.getSALEPRICE() + ""));
 
             SimpleDraweeView simpleDraweeView = baseViewHolder.getView(R.id.head_img);
             if (!StringUtils.isEmpty(activeComms.getIMG_PATH())) {
@@ -670,7 +719,7 @@ public class FragmentFind extends BaseFragment {
         @Override
         protected void convert(BaseViewHolder baseViewHolder, HomePageModel.DETAILS details) {
             baseViewHolder.setText(R.id.name, StringUtils.deletaFirst(details.getWARENAME()))
-                    .setText(R.id.money, details.getSALEPRICE() + "");
+                    .setText(R.id.money, Utils.formatFee(details.getSALEPRICE() + ""));
 
             SimpleDraweeView simpleDraweeView = baseViewHolder.getView(R.id.head_img);
             if (!StringUtils.isEmpty(details.getIMG_PATH())) {
@@ -680,32 +729,16 @@ public class FragmentFind extends BaseFragment {
     }
 
     private class ActiveListner implements View.OnClickListener {
-        private String id;
-        private String mtd;
+        private final String mtd;
 
-        public ActiveListner(String id, String mtd) {
-            this.id = id;
+        public ActiveListner(String mtd) {
             this.mtd = mtd;
         }
 
         @Override
         public void onClick(View v) {
-            Intent it;
-            switch (mtd) {
-                case "1":
-                case "2":
-                case "3":
-                    //进入活动页面
-                    it = HuoDongActivity.getIntent(getActivity(), mtd);
-                    getActivity().startActivity(it);
-                    break;
-                default:
-                    it = new Intent(getActivity(), ActivityMedicineList.class);
-                    it.putExtra(ActivityMedicineList.TAG_LIST_FROM, mtd);
-                    it.putExtra(TAG_MTD_QUICK_PARAM, ActiveListner.this.id);
-                    startActivity(it);
-                    break;
-            }
+            Intent it = HuoDongActivity.getIntent(getActivity(), mtd);
+            getActivity().startActivity(it);
         }
     }
 
@@ -722,7 +755,7 @@ public class FragmentFind extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     dialogConsult.dismiss();
-                    activity.openChat("首页咨询", "", settingid1, groupName, false, "");
+                    activity.openChat("首页咨询", "", AppConfig.CHAT_XN_LJT_SETTINGID2, AppConfig.CHAT_XN_LJT_TITLE, false, "");
                 }
             });
             View itemTel = layout.findViewById(R.id.fragment_consult_ll_tel);
@@ -762,6 +795,13 @@ public class FragmentFind extends BaseFragment {
         }
         dialogConsult.show();
 
+    }
+
+
+    public void setLocation() {
+        if (SingleCurrentUser.location != null) {
+            tvLocation.setText(SingleCurrentUser.location.getAddrStr());
+        }
     }
 
 

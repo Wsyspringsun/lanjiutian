@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x120"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_user_bejjing" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/fragment_user_index_userinfo_img_setting"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20"
+            android:layout_marginLeft="@dimen/vertical_margin_lg"
+            android:layout_marginTop="@dimen/x10"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_shezhi" />
+
+        <ImageView
+            android:id="@+id/fragment_user_index_userinfo_img_message"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20"
+            android:layout_alignBottom="@id/fragment_user_index_userinfo_img_setting"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/vertical_margin_lg"
+            android:layout_marginLeft="@dimen/vertical_margin"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_xiaoxi" />
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/fragment_user_index_userinfo_img_photo"
+            android:layout_width="@dimen/x50"
+            android:layout_height="@dimen/x50"
+            android:layout_below="@id/fragment_user_index_userinfo_img_setting"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginTop="@dimen/x30"
+            fresco:backgroundImage="@color/white"
+            fresco:failureImage="@mipmap/icon_moren_tou"
+            fresco:failureImageScaleType="centerInside"
+            fresco:placeholderImage="@mipmap/icon_moren_tou"
+            fresco:roundAsCircle="true"
+            fresco:roundingBorderColor="@color/gray1"
+            fresco:roundingBorderWidth="1dp" />
+
+
+        <LinearLayout
+            android:id="@+id/fragment_user_index_userinfo_ll_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/fragment_user_index_userinfo_img_photo"
+            android:layout_marginLeft="@dimen/vertical_margin"
+            android:layout_toRightOf="@id/fragment_user_index_userinfo_img_photo"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/fragment_user_index_userinfo_ll_infoname"
+                style="@style/font_ww_16"
+                android:text=""
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/fragment_user_index_userinfo_ll_infojifen"
+                style="@style/font_ww_12"
+                android:layout_marginTop="@dimen/x6"
+                android:background="@drawable/background_search_edit"
+                android:paddingBottom="@dimen/x3"
+                android:paddingLeft="@dimen/x5"
+                android:paddingRight="@dimen/x5"
+                android:paddingTop="@dimen/x3"
+                android:text=""
+                android:textColor="@color/base_bar" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment_user_info_userinfo_zhanghuguanli"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/fragment_user_index_userinfo_ll_info"
+            android:layout_alignRight="@id/fragment_user_index_userinfo_img_message"
+            android:layout_marginBottom="@dimen/x20"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:text="@string/user_zhanghu"
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:layout_width="@dimen/x14"
+                android:layout_height="@dimen/x12"
+                android:layout_marginLeft="@dimen/x12"
+                android:scaleType="fitXY"
+                android:src="@mipmap/jiantou_you" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>
+
+

@@ -1,5 +1,7 @@
 package com.wyw.ljtds.model;
 
+import com.wyw.ljtds.utils.Utils;
+
 /**
  * Created by wsy on 17-11-29.
  */
@@ -8,11 +10,13 @@ public class OrderCommDto {
     private String COMMODITY_ORDER_ID;
     private String OID_USER_ID;
     private String COMMODITY_ID;
-    private String COMMODITY_NAME;
+    private String COMMODITY_NAME = "";
     private String ORDER_GROUP_ID;
     private String COMMODITY_COLOR;
-    private String COMMODITY_SIZE;
+    private String COMMODITY_SIZE = "";
     private Integer EXCHANGE_QUANLITY;
+    private String LOGISTICS_COMPANY_ID; //店铺编号
+    private String LOGISTICS_COMPANY; //店铺名称
     private String COST_MONEY;
     private String COST_MONEY_ALL;
     private String SINGLE_ELECTRONIC_MONEY;
@@ -24,6 +28,8 @@ public class OrderCommDto {
     private String UPD_USER_ID;
     private String INS_DATE;
     private String UPD_DATE;
+    private String IMG_PATH;
+    private String IS_RETURNGOODS; //1:可以退  0 不可退
 
     public String getCOMMODITY_ORDER_ID() {
         return COMMODITY_ORDER_ID;
@@ -82,7 +88,7 @@ public class OrderCommDto {
     }
 
     public String getCOST_MONEY() {
-        return COST_MONEY;
+        return Utils.formatFee(COST_MONEY);
     }
 
     public void setCOST_MONEY(String COST_MONEY) {
@@ -175,5 +181,37 @@ public class OrderCommDto {
 
     public void setCOMMODITY_NAME(String COMMODITY_NAME) {
         this.COMMODITY_NAME = COMMODITY_NAME;
+    }
+
+    public String getBUSNAME() {
+        return LOGISTICS_COMPANY;
+    }
+
+    public void setBUSNAME(String LOGISTICS_COMPANY) {
+        this.LOGISTICS_COMPANY = LOGISTICS_COMPANY;
+    }
+
+    public String getBUSNO() {
+        return LOGISTICS_COMPANY_ID;
+    }
+
+    public void setBUSNO(String LOGISTICS_COMPANY_ID) {
+        this.LOGISTICS_COMPANY_ID = LOGISTICS_COMPANY_ID;
+    }
+
+    public String getIMG_PATH() {
+        return IMG_PATH;
+    }
+
+    public void setIMG_PATH(String IMG_PATH) {
+        this.IMG_PATH = IMG_PATH;
+    }
+
+    public String getIS_RETURNGOODS() {
+        return IS_RETURNGOODS;
+    }
+
+    public void setIS_RETURNGOODS(String IS_RETURNGOODS) {
+        this.IS_RETURNGOODS = IS_RETURNGOODS;
     }
 }

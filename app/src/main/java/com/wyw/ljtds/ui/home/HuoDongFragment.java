@@ -35,9 +35,11 @@ import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.base.BaseActivityFragment;
 import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.ui.goods.ActivityGoodsInfo;
+import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.ui.user.wallet.ChojiangRecActivity;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.utils.ToolbarManager;
 
 import org.json.JSONObject;
 import org.xutils.view.annotation.ContentView;
@@ -53,7 +55,7 @@ import java.util.List;
  */
 
 @ContentView(R.layout.fragment_web)
-public class HuoDongFragment extends BaseFragment implements BaseActivityFragment.IconBtnManager {
+public class HuoDongFragment extends BaseFragment implements ToolbarManager.IconBtnManager {
     private static final String ARG_CATEGORY = "arg_category";
     @ViewInject(R.id.fragment_web_webview)
     private WebView webView;
@@ -234,10 +236,10 @@ public class HuoDongFragment extends BaseFragment implements BaseActivityFragmen
                 Intent it = null;
                 if ("1".equals(isMedcine)) {
                     //生活馆产品
-                    it = ActivityGoodsInfo.getIntent(getActivity(), commId);
+//                    it = ActivityGoodsInfo.getIntent(getActivity(), commId);
                 } else if ("2".equals(isMedcine)) {
                     //医药馆产品
-                    it = ActivityGoodsInfo.getIntent(getActivity(), commId);
+//                    it = ActivityMedicinesInfo.getIntent(getActivity(), commId);
                 }
                 startActivity(it);
                 break;

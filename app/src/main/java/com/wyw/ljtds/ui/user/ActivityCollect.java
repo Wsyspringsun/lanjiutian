@@ -1,5 +1,6 @@
 package com.wyw.ljtds.ui.user;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.ui.goods.FragmentGoodsDetails;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -42,12 +44,17 @@ import org.xutils.view.annotation.ViewInject;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Created by Administrator on 2017/2/12 0012.
  */
 
 @ContentView(R.layout.activity_collect)
 public class ActivityCollect extends BaseActivity {
+    public static String TAG_MY = "com.wyw.ljtds.ui.user.ActivityCollect.tag_my";
+    public static String TAG_MY_SHOUCANG = "tag_shoucang";
+    public static String TAG_MY_ZUJI = "tag_zuji";
+
     @ViewInject(R.id.reclcyer)
     private RecyclerView recyclerView;
     @ViewInject(R.id.jiantou)
@@ -126,7 +133,7 @@ public class ActivityCollect extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        tagMy = intent.getStringExtra(FragmentUser.TAG_MY);
+        tagMy = intent.getStringExtra(TAG_MY);
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有
@@ -143,24 +150,24 @@ public class ActivityCollect extends BaseActivity {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
                 if (index == 0) {
-                    if (FragmentUser.TAG_MY_ZUJI.equals(tagMy)) {
+                    if (TAG_MY_ZUJI.equals(tagMy)) {
                         if (adapter.getItem(i).getGoodsFlg().equals("0")) {
                             Intent it = new Intent(ActivityCollect.this, ActivityMedicinesInfo.class);
-                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
+//                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
                             startActivity(it);
                         } else {
                             Intent it = new Intent(ActivityCollect.this, ActivityGoodsInfo.class);
-                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
+//                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
                             startActivity(it);
                         }
-                    } else if (FragmentUser.TAG_MY_SHOUCANG.equals(tagMy)) {
+                    } else if (TAG_MY_SHOUCANG.equals(tagMy)) {
                         if (adapter.getItem(i).getGoodsFlg().equals("1")) {
                             Intent it = new Intent(ActivityCollect.this, ActivityMedicinesInfo.class);
-                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
+//                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
                             startActivity(it);
                         } else {
                             Intent it = new Intent(ActivityCollect.this, ActivityGoodsInfo.class);
-                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
+//                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
                             startActivity(it);
                         }
                     }
@@ -180,11 +187,11 @@ public class ActivityCollect extends BaseActivity {
     }
 
     private void refreshData() {
-        if (FragmentUser.TAG_MY_SHOUCANG.equals(tagMy)) {
+        if (TAG_MY_SHOUCANG.equals(tagMy)) {
             header_edit.setVisibility(View.VISIBLE);
             title.setText(getResources().getString(R.string.user_shoucang));
             getFavorite();
-        } else if (FragmentUser.TAG_MY_ZUJI.equals(tagMy)) {
+        } else if (TAG_MY_ZUJI.equals(tagMy)) {
             header_edit.setVisibility(View.GONE);
             title.setText(getResources().getString(R.string.user_zuji));
             getHistory();
@@ -296,7 +303,7 @@ public class ActivityCollect extends BaseActivity {
 
             //加载图片
             SimpleDraweeView imageView = baseViewHolder.getView(R.id.goods_img);
-            imageView.setImageURI(Uri.parse("http://www.lanjiutian.com/upload/images" + messageModel.getImgPath()));
+            imageView.setImageURI(Uri.parse(messageModel.getImgPath()));
 
             String title = messageModel.getTitle();
             if (!StringUtils.isEmpty(title)) {
@@ -305,7 +312,7 @@ public class ActivityCollect extends BaseActivity {
                 }
             }
             baseViewHolder.setText(R.id.goods_title, title)
-                    .setText(R.id.money, "￥" + messageModel.getCostMoney() + "")
+                    .setText(R.id.money, "￥" + Utils.formatFee(messageModel.getCostMoney() + ""))
                     .setOnCheckedChangeListener(R.id.check, new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -325,5 +332,11 @@ public class ActivityCollect extends BaseActivity {
         public void setIds(String[] ids) {
             this.ids = ids;
         }
+    }
+
+    public static Intent getIntent(Context context, String tag) {
+        Intent it = new Intent(context, ActivityCollect.class);
+        it.putExtra(TAG_MY, tag);
+        return it;
     }
 }

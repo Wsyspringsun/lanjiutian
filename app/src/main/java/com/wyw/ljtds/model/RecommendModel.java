@@ -6,8 +6,8 @@ import java.math.BigDecimal;
  * Created by Administrator on 2017/5/25 0025.
  */
 
-public class RecommendModel extends BaseModel {
-    private String CLASSCODE;
+public class RecommendModel extends MedicineListModel {
+/*    private String CLASSCODE;
     private String CLASSNAME;
     private String IMG_PATH;
     private BigDecimal SALEPRICE;
@@ -69,5 +69,5 @@ public class RecommendModel extends BaseModel {
 
     public void setWARENAME(String WARENAME) {
         this.WARENAME = WARENAME;
-    }
+    }*/
 }

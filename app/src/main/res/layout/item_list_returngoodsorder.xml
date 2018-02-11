@@ -1,90 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
 
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/x5"
-        android:paddingTop="@dimen/x5">
-
-        <ImageView
-            android:id="@+id/jiantou"
-            android:layout_width="@dimen/x16"
-            android:layout_height="@dimen/x16"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x10"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/icon_dianpu" />
-
-        <TextView
-            android:id="@+id/tv_group_name"
-            style="@style/font_ww_14"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x5"
-            android:layout_toRightOf="@+id/jiantou"
-            android:text="兰花超市"
-            android:textColor="@color/font_black2" />
-
-        <ImageView
-            android:layout_width="@dimen/x10"
-            android:layout_height="@dimen/x12"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x3"
-            android:layout_toRightOf="@id/tv_group_name"
-            android:scaleType="fitXY"
-            android:src="@mipmap/jiantou_you_hei" />
-
-        <TextView
-            android:id="@+id/tv_returngoodsorder_stat"
-            style="@style/font_ww_14"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x10"
-            android:text="@string/holder"
-            android:textColor="@color/base_bar" />
-
-    </RelativeLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_orlderlist"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </android.support.v7.widget.RecyclerView>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/x5"
-        android:paddingTop="@dimen/x5">
-
-        <TextView
-            android:id="@+id/tv_returngoodsorder_returnmoney"
-            style="@style/font_ww_16"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x10"
-            android:text="@string/holder"
-            android:textColor="@color/base_bar" />
-
-        <TextView
-            android:id="@+id/tv_returngoodsorder_show"
-            style="@style/font_ww_14"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x2"
-            android:text="@string/holder"
-            android:textColor="@color/font_black2" />
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/vertical_margin"
+        android:layout_marginRight="@dimen/vertical_margin"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/padding1"
+        android:paddingRight="@dimen/padding1">
 
 
-    </RelativeLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x10"
-        android:background="@color/basebackground" />
-</LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/x5"
+            android:paddingTop="@dimen/x5">
+
+            <ImageView
+                android:id="@+id/jiantou"
+                android:layout_width="@dimen/x16"
+                android:layout_height="@dimen/x16"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/icon_dianpu" />
+
+            <TextView
+                android:id="@+id/tv_group_name"
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x5"
+                android:layout_toRightOf="@+id/jiantou"
+                android:text="@string/app_name"
+                android:textColor="@color/font_black2" />
+
+            <ImageView
+                android:layout_width="@dimen/x10"
+                android:layout_height="@dimen/x12"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x3"
+                android:layout_toRightOf="@id/tv_group_name"
+                android:scaleType="fitXY"
+                android:src="@mipmap/jiantou_you_hei" />
+
+            <TextView
+                android:id="@+id/tv_returngoodsorder_stat"
+                style="@style/font_ww_14"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="@string/holder"
+                android:textColor="@color/base_bar" />
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_orlderlist"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_gravity="bottom"
+            android:paddingBottom="@dimen/x5"
+            android:paddingTop="@dimen/x5">
+
+            <TextView
+                android:id="@+id/tv_returngoodsorder_returnmoney"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:gravity="right|bottom"
+                android:text="￥退款金额"
+                android:textColor="@color/base_bar"
+                android:textSize="@dimen/font_5" />
+
+            <TextView
+                android:id="@+id/tv_returngoodsorder_show"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_alignBottom="@id/tv_returngoodsorder_returnmoney"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/tv_returngoodsorder_returnmoney"
+                android:gravity="left|bottom"
+                android:text="未知\n未知\n未知"
+                android:textColor="@color/font_black2"
+                android:textSize="@dimen/font_5" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x10"
+            android:background="@color/basebackground" />
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

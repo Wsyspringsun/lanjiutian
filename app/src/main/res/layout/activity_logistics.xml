@@ -27,32 +27,119 @@
 
                 <TextView
                     android:id="@+id/zhuangtai"
-                    style="@style/font_ww_16_black"/>
+                    style="@style/font_ww_16_black" />
 
                 <TextView
                     android:id="@+id/wuliu"
                     style="@style/font_ww_16_black"
-                    android:layout_marginTop="@dimen/x4"/>
+                    android:layout_marginTop="@dimen/x4" />
 
                 <TextView
                     android:id="@+id/dingdan"
                     style="@style/font_ww_16_black"
-                    android:layout_marginTop="@dimen/x4"/>
+                    android:layout_marginTop="@dimen/x4" />
 
 
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
+                android:id="@+id/reclcyer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/reclcyer">
+                android:layout_height="wrap_content">
 
             </android.support.v7.widget.RecyclerView>
 
             <View
-                android:layout_marginTop="@dimen/x5"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
+                android:layout_marginTop="@dimen/x5"
+                android:background="@color/gray" />
+
+            <RelativeLayout
+                android:id="@+id/activity_logistic_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/vertical_margin"
+                android:layout_marginRight="@dimen/vertical_margin">
+
+                <ImageView
+                    android:id="@+id/activity_logistic_img_curior"
+                    android:layout_width="@dimen/x16"
+                    android:layout_height="@dimen/x16"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_curior" />
+
+                <TextView
+                    android:id="@+id/activity_logistic_tv_curior"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/activity_logistic_img_curior"
+                    android:text="快递员\n张*"
+                    android:textColor="@color/font_2"
+                    android:textSize="@dimen/font_5" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/activity_logistic_tel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/x16"
+                            android:layout_height="@dimen/x16"
+                            android:layout_gravity="left"
+                            android:src="@drawable/ic_tel" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="联系"
+                            android:textColor="@color/font_2"
+                            android:textSize="@dimen/font_5" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/activity_logistic_trace"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/x16"
+                            android:layout_height="@dimen/x16"
+                            android:src="@drawable/ic_location_my" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="跟踪"
+                            android:textColor="@color/font_2"
+                            android:textSize="@dimen/font_5" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="@dimen/x5"
                 android:background="@color/gray" />
 
             <com.wyw.ljtds.widget.logistics.StepView
@@ -61,14 +148,14 @@
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:padding="@dimen/x10"
-                app:rightMargin="@dimen/x20"
-                app:leftMargin="@dimen/x5"
                 app:defaultDotColor="@color/gray1"
-                app:highDotColor="@color/base_bar"
                 app:dotPosition="top"
+                app:highDotColor="@color/base_bar"
+                app:leftMargin="@dimen/x5"
                 app:lineColor="@color/basebackground"
                 app:lineWidth="@dimen/x1"
-                app:radius="5dp"/>
+                app:radius="5dp"
+                app:rightMargin="@dimen/x20" />
 
 
         </LinearLayout>

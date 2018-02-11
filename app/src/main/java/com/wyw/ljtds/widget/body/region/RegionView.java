@@ -112,9 +112,7 @@ public class RegionView {
             public void onClick(View v) {
                 String classId = classIdMap.get(region);
                 Utils.log("body part :" + classId);
-                Intent it = new Intent(mContext, ActivityMedicineList.class);
-                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FragmentFind.FIND_MTD_QUICK);
-                it.putExtra(FragmentFind.TAG_MTD_QUICK_PARAM, classId);
+                Intent it = ActivityMedicineList.getIntent(mContext, ActivityMedicineList.ARG_MTD_FIND, "", classId, "");
                 mContext.startActivity(it);
 //                Log.e(AppConfig.ERR_TAG, "click " + classId);
             }
