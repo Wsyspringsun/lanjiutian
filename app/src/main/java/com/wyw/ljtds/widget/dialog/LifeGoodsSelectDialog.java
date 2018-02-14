@@ -152,21 +152,31 @@ public class LifeGoodsSelectDialog extends Dialog {
                     if (seledColor == model.getColorList().get(idx)) return;
                     seledColor = model.getColorList().get(idx);
                     rgSizeSelFlxLayout.removeAllViews();
-                    for (CommodityDetailsModel.SizeList sizeItem : seledColor.getSizeList()) {
+                    for (int i = 0; i < seledColor.getSizeList().size(); i++) {
+                        CommodityDetailsModel.SizeList sizeItem = seledColor.getSizeList().get(i);
                         RadioButton rb = (RadioButton) LayoutInflater.from(context).inflate(R.layout.item_radiobutton, rgSizeSel, false);
                         rb.setText(sizeItem.getCommoditySize());
                         rb.setOnClickListener(sizeSelChangeListener);
                         rgSizeSelFlxLayout.addView(rb);
+                        if(i==0){
+                            rb.setChecked(true);
+                            sizeSelChangeListener.onClick(rb);
+                        }
                     }
                     setSeledText();
                 }
             }
         };
-        for (CommodityDetailsModel.ColorList colorItem : model.getColorList()) {
+        for (int i = 0; i < model.getColorList().size(); i++) {
+            CommodityDetailsModel.ColorList colorItem = model.getColorList().get(i);
             RadioButton rb = (RadioButton) LayoutInflater.from(context).inflate(R.layout.item_radiobutton, rgColorSel, false);
             rb.setText(colorItem.getColorName());
             rb.setOnClickListener(colorSelChangeListener);
             rgColorSelFlxLayout.addView(rb);
+            if (i == 0) {
+                rb.setChecked(true);
+                colorSelChangeListener.onClick(rb);
+            }
         }
 //        RadioGrouptflColorSel = (TagFlowLayout) view.findViewById(R.id.dialog_lifegoods_sel_tfl_color);
 //        ~ = (TagFlowLayout) view.findViewById(R.id.dialog_lifegoods_sel_tfl_color);

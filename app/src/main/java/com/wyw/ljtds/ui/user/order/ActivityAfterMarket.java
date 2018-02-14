@@ -36,7 +36,9 @@ import org.xutils.view.annotation.ViewInject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerPreviewActivity;
@@ -173,7 +175,10 @@ public class ActivityAfterMarket extends BaseActivity implements BGASortableNine
         new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
-                return ReturnGoodsBiz.getReturnMoney(orderId);
+                Map<String,String> data = new HashMap<>();
+                data.put("groupId",orderId);
+                data.put("commId",commOrderId);
+                return ReturnGoodsBiz.getReturnMoney(GsonUtils.Bean2Json(data));
             }
 
             @Override

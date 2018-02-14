@@ -126,6 +126,17 @@ public abstract class ActivityGoodsInfo extends BaseActivity {
      *
      * @return
      */
+    protected void initFragmentList(String id) {
+        fragmentGoodsDetail = new FragmentGoodsPagerDetails();
+        fragmentGoodsEvaluate = FragmentGoodsPagerEvaluate.newInstance(id);
+        fragmentList.add(getMainFragment());
+        fragmentList.add(fragmentGoodsDetail);
+        fragmentList.add(fragmentGoodsEvaluate);
+
+        nsvpContent.setAdapter(new ItemTitlePagerAdapter(getSupportFragmentManager(),
+                fragmentList, new String[]{"商品", "详情", "评价"}));
+        nsvpContent.setOffscreenPageLimit(3);
+    }
 
     protected abstract OrderTradeDto info2Order();
 
@@ -140,17 +151,9 @@ public abstract class ActivityGoodsInfo extends BaseActivity {
 
         initIconBtnStat();
 
-        fragmentGoodsDetail = new FragmentGoodsPagerDetails();
-        fragmentGoodsEvaluate = new FragmentGoodsPagerEvaluate();
-        fragmentList.add(getMainFragment());
-        fragmentList.add(fragmentGoodsDetail);
-        fragmentList.add(fragmentGoodsEvaluate);
 
-        nsvpContent.setAdapter(new ItemTitlePagerAdapter(getSupportFragmentManager(),
-                fragmentList, new String[]{"商品", "详情", "评价"}));
-        nsvpContent.setOffscreenPageLimit(3);
         //设置图标
-        int i = 0, j = 2;//i:起始 j:字数
+//        int i = 0, j = 2;//i:起始 j:字数
 //        Utils.setIconText(this, tvShop, "\ue623\n店铺");
 //        SpannableString sbs1 = new SpannableString(tvShop.getText());
 //        sbs1.setSpan(ass, i, j, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

@@ -23,7 +23,7 @@ public class AppConfig {
     public static final int OUT_TIME = 22000;
     public static final int TAG_TRACE = 1;
     //是否测试环境
-    private static int TAG_DOMAIN = 2 ;
+    private static int TAG_DOMAIN = 2;
     public static String WEB_APP_URL = "";
     public static String WEB_DOMAIN = "";
     public static String WS_BASE_URL = "";
@@ -36,6 +36,8 @@ public class AppConfig {
     public static String IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";
     public static int MAx_UPLOAD_IMG_CNT = 5;
 
+    public static String IMAGE_PATH_LJT_ECOMERCE;
+
     static {
         switch (TAG_DOMAIN) {
             case 1:
@@ -45,7 +47,8 @@ public class AppConfig {
                 WS_BASE_JSP_URL = WEB_DOMAIN + "/e-commerce_platform_WebService" + "/jsp/";
                 APP_UPDATE_URL = WEB_DOMAIN + "/e-commerce_platform_WebService/version.json";
                 WEB_APP_URL = "http://cs.lanjiutian.com/mobile";
-//                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/ecommerce/images";
+                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/upload/images";
+                IMAGE_PATH_LJT_ECOMERCE = "http://cs.lanjiutian.com";
                 break;
             case 2:
                 WEB_APP_URL = "http://cs.lanjiutian.com/mobile";
@@ -55,6 +58,7 @@ public class AppConfig {
                 WS_BASE_JSP_URL = WEB_DOMAIN + "/WebService" + "/jsp/";
                 APP_UPDATE_URL = WEB_DOMAIN + "/WebService/version.json";
                 IMAGE_PATH_LJT = "http://cs.lanjiutian.com/upload/images";
+                IMAGE_PATH_LJT_ECOMERCE = "http://cs.lanjiutian.com";
 //                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/ecommerce/images";
                 break;
             case 3:
@@ -63,7 +67,8 @@ public class AppConfig {
                 WS_BASE_URL = WEB_DOMAIN + "/WebService" + "/services/";
                 WS_BASE_HTML_URL = WEB_DOMAIN + "/WebService" + "/html/";
                 WS_BASE_JSP_URL = WEB_DOMAIN + "/WebService" + "/jsp/";
-//                IMAGE_PATH_LJT = "http://www.lanjiutian.com/ecommerce/images";
+                IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";
+                IMAGE_PATH_LJT_ECOMERCE = "http://www.lanjiutian.com";
                 break;
         }
     }

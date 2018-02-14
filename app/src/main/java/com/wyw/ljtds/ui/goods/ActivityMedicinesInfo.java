@@ -249,7 +249,10 @@ public class ActivityMedicinesInfo extends ActivityGoodsInfo {
         super.onCreate(savedInstanceState);
         tvGoumai.setText(getString(R.string.goumai_medicine));
 
+        commId = getIntent().getStringExtra(MEDICINE_INFO_ID);
+        initFragmentList(commId);
         initIconBtnStat();
+
 
         fragmentGoodsInfo.addItemCallback(new MyCallback() {
             @Override
@@ -386,7 +389,7 @@ public class ActivityMedicinesInfo extends ActivityGoodsInfo {
         setGouMaiBtn(medicineModel.getPRESCRIPTION_FLG());
 
         fragmentGoodsDetail.bindData2View(medicineModel);
-        fragmentGoodsEvaluate.bindData2View(medicineModel);
+//        fragmentGoodsEvaluate.bindData2View(medicineModel);
     }
 
 

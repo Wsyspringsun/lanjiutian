@@ -30,6 +30,7 @@ public class OrderGroupDto {
     private String GROUP_REMARKS;
     private String INVOICE_FLG;
     private String INVOICE_TYPE;
+    private String INVOICE_ORG;
     private String INVOICE_ID;
     private String INVOICE_TAX;
     private String INVOICE_TITLE;
@@ -377,5 +378,13 @@ public class OrderGroupDto {
 
     public void setDISTRIBUTION_DATE_END(String DISTRIBUTION_DATE_END) {
         this.DISTRIBUTION_DATE_END = DISTRIBUTION_DATE_END;
+    }
+
+    public String getINVOICE_ORG() {
+        return INVOICE_ORG;
+    }
+
+    public void setINVOICE_ORG(String INVOICE_ORG) {
+        this.INVOICE_ORG = INVOICE_ORG;
     }
 }

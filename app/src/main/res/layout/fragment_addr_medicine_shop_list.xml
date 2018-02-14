@@ -47,7 +47,8 @@
         <Button
             android:id="@+id/fragment_addr_medicine_shop_list_btn_confirm"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/font_4"
+            android:layout_height="@dimen/x20"
+            android:layout_marginBottom="@dimen/x1"
             android:background="@drawable/background_submit"
             android:text="@string/confirm"
             android:textColor="@color/white"

@@ -23,23 +23,24 @@
                 <ImageView
                     android:id="@+id/activity_lifeshop_img_banner"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x90"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/shop_beijing" />
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/life_shop" />
 
             </FrameLayout>
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/activity_lifeshop_tabs"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/x40"
+                android:layout_height="@dimen/x32"
                 android:layout_alignParentBottom="true"
                 app:tabGravity="fill"
                 app:tabIndicatorColor="@android:color/holo_orange_dark"
                 app:tabIndicatorHeight="2dp"
                 app:tabMode="fixed"
                 app:tabSelectedTextColor="@android:color/holo_orange_dark"
-                app:theme="@style/Widget.Design.TabLayout"/>
+                app:theme="@style/LjtTabLayout">
+            </android.support.design.widget.TabLayout>
 
             <com.wyw.ljtds.widget.goodsinfo.NoScrollViewPager
                 android:id="@+id/fragment_shopimg_vp_main"

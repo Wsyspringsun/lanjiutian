@@ -45,6 +45,7 @@ import com.wyw.ljtds.model.ShoppingCartModel;
 import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.ui.goods.ActivityGoodsSubmit;
+import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.ui.goods.ShopActivity;
 import com.wyw.ljtds.ui.user.ActivityLogin;
@@ -498,6 +499,9 @@ public class FragmentCart extends BaseFragment {
                 default:
                     if (AppConfig.GROUP_LJT.equals(itemData.getINS_USER_ID())) {
                         Intent it = ActivityMedicinesInfo.getIntent(getActivity(), itemData.getCOMMODITY_ID(), itemData.getBUSNO());
+                        startActivity(it);
+                    }else{
+                        Intent it = ActivityLifeGoodsInfo.getIntent(getActivity(), itemData.getCOMMODITY_ID());
                         startActivity(it);
                     }
                     break;

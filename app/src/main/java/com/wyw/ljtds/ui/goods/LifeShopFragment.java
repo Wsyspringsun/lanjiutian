@@ -27,6 +27,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.adapter.goodsinfo.NetworkImageHolderView;
 import com.wyw.ljtds.biz.biz.GoodsBiz;
@@ -38,6 +39,9 @@ import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.model.ShopImg;
 import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.utils.ToastUtil;
+import com.wyw.ljtds.widget.DividerGridItemDecoration;
+import com.wyw.ljtds.widget.GridItemDecoration;
+import com.wyw.ljtds.widget.logistics.item.LinearDividerItemDecoration;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -154,14 +158,17 @@ public class LifeShopFragment extends BaseFragment {
             case 0:
                 LinearLayoutManager llm = new LinearLayoutManager(getActivity());
                 ryData.setLayoutManager(llm);
+                ryData.addItemDecoration(new LinearDividerItemDecoration(new LinearDividerItemDecoration.Builder()));
                 break;
             case 1:
                 GridLayoutManager glm = new GridLayoutManager(getActivity(), 2);
                 ryData.setLayoutManager(glm);
+                ryData.addItemDecoration(new DividerGridItemDecoration(getActivity()));
                 break;
             case 2:
                 LinearLayoutManager llm2 = new LinearLayoutManager(getActivity());
                 ryData.setLayoutManager(llm2);
+                ryData.addItemDecoration(new LinearDividerItemDecoration(new LinearDividerItemDecoration.Builder()));
                 break;
         }
         loadData();
@@ -255,22 +262,24 @@ public class LifeShopFragment extends BaseFragment {
             if (o == null)
                 return;
 
-            SimpleDraweeView ivItem = baseViewHolder.getView(R.id.item_shopimg_iv_shopimgitem);
+            ImageView ivItem = baseViewHolder.getView(R.id.item_shopimg_iv_shopimgitem);
 
-
+/*
             int screenWidth = ((MyApplication) (getActivity().getApplication())).screenWidth;
 //            int wWidth = wm.getDefaultDisplay().getWidth();
             ViewGroup.LayoutParams lp = ivItem.getLayoutParams();
             lp.width = screenWidth;
             lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            ivItem.setLayoutParams(lp);
+//            lp.height = lp.width *  2;
 
             ivItem.setMaxWidth(screenWidth);
             ivItem.setMaxHeight(screenWidth * 2); //这里其实可以根据需求而定，我这里测试为最大宽度的5倍
+            ivItem.setLayoutParams(lp);*/
 
 
             Log.e(AppConfig.ERR_TAG, "o.getIMG_PATH():" + o.getIMG_PATH());
-            ivItem.setImageURI(Uri.parse(o.getIMG_PATH()));
+            Picasso.with(getActivity()).load(Uri.parse(o.getIMG_PATH())).into(ivItem);
+//            ivItem.setImageURI();
 //            ViewGroup.LayoutParams lp = ivItem.getLayoutParams();
 //
 //            lp.height = R.dimen.x20;

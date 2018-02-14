@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.wyw.ljtds.R;
+import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.MedicineTypeSecondModel;
 import com.wyw.ljtds.ui.goods.ActivityMedicineList;
 
@@ -62,7 +63,7 @@ public class GridAdapter2 extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.textView.setText(mChildrenBeanXes.get(position).getCLASSNAME());
-        viewHolder.mImageView.setImageURI(Uri.parse("http://www.lanjiutian.com/upload/images" + mChildrenBeanXes.get(position).getIMG_PATH()));
+        viewHolder.mImageView.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + mChildrenBeanXes.get(position).getIMG_PATH()));
 
         viewHolder.item.setOnClickListener(new View.OnClickListener() {
             @Override

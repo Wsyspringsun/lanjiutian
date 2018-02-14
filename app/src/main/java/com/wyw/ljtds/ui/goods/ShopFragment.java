@@ -31,7 +31,7 @@ import java.util.Map;
  * Use the {@link ShopFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-@ContentView(R.layout.fragment_shopgoods)
+@ContentView(R.layout.fragment_shopinfo)
 public class ShopFragment extends BaseFragment {
     private static final String ARG_SHOPID = "param1";
     private static final String ARG_PARAM2 = "param2";

@@ -58,13 +58,16 @@
         android:layout_marginBottom="1dp"
         android:background="@color/white"
         android:paddingLeft="@dimen/padding2"
-        android:paddingRight="@dimen/padding2">
+        android:paddingRight="@dimen/padding2"
+        android:paddingTop="@dimen/padding1">
 
         <TextView
             android:id="@+id/item_order_submit_bottom_paymethod_title"
             style="@style/textview_title"
             android:layout_alignParentLeft="true"
-            android:lineSpacingMultiplier="1.5"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:layout_marginBottom="@dimen/vertical_margin"
+            android:lineSpacingMultiplier="1.2"
             android:text="配送方式\n支付方式"
             android:textColor="@color/font_1"
             android:textSize="@dimen/font_5" />

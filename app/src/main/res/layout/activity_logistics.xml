@@ -27,17 +27,29 @@
 
                 <TextView
                     android:id="@+id/zhuangtai"
-                    style="@style/font_ww_16_black" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="状态"
+                    android:textColor="@color/font_1"
+                    android:textSize="@dimen/font_5" />
 
                 <TextView
                     android:id="@+id/wuliu"
-                    style="@style/font_ww_16_black"
-                    android:layout_marginTop="@dimen/x4" />
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="@dimen/x4"
+                    android:text="物流"
+                    android:textColor="@color/font_1"
+                    android:textSize="@dimen/font_5" />
 
                 <TextView
                     android:id="@+id/dingdan"
-                    style="@style/font_ww_16_black"
-                    android:layout_marginTop="@dimen/x4" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/x4"
+                    android:text="Info"
+                    android:textColor="@color/font_1"
+                    android:textSize="@dimen/font_5" />
 
 
             </LinearLayout>

@@ -38,8 +38,9 @@
 
                 <RadioButton
                     android:id="@+id/activity_orderbill_rb_fapiao_no"
-                    android:layout_width="@dimen/x64"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/x1"
                     android:background="@drawable/select_btn_order"
                     android:button="@null"
                     android:checked="true"
@@ -47,11 +48,11 @@
                     android:padding="@dimen/x5"
                     android:text="@string/fapiao_no"
                     android:textColor="@color/select_btn_order_text"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/font_5" />
 
                 <RadioButton
                     android:id="@+id/activity_orderbill_rb_fapiao_yes"
-                    android:layout_width="@dimen/x64"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/select_btn_order"
                     android:button="@null"
@@ -59,7 +60,7 @@
                     android:padding="@dimen/x5"
                     android:text="@string/fapiao_yes"
                     android:textColor="@color/select_btn_order_text"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/font_5" />
 
             </RadioGroup>
 
@@ -100,8 +101,9 @@
 
                     <RadioButton
                         android:id="@+id/fapiao_lx_rb1"
-                        android:layout_width="@dimen/x64"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/x1"
                         android:background="@drawable/select_btn_order"
                         android:button="@null"
                         android:checked="true"
@@ -109,20 +111,21 @@
                         android:padding="@dimen/x5"
                         android:text="@string/fapiao_z"
                         android:textColor="@color/select_btn_order_text"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/font_5" />
 
                     <RadioButton
                         android:id="@+id/fapiao_lx_rb2"
                         android:layout_width="@dimen/x64"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/x15"
+                        android:layout_marginRight="@dimen/x1"
                         android:background="@drawable/select_btn_order"
                         android:button="@null"
                         android:gravity="center"
                         android:padding="@dimen/x5"
                         android:text="@string/fapiao_d"
                         android:textColor="@color/select_btn_order_text"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/font_5"
                         android:visibility="gone" />
 
                 </RadioGroup>
@@ -132,7 +135,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <View
                     android:layout_width="match_parent"
@@ -165,8 +168,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
+                            android:tag="0"
                             android:text="@string/fapiao_gr"
-                            android:textSize="14sp" />
+                            android:textSize="@dimen/font_5" />
 
                         <RadioButton
                             android:id="@+id/dialog_pay_bill_gongsi"
@@ -174,14 +178,15 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/x15"
                             android:text="@string/fapiao_gs"
-                            android:textSize="14sp" />
+                            android:tag="1"
+                            android:textSize="@dimen/font_5" />
 
                     </RadioGroup>
 
                     <LinearLayout
-                        android:layout_below="@id/dialog_pay_bill_rg_orglvl"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/dialog_pay_bill_rg_orglvl"
                         android:orientation="vertical">
 
                         <EditText
@@ -204,7 +209,7 @@
                             android:padding="@dimen/x5"
                             android:singleLine="true"
                             android:textColor="@color/font_black2"
-                            android:textSize="14sp" />
+                            android:textSize="@dimen/font_5" />
 
                     </LinearLayout>
 
@@ -227,7 +232,7 @@
         android:background="@drawable/background_submit_yuan"
         android:text="@string/alert_queding"
         android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:textSize="@dimen/font_5" />
 
 
 </RelativeLayout>

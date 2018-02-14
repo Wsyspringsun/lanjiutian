@@ -46,6 +46,7 @@ import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
 
 @ContentView(R.layout.fragment_goods_evaluate)
 public class FragmentGoodsPagerEvaluate extends BaseFragment {
+    private static final String ARG_COMMID = "ARG_COMMID";
     @ViewInject(R.id.fragment_goods_evaluate_data)
     private RecyclerView rylvData;
 
@@ -57,6 +58,23 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
 
     @ViewInject(R.id.tv_evaluate_cnt)
     TextView tvGoodComment;
+
+    public static FragmentGoodsPagerEvaluate newInstance(String commId) {
+        FragmentGoodsPagerEvaluate frag = new FragmentGoodsPagerEvaluate();
+        Bundle args = new Bundle();
+        args.putString(ARG_COMMID, commId);
+        frag.setArguments(args);
+        return frag;
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            String commid = getArguments().getString(ARG_COMMID);
+            geteva(false, true);
+        }
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -72,41 +90,44 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
         rylvData.addItemDecoration(new RecycleViewDivider(getActivity(), LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.font_black2)));
     }
 
-    public void bindData2View(final MedicineDetailsModel model) {
-        Log.e(AppConfig.ERR_TAG, GsonUtils.Bean2Json(model));
-        geteva(model.getWAREID(), true, true);
-//        Log.e(AppConfig.ERR_TAG, "evaluate page eva count:" + model.getEVALUATE_CNT() + "");
-        tvGoodComment.setText("(" + model.getEVALUATE_CNT() + ")");
+    public void bindData2View(List<MedicineDetailsEvaluateModel> medicineDetailsEvaluateModels) {
+        if (medicineDetailsEvaluateModels == null) return;
+        tvGoodComment.setText("(" + medicineDetailsEvaluateModels.size() + ")");
+        if (adapter == null) {
+            adapter = new MyAdapter();
+            adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+                @Override
+                public void onLoadMoreRequested() {
+                    geteva(true, false);
+                }
+            });
+            rylvData.setAdapter(adapter);
+        }
+        adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+        adapter.addData(medicineDetailsEvaluateModels);
+        adapter.notifyDataSetChanged();
+    }
+
+    /*public void bindData2View(final CommodityDetailsModel model) {
+//        tvGoodComment.setText("" + model.getEVALUATE_CNT());
+//        geteva(model.getCommodityId(), true, true);
         adapter = new MyAdapter();
         adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                geteva(model.getWAREID(), true, false);
+                geteva(true, false);
             }
         });
         adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         rylvData.setAdapter(adapter);
-    }
+    }*/
 
-    public void bindData2View(final CommodityDetailsModel model) {
-        tvGoodComment.setText("" + model.getEVALUATE_CNT());
-        geteva(model.getCommodityId(), true, true);
-        adapter = new MyAdapter();
-        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                geteva(model.getCommodityId(), true, false);
-            }
-        });
-        adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
-        rylvData.setAdapter(adapter);
-    }
-
-    private void geteva(final String classid, final boolean loadmore, final boolean refresh) {
+    private void geteva(final boolean loadmore, final boolean refresh) {
         setLoding(getActivity(), false);
         new BizDataAsyncTask<List<MedicineDetailsEvaluateModel>>() {
             @Override
             protected List<MedicineDetailsEvaluateModel> doExecute() throws ZYException, BizFailure {
+                String classid = getArguments().getString(ARG_COMMID);
                 if (refresh) {
                     return GoodsBiz.getEvaluate(classid, "0", AppConfig.DEFAULT_PAGE_COUNT + "");
                 } else {
@@ -147,9 +168,10 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
                     adapter.notifyDataSetChanged();
                 }
 
-                Log.e("****", medicineDetailsEvaluateModels.size() + ";    " + pageIndex + ";  " + adapter.getData().size() + "");
 
                 pageIndex++;
+
+                bindData2View(medicineDetailsEvaluateModels);
             }
 
             @Override

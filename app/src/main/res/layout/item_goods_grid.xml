@@ -15,8 +15,8 @@
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/item_goods_grid_sdv"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x135"
-        fresco:actualImageScaleType="fitCenter"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         fresco:fadeDuration="200"
         fresco:failureImage="@mipmap/zhanweitu"
         fresco:failureImageScaleType="fitCenter"

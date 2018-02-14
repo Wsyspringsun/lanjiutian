@@ -55,7 +55,7 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
     @Event(value = {R.id.activity_goods_info_rl_shoucang, R.id.activity_goods_info_rl_shop, R.id.activity_goods_info_rl_kefu, R.id.activity_goods_info_tv_goumai, R.id.activity_goods_info_tv_addcart, R.id.shopping_cart})
     private void onClick(View v) {
 //        super.onClick(v);
-        Log.e(AppConfig.ERR_TAG,"shop");
+        Log.e(AppConfig.ERR_TAG, "shop");
         switch (v.getId()) {
             case R.id.activity_goods_info_tv_goumai:
                 if (!UserBiz.isLogined()) {
@@ -234,7 +234,7 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
         super.onCreate(savedInstanceState);
 //
         tvGoumai.setText(R.string.goumai);
-//
+        initFragmentList(getIntent().getStringExtra(TAG_LIFE_GOODS_ID ));
 //
 //
     }
@@ -291,7 +291,7 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
 
         fragmentCommodityInfo.updeta(commodityModel);
         fragmentGoodsDetail.bindData2View(commodityModel);
-        fragmentGoodsEvaluate.bindData2View(commodityModel);
+//        fragmentGoodsEvaluate.bindData2View(commodityModel);
     }
 //
 //    //添加购物车

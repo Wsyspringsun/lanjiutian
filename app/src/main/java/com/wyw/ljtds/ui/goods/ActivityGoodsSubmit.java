@@ -584,6 +584,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
             @Override
             protected void OnExecuteFailed() {
                 Log.e(AppConfig.ERR_TAG, ActivityGoodsSubmit.this.getClass().getName() + "OnExecuteFailed");
+                finish();
                 closeLoding();
             }
         }.execute();
@@ -934,6 +935,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
                         cOrderModel.setINVOICE_TYPE(fapiaoModel.getINVOICE_TYPE());
                         cOrderModel.setINVOICE_TITLE(fapiaoModel.getINVOICE_TITLE());
                         cOrderModel.setINVOICE_CONTENT(fapiaoModel.getINVOICE_CONTENT());
+                        cOrderModel.setINVOICE_ORG(fapiaoModel.getINVOICE_ORG());
                         cOrderModel.setINVOICE_TAX(fapiaoModel.getINVOICE_TAX());
                         for (OrderGroupDto groupItem : cOrderModel.getDETAILS()) {
                             groupItem.setINVOICE_FLG(fapiaoModel.getINVOICE_FLG());

@@ -13,6 +13,7 @@ public class CreatOrderModel extends OrderTradeDto implements Serializable {
     private String INVOICE_TYPE;
     private String INVOICE_ID;
     private String INVOICE_TAX;
+    private String INVOICE_ORG;
     private String INVOICE_TITLE;
     //发票种类 0：明细  1办公  2：家居   3：药品   4：耗材
     private String INVOICE_CONTENT;
@@ -81,6 +82,14 @@ public class CreatOrderModel extends OrderTradeDto implements Serializable {
 
     public void setADDRESS_ID(String ADDRESS_ID) {
         this.ADDRESS_ID = ADDRESS_ID;
+    }
+
+    public String getINVOICE_ORG() {
+        return INVOICE_ORG;
+    }
+
+    public void setINVOICE_ORG(String INVOICE_ORG) {
+        this.INVOICE_ORG = INVOICE_ORG;
     }
 
     /*    //获取的 地址 id

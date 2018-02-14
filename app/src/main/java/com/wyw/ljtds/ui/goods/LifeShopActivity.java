@@ -31,6 +31,7 @@ import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.category.FragmentLife;
 import com.wyw.ljtds.ui.user.ActivityMessage;
 import com.wyw.ljtds.ui.user.wallet.BalanceFragment;
+import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -93,7 +94,7 @@ public class LifeShopActivity extends BaseActivity {
 
             @Override
             public Fragment getItem(int position) {
-                return LifeShopFragment.newInstance(shopId,position);
+                return LifeShopFragment.newInstance(shopId, position);
                 /*switch (position) {
                     case 0:
                     case 1:
@@ -149,6 +150,7 @@ public class LifeShopActivity extends BaseActivity {
         ShopImg itemShop = shopImgs.get(0);
 //        tvShopName.setText(itemShop.getSHOP_NAME());
 //        sdvShopLogo.setImageURI(Uri.parse(itemShop.getIMAGE_PATH1()));
+        Utils.log("itemShop.getIMAGE_PATH1():" + itemShop.getIMAGE_PATH1());
         Picasso.with(this).load(Uri.parse(itemShop.getIMAGE_PATH1())).into(shopImg);
     }
 }

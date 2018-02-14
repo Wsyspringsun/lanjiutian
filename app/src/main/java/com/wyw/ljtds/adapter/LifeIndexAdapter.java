@@ -208,8 +208,8 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
             holder.tvNumber.setText("" + recComm.getCommodityList().size() + "\n单品");
         }
 //        holder.imgCat.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + recComm.getImgPath()));
-        Utils.log("recComm:" + AppConfig.IMAGE_PATH_LJT + recComm.getImgPath());
-        Picasso.with(context).load(Uri.parse(AppConfig.IMAGE_PATH_LJT + recComm.getImgPath())).into(holder.imgCat);
+        Utils.log("recComm:" + AppConfig.IMAGE_PATH_LJT_ECOMERCE + recComm.getImgPath());
+        Picasso.with(context).load(Uri.parse(AppConfig.IMAGE_PATH_LJT_ECOMERCE + recComm.getImgPath())).into(holder.imgCat);
 
         holder.bindCommList(recComm.getCommodityList());
     }

@@ -87,6 +87,9 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
                     setResult(AppConfig.IntentExtraKey.RESULT_OK, mIntent);
                     finish();
                 } else {
+                    orderModel.setINVOICE_TYPE("0");
+                    RadioButton rbOrg = (RadioButton) rgOrgLvl.findViewById(rgOrgLvl.getCheckedRadioButtonId());
+                    orderModel.setINVOICE_ORG((String) rbOrg.getTag());
                     orderModel.setINVOICE_TAX(edCompanyId.getText().toString());
                     if (StringUtils.isEmpty(edTitle.getText().toString().trim())) {
                         ToastUtil.show(this, "请填写发票抬头信息");

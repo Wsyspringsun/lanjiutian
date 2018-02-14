@@ -2,23 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/x200"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <ImageView
         android:id="@+id/item_shopimg_iv_shopimgitem"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:adjustViewBounds="true"
-        android:padding="@dimen/x3"
-        android:scaleType="fitXY"
-        fresco:actualImageScaleType="fitXY"
-        fresco:fadeDuration="200"
-        fresco:failureImage="@mipmap/zhanweitu"
-        fresco:failureImageScaleType="fitCenter"
-        fresco:placeholderImage="@mipmap/zhanweitu" />
+        android:gravity="center"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ss" />
+    <!--    <com.facebook.drawee.view.SimpleDraweeView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            fresco:actualImageScaleType="fitXY"
+            fresco:fadeDuration="200"
+            fresco:failureImage="@mipmap/zhanweitu"
+            fresco:failureImageScaleType="fitCenter"
+            fresco:placeholderImage="@mipmap/zhanweitu" />-->
 
 </LinearLayout>
 

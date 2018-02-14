@@ -243,8 +243,8 @@ public class AddressModel extends BaseModel implements Parcelable {
 
         double lat, lng;
         try {
-            lat = Double.parseDouble(ssLoc[1]);
-            lng = Double.parseDouble(ssLoc[2]);
+            lat = Double.parseDouble(ssLoc[2]);
+            lng = Double.parseDouble(ssLoc[1]);
         } catch (Exception ex) {
             err.append("错误的地址格式, 需要 xx|lat|lng");
             return null;

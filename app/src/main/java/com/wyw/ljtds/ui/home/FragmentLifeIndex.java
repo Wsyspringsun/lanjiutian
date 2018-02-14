@@ -76,12 +76,12 @@ public class FragmentLifeIndex extends BaseFragment {
         initView();
         //加载服务器数据
         //Location
+        loadhomeData();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        loadhomeData();
 
     }
 

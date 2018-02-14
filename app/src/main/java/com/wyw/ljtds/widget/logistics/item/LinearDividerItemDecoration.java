@@ -24,7 +24,7 @@ public class LinearDividerItemDecoration extends RecyclerView.ItemDecoration {
     private ColorDrawable mDivider;
     private Builder builder;
 
-    private LinearDividerItemDecoration(Builder builder) {
+    public LinearDividerItemDecoration(Builder builder) {
         mDivider = new ColorDrawable(Color.GRAY);
         mDivider.setColor(builder.dividerColor);
         this.builder = builder;

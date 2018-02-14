@@ -132,7 +132,7 @@ public class AddressMapActivity extends Activity {
                 if (TAG_FROM_MAIN.equals(tf)) {
                     SingleCurrentUser.locStyle = SingleCurrentUser.locStyleCustom;
                 }
-                data.putExtra(TAG_ADDRESS_POI_LAT, "|" + poi.location.latitude + "|" + poi.location.longitude);
+                data.putExtra(TAG_ADDRESS_POI_LAT, "|" + poi.location.longitude + "|" + poi.location.latitude);
                 data.putExtra(TAG_ADDRESS_POI_ADDRESS, tvAddress.getText().toString());
                 setResult(Activity.RESULT_OK, data);
                 finish();
