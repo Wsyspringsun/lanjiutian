@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.config;
+package com.wyw.ljtmgr.config;
 
 import android.app.Application;
 import android.app.Service;
@@ -13,18 +13,16 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.trace.LBSTraceClient;
-import com.baidu.trace.Trace;
 import com.baidu.trace.api.entity.LocRequest;
 import com.google.gson.Gson;
-import com.wyw.ljtwl.model.LoginModel;
-import com.wyw.ljtwl.service.LocationService;
+import com.wyw.ljtmgr.model.LoginModel;
+import com.wyw.ljtmgr.service.LocationService;
 
 import org.xutils.BuildConfig;
 import org.xutils.x;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 import cn.jpush.android.api.JPushInterface;
-import utils.CommonUtil;
 
 /**
  * Created by Administrator on 2017/7/3 0003.
@@ -41,9 +39,14 @@ public class MyApplication extends Application {
     public Vibrator mVibrator;
     private LocRequest locRequest;
 
+    public static void clearLoginer() {
+        currentLoginer = null;
+    }
+
     public static LoginModel getCurrentLoginer() {
         if (currentLoginer == null) {
             String str = PreferenceCache.getUser();
+            Log.e(AppConfig.TAG_ERR, "getCurrentLoginer str:" + str);
             currentLoginer = new Gson().fromJson(str, LoginModel.class);
         }
         return currentLoginer;

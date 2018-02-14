@@ -1,7 +1,4 @@
-package com.wyw.ljtwl.model;
-
-import java.util.HashMap;
-import java.util.Map;
+package com.wyw.ljtmgr.model;
 
 /**
  * Created by Administrator on 2017/8/1.

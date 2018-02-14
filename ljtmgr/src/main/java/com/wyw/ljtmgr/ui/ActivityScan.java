@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.ui;
+package com.wyw.ljtmgr.ui;
 
 
 import android.Manifest;
@@ -9,15 +9,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatImageView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.config.AppConfig;
+import com.wyw.ljtmgr.R;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -29,8 +26,6 @@ import java.util.List;
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zxing.QRCodeDecoder;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by wsy on 2018/1/17 0947

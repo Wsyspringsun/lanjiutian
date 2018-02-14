@@ -1,1 +1,2 @@
-include ':easypermissions', ':app3', ':temp', 'app', ':circledialog', ':flowlayout-lib', ':MarqueeView', ':app2', ':xiaonengChatUI'
+include ':page',':easypermissions', ':ljtmgr', ':temp', ':appbase', 'app', ':circledialog', ':flowlayout-lib', ':MarqueeView', ':BaiduMapsApiDemo'
+include ':xiaonengChatUI'

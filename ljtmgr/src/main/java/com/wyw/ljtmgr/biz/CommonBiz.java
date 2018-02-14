@@ -1,15 +1,15 @@
-package com.wyw.ljtwl.biz;
+package com.wyw.ljtmgr.biz;
 
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.wyw.ljtwl.biz.task.AbstractCommonCallback;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.config.MyApplication;
-import com.wyw.ljtwl.config.PreferenceCache;
-import com.wyw.ljtwl.model.BaseJson;
-import com.wyw.ljtwl.model.Header;
-import com.wyw.ljtwl.model.LoginModel;
+import com.wyw.ljtmgr.biz.task.AbstractCommonCallback;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.config.MyApplication;
+import com.wyw.ljtmgr.config.PreferenceCache;
+import com.wyw.ljtmgr.model.BaseJson;
+import com.wyw.ljtmgr.model.Header;
+import com.wyw.ljtmgr.model.LoginModel;
 
 import org.xutils.http.RequestParams;
 import org.xutils.x;

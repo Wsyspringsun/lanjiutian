@@ -1,12 +1,12 @@
-package com.wyw.ljtwl.biz.task;
+package com.wyw.ljtmgr.biz.task;
 
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.ui.ActivityLogin;
-import com.wyw.ljtwl.ui.BaseActivity;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.ui.ActivityLogin;
+import com.wyw.ljtmgr.ui.BaseActivity;
 
 import org.json.JSONObject;
 import org.xutils.common.Callback;

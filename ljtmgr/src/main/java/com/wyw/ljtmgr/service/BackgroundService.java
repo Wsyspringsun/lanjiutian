@@ -1,23 +1,18 @@
-package com.wyw.ljtwl.service;
+package com.wyw.ljtmgr.service;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.baidu.trace.LBSTraceClient;
 import com.baidu.trace.model.OnTraceListener;
 import com.baidu.trace.model.PushMessage;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.config.MyApplication;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.config.MyApplication;
 
 /**
  * 拉取服务器消息的后台服务

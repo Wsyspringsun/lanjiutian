@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2016 Baidu, Inc. All Rights Reserved.
  */
-package com.wyw.ljtwl.ui.map;
+package com.wyw.ljtmgr.ui.map;
 
 import android.graphics.Color;
 import android.os.Bundle;

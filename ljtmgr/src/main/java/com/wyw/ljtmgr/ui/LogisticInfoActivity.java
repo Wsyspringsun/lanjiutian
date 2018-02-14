@@ -1,22 +1,17 @@
-package com.wyw.ljtwl.ui;
+package com.wyw.ljtmgr.ui;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.service.BackgroundService;
+import com.wyw.ljtmgr.R;
+import com.wyw.ljtmgr.service.BackgroundService;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 第三方物流

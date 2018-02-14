@@ -1,22 +1,21 @@
-package com.wyw.ljtwl.ui;
+package com.wyw.ljtmgr.ui;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.route.BikingRoutePlanOption;
 import com.baidu.mapapi.search.route.BikingRouteResult;
@@ -28,27 +27,13 @@ import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
 import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
-import com.baidu.trace.api.entity.OnEntityListener;
-import com.baidu.trace.api.track.HistoryTrackResponse;
-import com.baidu.trace.api.track.LatestPoint;
-import com.baidu.trace.api.track.LatestPointResponse;
-import com.baidu.trace.api.track.OnTrackListener;
-import com.baidu.trace.api.track.TrackPoint;
-import com.baidu.trace.model.OnTraceListener;
-import com.baidu.trace.model.PushMessage;
-import com.baidu.trace.model.StatusCodes;
-import com.baidu.trace.model.TraceLocation;
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.config.MyApplication;
-import com.wyw.ljtwl.config.SingleCurrentUser;
-import com.wyw.ljtwl.ui.map.BikingRouteOverlay;
-import com.wyw.ljtwl.utils.BitmapUtil;
-import com.wyw.ljtwl.utils.CommonUtil;
-import com.wyw.ljtwl.utils.MapUtil;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.wyw.ljtmgr.R;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.config.MyApplication;
+import com.wyw.ljtmgr.config.SingleCurrentUser;
+import com.wyw.ljtmgr.ui.map.BikingRouteOverlay;
+import com.wyw.ljtmgr.utils.BitmapUtil;
+import com.wyw.ljtmgr.utils.MapUtil;
 
 import utils.GsonUtils;
 
@@ -120,6 +105,7 @@ public class LogisticMapActivity extends AppCompatActivity {
     private boolean useDefaultIcon = true;
 
     private MapUtil mapUtil;
+    private ImageView imgView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -161,6 +147,14 @@ public class LogisticMapActivity extends AppCompatActivity {
         // 地图初始化
         mMapView = (MapView) findViewById(R.id.activity_logistic_map_mapview);
         mBaiduMap = mMapView.getMap();
+
+        imgView = (ImageView) findViewById(R.id.activity_logistic_img_cancel);
+        imgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         mapUtil = MapUtil.getInstance();
         mapUtil.init(mMapView);

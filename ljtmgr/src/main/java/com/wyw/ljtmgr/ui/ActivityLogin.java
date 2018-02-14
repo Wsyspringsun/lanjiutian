@@ -1,9 +1,10 @@
-package com.wyw.ljtwl.ui;
+package com.wyw.ljtmgr.ui;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -11,16 +12,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.biz.SimpleCommonCallback;
-import com.wyw.ljtwl.biz.UserBiz;
-import com.wyw.ljtwl.config.PreferenceCache;
-import com.wyw.ljtwl.model.LoginModel;
-import com.wyw.ljtwl.utils.InputMethodUtils;
+import com.wyw.ljtmgr.R;
+import com.wyw.ljtmgr.biz.SimpleCommonCallback;
+import com.wyw.ljtmgr.biz.UserBiz;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.config.PreferenceCache;
+import com.wyw.ljtmgr.model.LoginModel;
+import com.wyw.ljtmgr.utils.InputMethodUtils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+
+import utils.CommonUtil;
 
 /**
  * Created by Administrator on 2017/7/3 0003.
@@ -28,7 +32,7 @@ import org.xutils.view.annotation.ViewInject;
 
 @ContentView(R.layout.activity_login)
 public class ActivityLogin extends BaseActivity {
-//    @ViewInject(R.id.guanbi)
+    //    @ViewInject(R.id.guanbi)
 //    private ImageView close;
     @ViewInject(R.id.ed_phone)
     private EditText ed_phone;
@@ -87,17 +91,16 @@ public class ActivityLogin extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == event.KEYCODE_BACK) {
             InputMethodUtils.closeSoftKeyboard(this);
-            finish();
-            Intent it = new Intent(this, MainActivity.class);
 //            AppConfig.currSel = 0;
 //            it.putExtra( AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel );
-            startActivity(it);
+            startActivity(MainActivity.getIntent(ActivityLogin.this));
         }
         return super.onKeyDown(keyCode, event);
     }
 
     public static Intent getIntent(Context ctx) {
         Intent it = new Intent(ctx, ActivityLogin.class);
+        it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         return it;
     }
 
@@ -113,7 +116,7 @@ public class ActivityLogin extends BaseActivity {
                 PreferenceCache.putToken(result.getToken()); // 持久化缓存token
                 PreferenceCache.putUser(new Gson().toJson(result)); // 持久化缓存token
 
-                finish();
+                startActivity(MainActivity.getIntent(ActivityLogin.this));
             }
         });
     }

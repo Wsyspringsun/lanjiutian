@@ -2,8 +2,10 @@ package utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.telephony.TelephonyManager;
 
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -118,26 +120,25 @@ public class CommonUtil {
         return Math.abs((DISTANCE * slope) / Math.sqrt(1 + slope * slope));
     }
 
-    
-    /**
-     * 根据两点算取图标转的角度
-     */
-    public static double getAngle(LatLng fromPoint, LatLng toPoint) {
-        double slope = getSlope(fromPoint, toPoint);
-        if (slope == Double.MAX_VALUE) {
-            if (toPoint.latitude > fromPoint.latitude) {
-                return 0;
-            } else {
-                return 180;
-            }
+    public static String getImei(Context context) {
+        String imei;
+        try {
+            imei = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+        } catch (Exception e) {
+            imei = "wsyTrace";
         }
-        float deltAngle = 0;
-        if ((toPoint.latitude - fromPoint.latitude) * slope < 0) {
-            deltAngle = 180;
-        }
-        double radio = Math.atan(slope);
-        return 180 * (radio / Math.PI) + deltAngle - 90;
+        return imei;
     }
 
+    public static boolean isEmpty(CharSequence str) {
+        return (str == null || str.length() == 0);
+    }
 
+    public static String formatFee(String val) {
+        if (isEmpty(val))
+            return "";
+        DecimalFormat df = new DecimalFormat("0.#");
+        BigDecimal bVal = new BigDecimal(val);
+        return df.format(bVal);
+    }
 }

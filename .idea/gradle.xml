@@ -8,13 +8,15 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/BaiduMapsApiDemo" />
             <option value="$PROJECT_DIR$/MarqueeView" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/app2" />
-            <option value="$PROJECT_DIR$/app3" />
+            <option value="$PROJECT_DIR$/appbase" />
             <option value="$PROJECT_DIR$/circledialog" />
             <option value="$PROJECT_DIR$/easypermissions" />
             <option value="$PROJECT_DIR$/flowlayout-lib" />
+            <option value="$PROJECT_DIR$/ljtmgr" />
+            <option value="$PROJECT_DIR$/page" />
             <option value="$PROJECT_DIR$/temp" />
             <option value="$PROJECT_DIR$/xiaonengChatUI" />
           </set>

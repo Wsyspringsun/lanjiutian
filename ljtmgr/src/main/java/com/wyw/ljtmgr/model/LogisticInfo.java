@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.model;
+package com.wyw.ljtmgr.model;
 
 /**
  * save info for logistic

@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/incremental/mergeDebugResources/merged.dir/values-w500dp-v13/values-w500dp-v13.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 54,
+                    "endOffset": 105
+                },
+                "from": {
+                    "file": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/values-w500dp-v13/values-w500dp-v13.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 54,
+                        "endOffset": 105
+                    }
+                }
+            }
+        ]
+    }
+]

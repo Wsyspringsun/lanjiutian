@@ -1,0 +1,66 @@
+[
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/abc_popup_exit.xml",
+        "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/anim/abc_popup_exit.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/abc_slide_out_bottom.xml",
+        "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/anim/abc_slide_out_bottom.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/abc_slide_in_bottom.xml",
+        "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/anim/abc_slide_in_bottom.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/design_snackbar_in.xml",
+        "source": "/home/wsy/.android/build-cache/517be5b978a64a705022b7feab459295d9b0e9d7/output/res/anim/design_snackbar_in.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/design_bottom_sheet_slide_in.xml",
+        "source": "/home/wsy/.android/build-cache/517be5b978a64a705022b7feab459295d9b0e9d7/output/res/anim/design_bottom_sheet_slide_in.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/design_fab_out.xml",
+        "source": "/home/wsy/.android/build-cache/517be5b978a64a705022b7feab459295d9b0e9d7/output/res/anim/design_fab_out.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/abc_grow_fade_in_from_bottom.xml",
+        "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/anim/abc_grow_fade_in_from_bottom.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/abc_popup_enter.xml",
+        "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/anim/abc_popup_enter.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/abc_slide_out_top.xml",
+        "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/anim/abc_slide_out_top.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/abc_slide_in_top.xml",
+        "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/anim/abc_slide_in_top.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/abc_shrink_fade_out_from_bottom.xml",
+        "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/anim/abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/design_bottom_sheet_slide_out.xml",
+        "source": "/home/wsy/.android/build-cache/517be5b978a64a705022b7feab459295d9b0e9d7/output/res/anim/design_bottom_sheet_slide_out.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/abc_fade_in.xml",
+        "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/anim/abc_fade_in.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/design_snackbar_out.xml",
+        "source": "/home/wsy/.android/build-cache/517be5b978a64a705022b7feab459295d9b0e9d7/output/res/anim/design_snackbar_out.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/design_fab_in.xml",
+        "source": "/home/wsy/.android/build-cache/517be5b978a64a705022b7feab459295d9b0e9d7/output/res/anim/design_fab_in.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim/abc_fade_out.xml",
+        "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/anim/abc_fade_out.xml"
+    }
+]

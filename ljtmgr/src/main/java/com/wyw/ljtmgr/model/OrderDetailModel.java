@@ -1,6 +1,5 @@
-package com.wyw.ljtwl.model;
+package com.wyw.ljtmgr.model;
 
-import java.util.Date;
 import java.util.List;
 
 /**

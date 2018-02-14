@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.config;
+package com.wyw.ljtmgr.config;
 
 import android.app.Activity;
 import android.app.ActivityManager;

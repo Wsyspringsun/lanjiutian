@@ -1,127 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="1dp">
-    <LinearLayout
-        android:layout_width="match_parent"
+    android:layout_margin="@dimen/margin"
+    android:background="@color/white">
+
+
+
+    <TextView
+        android:id="@+id/item_order_orderid"
+        style="@style/base_textview"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFFFFF"
-            android:orientation="horizontal">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="orderid" />
 
-            <!-- 以下为两种方案:
-            1,将"订单编号"与数字"1000000001"分开
-            -->
-
-            <TextView
-                android:paddingLeft="5dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="订单编号:"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:text="1000000001"
-                android:id="@+id/orderId"/>
-            <!--方案2
-            "订单编号:100000001"
-
-            -->
-            <!--<TextView-->
-            <!--android:padding="5dp"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/orderId"-->
-            <!--android:text="订单编号:100000001"/>-->
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="订单代发货"
-                android:padding="5dp"
-                android:layout_gravity="right"
-                android:gravity="right"
-                android:textColor="#F53E1D"
-                android:id="@+id/orderState"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="#F9FAF9"
-            android:padding="5dp"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="购买数量"
-                    android:gravity="center"
-                    />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="1"
-                    android:gravity="center"
-                    android:id="@+id/orderBuyCount"
-                    />
-            </LinearLayout>
-            <TextView
-                android:layout_width="0.5dp"
-                android:layout_height="match_parent"
-                android:background="#767676"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="订单金额"
-                    android:gravity="center"
-                    />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="¥101"
-                    android:gravity="center"
-                    android:id="@+id/orderMoneySum"
-                    />
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/item_order_shuliang"
+        style="@style/base_textview"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:orientation="horizontal"
-        android:background="#FFFFFF">
-        <TextView
-            android:padding="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="更新时间:2017-07-28 12:22:30"
-            android:id="@+id/orderUpdateTime"/>
-    </LinearLayout>
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/item_order_orderid"
+        android:gravity="center_horizontal|bottom"
+        android:text="数量\n0" />
+
+
+    <TextView
+        android:id="@+id/item_order_orderprice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/margin"
+        android:layout_toRightOf="@id/item_order_orderid"
+        android:text="￥00"
+        android:textAlignment="textEnd"
+        android:textColor="@color/base_bar"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/item_order_orderinfo"
+        style="@style/base_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/item_order_orderprice"
+        android:layout_marginLeft="@dimen/margin"
+        android:layout_alignBottom="@id/item_order_shuliang"
+        android:gravity="bottom"
+        android:text="运费:¥5\n2018-01-01 10:23" />
+
+
+</RelativeLayout>

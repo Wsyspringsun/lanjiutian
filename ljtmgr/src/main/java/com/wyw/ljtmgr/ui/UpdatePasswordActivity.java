@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.ui;
+package com.wyw.ljtmgr.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,13 +10,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.config.MyApplication;
-import com.wyw.ljtwl.config.PreferenceCache;
-import com.wyw.ljtwl.model.BaseJson;
-import com.wyw.ljtwl.model.Header;
-import com.wyw.ljtwl.model.LoginModel;
-import com.wyw.ljtwl.model.UpdatePassWordModel;
+import com.wyw.ljtmgr.R;
+import com.wyw.ljtmgr.config.MyApplication;
+import com.wyw.ljtmgr.config.PreferenceCache;
+import com.wyw.ljtmgr.model.BaseJson;
+import com.wyw.ljtmgr.model.Header;
+import com.wyw.ljtmgr.model.LoginModel;
+import com.wyw.ljtmgr.model.UpdatePassWordModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;

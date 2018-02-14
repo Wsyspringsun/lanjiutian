@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.ui;
+package com.wyw.ljtmgr.ui;
 
 
 import android.app.Activity;
@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,29 +29,24 @@ import com.alibaba.android.vlayout.VirtualLayoutManager.LayoutParams;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.biz.OrderBiz;
-import com.wyw.ljtwl.biz.SimpleCommonCallback;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.config.MyApplication;
-import com.wyw.ljtwl.config.SingleCurrentUser;
-import com.wyw.ljtwl.model.LogisticInfo;
-import com.wyw.ljtwl.model.OrderDetail;
-import com.wyw.ljtwl.model.OrderDetailModel;
-import com.wyw.ljtwl.model.OrderStatus;
-import com.wyw.ljtwl.model.ServerResponse;
-import com.wyw.ljtwl.utils.StringUtils;
+import com.wyw.ljtmgr.R;
+import com.wyw.ljtmgr.biz.OrderBiz;
+import com.wyw.ljtmgr.biz.SimpleCommonCallback;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.config.MyApplication;
+import com.wyw.ljtmgr.model.LogisticInfo;
+import com.wyw.ljtmgr.model.OrderDetail;
+import com.wyw.ljtmgr.model.OrderDetailModel;
+import com.wyw.ljtmgr.model.OrderStatus;
+import com.wyw.ljtmgr.model.ServerResponse;
+import com.wyw.ljtmgr.utils.StringUtils;
 
-import org.xutils.common.Callback;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import cn.bingoogolapple.photopicker.imageloader.BGAPicassoImageLoader;
-import utils.CommonUtil;
 
 
 /**
@@ -61,6 +55,7 @@ import utils.CommonUtil;
 @ContentView(R.layout.fragment_order_detail)
 public class OrderDetailFragment extends Fragment {
     private static final String ARG_ORDER_ID = "ARG_ORDER_ID";
+    private static final String ARG_ORDER_STAT = "ARG_ORDER_STAT";
     private static final int REQUEST_DELEGATE_LOGISTIC = 1;
 
     MyApplication myApp = null;
@@ -69,6 +64,12 @@ public class OrderDetailFragment extends Fragment {
     RecyclerView ryvOrder;
     @ViewInject(R.id.fragment_order_detail_btn_submit)
     Button btnSubmit;
+    @ViewInject(R.id.fragment_order_detail_btn_songda)
+    Button btnSongda;
+    @ViewInject(R.id.fragment_order_detail_btn_shouhoutongyi)
+    Button btnShouhouTongyi;
+    @ViewInject(R.id.fragment_order_detail_btn_shouhoujujue)
+    Button btnShouhouJujue;
     @ViewInject(R.id.fragment_order_detail_ll_logistic)
     LinearLayout llLogistic;
 
@@ -77,10 +78,11 @@ public class OrderDetailFragment extends Fragment {
     private int logisticStat;
     private SimpleCommonCallback sendOrderCallback;
 
-    public static OrderDetailFragment newInstance(String orderId) {
+    public static OrderDetailFragment newInstance(String orderId, String stat) {
         OrderDetailFragment frag = new OrderDetailFragment();
         Bundle args = new Bundle();
         args.putString(ARG_ORDER_ID, orderId);
+        args.putString(ARG_ORDER_STAT, stat);
         frag.setArguments(args);
         return frag;
     }
@@ -144,15 +146,48 @@ public class OrderDetailFragment extends Fragment {
         } else {
             this.logisticStat = OrderStatus.LJT;
         }
-        if (!OrderStatus.TOSHIPPED.equals(orderDetailModel.getGroupStatus())) {
+
+        String stat = getArguments().getString(ARG_ORDER_STAT);
+        Log.e(AppConfig.TAG_ERR, "stat:" + stat);
+
+//        A”:新订单“B”:进行中“C”:已取消 “D”:售后 “E”：已完成
+        resetBtn();
+        switch (stat) {
+            case "A":
+                btnSubmit.setVisibility(View.VISIBLE);
+                llLogistic.setVisibility(View.GONE);
+                break;
+            case "B":
+//                btnSongda.setVisibility(View.VISIBLE);
+                break;
+            case "C":
+                llLogistic.setVisibility(View.GONE);
+                break;
+            case "D":
+                btnShouhouTongyi.setVisibility(View.VISIBLE);
+                btnShouhouJujue.setVisibility(View.VISIBLE);
+                break;
+        }
+
+/*        if (OrderStatus.UNPAY.equals(orderDetailModel.getGroupStatus()) || OrderStatus.TOSHIPPED.equals(orderDetailModel.getGroupStatus())) {
             //没有分配 快递元
-            btnSubmit.setVisibility(View.GONE);
-            llLogistic.setVisibility(View.VISIBLE);
-        } else {
-            //有分配 快递元
             btnSubmit.setVisibility(View.VISIBLE);
             llLogistic.setVisibility(View.GONE);
-        }
+            btnSongda.setVisibility(View.GONE);
+        } else {
+            //有分配 快递元
+            if (OrderStatus.LOGISTICSSHIPPED.equals(orderDetailModel.getGroupStatus())) {
+                btnSongda.setVisibility(View.VISIBLE);
+            } else {
+                //送达
+                btnSongda.setVisibility(View.GONE);
+            }
+            llLogistic.setVisibility(View.VISIBLE);
+            btnSubmit.setVisibility(View.GONE);
+
+        }*/
+
+
         btnSubmit.setTag(this.logisticStat);
         if (OrderStatus.DELEGATE == this.logisticStat) {
             btnSubmit.setText(getString(R.string.logistic_delegate));
@@ -185,21 +220,50 @@ public class OrderDetailFragment extends Fragment {
         mainHandler.postDelayed(trigger, 1000);
     }
 
+    private void resetBtn() {
+        btnSubmit.setVisibility(View.GONE);
+        btnSongda.setVisibility(View.GONE);
+        btnShouhouTongyi.setVisibility(View.GONE);
+        btnShouhouJujue.setVisibility(View.GONE);
+        llLogistic.setVisibility(View.VISIBLE);
+    }
+
     private void initView(View v) {
 
+        resetBtn();
 
-        llLogistic.setVisibility(View.GONE);
-
-        btnSubmit.setVisibility(View.GONE);
+        //是否同意退换货 0 同意 1 拒绝
+        btnShouhouJujue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OrderBiz.orderAfterSale(orderDetailModel.getOrderId(), "1", new SimpleCommonCallback<ServerResponse>(getActivity()) {
+                    @Override
+                    protected void handleResult(ServerResponse result) {
+                        Toast.makeText(getActivity(), "成功", Toast.LENGTH_LONG);
+                        sendOK();
+                    }
+                });
+            }
+        });
+        btnShouhouTongyi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OrderBiz.orderAfterSale(orderDetailModel.getOrderId(), "0", new SimpleCommonCallback<ServerResponse>(getActivity()) {
+                    @Override
+                    protected void handleResult(ServerResponse result) {
+                        Toast.makeText(getActivity(), "成功", Toast.LENGTH_LONG);
+                        sendOK();
+                    }
+                });
+            }
+        });
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.getTag().equals(OrderStatus.DELEGATE)) {
                     //第三方
-
                     startActivityForResult(LogisticInfoActivity.getIntent(getActivity(), orderDetailModel.getOrderId()), REQUEST_DELEGATE_LOGISTIC);
                 } else {
-
                     //蓝九天
                     LogisticInfo logisticInfo = new LogisticInfo();
                     logisticInfo.setOrderGroupId(orderDetailModel.getOrderId());
@@ -210,6 +274,22 @@ public class OrderDetailFragment extends Fragment {
                     OrderBiz.sendOrder(logisticInfo, sendOrderCallback);
                 }
 
+            }
+        });
+
+        btnSongda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (OrderStatus.RECEIVED.equals(orderDetailModel.getGroupStatus())) {
+                    return;
+                }
+                OrderBiz.orderArrived(orderDetailModel.getOrderId(), new SimpleCommonCallback<ServerResponse>(getActivity()) {
+                    @Override
+                    protected void handleResult(ServerResponse result) {
+                        Toast.makeText(getActivity(), "成功", Toast.LENGTH_LONG);
+                        sendOK();
+                    }
+                });
             }
         });
     }

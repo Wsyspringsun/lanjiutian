@@ -5,18 +5,16 @@
     android:background="@color/basebackground"
     android:orientation="vertical">
 
+    <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/dingdan_nor" />-->
+
     <TextView
-        android:id="@+id/fragment_order_tv_show"
+        android:id="@+id/fragment_tab_item"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="item" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/x3"
-        android:background="@color/basebackground">
-
-    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

@@ -1,8 +1,4 @@
-package com.wyw.ljtwl.config;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+package com.wyw.ljtmgr.config;
 
 /**
  * Created by Administrator on 2017/7/3 0003.

@@ -2,19 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/basebackground"
+    android:layout_margin="@dimen/margin"
+    android:padding="@dimen/padding"
     android:orientation="vertical">
 
-    <!--<ImageView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:src="@drawable/dingdan_nor" />-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_order_group_ryc_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
     <TextView
-        android:id="@+id/fragment_tab_item"
-        android:layout_width="wrap_content"
+        android:id="@+id/fragment_order_group_info"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="item" />
+        android:layout_marginTop="@dimen/margin"
+        android:background="@color/white"
+        android:text="优惠5元"
+        android:textAlignment="viewEnd" />
 
+    <TextView
+        android:id="@+id/fragment_order_group_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin"
+        android:background="@color/white"
+        android:text="￥100(含运费5)"
+        android:textAlignment="viewEnd" />
+
+    <include
+        android:id="@+id/fragment_order_group_invoice"
+        layout="@layout/textview_title" />
 
 </LinearLayout>

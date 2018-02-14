@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.receivers;
+package com.wyw.ljtmgr.receivers;
 
 import cn.jpush.android.service.JPushMessageReceiver;
 

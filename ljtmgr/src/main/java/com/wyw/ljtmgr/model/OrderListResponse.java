@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.model;
+package com.wyw.ljtmgr.model;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import java.util.List;
  */
 
 public class OrderListResponse extends ServerResponse {
+    private String mOrderStat;
     private List<OrderInfoModel> data;
 
     public List<OrderInfoModel> getData() {
@@ -15,5 +16,13 @@ public class OrderListResponse extends ServerResponse {
 
     public void setData(List<OrderInfoModel> data) {
         this.data = data;
+    }
+
+    public String getmOrderStat() {
+        return mOrderStat;
+    }
+
+    public void setmOrderStat(String mOrderStat) {
+        this.mOrderStat = mOrderStat;
     }
 }

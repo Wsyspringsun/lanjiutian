@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.biz.util;
+package com.wyw.ljtmgr.biz.util;
 
 import android.util.Log;
 

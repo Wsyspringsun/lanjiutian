@@ -1,47 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_order_detail_ryv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4.5"
-        android:orientation="vertical">
+        android:layout_marginTop="@dimen/x3"
+        android:layout_weight="1"
+        android:background="@color/basebackground" />
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/fragment_order_index_tab"
+    <LinearLayout
+        android:id="@+id/fragment_order_detail_ll_logistic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/background_submit_yuan_lan" />
+
+        <TextView
+            android:id="@+id/fragment_order_detail_tv_logistic_name"
+            style="@style/base_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="张三" />
+
+        <TextView
+            android:id="@+id/fragment_order_detail_tv_logistic_info"
+            style="@style/base_textview"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/x40"
-            android:layout_alignParentBottom="true"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="@android:color/holo_orange_dark"
-            app:tabIndicatorHeight="2dp"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@android:color/holo_orange_dark"
-            app:theme="@style/Widget.Design.TabLayout" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="预计20分钟"
+            android:textAlignment="viewEnd" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/fragment_order_index_ryv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/x3"
-            android:background="@color/basebackground">
-
-        </android.support.v7.widget.RecyclerView>
-
-
-        <!--<android.support.v4.view.ViewPager
-            android:id="@+id/fragment_order_index_vp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:flipInterval="30"
-            android:persistentDrawingCache="animation">
-
-        </android.support.v4.view.ViewPager>
--->
     </LinearLayout>
 
+    <Button
+        android:id="@+id/fragment_order_detail_btn_songda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/margin"
+        android:background="@drawable/button_selector"
+        android:text="@string/songda"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_5" />
+
+    <Button
+        android:id="@+id/fragment_order_detail_btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/margin"
+        android:background="@drawable/button_selector"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_5" />
+
+
+    <Button
+        android:id="@+id/fragment_order_detail_btn_shouhoutongyi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/margin"
+        android:background="@drawable/button_selector"
+        android:text="@string/tongyi"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_5" />
+
+    <Button
+        android:id="@+id/fragment_order_detail_btn_shouhoujujue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/margin"
+        android:background="@drawable/button_selector"
+        android:text="@string/jujue"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_5" />
 </LinearLayout>

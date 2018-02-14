@@ -4,106 +4,104 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/activity_login_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/margin3"
         android:scaleType="fitXY"
-        android:src="@mipmap/denglubeijing"/>
-
-    <ImageView
-        android:id="@+id/guanbi"
-        android:layout_marginTop="@dimen/x15"
-        android:layout_marginLeft="@dimen/x10"
-        android:layout_width="@dimen/x18"
-        android:layout_height="@dimen/x18"
-        android:scaleType="fitCenter"
-        android:src="@mipmap/icon_chahao"/>
-
-    <LinearLayout
-        android:id="@+id/zhanghao"
-        android:layout_below="@+id/guanbi"
-        android:gravity="center_vertical"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x35"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/x120">
-
-        <TextView
-            android:layout_marginLeft="@dimen/x10"
-            style="@style/font_ww_14"
-            android:text="@string/zhanghao"
-            android:textColor="@color/font_black1"/>
-
-        <EditText
-            android:singleLine="true"
-            android:maxLines="1"
-            android:id="@+id/ed_phone"
-            android:background="@null"
-            android:textSize="14sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x10"
-            android:layout_marginRight="@dimen/x10"
-            android:hint="@string/phone_number1"/>
-
-    </LinearLayout>
-
-    <View
-        android:layout_marginRight="@dimen/x10"
-        android:layout_marginLeft="@dimen/x10"
-        android:layout_below="@+id/zhanghao"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x1"
-        android:background="@color/basebackground"/>
-
-    <LinearLayout
-        android:id="@+id/mima"
-        android:layout_below="@+id/zhanghao"
-        android:gravity="center_vertical"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x35"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/x5">
-
-        <TextView
-            android:layout_marginLeft="@dimen/x10"
-            style="@style/font_ww_14"
-            android:text="@string/mima"
-            android:textColor="@color/font_black1"/>
-
-        <EditText
-            android:singleLine="true"
-            android:password="true"
-            android:maxLines="1"
-            android:id="@+id/ed_pass"
-            android:background="@null"
-            android:textSize="14sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x10"
-            android:layout_marginRight="@dimen/x10"
-            android:hint="@string/mima1"/>
-
-    </LinearLayout>
-
-    <View
-        android:layout_marginRight="@dimen/x10"
-        android:layout_marginLeft="@dimen/x10"
-        android:layout_below="@+id/mima"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x1"
-        android:background="@color/basebackground"/>
+        android:src="@mipmap/denglubeijing" />
 
     <Button
-        android:layout_below="@+id/mima"
         android:id="@+id/next"
-        android:textSize="18sp"
-        android:text="@string/login"
-        android:textColor="@color/white"
-        android:layout_marginTop="@dimen/x35"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x35"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/x15"
         android:layout_marginRight="@dimen/x15"
-        android:background="@drawable/background_submit_yuan_lan"/>
+        android:layout_marginTop="@dimen/x5"
+        android:background="@drawable/background_submit_yuan_lan"
+        android:text="@string/login"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/next"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/zhanghao"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x35"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_marginLeft="@dimen/x10"
+                android:text="@string/zhanghao"
+                android:textColor="@color/font_black1" />
+
+            <EditText
+                android:id="@+id/ed_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginRight="@dimen/x10"
+                android:background="@null"
+                android:hint="@string/phone_number1"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_below="@+id/zhanghao"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginRight="@dimen/x10"
+            android:background="@color/basebackground" />
+
+        <LinearLayout
+            android:id="@+id/mima"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x35"
+            android:layout_marginTop="@dimen/x5"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_marginLeft="@dimen/x10"
+                android:text="@string/mima"
+                android:textColor="@color/font_black1" />
+
+            <EditText
+                android:id="@+id/ed_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginRight="@dimen/x10"
+                android:background="@null"
+                android:hint="@string/mima1"
+                android:maxLines="1"
+                android:password="true"
+                android:singleLine="true"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_below="@+id/mima"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginRight="@dimen/x10"
+            android:background="@color/basebackground" />
+
+    </LinearLayout>
+
 
 </RelativeLayout>

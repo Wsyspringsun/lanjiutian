@@ -1,5 +1,7 @@
-package com.wyw.ljtwl.ui;
+package com.wyw.ljtmgr.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,11 +19,14 @@ import android.view.ViewTreeObserver;
 import com.baidu.trace.Trace;
 import com.baidu.trace.model.OnTraceListener;
 import com.baidu.trace.model.PushMessage;
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.biz.UserBiz;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.config.MyApplication;
-import com.wyw.ljtwl.utils.CommonUtil;
+import com.wyw.ljtmgr.R;
+import com.wyw.ljtmgr.biz.OrderBiz;
+import com.wyw.ljtmgr.biz.SimpleCommonCallback;
+import com.wyw.ljtmgr.biz.UserBiz;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.config.MyApplication;
+import com.wyw.ljtmgr.model.OrderListResponse;
+import com.wyw.ljtmgr.utils.CommonUtil;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -36,6 +41,7 @@ import utils.GsonUtils;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends BaseActivity {
+    private MyApplication myApp;
     @ViewInject(R.id.activity_main_vp)
     private ViewPager viewPager;
     @ViewInject(R.id.activity_main_tab)
@@ -53,7 +59,6 @@ public class MainActivity extends BaseActivity {
     int[] drawSel = {R.drawable.dingdan_sel, R.drawable.dianpu_sel, R.drawable.xiaoxi_sel, R.drawable.shezhi_sel};
     final String[] titles = new String[]{"订单", "店铺", "消息", "设置"};
 
-    private MyApplication myApp;
     //鹰眼服务
     private OnTraceListener traceListener = new OnTraceListener() {
         @Override
@@ -64,7 +69,6 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onStartTraceCallback(int errorNo, String message) {
             Log.e(AppConfig.TAG_ERR, "onStartTraceCallback:" + errorNo + ":" + message);
-
 
             myApp.mTraceClient.startGather(traceListener);
         }
@@ -98,20 +102,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        myApp = (MyApplication) getApplication();
 
-
-
-       /* if (UserBiz.isLogined()) {
-            UserBiz.groupAccount("sxljt", new SimpleCommonCallback(MainActivity.this) {
-
-                @Override
-                protected void handleResult(ServerResponse result) {
-
-                }
-            });
-        }
-*/
 
         tabSpans = new ArrayList<>();
 
@@ -171,9 +162,12 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (!UserBiz.isLogined()) return;
-
+        if (!UserBiz.isLogined()) {
+            startActivity(ActivityLogin.getIntent(this));
+            return;
+        }
         //set jiguang tag
+        myApp = (MyApplication) getApplication();
         Set<String> tags = new HashSet<>();
         tags.add(myApp.getCurrentLoginer().getOidGroupId());
         CommonUtil.log(GsonUtils.Bean2Json(tags));
@@ -184,6 +178,7 @@ public class MainActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (myApp.getCurrentLoginer() == null) return;
                 Trace mTrace = new Trace(myApp.serviceId, myApp.getCurrentLoginer().getAdminUserId());
                 myApp.mTraceClient.startTrace(mTrace, traceListener);
             }
@@ -197,4 +192,9 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    public static Intent getIntent(Context ctx) {
+        Intent it = new Intent(ctx, MainActivity.class);
+        it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        return it;
+    }
 }

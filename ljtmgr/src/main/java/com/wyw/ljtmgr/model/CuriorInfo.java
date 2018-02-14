@@ -1,6 +1,4 @@
-package com.wyw.ljtwl.model;
-
-import java.util.List;
+package com.wyw.ljtmgr.model;
 
 /**
  * Created by Administrator on 2017/8/5.

@@ -1,4 +1,4 @@
-package com.wyw.ljtwl;
+package com.wyw.ljtmgr;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

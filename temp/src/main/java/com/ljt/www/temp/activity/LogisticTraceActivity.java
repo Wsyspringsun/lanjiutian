@@ -1,63 +1,14 @@
-package com.wyw.ljtds.ui.user.order;
+package com.ljt.www.temp.activity;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.PowerManager;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
 
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.map.PolylineOptions;
-import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.search.route.BikingRoutePlanOption;
-import com.baidu.mapapi.search.route.BikingRouteResult;
-import com.baidu.mapapi.search.route.DrivingRouteResult;
-import com.baidu.mapapi.search.route.IndoorRouteResult;
-import com.baidu.mapapi.search.route.MassTransitRouteResult;
-import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
-import com.baidu.mapapi.search.route.PlanNode;
-import com.baidu.mapapi.search.route.RoutePlanSearch;
-import com.baidu.mapapi.search.route.TransitRouteResult;
-import com.baidu.mapapi.search.route.WalkingRouteResult;
-import com.baidu.trace.api.entity.OnEntityListener;
-import com.baidu.trace.api.track.HistoryTrackResponse;
-import com.baidu.trace.api.track.LatestPoint;
-import com.baidu.trace.api.track.LatestPointResponse;
-import com.baidu.trace.api.track.OnTrackListener;
-import com.baidu.trace.api.track.TrackPoint;
-import com.baidu.trace.model.OnTraceListener;
-import com.baidu.trace.model.PushMessage;
-import com.baidu.trace.model.StatusCodes;
-import com.baidu.trace.model.TraceLocation;
-import com.wyw.ljtds.R;
-import com.wyw.ljtds.config.AppConfig;
-import com.wyw.ljtds.config.MyApplication;
-import com.wyw.ljtds.model.CurrentLocation;
-import com.wyw.ljtds.receivers.TrackReceiver;
-import com.wyw.ljtds.ui.base.BikingRouteOverlay;
-import com.wyw.ljtds.ui.base.WalkingRouteOverlay;
-import com.wyw.ljtds.utils.BitmapUtil;
-import com.wyw.ljtds.utils.CommonUtil;
-import com.wyw.ljtds.utils.GsonUtils;
-import com.wyw.ljtds.utils.MapUtil;
-import com.wyw.ljtds.utils.ToastUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by wsy on 17-12-21.
  */
 
 public class LogisticTraceActivity extends AppCompatActivity {
-    private MapView mMapView;
+/*    private MapView mMapView;
     private BaiduMap mBaiduMap;
     private RoutePlanSearch mSearch;
     BitmapDescriptor bitmap;
@@ -377,9 +328,9 @@ public class LogisticTraceActivity extends AppCompatActivity {
         }
     }
 
-    /**
+    *//**
      * 获取实时轨迹
-     */
+     *//*
     class RealTimeLocRunnable implements Runnable {
 
         private int interval = 10;
@@ -402,6 +353,6 @@ public class LogisticTraceActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
         }
-    }
+    }*/
 
 }

@@ -7,10 +7,22 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="font_ww_26">
+        <item name="android:paddingTop">@dimen/padding</item>
+        <item name="android:paddingBottom">@dimen/padding</item>
+        <item name="android:layout_marginBottom">@dimen/margin</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+
+
     <style name="font_ww_16">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/margin</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:background">@color/white</item>
     </style>
 
     <style name="font_ww_14">
@@ -50,5 +62,17 @@
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+
+    <style name="tv_shop_summary">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/x75</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingTop">@dimen/padding3</item>
+        <item name="android:background">@drawable/bg_shop_summary_shandow</item>
+        <item name="android:textSize">@dimen/font_4</item>
+        <item name="android:textColor">@color/font_1</item>
+    </style>
+
 
 </resources>

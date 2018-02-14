@@ -1,17 +1,10 @@
-package com.wyw.ljtwl.ui;
+package com.wyw.ljtmgr.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.config.AppConfig;
+import com.wyw.ljtmgr.R;
 
 import org.xutils.view.annotation.ContentView;
 

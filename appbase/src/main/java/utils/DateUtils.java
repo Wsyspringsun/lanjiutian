@@ -1,4 +1,4 @@
-package com.wyw.ljtds.utils;
+package utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,6 +60,7 @@ public class DateUtils {
 
     /**
      * 格式化时间
+     *
      * @param s long类型的日期字符串
      * @return
      */
@@ -80,7 +81,6 @@ public class DateUtils {
             return parseTime(timeLong, format);
         } catch (Exception ex) {
             ex.printStackTrace();
-            Utils.log(ex.getMessage());
             return NULL_DATE;
         }
 

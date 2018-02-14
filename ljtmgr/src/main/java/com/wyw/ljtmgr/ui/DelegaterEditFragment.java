@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.ui;
+package com.wyw.ljtmgr.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,13 +8,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.biz.CommonBiz;
-import com.wyw.ljtwl.biz.task.AbstractCommonCallback;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.config.PreferenceCache;
-import com.wyw.ljtwl.model.CuriorInfo;
-import com.wyw.ljtwl.utils.StringUtils;
+import com.wyw.ljtmgr.R;
+import com.wyw.ljtmgr.biz.CommonBiz;
+import com.wyw.ljtmgr.biz.task.AbstractCommonCallback;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.config.PreferenceCache;
+import com.wyw.ljtmgr.model.CuriorInfo;
+import com.wyw.ljtmgr.utils.StringUtils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;

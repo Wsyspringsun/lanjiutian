@@ -1,15 +1,16 @@
-package com.wyw.ljtwl.biz;
+package com.wyw.ljtmgr.biz;
 
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.config.PreferenceCache;
-import com.wyw.ljtwl.model.BaseJson;
-import com.wyw.ljtwl.model.Header;
-import com.wyw.ljtwl.model.LoginModel;
-import com.wyw.ljtwl.model.ServerResponse;
-import com.wyw.ljtwl.utils.StringUtils;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.config.MyApplication;
+import com.wyw.ljtmgr.config.PreferenceCache;
+import com.wyw.ljtmgr.model.BaseJson;
+import com.wyw.ljtmgr.model.Header;
+import com.wyw.ljtmgr.model.LoginModel;
+import com.wyw.ljtmgr.utils.CommonUtil;
+import com.wyw.ljtmgr.utils.StringUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -30,7 +31,8 @@ public class UserBiz {
      */
     public static boolean isLogined() {
         String token = PreferenceCache.getToken();
-        return !StringUtils.isEmpty(token);
+        String user = PreferenceCache.getUser();
+        return !StringUtils.isEmpty(token) && !StringUtils.isEmpty(user);
     }
 
     public static void groupAccount(String busId, Callback.CommonCallback callback) {
@@ -61,5 +63,23 @@ public class UserBiz {
     public static void logout() {
         PreferenceCache.putToken(""); // 持久化缓存token
         PreferenceCache.putUser(""); // 持久化缓存token
+        MyApplication.clearLoginer();
+    }
+
+    public static void loadGroupInfo(Callback.CommonCallback callback) {
+        BaseJson<Map<String, String>> baseJson = new BaseJson<>();
+        Map<String, String> data = new HashMap<>();
+        LoginModel loginer = MyApplication.getCurrentLoginer();
+        data.put("oidGroupId", loginer.getOidGroupId());
+        CommonUtil.log(loginer.getOidGroupId());
+        Header head = CommonBiz.getDataHeader();
+        baseJson.setHead(head);
+        baseJson.setBody(data);
+        Gson gson = new Gson();
+        String json = gson.toJson(baseJson);
+        RequestParams params = new RequestParams(AppConfig.WEB_DOMAIN + "/v/shop/shopInfo");
+        params.setAsJsonContent(true);
+        params.setBodyContent(json);
+        x.http().post(params, callback);
     }
 }

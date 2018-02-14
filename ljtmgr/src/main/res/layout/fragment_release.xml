@@ -1,17 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/basebackground"
-    android:orientation="vertical">
+    android:background="@color/whitesmoke">
 
-    <TextView
-        android:id="@+id/shop"
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="商品发布。。。"
-        android:textColor="@color/font_black2"
-        android:textSize="16sp" />
+        android:layout_height="@dimen/x128"
+        android:layout_gravity="top"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_shop" />
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin"
+            android:paddingTop="@dimen/padding"
+            android:text="店铺管理"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin3"
+            android:layout_marginRight="@dimen/margin3">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/fragment_order_tv_show"
+                    android:layout_width="@dimen/x45"
+                    android:layout_height="@dimen/x45"
+                    android:src="@drawable/ic_shop" />
+
+                <TextView
+                    android:id="@+id/fragment_shop_tv_shopname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/shop_name"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/x36"
+                    android:layout_height="@dimen/x36"
+                    android:layout_marginLeft="@dimen/margin"
+                    android:src="@drawable/shop_run" />
+
+                <ImageView
+                    android:layout_width="@dimen/x36"
+                    android:layout_height="@dimen/x36"
+                    android:layout_marginLeft="@dimen/margin"
+                    android:src="@drawable/shop_rest" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin3"
+            android:layout_marginRight="@dimen/margin3"
+            android:layout_marginTop="@dimen/margin2"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/tv_shop_summary"
+                android:text="今日营业额" />
+
+            <TextView
+                style="@style/tv_shop_summary"
+                android:text="今日订单" />
+
+            <TextView
+                style="@style/tv_shop_summary"
+                android:text="总收入" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin2"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <include
+                layout="@layout/textview_title"
+                android:padding="@dimen/padding3" />
+
+            <include
+                layout="@layout/textview_title"
+                android:padding="@dimen/padding3" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.biz;
+package com.wyw.ljtmgr.biz;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,10 +6,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.model.ServerResponse;
-import com.wyw.ljtwl.ui.ActivityLogin;
-import com.wyw.ljtwl.ui.BaseActivity;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.model.ServerResponse;
+import com.wyw.ljtmgr.ui.ActivityLogin;
+import com.wyw.ljtmgr.ui.BaseActivity;
 
 import org.xutils.common.Callback;
 

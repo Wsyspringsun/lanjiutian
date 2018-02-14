@@ -1,40 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:paddingTop="100dp"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin"
+    android:layout_marginBottom="1dp"
+    android:background="@color/white"
+    android:paddingLeft="@dimen/padding2"
+    android:paddingRight="@dimen/padding2">
 
-    <EditText
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/bg_edittext"
-        android:hint="旧密码"
-        android:id="@+id/oldPwd"/>
-    <EditText
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/bg_edittext"
-        android:hint="新密码"
-        android:id="@+id/newPwd"/>
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/textview_title"
+        style="@style/base_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="50dp">
-        <Button
-            android:layout_width="300dp"
-            android:layout_height="30dp"
-            android:text="确定"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_selector"
-            android:id="@+id/confirm"
-            />
-    </LinearLayout>
+        android:layout_alignParentLeft="true"
+        android:paddingBottom="@dimen/padding"
+        android:paddingTop="@dimen/padding"
+        android:text="xx:" />
 
+    <TextView
+        android:id="@+id/textview_content"
+        style="@style/base_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/textview_title"
+        android:paddingBottom="@dimen/padding"
+        android:paddingTop="@dimen/padding"
+        android:textAlignment="textEnd"
+        android:text="xxx" />
 
-
-</LinearLayout>
+</RelativeLayout>

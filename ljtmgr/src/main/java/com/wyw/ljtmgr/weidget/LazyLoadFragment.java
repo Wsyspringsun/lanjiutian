@@ -1,9 +1,9 @@
-package com.wyw.ljtwl.weidget;
+package com.wyw.ljtmgr.weidget;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.wyw.ljtwl.ui.BaseFragment;
+import com.wyw.ljtmgr.ui.BaseFragment;
 
 /**
  * Fragment预加载问题的解决方案：

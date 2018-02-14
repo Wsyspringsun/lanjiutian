@@ -1,11 +1,11 @@
-package com.wyw.ljtwl.utils;
+package com.wyw.ljtmgr.utils;
 
 import android.content.Context;
 import android.content.res.Resources;
 
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.wyw.ljtwl.R;
+import com.wyw.ljtmgr.R;
 
 /**
  * Created by baidu on 17/3/8.

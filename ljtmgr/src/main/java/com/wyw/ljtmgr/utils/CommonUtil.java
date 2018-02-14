@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.utils;
+package com.wyw.ljtmgr.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -6,8 +6,8 @@ import android.net.ConnectivityManager;
 import android.util.Log;
 
 import com.baidu.mapapi.model.LatLng;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.ui.BaseActivity;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.ui.BaseActivity;
 
 import java.sql.Timestamp;
 import java.text.DecimalFormat;

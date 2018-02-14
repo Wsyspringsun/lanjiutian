@@ -1,43 +1,30 @@
-package com.wyw.ljtwl.ui;
+package com.wyw.ljtmgr.ui;
 
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.adapter.OrderListAdapter;
-import com.wyw.ljtwl.biz.OrderBiz;
-import com.wyw.ljtwl.biz.SimpleCommonCallback;
-import com.wyw.ljtwl.biz.UserBiz;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.config.MyApplication;
-import com.wyw.ljtwl.model.OrderListResponse;
-import com.wyw.ljtwl.utils.ActivityUtil;
-import com.wyw.ljtwl.utils.StringUtils;
+import com.wyw.ljtmgr.R;
+import com.wyw.ljtmgr.biz.OrderBiz;
+import com.wyw.ljtmgr.biz.SimpleCommonCallback;
+import com.wyw.ljtmgr.biz.UserBiz;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.config.MyApplication;
+import com.wyw.ljtmgr.model.OrderListResponse;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -78,15 +65,6 @@ public class SettingIndexFragment extends Fragment implements View.OnClickListen
         bindData2View();
     }
 
-    private void loadOrder(String stat) {
-        Log.e(AppConfig.TAG_ERR, "stat:" + stat);
-        OrderBiz.loadOrder(stat, new SimpleCommonCallback<OrderListResponse>(getActivity()) {
-            @Override
-            protected void handleResult(OrderListResponse result) {
-                Log.e(AppConfig.TAG_ERR, "data:" + new Gson().toJson(result));
-            }
-        });
-    }
 
     void bindData2View() {
         String userId = "";

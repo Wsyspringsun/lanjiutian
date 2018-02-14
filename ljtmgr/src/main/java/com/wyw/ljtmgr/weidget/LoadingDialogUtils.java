@@ -1,8 +1,7 @@
-package com.wyw.ljtwl.weidget;
+package com.wyw.ljtmgr.weidget;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +10,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.config.AppConfig;
+import com.wyw.ljtmgr.R;
 
 /**
  * @author ：程序员小冰

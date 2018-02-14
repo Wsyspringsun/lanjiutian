@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.adapter;
+package com.wyw.ljtmgr.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,24 +14,28 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.springsun.appbase.adapter.DataListAdapter;
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.model.OrderInfoModel;
-import com.wyw.ljtwl.ui.OrderDetailActivity;
-import com.wyw.ljtwl.utils.StringUtils;
-
-import org.kobjects.util.Strings;
-
-import java.text.NumberFormat;
+import com.wyw.ljtmgr.R;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.model.OrderInfoModel;
+import com.wyw.ljtmgr.ui.OrderDetailActivity;
 
 import utils.CommonUtil;
 
 public class OrderListAdapter extends DataListAdapter<OrderInfoModel, RecyclerView.ViewHolder> {
     private final Activity context;
+    private String mstat;
 
-    public OrderListAdapter(Activity context) {
+    public String getMstat() {
+        return mstat;
+    }
+
+    public void setMstat(String mstat) {
+        this.mstat = mstat;
+    }
+
+    public OrderListAdapter(Activity context, String stat) {
         this.context = context;
-
+        this.mstat = stat;
     }
 
     @Override
@@ -48,16 +52,22 @@ public class OrderListAdapter extends DataListAdapter<OrderInfoModel, RecyclerVi
         if (holder instanceof OrderViewHolder) {
             OrderViewHolder h = (OrderViewHolder) holder;
             OrderInfoModel data = list.get(position);
-            h.tvOrder.setText(buildOrderSpannable(data));
-            h.tvUser.setText(buildUserSpannable(data));
-            ;
+            StringBuilder sb = new StringBuilder("");
+            String postage = "", dat = data.getUpdDate();
+            sb.append(postage).append(dat);
+//            h.tvOrder.setText(buildOrderSpannable(data));
+            h.tvOrder.setText(sb.toString());
+//            h.tvShuliang.setText(buildUserSpannable(data));
+            h.tvShuliang.setText("数量\n" + data.getExchangeQuanlity());
+            h.tvPrice.setText("￥" + CommonUtil.formatFee("" + data.getGroupPayAmount()));
+            h.tvOrderId.setText("订单:" + data.getOrderGroupId());
             h.data = data;
         }
 
 
     }
 
-    private CharSequence buildOrderSpannable(OrderInfoModel data) {
+    /*private CharSequence buildOrderSpannable(OrderInfoModel data) {
         String priceAll = "￥" + CommonUtil.formatFee("" + data.getGroupPayAmount()) + "\n",
                 postage = "",
                 dat = data.getUpdDate();
@@ -74,9 +84,9 @@ public class OrderListAdapter extends DataListAdapter<OrderInfoModel, RecyclerVi
             start += strOrders[i].length();
         }
         return ssOrder;
-    }
+    }*/
 
-    private CharSequence buildUserSpannable(OrderInfoModel data) {
+    /*private CharSequence buildUserSpannable(OrderInfoModel data) {
         String[] strUsers = new String[]{"", " ", "订单:" + data.getOrderGroupId() + "\n", "数量\n", data.getExchangeQuanlity() + ""};
         int[] color4UserArr = {R.color.font_3, R.color.font_3, R.color.font_1, R.color.font_1, R.color.font_4, R.color.font_1};
         int[] size4UserArr = {R.dimen.font_4, R.dimen.font_3, R.dimen.font_4, R.dimen.font_4, R.dimen.font_4, R.dimen.font_2};
@@ -92,23 +102,28 @@ public class OrderListAdapter extends DataListAdapter<OrderInfoModel, RecyclerVi
             start += strUsers[i].length();
         }
         return ssUser;
-    }
+    }*/
 
     private class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView tvOrder;
-        private final TextView tvUser;
+        private final TextView tvShuliang;
+        private final TextView tvOrderId;
+        private final TextView tvPrice;
         public OrderInfoModel data;
 
         public OrderViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             tvOrder = (TextView) itemView.findViewById(R.id.item_order_orderinfo);
-            tvUser = (TextView) itemView.findViewById(R.id.item_order_userinfo);
+            tvShuliang = (TextView) itemView.findViewById(R.id.item_order_shuliang);
+            tvOrderId = (TextView) itemView.findViewById(R.id.item_order_orderid);
+            tvPrice = (TextView) itemView.findViewById(R.id.item_order_orderprice);
         }
 
         @Override
         public void onClick(View v) {
-            Intent it = OrderDetailActivity.getIntent(context, data.getOrderGroupId());
+            Log.e(AppConfig.TAG_ERR, "adapter stat:" + mstat);
+            Intent it = OrderDetailActivity.getIntent(context, mstat, data.getOrderGroupId());
             context.startActivity(it);
         }
     }

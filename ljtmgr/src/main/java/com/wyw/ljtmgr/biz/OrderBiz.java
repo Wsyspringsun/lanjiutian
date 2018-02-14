@@ -1,20 +1,24 @@
-package com.wyw.ljtwl.biz;
+package com.wyw.ljtmgr.biz;
 
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.config.MyApplication;
-import com.wyw.ljtwl.model.BaseJson;
-import com.wyw.ljtwl.model.Header;
-import com.wyw.ljtwl.model.LoginModel;
-import com.wyw.ljtwl.model.LogisticInfo;
-import com.wyw.ljtwl.model.OrderDetailGetModel;
-import com.wyw.ljtwl.model.UserModel;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.config.MyApplication;
+import com.wyw.ljtmgr.model.BaseJson;
+import com.wyw.ljtmgr.model.Header;
+import com.wyw.ljtmgr.model.LoginModel;
+import com.wyw.ljtmgr.model.LogisticInfo;
+import com.wyw.ljtmgr.model.OrderDetailGetModel;
+import com.wyw.ljtmgr.model.ServerResponse;
+import com.wyw.ljtmgr.model.UserModel;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by wsy on 18-1-9.
@@ -28,7 +32,7 @@ public class OrderBiz {
      * @param stat     status
      * @param callback handle events of after response from server completed
      */
-    public static void loadOrder(String stat, Callback.CommonCallback callback) {
+    public static void loadOrder(String stat, String page, Callback.CommonCallback callback) {
         BaseJson<UserModel> baseJson = new BaseJson<UserModel>();
         LoginModel loginer = MyApplication.getCurrentLoginer();
         UserModel userModel = new UserModel();
@@ -36,7 +40,7 @@ public class OrderBiz {
         Header head = CommonBiz.getDataHeader();
 
         userModel.setLogisticsCompanyId(loginer.getOidGroupId());
-        userModel.setPageNum("1");
+        userModel.setPageNum(page);
         userModel.setPageSize(AppConfig.PAGE_NUM);
 //        Log.e("status", status);
         userModel.setClassify(stat);
@@ -93,4 +97,37 @@ public class OrderBiz {
         x.http().post(params, callback);
     }
 
+    public static void orderAfterSale(String orderid, String isAgree, Callback.CommonCallback callback) {
+        Header head = CommonBiz.getDataHeader();
+        Map<String, String> model = new HashMap<>();
+        model.put("orderGroupId", orderid);
+        model.put("handleStatus", isAgree);
+
+        BaseJson<Map<String, String>> baseJson = new BaseJson<>();
+        baseJson.setHead(head);
+        baseJson.setBody(model);
+        Gson gson = new Gson();
+        String data = gson.toJson(baseJson);
+
+        RequestParams params = new RequestParams(AppConfig.WEB_DOMAIN + "/v/order/orderAfterSale");
+        params.setAsJsonContent(true);
+        params.setBodyContent(data);
+        x.http().post(params, callback);
+    }
+
+    public static void orderArrived(String id, SimpleCommonCallback<ServerResponse> callback) {
+        Header head = CommonBiz.getDataHeader();
+        BaseJson<Map<String, String>> baseJson = new BaseJson<>();
+        baseJson.setHead(head);
+        Map<String, String> m = new HashMap<>();
+        m.put("orderGroupId", id);
+        baseJson.setBody(m);
+        Gson gson = new Gson();
+        String data = gson.toJson(baseJson);
+
+        RequestParams params = new RequestParams(AppConfig.WEB_DOMAIN + "/v/order/orderSend");
+        params.setAsJsonContent(true);
+        params.setBodyContent(data);
+        x.http().post(params, callback);
+    }
 }

@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.model;
+package com.wyw.ljtmgr.model;
 
 /**
  * Created by Administrator on 2017/8/1.

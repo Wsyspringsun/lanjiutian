@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.biz.exception;
+package com.wyw.ljtmgr.biz.exception;
 
 @SuppressWarnings("serial")
 public class OperationTimeOutException extends ZYException {

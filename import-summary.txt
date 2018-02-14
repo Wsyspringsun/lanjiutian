@@ -22,7 +22,7 @@ Eclipse projects. Here's how the projects were restructured:
 * assets/ => xiaonengChatUI/src/main/assets
 * libs/HwPush_SDK.jar => xiaonengChatUI/libs/HwPush_SDK.jar
 * libs/MiPush_SDK_Client_3_0_3.jar => xiaonengChatUI/libs/MiPush_SDK_Client_3_0_3.jar
-* libs/xiaoneng-mqtt.jar => xiaonengChatUI/libs/xiaoneng-mqtt.jar
+* libs/mqtt-client-java1.4-uber-1.14.jar => xiaonengChatUI/libs/mqtt-client-java1.4-uber-1.14.jar
 * libs/xiaonengchatcore.jar => xiaonengChatUI/libs/xiaonengchatcore.jar
 * libs/xiaonengchatui.jar => xiaonengChatUI/libs/xiaonengchatui.jar
 * libs/xiaonengnetwork.jar => xiaonengChatUI/libs/xiaonengnetwork.jar

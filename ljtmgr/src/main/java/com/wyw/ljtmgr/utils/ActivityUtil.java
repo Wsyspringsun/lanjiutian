@@ -1,9 +1,9 @@
-package com.wyw.ljtwl.utils;
+package com.wyw.ljtmgr.utils;
 
 import android.app.Activity;
 
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.ui.BaseActivity;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.ui.BaseActivity;
 
 /**
  * Created by wsy on 18-1-8.

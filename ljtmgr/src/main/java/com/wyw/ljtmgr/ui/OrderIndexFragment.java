@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.ui;
+package com.wyw.ljtmgr.ui;
 
 
 import android.graphics.drawable.Drawable;
@@ -14,14 +14,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.adapter.OrderListAdapter;
-import com.wyw.ljtwl.biz.OrderBiz;
-import com.wyw.ljtwl.biz.SimpleCommonCallback;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.model.OrderListResponse;
-import com.wyw.ljtwl.utils.ActivityUtil;
+import com.wyw.ljtmgr.R;
+import com.wyw.ljtmgr.adapter.OrderListAdapter;
+import com.wyw.ljtmgr.biz.OrderBiz;
+import com.wyw.ljtmgr.biz.SimpleCommonCallback;
+import com.wyw.ljtmgr.biz.UserBiz;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.model.OrderListResponse;
+import com.wyw.ljtmgr.utils.ActivityUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +38,8 @@ public class OrderIndexFragment extends Fragment {
     private OrderListResponse orderListRes;
     private OrderListAdapter adapter;
     private int pageIdx = 1;
+    private boolean end = false;
+    private String stat = "A";
 
     public static OrderIndexFragment newInstance(String title) {
         OrderIndexFragment frag = new OrderIndexFragment();
@@ -59,22 +63,19 @@ public class OrderIndexFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Log.e(AppConfig.TAG_ERR, getArguments().getString(ARG_TITLE) + "...curPhase:" + ((BaseActivity) getActivity()).curPhase);
-
-
+        pageIdx = 1;
+        loadOrder();
     }
 
-    private void loadOrder(String stat) {
-        int needPhase = AppConfig.PHASE_LOGIN_IN;
-        if (!ActivityUtil.isComplete(getActivity(), needPhase)) {
-            return;
-        }
+    private void loadOrder() {
         Log.e(AppConfig.TAG_ERR, "stat:" + stat);
+        if (!UserBiz.isLogined()) return;
         ((BaseActivity) getActivity()).setLoding();
-        OrderBiz.loadOrder(stat, new SimpleCommonCallback<OrderListResponse>(getActivity()) {
+        OrderBiz.loadOrder(stat, pageIdx + "", new SimpleCommonCallback<OrderListResponse>(getActivity()) {
             @Override
             protected void handleResult(OrderListResponse result) {
                 orderListRes = result;
+                orderListRes.setmOrderStat(stat);
                 bindData2View();
             }
         });
@@ -84,12 +85,9 @@ public class OrderIndexFragment extends Fragment {
         if (orderListRes == null) {
             return;
         }
-        if (orderListRes.getData() == null || orderListRes.getData().size() <= 0) {
-            return;
-        }
 
         if (adapter == null) {
-            adapter = new OrderListAdapter(getActivity());
+            adapter = new OrderListAdapter(getActivity(), orderListRes.getmOrderStat());
             ryvOrder.setAdapter(adapter);
         }
         if (pageIdx <= 1) {
@@ -97,39 +95,48 @@ public class OrderIndexFragment extends Fragment {
         } else {
             adapter.list.addAll(orderListRes.getData());
         }
+        if (adapter.list == null || adapter.list.size() <= 0) {
+            end = true;
+        }
+        adapter.setMstat(stat);
         adapter.notifyDataSetChanged();
 
     }
 
     private void initView(View v) {
+//        A”:新订单“B”:进行中“C”:已取消 “D”:售后 “E”：已完成
         tabLayout = (TabLayout) v.findViewById(R.id.fragment_order_index_tab);
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                String nStat = "";
                 int pos = tab.getPosition();
-                String stat = "A";
                 switch (pos) {
                     case 0:
-                        stat = "A";
+                        nStat = "A";
                         break;
                     case 1:
-                        stat = "B";
+                        nStat = "B";
                         break;
                     case 2:
-                        stat = "C";
+                        nStat = "C";
                         break;
                     case 3:
-                        stat = "D";
+                        nStat = "E";
                         break;
                     case 4:
-                        stat = "E";
+                        nStat = "D";
                         break;
                     default:
-                        stat = "A";
+                        nStat = "A";
                         break;
                 }
+                if (stat == nStat) return;
 
-                loadOrder(stat);
+                pageIdx = 1;
+                end = false;
+                stat = nStat;
+                loadOrder();
             }
 
             @Override
@@ -150,10 +157,12 @@ public class OrderIndexFragment extends Fragment {
                     Drawable image = ActivityCompat.getDrawable(getActivity(), drawNor[i]);
                     tabLayout.addTab(tabLayout.newTab().setIcon(image));
                 }
+                tabLayout.getTabAt(0).select();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     //防止丢失点击事件
                     tabLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
+
             }
         });
 
@@ -161,8 +170,29 @@ public class OrderIndexFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());//必须有
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置水平方向滑动
         ryvOrder.setLayoutManager(linearLayoutManager);
+        ryvOrder.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                super.onScrollStateChanged(recyclerView, newState);
+                if (0 == newState) {
+                    //0标识到达了
+                    int fp = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                    //完成滑动
+                    if (fp == 1 && !end) {
+                        pageIdx = pageIdx + 1;
+                        loadOrder();
+                    }
+//                    Log.e(AppConfig.TAG_ERR, "newState:" + newState + " fp" + fp);
+                }
+            }
 
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
 
+            }
+        });
     }
 
 }

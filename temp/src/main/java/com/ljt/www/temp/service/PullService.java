@@ -26,6 +26,7 @@ import java.util.List;
  * 拉取服务器消息的后台服务
  */
 public class PullService extends IntentService {
+    public static final String CONNECTIVITY_SERVICE = "connectivity";
     public static final String PREF_IS_ALARM_ON = "PREF_IS_ALARM_ON";
     public static final String BROADCAST_NOTIFICATION = "com.ljt.www.temp.service.IntentService.BROADCAST_NOTIFICATION";
 

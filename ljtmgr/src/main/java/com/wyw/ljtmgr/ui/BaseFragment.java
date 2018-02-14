@@ -1,18 +1,11 @@
-package com.wyw.ljtwl.ui;
+package com.wyw.ljtmgr.ui;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.weidget.LoadingDialogUtils;
 
 import org.xutils.x;
 

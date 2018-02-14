@@ -1,14 +1,12 @@
-package com.wyw.ljtwl.receivers;
+package com.wyw.ljtmgr.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 
 
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.utils.CommonUtil;
+import com.wyw.ljtmgr.utils.CommonUtil;
 
 import cn.jpush.android.api.JPushInterface;
 

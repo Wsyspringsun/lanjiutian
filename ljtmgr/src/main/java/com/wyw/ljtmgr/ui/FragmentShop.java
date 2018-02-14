@@ -1,15 +1,23 @@
-package com.wyw.ljtwl.ui;
+package com.wyw.ljtmgr.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.weidget.LazyLoadFragment;
+import com.wyw.ljtmgr.R;
+import com.wyw.ljtmgr.biz.SimpleCommonCallback;
+import com.wyw.ljtmgr.biz.UserBiz;
+import com.wyw.ljtmgr.config.MyApplication;
+import com.wyw.ljtmgr.config.SingleCurrentUser;
+import com.wyw.ljtmgr.model.LoginModel;
+import com.wyw.ljtmgr.model.ServerResponse;
+import com.wyw.ljtmgr.weidget.LazyLoadFragment;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
+
+import utils.CommonUtil;
 
 /**
  * Created by Administrator on 2017/7/3 0003.
@@ -35,13 +43,31 @@ public class FragmentShop extends LazyLoadFragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        LoginModel loginer = MyApplication.getCurrentLoginer();
+        if (loginer == null) return;
+        shop.setText(loginer.getOidGroupId());
+        loadGroup();
+    }
+
+    public void loadGroup() {
+        UserBiz.loadGroupInfo(new SimpleCommonCallback<ServerResponse>(getActivity()) {
+
+            @Override
+            protected void handleResult(ServerResponse result) {
+            }
+        });
+    }
+
+
+    @Override
     protected void lazyLoad() {
-        shop.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void stopLoad() {
         super.stopLoad();
-        shop.setVisibility(View.GONE);
     }
 }

@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.ui.map;
+package com.wyw.ljtmgr.ui.map;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BaiduMap.OnPolylineClickListener;

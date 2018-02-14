@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.ui;
+package com.wyw.ljtmgr.ui;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -15,12 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.wyw.ljtwl.R;
-import com.wyw.ljtwl.biz.UserBiz;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.config.AppManager;
-import com.wyw.ljtwl.utils.CommonUtil;
-import com.wyw.ljtwl.weidget.LoadingDialogUtils;
+import com.wyw.ljtmgr.R;
+import com.wyw.ljtmgr.biz.UserBiz;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.config.AppManager;
+import com.wyw.ljtmgr.utils.CommonUtil;
+import com.wyw.ljtmgr.weidget.LoadingDialogUtils;
 
 import org.xutils.x;
 

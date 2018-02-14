@@ -1,4 +1,4 @@
-package com.wyw.ljtwl.utils;
+package com.wyw.ljtmgr.utils;
 
 import android.graphics.Color;
 import android.graphics.Point;
@@ -21,13 +21,13 @@ import com.baidu.mapapi.utils.CoordinateConverter;
 import com.baidu.trace.model.CoordType;
 import com.baidu.trace.model.SortType;
 import com.baidu.trace.model.TraceLocation;
-import com.wyw.ljtwl.config.AppConfig;
-import com.wyw.ljtwl.config.MyApplication;
+import com.wyw.ljtmgr.config.AppConfig;
+import com.wyw.ljtmgr.config.MyApplication;
 
 import java.util.List;
 
-import static com.wyw.ljtwl.utils.BitmapUtil.bmEnd;
-import static com.wyw.ljtwl.utils.BitmapUtil.bmStart;
+import static com.wyw.ljtmgr.utils.BitmapUtil.bmEnd;
+import static com.wyw.ljtmgr.utils.BitmapUtil.bmStart;
 
 /**
  * Created by baidu on 17/2/9.
