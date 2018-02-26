@@ -31,6 +31,7 @@ import com.wyw.ljtds.config.AppManager;
 import com.wyw.ljtds.model.FavoriteModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.goods.ActivityGoodsInfo;
+import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.ui.goods.FragmentGoodsDetails;
 import com.wyw.ljtds.utils.GsonUtils;
@@ -150,16 +151,18 @@ public class ActivityCollect extends BaseActivity {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
                 if (index == 0) {
-                    if (TAG_MY_ZUJI.equals(tagMy)) {
-                        if (adapter.getItem(i).getGoodsFlg().equals("0")) {
-                            Intent it = new Intent(ActivityCollect.this, ActivityMedicinesInfo.class);
+                    FavoriteModel dataItem = adapter.getItem(i);
+                    Intent it;
+                    if (dataItem.getGoodsFlg().equals("0")) {
 //                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
-                            startActivity(it);
-                        } else {
-                            Intent it = new Intent(ActivityCollect.this, ActivityGoodsInfo.class);
-//                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
-                            startActivity(it);
-                        }
+                        it = ActivityMedicinesInfo.getIntent(ActivityCollect.this, dataItem.getCommodityId(),dataItem.getOidGroupId() );
+                    } else {
+                        it = ActivityLifeGoodsInfo.getIntent(ActivityCollect.this, dataItem.getCommodityId());
+                    }
+                    startActivity(it);
+
+                    /*if (TAG_MY_ZUJI.equals(tagMy)) {
+
                     } else if (TAG_MY_SHOUCANG.equals(tagMy)) {
                         if (adapter.getItem(i).getGoodsFlg().equals("1")) {
                             Intent it = new Intent(ActivityCollect.this, ActivityMedicinesInfo.class);
@@ -167,10 +170,9 @@ public class ActivityCollect extends BaseActivity {
                             startActivity(it);
                         } else {
                             Intent it = new Intent(ActivityCollect.this, ActivityGoodsInfo.class);
-//                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
                             startActivity(it);
                         }
-                    }
+                    }*/
 
 
                 }

@@ -47,6 +47,7 @@ import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.ui.goods.ActivityGoodsSubmit;
 import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
+import com.wyw.ljtds.ui.goods.LifeShopActivity;
 import com.wyw.ljtds.ui.goods.ShopActivity;
 import com.wyw.ljtds.ui.user.ActivityLogin;
 import com.wyw.ljtds.utils.GsonUtils;
@@ -355,7 +356,12 @@ public class FragmentCart extends BaseFragment {
             btnAddMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent it = ShopActivity.getIntent(getActivity(), group.getBUSNO());
+                    Intent it = null;
+                    if (AppConfig.GROUP_LJT.equals(group.getINS_USER_ID())) {
+                        it = ShopActivity.getIntent(getActivity(), group.getBUSNO());
+                    } else {
+                        it = LifeShopActivity.getIntent(getActivity(), group.getBUSNO());
+                    }
                     startActivity(it);
                 }
             });
@@ -500,7 +506,7 @@ public class FragmentCart extends BaseFragment {
                     if (AppConfig.GROUP_LJT.equals(itemData.getINS_USER_ID())) {
                         Intent it = ActivityMedicinesInfo.getIntent(getActivity(), itemData.getCOMMODITY_ID(), itemData.getBUSNO());
                         startActivity(it);
-                    }else{
+                    } else {
                         Intent it = ActivityLifeGoodsInfo.getIntent(getActivity(), itemData.getCOMMODITY_ID());
                         startActivity(it);
                     }

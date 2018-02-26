@@ -306,4 +306,5 @@
 
 
     <string name="launch_wx">启动微信</string>
+    <string name="order_stat_return">退换货</string>
 </resources>

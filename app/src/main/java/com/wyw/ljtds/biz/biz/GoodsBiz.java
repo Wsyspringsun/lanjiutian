@@ -78,18 +78,32 @@ public class GoodsBiz extends BaseBiz {
      */
     public static MedicineDetailsModel getMedicine(String id, String logiId, String lat, String lng, String addrId) throws BizFailure, ZYException {
         SoapProcessor ksoap = null;
-        if (!StringUtils.isEmpty(PreferenceCache.getToken())) {
-            ksoap = new SoapProcessor("Service", "getMedicine", true);
+        if ("x".equals(logiId)) {
+            if (!StringUtils.isEmpty(PreferenceCache.getToken())) {
+                ksoap = new SoapProcessor("Service", "getMedicineByBarcode", true);
+            } else {
+                ksoap = new SoapProcessor("Service", "getMedicineByBarcode", false);
+                ksoap.setProperty("token", "", SoapProcessor.PropertyType.TYPE_STRING);
+            }
+            ksoap.setProperty("barcode", id, SoapProcessor.PropertyType.TYPE_STRING);
+            ksoap.setProperty("lat", lat, SoapProcessor.PropertyType.TYPE_STRING);
+            ksoap.setProperty("lng", lng, SoapProcessor.PropertyType.TYPE_STRING);
+            ksoap.setProperty("addressId", addrId, SoapProcessor.PropertyType.TYPE_STRING);
+            Utils.log("barcode:" + id);
         } else {
-            ksoap = new SoapProcessor("Service", "getMedicine", false);
-            ksoap.setProperty("token", "", SoapProcessor.PropertyType.TYPE_STRING);
+            if (!StringUtils.isEmpty(PreferenceCache.getToken())) {
+                ksoap = new SoapProcessor("Service", "getMedicine", true);
+            } else {
+                ksoap = new SoapProcessor("Service", "getMedicine", false);
+                ksoap.setProperty("token", "", SoapProcessor.PropertyType.TYPE_STRING);
+            }
+            ksoap.setProperty("wareId", id, SoapProcessor.PropertyType.TYPE_STRING);
+            ksoap.setProperty("logisticsCompanyId", logiId, SoapProcessor.PropertyType.TYPE_STRING);
+            ksoap.setProperty("lat", lat, SoapProcessor.PropertyType.TYPE_STRING);
+            ksoap.setProperty("lng", lng, SoapProcessor.PropertyType.TYPE_STRING);
+            ksoap.setProperty("addressId", addrId, SoapProcessor.PropertyType.TYPE_STRING);
+            Utils.log("wareId:" + id);
         }
-        ksoap.setProperty("wareId", id, SoapProcessor.PropertyType.TYPE_STRING);
-        ksoap.setProperty("logisticsCompanyId", logiId, SoapProcessor.PropertyType.TYPE_STRING);
-        ksoap.setProperty("lat", lat, SoapProcessor.PropertyType.TYPE_STRING);
-        ksoap.setProperty("lng", lng, SoapProcessor.PropertyType.TYPE_STRING);
-        ksoap.setProperty("addressId", addrId, SoapProcessor.PropertyType.TYPE_STRING);
-
         JsonElement element = ksoap.request();
         Gson gson = new GsonBuilder().create();
         return gson.fromJson(element, MedicineDetailsModel.class);

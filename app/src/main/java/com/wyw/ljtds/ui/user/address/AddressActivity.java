@@ -74,10 +74,6 @@ public class AddressActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!UserBiz.isLogined()) {
-            startActivity(ActivityLogin.getIntent(this));
-            finish();
-        }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动 recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -88,6 +84,12 @@ public class AddressActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (!UserBiz.isLogined()) {
+            startActivity(ActivityLogin.getIntent(this));
+            finish();
+            return;
+        }
         getAddress();
     }
 

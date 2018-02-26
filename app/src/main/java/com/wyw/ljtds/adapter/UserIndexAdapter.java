@@ -263,6 +263,7 @@ public class UserIndexAdapter extends RecyclerView.Adapter {
             IconText data = model.getExtraIcons().get(dataPos);
             hExtraIconHolder.icon.setImageDrawable(ActivityCompat.getDrawable(context, data.getImgId()));
             hExtraIconHolder.text.setText(data.getText());
+            hExtraIconHolder.index = dataPos;
         } else if (holder instanceof RecommandGoodsHolder) {
             RecommandGoodsHolder hRecommandGoodsHolder = (RecommandGoodsHolder) holder;
             if (model.getRecommendModels() == null) return;

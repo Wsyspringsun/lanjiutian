@@ -84,7 +84,6 @@ import java.util.Map;
 
 @ContentView(R.layout.fragment_find)
 public class FragmentFind extends BaseFragment {
-
     //    public static final String TAG_FIND_MTD = "com.wyw.ljtds.ui.find.FragmentFind.TAG_FIND_MTD";
     public static final String FIND_MTD_QUICK = "1";
     public static final String FIND_MTD_QUICK2 = "0";
@@ -113,10 +112,10 @@ public class FragmentFind extends BaseFragment {
     private ConvenientBanner banner; //轮播图
     //    @ViewInject(R.id.RushBuyCountDownTimerView)
 //    private SnapUpCountDownTimerView snapUpCountDownTimerView;
-    @ViewInject(R.id.qianggou_rv)
-    private RecyclerView recyclerView; //一起抢区域
+    @ViewInject(R.id.fragment_find_ryv_qianggou)
+    private RecyclerView rycQiangou; //一起抢区域
     @ViewInject(R.id.fragment_find_ryv_recommand)
-    private RecyclerView reclcyer;
+    private RecyclerView rycTuijian;
     @ViewInject(R.id.reclcyer1)
     private RecyclerView reclcyer1;
     //    @ViewInject(R.id.fragment_find_rv_huodong)
@@ -258,7 +257,7 @@ public class FragmentFind extends BaseFragment {
                 break;
             case R.id.tv_jt_djs:
                 //活动 --- 更多
-                it = ActivityMedicineList.getIntent(getActivity(), "", "3", "", "");
+                it = ActivityMedicineList.getIntent(getActivity(), "0", "3", "", "");
 //                it.putExtra(ActivityMedicineList.TAG_LIST_FROM, FIND_MTD_QUICK3);
 //                it.putExtra(TAG_MTD_QUICK_PARAM, "3");
                 startActivity(it);
@@ -332,12 +331,12 @@ public class FragmentFind extends BaseFragment {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());//必须有
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);//设置方向滑动
-        recyclerView.setLayoutManager(linearLayoutManager);
+        rycQiangou.setLayoutManager(linearLayoutManager);
 
         adapter = new MyAdapter();
         adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
-        recyclerView.setAdapter(adapter);
-        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
+        rycQiangou.setAdapter(adapter);
+        rycQiangou.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
                 HomePageModel.DETAILS detail = adapter.getData().get(i);
@@ -349,10 +348,10 @@ public class FragmentFind extends BaseFragment {
 
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getActivity());//必须有
         linearLayoutManager1.setOrientation(LinearLayoutManager.HORIZONTAL);//设置方向滑动
-        reclcyer.setLayoutManager(linearLayoutManager1);
+        rycTuijian.setLayoutManager(linearLayoutManager1);
 
         adapter1 = new MyAdapter1();
-        reclcyer.setAdapter(adapter1);
+        rycTuijian.setAdapter(adapter1);
 
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getActivity());//必须有
         linearLayoutManager2.setOrientation(LinearLayoutManager.HORIZONTAL);//设置方向滑动
@@ -372,7 +371,7 @@ public class FragmentFind extends BaseFragment {
         });
 
 
-        reclcyer.addOnItemTouchListener(new OnItemClickListener() {
+        rycTuijian.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
                 index = adapter1.getData().get(i).getCLASSCODE();
@@ -411,7 +410,6 @@ public class FragmentFind extends BaseFragment {
 //        updHuodongAdapter();
 
 
-        getHome();
     }
 
 //    private void updHuodongAdapter() {
@@ -484,6 +482,7 @@ public class FragmentFind extends BaseFragment {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CHANGE_LOCATION:
+                    //完成地址或
                     if (data != null) {
                         Parcelable paddr = data.getParcelableExtra(AddressSelActivity.TAG_SELECTED_ADDRESS);
                         if (paddr != null) {
@@ -503,6 +502,7 @@ public class FragmentFind extends BaseFragment {
                     }
 
                     tvLocation.setText(SingleCurrentUser.location.getAddrStr());
+                    getHome();
                     break;
                 case REQUEST_SEL_LOCATION:
                     if (data == null) {
@@ -515,10 +515,11 @@ public class FragmentFind extends BaseFragment {
     }
 
 
-    BizDataAsyncTask<HomePageModel> homeTask;
-
+    /**
+     * 获取首页数据
+     */
     private void getHome() {
-        homeTask = new BizDataAsyncTask<HomePageModel>() {
+        new BizDataAsyncTask<HomePageModel>() {
             @Override
             protected HomePageModel doExecute() throws ZYException, BizFailure {
                 return HomeBiz.getHome();
@@ -630,7 +631,55 @@ public class FragmentFind extends BaseFragment {
                 adapter2.setNewData(list2);
                 adapter2.notifyDataSetChanged();
 
-                if (StringUtils.isEmpty(homePageModel.getAdvImgs()[0])) {
+
+                for (int i = 0; i < homePageModel.getAdvImgsList().size(); i++) {
+                    Map<String, Object> advItem = homePageModel.getAdvImgsList().get(i);
+                    String imgPath = (String) advItem.get("advImgs");
+                    Boolean startFlg = (Boolean) advItem.get("startFlg");
+                    switch (i) {
+                        case 0:
+                            simpleDraweeView1.setImageURI(Uri.parse(imgPath));
+                            if (startFlg) {
+                                simpleDraweeView1.setOnClickListener(new ActiveListner("1"));
+                            } else {
+                                simpleDraweeView1.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        startActivity(ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK2, "", "3", ""));
+                                    }
+                                });
+                            }
+                            break;
+                        case 1:
+                            simpleDraweeView2.setImageURI(Uri.parse(imgPath));
+                            if (startFlg) {
+                                simpleDraweeView2.setOnClickListener(new ActiveListner("3"));
+                            } else {
+                                simpleDraweeView2.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        startActivity(ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK, "", "03", ""));
+                                    }
+                                });
+                            }
+                            break;
+                        case 2:
+                            simpleDraweeView3.setImageURI(Uri.parse(imgPath));
+                            if (startFlg) {
+                                simpleDraweeView3.setOnClickListener(new ActiveListner("2"));
+                            } else {
+                                simpleDraweeView3.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        startActivity(ActivityMedicineList.getIntent(getActivity(), FIND_MTD_QUICK, "", "13", ""));
+                                    }
+                                });
+                            }
+                            break;
+                    }
+                }
+
+                /*if (StringUtils.isEmpty(homePageModel.getAdvImgs()[0])) {
                     simpleDraweeView1.setImageURI(Uri.parse(""));
                 } else {
                     simpleDraweeView1.setImageURI(Uri.parse(homePageModel.getAdvImgs()[0]));
@@ -646,16 +695,16 @@ public class FragmentFind extends BaseFragment {
                     simpleDraweeView3.setImageURI(Uri.parse(""));
                 } else {
                     simpleDraweeView3.setImageURI(Uri.parse(homePageModel.getAdvImgs()[2]));
-                }
+                }*/
 
-                //simpleDraweeView1.setOnClickListener(new ActiveListner("3", FIND_MTD_QUICK3));
+                /*//simpleDraweeView1.setOnClickListener(new ActiveListner("3", FIND_MTD_QUICK3));
                 simpleDraweeView1.setOnClickListener(new ActiveListner("1"));
                 // 保健 03
                 //simpleDraweeView2.setOnClickListener(new ActiveListner("03", FIND_MTD_QUICK2));
                 simpleDraweeView2.setOnClickListener(new ActiveListner("3"));
                 // 母婴     13
 //                simpleDraweeView3.setOnClickListener(new ActiveListner("13", FIND_MTD_QUICK2));
-                simpleDraweeView3.setOnClickListener(new ActiveListner("2"));
+                simpleDraweeView3.setOnClickListener(new ActiveListner("2"));*/
 
 
             }
@@ -665,8 +714,7 @@ public class FragmentFind extends BaseFragment {
                 //停止倒计时
 //                snapUpCountDownTimerView.stop();
             }
-        };
-        homeTask.execute();
+        }.execute();
     }
 
 
@@ -801,6 +849,8 @@ public class FragmentFind extends BaseFragment {
     public void setLocation() {
         if (SingleCurrentUser.location != null) {
             tvLocation.setText(SingleCurrentUser.location.getAddrStr());
+
+            getHome();
         }
     }
 

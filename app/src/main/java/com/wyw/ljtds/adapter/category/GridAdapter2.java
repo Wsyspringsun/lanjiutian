@@ -63,7 +63,7 @@ public class GridAdapter2 extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.textView.setText(mChildrenBeanXes.get(position).getCLASSNAME());
-        viewHolder.mImageView.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + mChildrenBeanXes.get(position).getIMG_PATH()));
+        viewHolder.mImageView.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT_ECOMERCE + mChildrenBeanXes.get(position).getIMG_PATH()));
 
         viewHolder.item.setOnClickListener(new View.OnClickListener() {
             @Override

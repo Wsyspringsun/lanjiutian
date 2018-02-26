@@ -133,7 +133,8 @@ public class AddressSelActivity extends BaseActivity {
             }
         });
 
-        updateLocationItem(SingleCurrentUser.location);
+        MyLocation location = MyLocation.newInstance(SingleCurrentUser.bdLocation.getLatitude(), SingleCurrentUser.bdLocation.getLongitude(), SingleCurrentUser.bdLocation.getAddrStr());
+        updateLocationItem(location);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动 recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setLayoutManager(linearLayoutManager);

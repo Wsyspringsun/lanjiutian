@@ -30,6 +30,10 @@ public class HomeBiz extends BaseBiz {
     public static HomePageModel getHome() throws BizFailure, ZYException {
         SoapProcessor ksoap = new SoapProcessor("Service", "homePage", false);
 
+        if (SingleCurrentUser.location != null) {
+            ksoap.setProperty("lat", "" + SingleCurrentUser.location.getLatitude(), SoapProcessor.PropertyType.TYPE_STRING);
+            ksoap.setProperty("lng", "" + SingleCurrentUser.location.getLongitude(), SoapProcessor.PropertyType.TYPE_STRING);
+        }
         JsonElement element = ksoap.request();
         Gson gson = new GsonBuilder().create();
         return gson.fromJson(element, HomePageModel.class);

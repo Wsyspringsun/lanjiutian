@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.wyw.ljtds.R;
+import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.CommodityTypeSecondModel;
 import com.wyw.ljtds.ui.goods.ActivityGoodsList;
 
@@ -62,7 +63,7 @@ public class GridAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.textView.setText(mChildrenBeanXes.get(position).getName());
-        viewHolder.mImageView.setImageURI(Uri.parse("http://www.lanjiutian.com/upload/images" + mChildrenBeanXes.get(position).getImgPath()));
+        viewHolder.mImageView.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT_ECOMERCE + mChildrenBeanXes.get(position).getImgPath()));
 
         viewHolder.item.setOnClickListener(new View.OnClickListener() {
             @Override

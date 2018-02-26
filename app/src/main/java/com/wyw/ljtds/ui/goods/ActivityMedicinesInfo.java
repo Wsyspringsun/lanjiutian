@@ -253,23 +253,6 @@ public class ActivityMedicinesInfo extends ActivityGoodsInfo {
         initFragmentList(commId);
         initIconBtnStat();
 
-
-        fragmentGoodsInfo.addItemCallback(new MyCallback() {
-            @Override
-            public void callback(Object... params) {
-                if (params[0] == null) return;
-                AddressModel addr = (AddressModel) params[0];
-                addrId = "" + addr.getADDRESS_ID();
-                getMedicine();
-            }
-
-        });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
         Intent it = getIntent();
         lat = "" + SingleCurrentUser.defaultLat;
         lng = "" + SingleCurrentUser.defaultLng;
@@ -282,6 +265,24 @@ public class ActivityMedicinesInfo extends ActivityGoodsInfo {
         }
         commId = it.getStringExtra(MEDICINE_INFO_ID);
         logisticId = it.getStringExtra(LOGISTIC_ID);
+
+
+        fragmentGoodsInfo.addItemCallback(new MyCallback() {
+            @Override
+            public void callback(Object... params) {
+                addrId = "" + params[0];
+                lat = "" + params[1];
+                lng = "" + params[2];
+//                getMedicine();
+            }
+
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
 
         getMedicine();
 //        getMedicine(commId, logistic);
@@ -309,17 +310,24 @@ public class ActivityMedicinesInfo extends ActivityGoodsInfo {
         new BizDataAsyncTask<MedicineDetailsModel>() {
             @Override
             protected MedicineDetailsModel doExecute() throws ZYException, BizFailure {
-//                Utils.log(":" + commId + "-" + logisticId + "-" + lat + "-" + lng + "-" + addrId);
-                return GoodsBiz.getMedicine(commId, logisticId, lat, lng, addrId);
+                Utils.log("" + commId + "-" + logisticId + "-" + lat + "-" + lng + "-" + addrId + "...........");
+                if ("x".equals(logisticId)) {
+                    return GoodsBiz.getMedicine(commId, logisticId, lat, lng, addrId);
+                } else {
+                    return GoodsBiz.getMedicine(commId, logisticId, lat, lng, addrId);
+                }
             }
 
             @Override
             protected void onExecuteSucceeded(MedicineDetailsModel medicineDetailsModel) {
                 closeLoding();
-                if (medicineDetailsModel == null) {
+                if (medicineDetailsModel == null || StringUtils.isEmpty(medicineDetailsModel.getWAREID())) {
+                    Utils.log("没有符合条件的商品:" + GsonUtils.Bean2Json(medicineDetailsModel));
                     ToastUtil.show(ActivityMedicinesInfo.this, "没有符合条件的商品");
+                    finish();
                     return;
                 }
+                Utils.log("有符合条件的商品:" + GsonUtils.Bean2Json(medicineDetailsModel));
                 ActivityMedicinesInfo.this.medicineModel = medicineDetailsModel;
                 bindData2View();
 //                model = medicineDetailsModel;
@@ -376,6 +384,7 @@ public class ActivityMedicinesInfo extends ActivityGoodsInfo {
             @Override
             protected void OnExecuteFailed() {
                 closeLoding();
+                finish();
             }
         }.execute();
     }

@@ -167,4 +167,10 @@ public class StringUtils {
         BigDecimal bd = new BigDecimal(latlng);
         return df.format(bd);
     }
+
+    public static String sub(String str, int start, int end) {
+        if (str == null) return "";
+        if (end >= str.length()) return str;
+        return str.substring(start, end)+"...";
+    }
 }

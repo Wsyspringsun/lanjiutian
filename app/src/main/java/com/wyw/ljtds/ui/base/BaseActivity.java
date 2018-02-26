@@ -234,11 +234,11 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
             }
 
             //判断是否登陆   是否为游客模式
-//            if (!StringUtils.isEmpty(PreferenceCache.getToken())) {
-//                Ntalker.getInstance().login(PreferenceCache.getPhoneNum(), PreferenceCache.getPhoneNum(), 0);
-//            } else {
-//                Ntalker.getInstance().logout();
-//            }
+            if (!StringUtils.isEmpty(PreferenceCache.getToken())) {
+                Ntalker.getInstance().login(PreferenceCache.getPhoneNum(), PreferenceCache.getPhoneNum(), 0);
+            } else {
+                Ntalker.getInstance().logout();
+            }
             int code = Ntalker.getBaseInstance().startChat(getApplicationContext(), settingid, groupName, null);
             Log.e("xiaoneng_code", code + "");
         } else {

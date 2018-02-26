@@ -18,7 +18,9 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -161,9 +163,17 @@ public class ShopActivity extends BaseActivity {
         imgSou.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (MyCallback callback : searchCallbackList) {
-                    callback.callback(edSearch.getText().toString());
+                doSearch();
+            }
+        });
+        edSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    //如果actionId是搜索的id，则进行下一步的操作
+                    doSearch();
                 }
+                return false;
             }
         });
         scrollMain.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
@@ -223,6 +233,13 @@ public class ShopActivity extends BaseActivity {
         vpMain.setCurrentItem(0);
 
         loadData();
+    }
+
+    private void doSearch() {
+        vpMain.setCurrentItem(1);
+        for (MyCallback callback : searchCallbackList) {
+            callback.callback(edSearch.getText().toString());
+        }
     }
 
     private void loadData() {

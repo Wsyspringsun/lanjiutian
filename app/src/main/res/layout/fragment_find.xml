@@ -350,7 +350,7 @@
             </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/qianggou_rv"
+                android:id="@+id/fragment_find_ryv_qianggou"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:overScrollMode="never" />

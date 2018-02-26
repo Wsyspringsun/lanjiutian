@@ -24,6 +24,7 @@ import com.wyw.ljtds.ui.goods.ActivityMedicineList;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
+import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -127,29 +128,30 @@ public class ActivityScan extends BaseActivity implements QRCodeView.Delegate, E
     @Override
     //</editor-fold>
     public void onScanQRCodeSuccess(final String result) {
-        Log.e("error:", result);
-//        ToastUtil.show(this, result);
-        goodsTask = new BizDataAsyncTask<String>() {
+        Utils.log("scan result:" + result);
+        Intent i = ActivityMedicinesInfo.getIntent(ActivityScan.this, result, "x");
+        startActivity(i);
+        /*goodsTask = new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
                 String id = GoodsBiz.getGoodsIdByBarcode(result);
-                Log.e("ljt", "aaaa");
                 return id;
             }
 
             @Override
             protected void onExecuteSucceeded(String s) {
-                Intent i = new Intent(ActivityScan.this, ActivityMedicinesInfo.class);
+//                Intent i = new Intent(ActivityScan.this, ActivityMedicinesInfo.class);
 //                i.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, s);
-                finish();
+                Intent i = ActivityMedicinesInfo.getIntent(ActivityScan.this, s, "");
                 startActivity(i);
+                finish();
             }
 
             @Override
             protected void OnExecuteFailed() {
             }
         };
-        goodsTask.execute();
+        goodsTask.execute();*/
 
         vibrate();
 //        mQRCodeView.startCamera();

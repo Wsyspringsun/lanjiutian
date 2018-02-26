@@ -134,7 +134,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:hint=" (选填)对本次交易的说明"
-            android:textColor="@color/white"
+            android:textColor="@color/font_1"
             android:textColorHint="@color/font_2"
             android:textColorLink="@color/white"
             android:textSize="@dimen/font_5" />

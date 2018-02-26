@@ -14,6 +14,8 @@ public class FavoriteModel extends BaseModel {
     private String title;
     private String favoritesGoodsId;
     private boolean check;
+    private String oidGroupId;
+    private String groupName;
 
     public boolean isCheck() {
         return check;
@@ -69,5 +71,21 @@ public class FavoriteModel extends BaseModel {
 
     public void setFavoritesGoodsId(String favoritesGoodsId) {
         this.favoritesGoodsId = favoritesGoodsId;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getOidGroupId() {
+        return oidGroupId;
+    }
+
+    public void setOidGroupId(String oidGroupId) {
+        this.oidGroupId = oidGroupId;
     }
 }

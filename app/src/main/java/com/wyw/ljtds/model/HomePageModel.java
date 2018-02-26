@@ -1,8 +1,11 @@
 package com.wyw.ljtds.model;
 
+import com.baidu.trace.model.OnTraceListener;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by Administrator on 2017/5/1 0001.
@@ -11,6 +14,7 @@ import java.util.Map;
 public class HomePageModel extends BaseModel {
     //单独 的 广告 图片
     private String[] advImgs;
+    private List<Map<String, Object>> advImgsList;
     //轮播 图片
     private List<Map<String, String>> headImgsList;
     private String[] headImgs;
@@ -67,6 +71,14 @@ public class HomePageModel extends BaseModel {
 
     public void setHeadImgs(String[] headImgs) {
         this.headImgs = headImgs;
+    }
+
+    public List<Map<String, Object>> getAdvImgsList() {
+        return advImgsList;
+    }
+
+    public void setAdvImgsList(List<Map<String, Object>> advImgsList) {
+        this.advImgsList = advImgsList;
     }
 
 //    public class activeComms extends HomePageModel.DETAILS {

@@ -7,11 +7,12 @@
     <include layout="@layout/fragment_toolbar_common" />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/gray1"
         android:padding="@dimen/padding2"
-        android:text="当前地址" />
+        android:text="当前位置" />
 
     <RelativeLayout
         android:id="@+id/activity_address_change_rl_location"

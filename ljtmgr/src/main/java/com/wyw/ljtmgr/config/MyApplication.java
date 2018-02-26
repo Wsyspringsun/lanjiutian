@@ -75,7 +75,7 @@ public class MyApplication extends Application {
         x.Ext.init(this);
         x.Ext.setDebug(BuildConfig.DEBUG);//是否输出debug日志，开启后会影响性能
         //极光推送通知
-        JPushInterface.setDebugMode(true);
+//        JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
 
         //app crash收集

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.wyw.ljtmgr.utils.CommonUtil;
 
 import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.service.PushService;
 
 
 /**
@@ -49,6 +50,8 @@ public class MyJiGuangReceiver extends BroadcastReceiver {
                 CommonUtil.log("[MyReceiver]" + intent.getAction() + " connected state change to " + connected);
             } else {
                 CommonUtil.log("[MyReceiver] Unhandled intent - " + intent.getAction());
+                Intent pushintent = new Intent(context, PushService.class);//启动极光推送的服务
+                context.startService(pushintent);
             }
         } catch (Exception e) {
 

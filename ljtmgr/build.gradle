@@ -20,7 +20,7 @@ android {
         versionName "1.0"
         manifestPlaceholders = [
                 JPUSH_PKGNAME: applicationId,
-                JPUSH_APPKEY : "4daff20a6bfdbf6461d56ba2", //JPush上注册的包名对应的appkey.
+                JPUSH_APPKEY : "bdfe22175048fae2973168a5", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL: "developer-default" //暂时填写默认值即可.
         ]
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

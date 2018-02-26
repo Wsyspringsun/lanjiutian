@@ -37,6 +37,7 @@ import com.wyw.ljtmgr.config.MyApplication;
 import com.wyw.ljtmgr.model.LogisticInfo;
 import com.wyw.ljtmgr.model.OrderDetail;
 import com.wyw.ljtmgr.model.OrderDetailModel;
+import com.wyw.ljtmgr.model.OrderStat;
 import com.wyw.ljtmgr.model.OrderStatus;
 import com.wyw.ljtmgr.model.ServerResponse;
 import com.wyw.ljtmgr.utils.StringUtils;
@@ -57,6 +58,7 @@ public class OrderDetailFragment extends Fragment {
     private static final String ARG_ORDER_ID = "ARG_ORDER_ID";
     private static final String ARG_ORDER_STAT = "ARG_ORDER_STAT";
     private static final int REQUEST_DELEGATE_LOGISTIC = 1;
+    private String orderStat = "";
 
     MyApplication myApp = null;
 
@@ -72,6 +74,9 @@ public class OrderDetailFragment extends Fragment {
     Button btnShouhouJujue;
     @ViewInject(R.id.fragment_order_detail_ll_logistic)
     LinearLayout llLogistic;
+    @ViewInject(R.id.fragment_order_detail_tv_logistic_info)
+    TextView tvLogiInfo;
+
 
     public OrderDetailModel orderDetailModel;
     DelegateAdapter delegateAdapter;
@@ -94,8 +99,11 @@ public class OrderDetailFragment extends Fragment {
 
         myApp = (MyApplication) (getActivity().getApplication());
 
+        initData();
+
         initView(v);
 
+        //发货处理
         sendOrderCallback = new SimpleCommonCallback<ServerResponse>(getActivity()) {
             @Override
             protected void handleResult(ServerResponse result) {
@@ -107,6 +115,10 @@ public class OrderDetailFragment extends Fragment {
         return v;
     }
 
+    private void initData() {
+        orderStat = getArguments().getString(ARG_ORDER_STAT);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -116,8 +128,7 @@ public class OrderDetailFragment extends Fragment {
 
     private void loadData() {
         String orderId = getArguments().getString(ARG_ORDER_ID);
-        Log.e(AppConfig.TAG_ERR, "...orderId:" + orderId);
-        OrderBiz.loadOrderDetail(orderId, new SimpleCommonCallback<OrderDetailModel>(getActivity()) {
+        OrderBiz.loadOrderDetail(orderId, orderStat, new SimpleCommonCallback<OrderDetailModel>(getActivity()) {
 
             @Override
             protected void handleResult(OrderDetailModel result) {
@@ -147,23 +158,27 @@ public class OrderDetailFragment extends Fragment {
             this.logisticStat = OrderStatus.LJT;
         }
 
-        String stat = getArguments().getString(ARG_ORDER_STAT);
-        Log.e(AppConfig.TAG_ERR, "stat:" + stat);
+        tvLogiInfo.setText("预计" + orderDetailModel.getDistributionDate() + "送达");
 
 //        A”:新订单“B”:进行中“C”:已取消 “D”:售后 “E”：已完成
         resetBtn();
+        String stat = orderDetailModel.getGroupStatus();
         switch (stat) {
-            case "A":
+            case OrderStatus.TOSHIPPED:
                 btnSubmit.setVisibility(View.VISIBLE);
                 llLogistic.setVisibility(View.GONE);
                 break;
-            case "B":
+            case OrderStatus.SHIPPED:
+            case OrderStatus.LOGISTICSALLOCATED:
+            case OrderStatus.LOGISTICSSHIPPED:
+                btnSongda.setVisibility(View.VISIBLE);
 //                btnSongda.setVisibility(View.VISIBLE);
                 break;
-            case "C":
-                llLogistic.setVisibility(View.GONE);
+            case OrderStatus.LOGISTICSSERVICE:
+                btnSongda.setVisibility(View.GONE);
+//                llLogistic.setVisibility(View.GONE);
                 break;
-            case "D":
+            case OrderStatus.APPLYRETURNED:
                 btnShouhouTongyi.setVisibility(View.VISIBLE);
                 btnShouhouJujue.setVisibility(View.VISIBLE);
                 break;
@@ -257,6 +272,7 @@ public class OrderDetailFragment extends Fragment {
                 });
             }
         });
+        //发货
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

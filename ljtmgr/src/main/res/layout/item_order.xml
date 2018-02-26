@@ -3,8 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin"
-    android:background="@color/white">
-
+    android:background="@color/white"
+    android:paddingBottom="@dimen/padding"
+    android:paddingLeft="@dimen/margin2"
+    android:paddingRight="@dimen/margin2"
+    android:paddingTop="@dimen/padding">
 
 
     <TextView
@@ -14,19 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/x2"
         android:text="orderid" />
-
-    <TextView
-        android:id="@+id/item_order_shuliang"
-        style="@style/base_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/item_order_orderid"
-        android:gravity="center_horizontal|bottom"
-        android:text="数量\n0" />
-
 
     <TextView
         android:id="@+id/item_order_orderprice"
@@ -42,6 +34,17 @@
         android:textSize="14sp" />
 
     <TextView
+        android:id="@+id/item_order_shuliang"
+        style="@style/base_textview"
+        android:layout_width="@dimen/x80"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/item_order_orderid"
+        android:gravity="center_horizontal|bottom"
+        android:text="数量\n0" />
+
+    <TextView
         android:id="@+id/item_order_orderinfo"
         style="@style/base_textview"
         android:layout_width="wrap_content"
@@ -50,8 +53,8 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/item_order_orderprice"
         android:layout_marginLeft="@dimen/margin"
-        android:layout_alignBottom="@id/item_order_shuliang"
-        android:gravity="bottom"
+        android:layout_toRightOf="@+id/item_order_shuliang"
+        android:gravity="bottom|right"
         android:text="运费:¥5\n2018-01-01 10:23" />
 
 

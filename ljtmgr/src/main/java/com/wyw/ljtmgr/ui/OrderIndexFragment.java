@@ -23,6 +23,7 @@ import com.wyw.ljtmgr.biz.SimpleCommonCallback;
 import com.wyw.ljtmgr.biz.UserBiz;
 import com.wyw.ljtmgr.config.AppConfig;
 import com.wyw.ljtmgr.model.OrderListResponse;
+import com.wyw.ljtmgr.model.OrderStat;
 import com.wyw.ljtmgr.utils.ActivityUtil;
 
 /**
@@ -113,22 +114,23 @@ public class OrderIndexFragment extends Fragment {
                 int pos = tab.getPosition();
                 switch (pos) {
                     case 0:
-                        nStat = "A";
+                        nStat = OrderStat.NEAREST;
                         break;
                     case 1:
-                        nStat = "B";
+                        nStat = OrderStat.DOING;
                         break;
                     case 2:
-                        nStat = "C";
+                        nStat = OrderStat.CANCELED;
                         break;
                     case 3:
-                        nStat = "E";
+                        nStat = OrderStat.COMPLETED;
                         break;
                     case 4:
-                        nStat = "D";
+                        nStat = OrderStat.RETURNED;
                         break;
                     default:
-                        nStat = "A";
+
+                        nStat = OrderStat.NEAREST;
                         break;
                 }
                 if (stat == nStat) return;

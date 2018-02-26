@@ -265,7 +265,8 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 }
                 String uname = "", phone = "";
                 //分别显示 地址信息
-                address_dizhi.setText(uname + " " + phone + "\n" + userAddressId);
+//                address_dizhi.setText(uname + " " + phone + "\n" + userAddressId+orderModelInfoMedicine.getAD);
+                address_dizhi.setText(orderModelInfoMedicine.getUSER_ADDRESS_ID());
 
                 dianpu.setText(orderModelInfoMedicine.getLOGISTICS_COMPANY());
                 tvShopAddr.setText(getString(R.string.shop_addr) + orderModelInfoMedicine.getORG_ADDRESS());

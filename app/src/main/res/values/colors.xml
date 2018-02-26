@@ -2,7 +2,8 @@
 <resources>
     <!-- 深蓝色 -->
     <!-- 中蓝色 -->
-    <color name="colorPrimaryDark">#303F9F</color>
+    <!--#303F9 old-->F
+    <color name="colorPrimaryDark">@color/base_red</color>
     <!-- 天蓝色 -->
 
     <color name="colorLightBlue">#0093e7</color>

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wyw.ljtds.R;
@@ -234,9 +235,39 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
         super.onCreate(savedInstanceState);
 //
         tvGoumai.setText(R.string.goumai);
-        initFragmentList(getIntent().getStringExtra(TAG_LIFE_GOODS_ID ));
+        initFragmentList(getIntent().getStringExtra(TAG_LIFE_GOODS_ID));
 //
 //
+        initIconBtnStat();
+    }
+
+    private void initIconBtnStat() {
+        LinearLayout btnBack = (LinearLayout) findViewById(R.id.back);
+        TextView tvTitle = (TextView) findViewById(R.id.activity_fragment_title);
+        tvTitle.setText(getTitle());
+
+        LinearLayout llIconBtnlist = (LinearLayout) findViewById(R.id.ll_icon_btnlist);
+        for (int i = 0; i < llIconBtnlist.getChildCount(); i++) {
+            View v = llIconBtnlist.getChildAt(i);
+            switch (i) {
+                case 3:
+                    //wechat share
+                    v.setVisibility(View.VISIBLE);
+                    v.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String price = "";
+                            if (commodityModel.getColorList() != null && commodityModel.getColorList().size() > 0 && commodityModel.getColorList().get(0).getSizeList() != null && commodityModel.getColorList().get(0).getSizeList().size() > 0) {
+                                price = commodityModel.getColorList().get(0).getSizeList().get(0).getMarketPrice() + "";
+                            }
+                            String description = commodityModel.getTitle() + "  " + price;
+                            Utils.log("description:" + description + "getIMG_PATH:" + AppConfig.IMAGE_PATH_LJT + commodityModel.getImgPath());
+                            wechatShare(commodityModel.getTitle(), description, AppConfig.IMAGE_PATH_LJT + commodityModel.getImgPath(), AppConfig.WEB_APP_URL + "/lifeDetail.html?commodityId=" + commodityModel.getCommodityId());
+                        }
+                    });
+                    break;
+            }
+        }
     }
 
     @Override

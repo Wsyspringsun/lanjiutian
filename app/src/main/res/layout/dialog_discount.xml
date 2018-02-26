@@ -120,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/dialog_discount_chk_use_youhuiquan"
                 android:layout_alignParentLeft="true"
-                android:text="@string/use_dianzibi" />
+                android:text="@string/use_youhuiquan" />
 
             <TextView
                 android:id="@+id/tv_youhuiquan_show"

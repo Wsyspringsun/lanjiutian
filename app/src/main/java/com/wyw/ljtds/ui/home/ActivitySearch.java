@@ -168,7 +168,7 @@ public class ActivitySearch extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_SEARCH) {
-                    if (getIntent().getIntExtra("from", 0) == 1) {
+/*                    if (getIntent().getIntExtra("from", 0) == 1) {
                         Intent it = new Intent(ActivitySearch.this, ActivityGoodsList.class);
                         it.putExtra("search", edHeader.getText().toString().trim());
                         it.putExtra("typeid", "");
@@ -178,7 +178,8 @@ public class ActivitySearch extends BaseActivity {
                         it.putExtra("search", edHeader.getText().toString().trim());
                         it.putExtra("typeid", "");
                         startActivity(it);
-                    }
+                    }*/
+                    goSearchRlt();
                 }
                 return false;
             }

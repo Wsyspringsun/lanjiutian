@@ -61,17 +61,21 @@ public class OrderBiz {
      * @param orderId  order unique id
      * @param callback callback
      */
-    public static void loadOrderDetail(String orderId, Callback.CommonCallback callback) {
+    public static void loadOrderDetail(String orderId,String orderStat, Callback.CommonCallback callback) {
         Header head = CommonBiz.getDataHeader();
 
-        OrderDetailGetModel orderDetailGetModel = new OrderDetailGetModel();
-        orderDetailGetModel.setOrderGroupId(orderId);
+//        OrderDetailGetModel orderDetailGetModel = new OrderDetailGetModel();
+//        orderDetailGetModel.setOrderGroupId(orderId);
+        Map<String,String> map = new HashMap<>();
+        map.put("orderGroupId",orderId);
+        map.put("classify",orderStat);
+//        orderDetailGetModel.setOrderGroupId(orderId);
 //        orderDetailGetModel.setOrderTradeId(orderId);
 //        orderDetailGetModel.setOidGroupId("sxljt");
 
-        BaseJson<OrderDetailGetModel> baseJson = new BaseJson<>();
+        BaseJson<Map<String,String>> baseJson = new BaseJson<>();
         baseJson.setHead(head);
-        baseJson.setBody(orderDetailGetModel);
+        baseJson.setBody(map);
         Gson gson = new Gson();
         String data = gson.toJson(baseJson);
 

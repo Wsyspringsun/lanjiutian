@@ -47,13 +47,6 @@ public class MainActivity extends BaseActivity {
     @ViewInject(R.id.activity_main_tab)
     private TabLayout tabLayout;
 
-    private int PHASE_PERMISSION = 1 << 0;
-    private int PHASE_NET_OK = 1 << 1;
-    private int PHASE_LOGIN_IN = 1 << 2;
-    private int PHASE_SERVER_OK = 1 << 3;
-    private int CUR_PHASE = 0;
-
-    private List<SpannableString> tabSpans;
     private PagerAdapter vpAdapter;
     int[] drawNor = {R.drawable.dingdan_nor, R.drawable.dianpu_nor, R.drawable.xiaoxi_nor, R.drawable.shezhi_nor};
     int[] drawSel = {R.drawable.dingdan_sel, R.drawable.dianpu_sel, R.drawable.xiaoxi_sel, R.drawable.shezhi_sel};
@@ -102,9 +95,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        tabSpans = new ArrayList<>();
 
         tabLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override

@@ -157,10 +157,10 @@ public class MainActivity extends BaseActivity {
 
     public void initAddr(MyLocation loc) {
         SingleCurrentUser.updateLocation(loc);
-        if (fragmentHome != null && fragmentHome.isAdded()){
+        if (fragmentHome != null && fragmentHome.isAdded()) {
             fragmentHome.setLocation();
         }
-        if (fragmentFind != null && fragmentFind.isAdded()){
+        if (fragmentFind != null && fragmentFind.isAdded()) {
             fragmentFind.setLocation();
         }
 
@@ -513,14 +513,21 @@ public class MainActivity extends BaseActivity {
                 if (addrlist == null || addrlist.size() <= 0) {
                     ((MyApplication) MainActivity.this.getApplication()).locationService.registerListener(locationListner); //注销掉监听
                 } else {
+                    //设置默认地址
                     AddressModel model = addrlist.get(0);
+                    for (int i = 0; i < addrlist.size(); i++) {
+                        if ("0".equals(addrlist.get(i).getDEFAULT_FLG())) {
+                            model = addrlist.get(i);
+                            break;
+                        }
+                    }
                     String addr = model.getADDRESS_LOCATION();
                     StringBuilder err = new StringBuilder();
                     MyLocation loc = AddressModel.parseLocation(err, addr);
-                    if(err.length()>0){
+                    if (err.length() > 0) {
                         Utils.log(err.toString());
                         ((MyApplication) MainActivity.this.getApplication()).locationService.registerListener(locationListner); //注销掉监听
-                    }else{
+                    } else {
                         //upd addr
                         initAddr(loc);
                         closeLoding();

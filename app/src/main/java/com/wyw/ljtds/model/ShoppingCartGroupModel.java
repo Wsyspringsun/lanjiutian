@@ -13,6 +13,7 @@ public class ShoppingCartGroupModel {
     private String LOGISTICS_COMPANY; //店铺名称
     public boolean checked = false;
     private String BAOYOU;
+    private String INS_USER_ID;
 
     public String getBAOYOU() {
         return BAOYOU;
@@ -44,5 +45,13 @@ public class ShoppingCartGroupModel {
 
     public void setBUSNAME(String LOGISTICS_COMPANY) {
         this.LOGISTICS_COMPANY = LOGISTICS_COMPANY;
+    }
+
+    public String getINS_USER_ID() {
+        return INS_USER_ID;
+    }
+
+    public void setINS_USER_ID(String INS_USER_ID) {
+        this.INS_USER_ID = INS_USER_ID;
     }
 }

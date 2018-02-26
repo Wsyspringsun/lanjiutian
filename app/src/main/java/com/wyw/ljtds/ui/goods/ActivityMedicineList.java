@@ -175,6 +175,14 @@ public class ActivityMedicineList extends BaseActivity {
         getlist();
     }
 
+    /**
+     * @param context
+     * @param type 0:获取一对多关系 ，1 ： 获取多对多关系列表
+     * @param topFlg 活动标识
+     * @param classId 分类
+     * @param keyword 查询关键字
+     * @return
+     */
     public static Intent getIntent(Context context, String type, String topFlg, String classId, String keyword) {
         Intent it = new Intent(context, ActivityMedicineList.class);
         it.putExtra(TAG_PARAM_TYPE, type);

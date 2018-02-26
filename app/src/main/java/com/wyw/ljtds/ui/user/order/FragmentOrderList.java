@@ -488,7 +488,7 @@ public class FragmentOrderList extends BaseFragment {
                         .addOnClickListener(R.id.button2);
             } else if ("B".equals(orderModelMedicine.getSTATUS())) {
                 status = getResources().getString(R.string.daifa);
-                baseViewHolder.setVisible(R.id.button1, false)
+                baseViewHolder.setVisible(R.id.button1, true)
                         .setText(R.id.button1, R.string.wuliu_chakan)
                         .addOnClickListener(R.id.button1);
                 if (OrderTrade.PAYMTD_MONEY.equals(orderModelMedicine.getPAYMENT_METHOD())) {
@@ -531,6 +531,8 @@ public class FragmentOrderList extends BaseFragment {
                         .setVisible(R.id.button3, false)
                         .setText(R.id.button1, R.string.shanchu)
                         .addOnClickListener(R.id.button1);
+            } else if ("T".equals(orderModelMedicine.getSTATUS())) {
+                status = getResources().getString(R.string.order_stat_return);
             } else {
                 status = getResources().getString(R.string.stat_unkwon);
             }

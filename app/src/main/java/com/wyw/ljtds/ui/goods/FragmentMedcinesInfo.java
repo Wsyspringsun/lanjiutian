@@ -48,6 +48,7 @@ import com.facebook.drawee.gestures.GestureDetector;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.gxz.PagerSlidingTabStrip;
 import com.squareup.picasso.Picasso;
+import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.adapter.DataListAdapter;
 import com.wyw.ljtds.biz.biz.GoodsBiz;
@@ -61,6 +62,7 @@ import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.MedicineDetailsEvaluateModel;
 import com.wyw.ljtds.model.MedicineDetailsModel;
 import com.wyw.ljtds.model.MedicineShop;
+import com.wyw.ljtds.model.MyLocation;
 import com.wyw.ljtds.model.ShoppingCartAddModel;
 import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.ui.base.BaseFragment;
@@ -313,6 +315,11 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
                 startActivityForResult(it, REQUEST_CHANGE_ADDR);
             }
         });
+
+
+        //初始化送至
+        String addrText = SingleCurrentUser.location.getAddrStr();
+        tvAddress.setText("送至:" + addrText);
     }
 
     private void setHejiVal(int num) {
@@ -471,9 +478,9 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
         String wareName = StringUtils.deletaFirst(model.getWARENAME()),
                 detailFlg = model.getCOMMODITY_PARAMETER() == null ? "" : model.getCOMMODITY_PARAMETER(),
                 size = model.getWARESPEC(),
-                brand = model.getCOMMODITY_BRAND()+"  ",
+                brand = model.getCOMMODITY_BRAND() + "  ",
                 price = "\n￥" + model.getSALEPRICE(),
-                treatment = "\n\n" + model.getTREATMENT(),
+                treatment = model.getTREATMENT() == null ? "\n\n" : "\n\n" + StringUtils.sub(model.getTREATMENT(), 0, 50),
                 postage = model.getPOSTAGE(),
                 prodAdd = "\n\n生产企业: " + model.getPRODUCER();
 //                detailFlg = model.getFLG_DETAIL()"[买而送一]",
@@ -491,8 +498,7 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
         //合计
         setHejiVal(numberButton.getNumber());
         //default address or location
-        String addrText = "";
-        if (model.getUSER_ADDRESS() != null) {
+        /*if (model.getUSER_ADDRESS() != null) {
             //default address
 //            AddressModel addr = model.getUSER_ADDRESS();
 //            addrText = addr.getCONSIGNEE_ADDRESS();
@@ -503,7 +509,7 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
             //default location
             addrText = SingleCurrentUser.location.getAddrStr();
         }
-        tvAddress.setText("送至:" + addrText);
+*/
 
         //default shop address
         String shopname = model.getLOGISTICS_COMPANY(),
@@ -747,10 +753,16 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
             return;
         switch (requestCode) {
             case REQUEST_CHANGE_ADDR:
-                Parcelable addr = data.getParcelableExtra(ActivityAddress.TAG_SELECTED_ADDRESS);
-                if (addr != null) {
+                Parcelable paddr = data.getParcelableExtra(ActivityAddress.TAG_SELECTED_ADDRESS);
+                if (paddr != null) {
+                    AddressModel addr = (AddressModel) paddr;
+                    StringBuilder err = new StringBuilder();
+                    MyLocation addrLoc = AddressModel.parseLocation(err, addr.getADDRESS_LOCATION());
+                    String addrText = addrLoc.getAddrStr();
+                    tvAddress.setText("送至:" + addrText);
+
                     for (MyCallback cb : itemCallbacks) {
-                        cb.callback(addr);
+                        cb.callback(addr.getADDRESS_ID(), "" + addrLoc.getLatitude(), "" + addrLoc.getLongitude());
                     }
                 }
                 break;
