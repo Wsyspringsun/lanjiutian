@@ -15,13 +15,17 @@ import com.baidu.mapapi.SDKInitializer;
 import com.baidu.trace.LBSTraceClient;
 import com.baidu.trace.api.entity.LocRequest;
 import com.google.gson.Gson;
+import com.wyw.ljtmgr.biz.UserBiz;
 import com.wyw.ljtmgr.model.LoginModel;
 import com.wyw.ljtmgr.service.LocationService;
 
 import org.xutils.BuildConfig;
 import org.xutils.x;
 
+import java.util.Set;
+
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
+import cn.alien95.resthttp.request.RestHttp;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -31,7 +35,8 @@ import cn.jpush.android.api.JPushInterface;
 public class MyApplication extends Application {
     private static LoginModel currentLoginer;
     public LBSTraceClient mTraceClient;
-    public long serviceId = 155924;
+    //    public long serviceId = 155924;
+    public long serviceId = 158684;
     public static int screenHeight = 0;
     public static int screenWidth = 0;
     //百度
@@ -44,6 +49,7 @@ public class MyApplication extends Application {
     }
 
     public static LoginModel getCurrentLoginer() {
+        if (!UserBiz.isLogined()) return null;
         if (currentLoginer == null) {
             String str = PreferenceCache.getUser();
             Log.e(AppConfig.TAG_ERR, "getCurrentLoginer str:" + str);
@@ -96,6 +102,15 @@ public class MyApplication extends Application {
         locationService.registerListener(locationListner);
         LocationClientOption locOpt = locationService.getDefaultLocationClientOption();
         locationService.setLocationOption(locOpt);
+
+        RestHttp.initialize(this);
+        if (BuildConfig.DEBUG) {
+            RestHttp.setDebug(true, "network");
+        }
+
+        if (!UserBiz.isLogined()) {
+            JPushInterface.cleanTags(getApplicationContext(), 0);
+        }
     }
 
     private void initView() {

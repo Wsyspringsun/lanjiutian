@@ -7,6 +7,7 @@ import java.util.List;
  */
 
 public class OrderDetailModel extends ServerResponse {
+    private String flag;//0医药 1 生活馆商品
     private String orderId;
     private String insDate;
 
@@ -16,7 +17,7 @@ public class OrderDetailModel extends ServerResponse {
 
     private String groupStatus;
 
-    private String courier;//派送员
+    private String courier = "";//派送员
 
     private String courierMobile;//派送员电话
 
@@ -38,6 +39,8 @@ public class OrderDetailModel extends ServerResponse {
     private String discount;
     private String lat;
     private String lng;
+    private ReturnGoodsInfo returnGoodsInfo;
+
 
     public String getCostMoneyAll() {
         return costMoneyAll;
@@ -130,7 +133,7 @@ public class OrderDetailModel extends ServerResponse {
     }
 
     public String getUpdDate() {
-        return updDate;
+        return updDate == null ? "" : updDate;
     }
 
     public void setUpdDate(String updDate) {
@@ -239,5 +242,21 @@ public class OrderDetailModel extends ServerResponse {
 
     public void setDiscount(String discount) {
         this.discount = discount;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
+    public ReturnGoodsInfo getReturnGoodsInfo() {
+        return returnGoodsInfo;
+    }
+
+    public void setReturnGoodsInfo(ReturnGoodsInfo returnGoodsInfo) {
+        this.returnGoodsInfo = returnGoodsInfo;
     }
 }

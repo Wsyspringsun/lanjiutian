@@ -5,6 +5,11 @@ package com.wyw.ljtmgr.model;
  */
 
 public class OrderInfoModel {
+    public static final String CLASSIFY_RETURN = "D";
+
+    private String classify;//标识是否退货
+
+    private String returnGoodsHandingId; // 退换货id
 
     private Integer exchangeQuanlity;
 
@@ -87,5 +92,21 @@ public class OrderInfoModel {
 
     public void setOidGroupId(String oidGroupId) {
         this.oidGroupId = oidGroupId;
+    }
+
+    public String getClassify() {
+        return classify;
+    }
+
+    public void setClassify(String classify) {
+        this.classify = classify;
+    }
+
+    public String getReturnGoodsHandingId() {
+        return returnGoodsHandingId;
+    }
+
+    public void setReturnGoodsHandingId(String returnGoodsHandingId) {
+        this.returnGoodsHandingId = returnGoodsHandingId;
     }
 }

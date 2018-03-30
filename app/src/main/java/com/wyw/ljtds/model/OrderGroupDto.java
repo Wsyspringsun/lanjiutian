@@ -1,5 +1,8 @@
 package com.wyw.ljtds.model;
 
+import android.support.annotation.IntegerRes;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -7,19 +10,22 @@ import java.util.List;
  */
 
 public class OrderGroupDto {
-    private String COIN_FLG;
-    private String COST_POINT;
+    private String COIN_FLG; //1:使用 0:没有使用
+    private Integer COST_POINT = 0;
     private String ORDER_GROUP_ID;
     private String ORDER_TRADE_ID;
     private String OID_GROUP_ID;
     private String OID_GROUP_NAME;
     private String POSTAGE;
-    private String POSTAGE_FLG;
+    private String POSTAGE_FLG; //1:使用 0 : 没有使用
+    private Integer POST_NUM; //抵邮券数量
     private String RED_PACKET_ID;
     private String PREFERENTIAL_FLG;
+    private Integer PREFERENTIAL_NUM; //优惠券数量
+    private String USER_POINT;  //积分数量
     private String PREFERENTIAL_ID;
-    private String ELECTRONIC_MONEY;
-    private String ELECTRONIC_USEABLE_MONEY;
+    private Integer ELECTRONIC_MONEY;
+    private Integer ELECTRONIC_USEABLE_MONEY; //电子币数量
     private String COUPON_MONEY;
     private String COUPON_USEABLE_MONEY;
     private String GROUP_EXCHANGE_QUANLITY;
@@ -27,10 +33,11 @@ public class OrderGroupDto {
     private String RED_PACKET_USEABLE_MONEY;
     private String GROUP_MONEY_ALL;
     private String GROUP_STATUS;
+    private BigDecimal GROUP_PAY_AMOUNT;
     private String GROUP_REMARKS;
     private String INVOICE_FLG;
     private String INVOICE_TYPE;
-    private String INVOICE_ORG;
+    private String INVOICE_ORG; //1:公司；0:个人
     private String INVOICE_ID;
     private String INVOICE_TAX;
     private String INVOICE_TITLE;
@@ -49,6 +56,9 @@ public class OrderGroupDto {
     private String UPD_USER_ID;
     private String INS_DATE;
     private String UPD_DATE;
+    private String STATUS;
+
+    private String USER_ADDRESS_LOCATION;//目标直抵
 
     List<OrderCommDto> DETAILS; //包含的商品
 
@@ -132,19 +142,19 @@ public class OrderGroupDto {
         this.PREFERENTIAL_ID = PREFERENTIAL_ID;
     }
 
-    public String getELECTRONIC_MONEY() {
+    public Integer getELECTRONIC_MONEY() {
         return ELECTRONIC_MONEY;
     }
 
-    public void setELECTRONIC_MONEY(String ELECTRONIC_MONEY) {
+    public void setELECTRONIC_MONEY(Integer ELECTRONIC_MONEY) {
         this.ELECTRONIC_MONEY = ELECTRONIC_MONEY;
     }
 
-    public String getELECTRONIC_USEABLE_MONEY() {
+    public Integer getELECTRONIC_USEABLE_MONEY() {
         return ELECTRONIC_USEABLE_MONEY;
     }
 
-    public void setELECTRONIC_USEABLE_MONEY(String ELECTRONIC_USEABLE_MONEY) {
+    public void setELECTRONIC_USEABLE_MONEY(Integer ELECTRONIC_USEABLE_MONEY) {
         this.ELECTRONIC_USEABLE_MONEY = ELECTRONIC_USEABLE_MONEY;
     }
 
@@ -308,11 +318,11 @@ public class OrderGroupDto {
         this.UPD_DATE = UPD_DATE;
     }
 
-    public String getCOST_POINT() {
+    public Integer getCOST_POINT() {
         return COST_POINT;
     }
 
-    public void setCOST_POINT(String COST_POINT) {
+    public void setCOST_POINT(Integer COST_POINT) {
         this.COST_POINT = COST_POINT;
     }
 
@@ -386,5 +396,53 @@ public class OrderGroupDto {
 
     public void setINVOICE_ORG(String INVOICE_ORG) {
         this.INVOICE_ORG = INVOICE_ORG;
+    }
+
+    public Integer getPOST_NUM() {
+        return POST_NUM;
+    }
+
+    public void setPOST_NUM(Integer POST_NUM) {
+        this.POST_NUM = POST_NUM;
+    }
+
+    public Integer getPREFERENTIAL_NUM() {
+        return PREFERENTIAL_NUM;
+    }
+
+    public void setPREFERENTIAL_NUM(Integer PREFERENTIAL_NUM) {
+        this.PREFERENTIAL_NUM = PREFERENTIAL_NUM;
+    }
+
+    public String getUSER_POINT() {
+        return USER_POINT;
+    }
+
+    public void setUSER_POINT(String USER_POINT) {
+        this.USER_POINT = USER_POINT;
+    }
+
+    public String getUSER_ADDRESS_LOCATION() {
+        return USER_ADDRESS_LOCATION;
+    }
+
+    public void setUSER_ADDRESS_LOCATION(String USER_ADDRESS_LOCATION) {
+        this.USER_ADDRESS_LOCATION = USER_ADDRESS_LOCATION;
+    }
+
+    public String getSTATUS() {
+        return STATUS;
+    }
+
+    public void setSTATUS(String STATUS) {
+        this.STATUS = STATUS;
+    }
+
+    public BigDecimal getGROUP_PAY_AMOUNT() {
+        return GROUP_PAY_AMOUNT;
+    }
+
+    public void setGROUP_PAY_AMOUNT(BigDecimal GROUP_PAY_AMOUNT) {
+        this.GROUP_PAY_AMOUNT = GROUP_PAY_AMOUNT;
     }
 }

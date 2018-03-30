@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="xiaonengxpush">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../xiaonengChatUI/libs/xiaonengxpush.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

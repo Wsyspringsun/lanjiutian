@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x10"
                     android:layout_marginRight="@dimen/x10"
-                    android:text="颜色"
+                    android:text="@string/title_cat"
                     android:textColor="@color/font_black2"
                     android:textSize="14sp" />
 

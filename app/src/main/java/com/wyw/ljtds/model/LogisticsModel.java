@@ -8,7 +8,7 @@ public class LogisticsModel {
     private String LOGISTICS_ORDER_ID;
     private String COURIER;
     private String COURIER_MOBILE;
-    private Order ORDER;
+    private OrderGroupDto ORDER;
     private List<NodeProgress> DETAILS;
 
     public String getCOMMODITY_ORDER_ID() {
@@ -27,11 +27,11 @@ public class LogisticsModel {
         this.LOGISTICS_ORDER_ID = LOGISTICS_ORDER_ID;
     }
 
-    public Order getORDER() {
+    public OrderGroupDto getORDER() {
         return ORDER;
     }
 
-    public void setORDER(Order ORDER) {
+    public void setORDER(OrderGroupDto ORDER) {
         this.ORDER = ORDER;
     }
 
@@ -59,7 +59,7 @@ public class LogisticsModel {
         this.COURIER = COURIER;
     }
 
-    public class Order {
+    /*public class Order {
         private String STATUS;
         private BigDecimal POSTAGE;
         private String OID_GROUP_NAME;
@@ -105,7 +105,7 @@ public class LogisticsModel {
         public void setDETAILS(List<Goods> DETAILS) {
             this.DETAILS = DETAILS;
         }
-    }
+    }*/
 
     public class Goods {
         //商品id

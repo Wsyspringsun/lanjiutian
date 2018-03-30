@@ -2,6 +2,7 @@ package com.ljt.www.temp;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -79,6 +80,17 @@ public class MainActivity extends AppCompatActivity {
         getPersimmions();
 
         PullService.setServiceNotifyStat(false);
+
+
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if ("cn.jpush.android.service.PushService".equals(service.service.getClassName())) {
+                Log.e("ljt test", "test PushService run.. running...");
+            } else {
+                Log.e("ljt test", "test service run.." + service.service.getClassName() + " running...");
+            }
+        }
+
     }
 
     @Override

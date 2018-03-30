@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -30,6 +31,7 @@ import com.wyw.ljtmgr.utils.ActivityUtil;
  * A simple {@link Fragment} subclass.
  */
 public class OrderIndexFragment extends Fragment {
+    SwipeRefreshLayout srf;
     private static final String ARG_TITLE = "ARG_TITLE";
     private int[] titles = {R.string.order_new, R.string.order_running, R.string.order_completed, R.string.order_canceled, R.string.order_refund};
     private int[] drawNor = {R.drawable.ic_indingdan_nor, R.drawable.ic_jiningzhong_nor, R.drawable.ic_yiquiao_nor, R.drawable.ic_yiwancheng_nor, R.drawable.ic_shouhou_nor};
@@ -56,6 +58,7 @@ public class OrderIndexFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = getActivity().getLayoutInflater().inflate(R.layout.fragment_order_index, null);
 
+
         initView(v);
 
         return v;
@@ -68,7 +71,7 @@ public class OrderIndexFragment extends Fragment {
         loadOrder();
     }
 
-    private void loadOrder() {
+    public void loadOrder() {
         Log.e(AppConfig.TAG_ERR, "stat:" + stat);
         if (!UserBiz.isLogined()) return;
         ((BaseActivity) getActivity()).setLoding();
@@ -105,6 +108,14 @@ public class OrderIndexFragment extends Fragment {
     }
 
     private void initView(View v) {
+        srf = (SwipeRefreshLayout) v.findViewById(R.id.fragment_order_index_sr);
+        srf.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadOrder();
+                srf.setRefreshing(false);
+            }
+        });
 //        A”:新订单“B”:进行中“C”:已取消 “D”:售后 “E”：已完成
         tabLayout = (TabLayout) v.findViewById(R.id.fragment_order_index_tab);
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -175,7 +186,6 @@ public class OrderIndexFragment extends Fragment {
         ryvOrder.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
                 super.onScrollStateChanged(recyclerView, newState);
                 if (0 == newState) {
                     //0标识到达了

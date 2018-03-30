@@ -24,6 +24,7 @@
         <TextView
             android:id="@+id/item_order_submit_address_info"
             style="@style/font_ww_14"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x10"
             android:layout_toRightOf="@id/shouhuo_img"
             android:lineSpacingMultiplier="1.2"
@@ -52,7 +53,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x10"
+        android:layout_height="@dimen/vertical_margin_lg"
         android:background="@color/basebackground" />
 
 </LinearLayout>

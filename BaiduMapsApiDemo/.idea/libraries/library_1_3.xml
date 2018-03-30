@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="library-1.3">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/dc1cd0634337e7d3195cf388b5a023a7a6178304/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/dc1cd0634337e7d3195cf388b5a023a7a6178304/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.gxz.pagerslidingtabstrip/library/1.3/2356ab4f14bd85063ea7724121e1c6631428bb4/library-1.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -82,6 +82,7 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
                     orderModel.setINVOICE_TITLE("");
                     orderModel.setINVOICE_CONTENT("");
                     orderModel.setINVOICE_TYPE("");
+                    orderModel.setINVOICE_ORG("");
                     String jsonStr = GsonUtils.Bean2Json(orderModel);
                     mIntent.putExtra(TAG_ORDER, jsonStr);
                     setResult(AppConfig.IntentExtraKey.RESULT_OK, mIntent);
@@ -114,7 +115,10 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
 
             case R.id.activity_orderbill_rb_fapiao_yes:
                 orderModel.setINVOICE_FLG("1");
+
+                orderModel.setINVOICE_CONTENT("0");
                 View view = LayoutInflater.from(ActivityGoodsSubmitBill.this).inflate(R.layout.dialog_pay_bill_select, null);
+                /* 发票明细选择
                 final BottomDialog dialog = new BottomDialog(ActivityGoodsSubmitBill.this, view).setCancelable(false).show();
                 final RadioGroup dialogRgFapiao = (RadioGroup) view.findViewById(R.id.dialog_pay_bill_select_fapiao_rg);
                 RadioButton rb1 = (RadioButton) view.findViewById(R.id.fapiao_rb1);
@@ -172,7 +176,7 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
                         dialog.dissmiss();
                         rbFapiaoYes.setText(Business.mapFapiaoCatText.get(orderModel.getINVOICE_CONTENT()));
                     }
-                });
+                });*/
                 llXiangQing.setVisibility(View.VISIBLE);
                 break;
         }
@@ -183,8 +187,6 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
         super.onCreate(savedInstanceState);
 
 
-        //init view event
-        rgOrgLvl.check(R.id.dialog_pay_bill_gren);
         edCompanyId.setVisibility(View.GONE);
         rgOrgLvl.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -194,10 +196,12 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
                     case R.id.dialog_pay_bill_gongsi:
                         Log.e(AppConfig.ERR_TAG, "changge : gongsi");
                         edCompanyId.setVisibility(View.VISIBLE);
+                        orderModel.setINVOICE_ORG("1");
                         break;
                     case R.id.dialog_pay_bill_gren:
                         Log.e(AppConfig.ERR_TAG, "changge : geren");
                         edCompanyId.setVisibility(View.GONE);
+                        orderModel.setINVOICE_ORG("0");
                         break;
                 }
             }
@@ -205,6 +209,7 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
 
 
         title.setText("选择配送方式及发票");
+        rgOrgLvl.check(R.id.dialog_pay_bill_gren);
 
 
         //bind initial data to views
@@ -232,6 +237,13 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
                 edTitle.setText(orderModel.getINVOICE_TITLE());
             }
 
+            //init view event
+            if ("1".equals(orderModel.getINVOICE_ORG())) {
+                rgOrgLvl.check(R.id.dialog_pay_bill_gongsi);
+                edCompanyId.setText(orderModel.getINVOICE_TAX());
+            } else {
+                rgOrgLvl.check(R.id.dialog_pay_bill_gren);
+            }
 
         }
     }

@@ -2,12 +2,7 @@ package com.wyw.ljtmgr.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +12,7 @@ import com.springsun.appbase.adapter.DataListAdapter;
 import com.wyw.ljtmgr.R;
 import com.wyw.ljtmgr.config.AppConfig;
 import com.wyw.ljtmgr.model.OrderInfoModel;
+import com.wyw.ljtmgr.model.OrderStatus;
 import com.wyw.ljtmgr.ui.OrderDetailActivity;
 
 import utils.CommonUtil;
@@ -58,9 +54,10 @@ public class OrderListAdapter extends DataListAdapter<OrderInfoModel, RecyclerVi
 //            h.tvOrder.setText(buildOrderSpannable(data));
             h.tvOrder.setText(sb.toString());
 //            h.tvShuliang.setText(buildUserSpannable(data));
-            h.tvShuliang.setText("数量\n" + data.getExchangeQuanlity());
-            h.tvPrice.setText("￥" + CommonUtil.formatFee("" + data.getGroupPayAmount()));
-            h.tvOrderId.setText("订单:" + data.getOrderGroupId());
+            h.tvShuliang.setText(context.getString(R.string.orderlist_num, data.getExchangeQuanlity()));
+            h.tvPrice.setText(context.getString(R.string.orderlist_costmoney, CommonUtil.formatFee("" + data.getGroupPayAmount())));
+            h.tvOrderId.setText(context.getString(R.string.orderlist_orderid, data.getOrderGroupId()));
+            h.tvOrderStat.setText(OrderStatus.getStatus(data.getGroupStatus()));
             h.data = data;
         }
 
@@ -108,6 +105,7 @@ public class OrderListAdapter extends DataListAdapter<OrderInfoModel, RecyclerVi
         private final TextView tvOrder;
         private final TextView tvShuliang;
         private final TextView tvOrderId;
+        private final TextView tvOrderStat;
         private final TextView tvPrice;
         public OrderInfoModel data;
 
@@ -117,13 +115,21 @@ public class OrderListAdapter extends DataListAdapter<OrderInfoModel, RecyclerVi
             tvOrder = (TextView) itemView.findViewById(R.id.item_order_orderinfo);
             tvShuliang = (TextView) itemView.findViewById(R.id.item_order_shuliang);
             tvOrderId = (TextView) itemView.findViewById(R.id.item_order_orderid);
+            tvOrderStat = (TextView) itemView.findViewById(R.id.item_order_orderstat);
             tvPrice = (TextView) itemView.findViewById(R.id.item_order_orderprice);
         }
 
         @Override
         public void onClick(View v) {
             Log.e(AppConfig.TAG_ERR, "adapter stat:" + mstat);
-            Intent it = OrderDetailActivity.getIntent(context, mstat, data.getOrderGroupId());
+            if (data == null) return;
+            String orderid = "";
+            if (OrderInfoModel.CLASSIFY_RETURN.equals(data.getClassify())) {
+                orderid = data.getReturnGoodsHandingId();
+            } else {
+                orderid = data.getOrderGroupId();
+            }
+            Intent it = OrderDetailActivity.getIntent(context, data.getClassify(), orderid);
             context.startActivity(it);
         }
     }

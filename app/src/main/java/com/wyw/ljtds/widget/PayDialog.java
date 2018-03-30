@@ -13,6 +13,7 @@ import com.wyw.ljtds.R;
 import com.wyw.ljtds.model.OrderTrade;
 import com.wyw.ljtds.model.OrderTradeDto;
 import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.dialog.BottomDialog;
 
 import java.util.HashMap;
@@ -59,7 +60,7 @@ public class PayDialog {
         final BottomDialog dialog_pay_select = new BottomDialog(activity, viewSelOnlinePayMtd).setCancelable(false).show();
         ImageView quxiao = (ImageView) viewSelOnlinePayMtd.findViewById(R.id.quxiao);
         TextView money = (TextView) viewSelOnlinePayMtd.findViewById(R.id.money);
-        money.setText("需付款：" + orderTrade.getPayAmount() + "元");
+        money.setText("需付款：￥" + Utils.formatFee(orderTrade.getPayAmount()) + "");
         LinearLayout select1 = (LinearLayout) viewSelOnlinePayMtd.findViewById(R.id.select1);
         LinearLayout select2 = (LinearLayout) viewSelOnlinePayMtd.findViewById(R.id.select2);
         LinearLayout select3 = (LinearLayout) viewSelOnlinePayMtd.findViewById(R.id.select3);

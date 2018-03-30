@@ -1,5 +1,7 @@
 package com.wyw.ljtds.ui.cart;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.os.PersistableBundle;
@@ -55,4 +57,11 @@ public class CartActivity extends BaseActivity {
         }
         bt.commit();
     }
+
+    public static Intent getIntent(Context context) {
+        Intent it = new Intent(context, CartActivity.class);
+        it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        return it;
+    }
+
 }

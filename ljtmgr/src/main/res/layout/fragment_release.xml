@@ -50,6 +50,7 @@
                     android:id="@+id/fragment_shop_tv_shopname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin"
                     android:text="@string/shop_name"
                     android:textAlignment="center"
                     android:textColor="@color/white" />

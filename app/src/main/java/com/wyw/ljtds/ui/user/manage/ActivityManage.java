@@ -10,14 +10,17 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.AppManager;
 import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.config.PreferenceCache;
+import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.model.UserModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.user.address.ActivityAddress;
@@ -40,7 +43,7 @@ public class ActivityManage extends BaseActivity {
     @ViewInject(R.id.header_title)
     private TextView title;
     @ViewInject(R.id.sdv_item_head_img)
-    private SimpleDraweeView sdv_item_head_img;
+    private ImageView sdv_item_head_img;
     @ViewInject(R.id.name)
     private TextView name;
     @ViewInject(R.id.nicheng)
@@ -53,7 +56,7 @@ public class ActivityManage extends BaseActivity {
     private UserModel user;
 
 
-    @Event(value = {R.id.address, R.id.shiming, R.id.touxiang, R.id.header_return, R.id.guanyu, R.id.qiehuan, R.id.anquan, R.id.sdv_item_head_img, R.id.activity_manage_qrcode})
+    @Event(value = {R.id.address, R.id.shiming, R.id.touxiang, R.id.header_return, R.id.guanyu, R.id.qiehuan, R.id.anquan, R.id.sdv_item_head_img, R.id.activity_manage_rl_qrcode})
     private void onClick(View view) {
         Intent it;
         switch (view.getId()) {
@@ -77,7 +80,7 @@ public class ActivityManage extends BaseActivity {
                 }
                 break;
 
-            case R.id.activity_manage_qrcode:
+            case R.id.activity_manage_rl_qrcode:
                 String jsonUser = GsonUtils.Bean2Json(user);
                 it = QrCodeActivity.getIntent(this, jsonUser);
                 startActivity(it);
@@ -111,6 +114,7 @@ public class ActivityManage extends BaseActivity {
                         PreferenceCache.putToken("");
                         PreferenceCache.putUsername("");
                         PreferenceCache.putPhoneNum("");
+                        SingleCurrentUser.updateLocation(SingleCurrentUser.bdLocation.getLatitude(),SingleCurrentUser.bdLocation.getLongitude(),SingleCurrentUser.bdLocation.getAddrStr());
                         AppConfig.currSel = AppConfig.DEFAULT_INDEX_FRAGMENT;
 
                         finish();
@@ -153,7 +157,8 @@ public class ActivityManage extends BaseActivity {
 
     private void updView() {
         name.setText("用户名：" + user.getMOBILE());
-        sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + user.getUSER_ICON_FILE_ID()));
+//        sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + user.getUSER_ICON_FILE_ID()));
+        Picasso.with(this).load(Uri.parse(AppConfig.IMAGE_PATH_LJT + user.getUSER_ICON_FILE_ID())).into(sdv_item_head_img);
 
         if (StringUtils.isEmpty(user.getNICKNAME())) {
             nicheng.setText("昵称：保密");

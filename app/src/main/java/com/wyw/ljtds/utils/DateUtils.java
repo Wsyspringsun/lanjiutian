@@ -1,7 +1,10 @@
 package com.wyw.ljtds.utils;
 
+import android.telecom.Call;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -60,6 +63,7 @@ public class DateUtils {
 
     /**
      * 格式化时间
+     *
      * @param s long类型的日期字符串
      * @return
      */
@@ -123,7 +127,8 @@ public class DateUtils {
 
     private static List<String> createdYear() {
         List<String> wheelString = new ArrayList<>();
-        for (int i = MIN_YEAR; i <= MAX_YEAR; i++) {
+        int maxyear = Calendar.getInstance().get(Calendar.YEAR);
+        for (int i = MIN_YEAR; i <= maxyear; i++) {
             wheelString.add(Integer.toString(i));
         }
         return wheelString;

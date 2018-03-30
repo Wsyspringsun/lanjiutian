@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basebackground"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/fragment_dialog_rejectreturn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x32"
+        android:layout_marginBottom="@dimen/margin"
+        android:layout_marginRight="@dimen/margin"
+        android:background="@color/trans"
+        android:scaleType="fitEnd"
+        android:src="@drawable/ic_action_cancel_solid" />
+
+
+    <EditText
+        android:id="@+id/fragment_dialog_rejectreturn_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|top"
+        android:hint="给我一个拒绝的理由,不要超过500字符"
+        android:lines="5"
+        android:maxLength="500"
+        android:text=""
+        android:textAlignment="textStart" />
+
+    <Button
+        android:id="@+id/fragment_dialog_rejectreturn_msg_btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/base_bar"
+        android:text="@string/submit" />
+
+</LinearLayout>

@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/fragment_shopgoods_ll_paixu"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x30"
         android:background="@color/white"
@@ -85,17 +86,9 @@
         android:layout_height="1dp"
         android:background="@color/gray1" />
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_shopgoods_ryv_goods"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:descendantFocusability="blocksDescendants"
-        android:orientation="vertical">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/fragment_shopgoods_ryv_goods"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-
-    </LinearLayout>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

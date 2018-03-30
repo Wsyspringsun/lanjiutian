@@ -1,18 +1,18 @@
 package com.wyw.ljtds;
 
-import android.*;
-import android.Manifest;
 import android.app.AlertDialog;
+import android.app.AppOpsManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
@@ -35,18 +35,15 @@ import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.MyLocation;
 import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.model.UpdateAppModel;
-import com.wyw.ljtds.service.LocationService;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.cart.FragmentCart;
 import com.wyw.ljtds.ui.category.FragmentCategory;
 import com.wyw.ljtds.ui.find.FragmentFind;
 import com.wyw.ljtds.ui.home.FragmentLifeIndex;
 import com.wyw.ljtds.ui.home.FragmentUserIndex;
-import com.wyw.ljtds.ui.user.ActivityLogin;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.Utils;
-import com.wyw.ljtds.widget.MyCallback;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -56,13 +53,21 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import pub.devrel.easypermissions.EasyPermissions;
+
 
 @ContentView(R.layout.activity_main)//setcontextview
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
     public static final String TAG_POSITION = "TAG_POSITION";
+
+    private static final String CHECK_OP_NO_THROW = "checkOpNoThrow";
+    private static final String OP_POST_NOTIFICATION = "OP_POST_NOTIFICATION";
     //    private IWXAPI wxApi;
     @ViewInject(R.id.home)
     private RelativeLayout home;
@@ -190,11 +195,7 @@ public class MainActivity extends BaseActivity {
 
 
         setLoding(this, false);
-        if (UserBiz.isLogined()) {
-            loadUserAddr();
-        } else {
-            ((MyApplication) this.getApplication()).locationService.registerListener(locationListner); //注销掉监听
-        }
+
 
         final IWXAPI api = WXAPIFactory.createWXAPI(this, null);
         api.registerApp(AppConfig.WEIXIN_APP_ID);
@@ -212,11 +213,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // 适配android M，检查权限
-        List<String> permissions = new ArrayList<>();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isNeedRequestPermissions(permissions)) {
-            requestPermissions(permissions.toArray(new String[permissions.size()]), 0);
-        }
+
+        //need notify
 
         ((MyApplication) getApplication()).locationService.start();// 定位SDK
 
@@ -224,26 +222,50 @@ public class MainActivity extends BaseActivity {
         if (AppConfig.currSel != -1) {
             addFragmentToStack(AppConfig.currSel);
         }
-    }
 
-    private boolean isNeedRequestPermissions(List<String> permissions) {
-        // 定位精确位置
-//        addPermission(permissions, Manifest.permission.WRITE_SETTINGS);
-        // 定位精确位置
-        addPermission(permissions, android.Manifest.permission.ACCESS_FINE_LOCATION);
-        // 存储权限
-        addPermission(permissions, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        // 读取手机状态
-        addPermission(permissions, android.Manifest.permission.READ_PHONE_STATE);
-        return permissions.size() > 0;
-    }
-
-    private void addPermission(List<String> permissionsList, String permission) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-            permissionsList.add(permission);
+        if (SingleCurrentUser.location == null) {
+            if (UserBiz.isLogined()) {
+                loadUserAddr();
+            } else {
+                ((MyApplication) this.getApplication()).locationService.registerListener(locationListner); //注销掉监听
+            }
         }
     }
+
+    /**
+     * 获取通知栏权限是否开启
+     */
+    public static boolean isNotificationEnabled(Context context) {
+        AppOpsManager mAppOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+        ApplicationInfo appInfo = context.getApplicationInfo();
+        String pkg = context.getApplicationContext().getPackageName();
+        int uid = appInfo.uid;
+
+        Class appOpsClass = null;
+      /* Context.APP_OPS_MANAGER */
+        try {
+            appOpsClass = Class.forName(AppOpsManager.class.getName());
+            Method checkOpNoThrowMethod = appOpsClass.getMethod(CHECK_OP_NO_THROW, Integer.TYPE, Integer.TYPE,
+                    String.class);
+            Field opPostNotificationValue = appOpsClass.getDeclaredField(OP_POST_NOTIFICATION);
+
+            int value = (Integer) opPostNotificationValue.get(Integer.class);
+            return ((Integer) checkOpNoThrowMethod.invoke(mAppOps, value, uid, pkg) == AppOpsManager.MODE_ALLOWED);
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
     @Override
     protected void onResume() {
@@ -402,7 +424,7 @@ public class MainActivity extends BaseActivity {
                     e.printStackTrace();
                 }
                 String version = packInfo.versionName;
-                Log.e(AppConfig.ERR_TAG, version + "; " + updateAppModel.getAndroid());
+                Log.e(AppConfig.ERR_TAG, "version:" + version + "; " + updateAppModel.getAndroid());
 //                if (!version.equals(updateAppModel.getAndroid())) {
                 if (version.compareTo(updateAppModel.getAndroid()) < 0) {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(
@@ -500,6 +522,9 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 获取登录着的地址,获得成功则使用,否则使用Location
+     */
     private void loadUserAddr() {
         new BizDataAsyncTask<List<AddressModel>>() {
             @Override
@@ -511,6 +536,7 @@ public class MainActivity extends BaseActivity {
             protected void onExecuteSucceeded(List<AddressModel> addressModels) {
                 addrlist = addressModels;
                 if (addrlist == null || addrlist.size() <= 0) {
+                    //用户没有地址,使用location
                     ((MyApplication) MainActivity.this.getApplication()).locationService.registerListener(locationListner); //注销掉监听
                 } else {
                     //设置默认地址
@@ -529,6 +555,7 @@ public class MainActivity extends BaseActivity {
                         ((MyApplication) MainActivity.this.getApplication()).locationService.registerListener(locationListner); //注销掉监听
                     } else {
                         //upd addr
+                        loc.setADDRESS_ID(model.getADDRESS_ID() + "");
                         initAddr(loc);
                         closeLoding();
                     }

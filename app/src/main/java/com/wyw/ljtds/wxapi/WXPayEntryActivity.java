@@ -56,12 +56,14 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
             if (resp.errCode == 0) {
                 Toast.makeText(this, getString(R.string.pay_result_callback_msg, "成功"), Toast.LENGTH_SHORT).show();
 
-                Intent it = new Intent(this, ActivityOrder.class);
-                startActivity(it);
-                finish();
 //                builder.setMessage(getString(R.string.pay_result_callback_msg, String.valueOf(resp.errCode)));
 //                builder.show();
+            } else if (-2 == resp.errCode) {
+                Toast.makeText(this, getString(R.string.pay_result_callback_msg, "取消支付"), Toast.LENGTH_SHORT).show();
             }
+            Intent it = new Intent(this, ActivityOrder.class);
+            startActivity(it);
+            finish();
 
         }
     }

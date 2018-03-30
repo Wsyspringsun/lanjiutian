@@ -8,17 +8,8 @@ import java.util.List;
  */
 
 public class OrderModelMedicine extends OrderGroupDto {
-    private String STATUS;
     private BigDecimal PAY_AMOUNT;
     private String PAYMENT_METHOD;
-
-    public String getSTATUS() {
-        return STATUS;
-    }
-
-    public void setSTATUS(String STATUS) {
-        this.STATUS = STATUS;
-    }
 
     public BigDecimal getPAY_AMOUNT() {
         return PAY_AMOUNT;

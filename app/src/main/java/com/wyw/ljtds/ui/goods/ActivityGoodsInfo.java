@@ -6,10 +6,13 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -61,15 +64,21 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.xiaoneng.uiapi.Ntalker;
+import cn.xiaoneng.uiapi.OnMsgUrlClickListener;
+import cn.xiaoneng.uiapi.XNClickGoodsListener;
+
 
 /**
  * Created by Administrator on 2016/12/26 0026.
  */
 //@ContentView(R.layout.activity_goods_info)
 public abstract class ActivityGoodsInfo extends BaseActivity {
+
     /**
      * 微信分享使用
      **/
+
     private IWXAPI wxApi;
     private static final int MMAlertSelect1 = 0; //选择分享的渠道
     private static final int MMAlertSelect2 = 1;
@@ -100,7 +109,7 @@ public abstract class ActivityGoodsInfo extends BaseActivity {
 
 
     AbsoluteSizeSpan ass = new AbsoluteSizeSpan(20);
-    private static final int THUMB_SIZE = 150;
+    private static final int THUMB_SIZE = 90;
     //    public MedicineDetailsModel model;
     private List<Fragment> fragmentList = new ArrayList<>();
     private Dialog dialogConsult;
@@ -132,10 +141,20 @@ public abstract class ActivityGoodsInfo extends BaseActivity {
         fragmentList.add(getMainFragment());
         fragmentList.add(fragmentGoodsDetail);
         fragmentList.add(fragmentGoodsEvaluate);
+        nsvpContent.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return fragmentList.get(position);
+            }
 
-        nsvpContent.setAdapter(new ItemTitlePagerAdapter(getSupportFragmentManager(),
+            @Override
+            public int getCount() {
+                return fragmentList.size();
+            }
+        });
+        /*nsvpContent.setAdapter(new ItemTitlePagerAdapter(getSupportFragmentManager(),
                 fragmentList, new String[]{"商品", "详情", "评价"}));
-        nsvpContent.setOffscreenPageLimit(3);
+        nsvpContent.setOffscreenPageLimit(3);*/
     }
 
     protected abstract OrderTradeDto info2Order();
@@ -150,6 +169,7 @@ public abstract class ActivityGoodsInfo extends BaseActivity {
         wxApi = ((MyApplication) getApplication()).wxApi;
 
         initIconBtnStat();
+
 
 
         //设置图标
@@ -185,6 +205,7 @@ public abstract class ActivityGoodsInfo extends BaseActivity {
                 null, new MMAlert.OnAlertSelectId() {
                     @Override
                     public void onClick(int whichButton) {
+                        Utils.log("whichButton:" + whichButton + ";imgUrl:" + imgUrl);
                         WXMediaMessage msg = null;
                         SendMessageToWX.Req req = null;
 
@@ -195,10 +216,12 @@ public abstract class ActivityGoodsInfo extends BaseActivity {
                         msg.description = description;
                         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.send_music_thumb);
                         Bitmap.CompressFormat cprsFormat = Bitmap.CompressFormat.PNG;
+                        msg.thumbData = Utils.bmpToByteArray(cprsFormat, bmp, true);
                         if (!StringUtils.isEmpty(imgUrl)) {
                             int fixIdx = imgUrl.lastIndexOf('.');
                             if (fixIdx > 0) {
                                 String fix = imgUrl.substring(fixIdx);
+                                Utils.log("fix:" + fix);
                                 if ("jpg".equals(fix.toLowerCase())) {
                                     cprsFormat = Bitmap.CompressFormat.JPEG;
                                 }
@@ -214,8 +237,9 @@ public abstract class ActivityGoodsInfo extends BaseActivity {
 
                         if (bmp != null) {
                             Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
-                            bmp.recycle();
+                            Utils.log("thumbBmp:" + thumbBmp.getByteCount());
                             msg.thumbData = Utils.bmpToByteArray(cprsFormat, thumbBmp, true);
+                            bmp.recycle();
                         } else {
                         }
 
@@ -320,7 +344,7 @@ public abstract class ActivityGoodsInfo extends BaseActivity {
                     v.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent it = new Intent(ActivityGoodsInfo.this, CartActivity.class);
+                            Intent it = CartActivity.getIntent(ActivityGoodsInfo.this);
                             startActivity(it);
                         }
                     });

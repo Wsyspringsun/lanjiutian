@@ -3,8 +3,11 @@ package com.wyw.ljtds.widget.goodsinfo;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.wyw.ljtds.config.AppConfig;
 
 /**
  * 提供禁止滑动功能的自定义ViewPager
@@ -57,7 +60,7 @@ public class NoScrollViewPager extends ViewPager {
         }
 
         heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
-
+        Log.e(AppConfig.ERR_TAG, "heightMeasureSpec:" + heightMeasureSpec + ",,height:" + height);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 

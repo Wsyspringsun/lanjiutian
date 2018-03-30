@@ -20,6 +20,7 @@ import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.ui.TestActivity;
 import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.ui.goods.SelDefaultAddressFragment;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.Utils;
@@ -34,6 +35,8 @@ import org.xutils.view.annotation.ViewInject;
 
 @ContentView(R.layout.activity_regist)
 public class ActivityRegist extends BaseActivity {
+    private static final int REQUEST_REGISTED = 0;
+    private static final String DIALOG_EXIST_REG = "DIALOG_EXIST_REG";
     @ViewInject(R.id.header_title)
     private TextView title;
     @ViewInject(R.id.header_return_text)
@@ -50,10 +53,7 @@ public class ActivityRegist extends BaseActivity {
                     ToastUtil.show(this, getResources().getString(R.string.phone_error));
                     return;
                 }
-
-                Intent in = new Intent(this, TestActivity.class);
-                in.putExtra(AppConfig.IntentExtraKey.PHONE_NUMBER, ed_phone.getText().toString().trim());
-                startActivity(in);
+                getCode(ed_phone.getText().toString().trim());
                 break;
 
             case R.id.header_return:
@@ -71,5 +71,33 @@ public class ActivityRegist extends BaseActivity {
 
     }
 
+    private void getCode(final String phone) {
+        setLoding(this, false);
+        new BizDataAsyncTask<String>() {
+            @Override
+            protected String doExecute() throws ZYException, BizFailure {
+                return UserBiz.VerificationCode(phone, "0");
+            }
+
+            @Override
+            protected void onExecuteSucceeded(String s) {
+                closeLoding();
+                Log.e(AppConfig.ERR_TAG, "getcode s:" + s);
+                Intent in = new Intent(ActivityRegist.this, ActivityRegist1.class);
+                in.putExtra(AppConfig.IntentExtraKey.PHONE_NUMBER, ed_phone.getText().toString().trim());
+                startActivity(in);
+            }
+
+            @Override
+            protected void OnExecuteFailed() {
+                Log.e(AppConfig.ERR_TAG, "getcode OnExecuteFailed");
+
+                ExistUserPhoneDialogFragment frag = ExistUserPhoneDialogFragment.newInstance(ed_phone.getText().toString().trim());
+//                frag.setTargetFragment(ActivityRegist.this, REQUEST_REGISTED);
+                frag.show(ActivityRegist.this.getSupportFragmentManager(), DIALOG_EXIST_REG);
+                closeLoding();
+            }
+        }.execute();
+    }
 
 }

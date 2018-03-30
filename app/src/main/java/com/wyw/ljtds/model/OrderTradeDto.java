@@ -7,6 +7,7 @@ import java.util.List;
  * 整个交易 order
  */
 public class OrderTradeDto {
+
     private String COIN_FLG; //是否使用电子币
     private String COST_POINT; //使用积分数量
     private String DISTRIBUTION_DATE_END; //派送时间截止
@@ -26,6 +27,7 @@ public class OrderTradeDto {
     private String USABLE_AMOUNT; //可用的电子币额度
     private String LOCATION;
     private String USER_ADDRESS_ID; //客户地址概要
+    private String ADDRESS_ID; //地址的id
     private String USER_POINT; //客户积分数量
     private String USER_ADDRESS_LOCATION;
     private AddressModel USER_ADDRESS; //客户 地址
@@ -213,5 +215,13 @@ public class OrderTradeDto {
 
     public void setPOSTAGE_ALL(String POSTAGE_ALL) {
         this.POSTAGE_ALL = POSTAGE_ALL;
+    }
+
+    public String getADDRESS_ID() {
+        return ADDRESS_ID;
+    }
+
+    public void setADDRESS_ID(String ADDRESS_ID) {
+        this.ADDRESS_ID = ADDRESS_ID;
     }
 }

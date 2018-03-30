@@ -26,6 +26,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.gson.JsonSyntaxException;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.unionpay.UPPayAssistEx;
@@ -43,6 +44,7 @@ import com.wyw.ljtds.model.OrderTrade;
 import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.ui.goods.ActivityGoodsSubmit;
 import com.wyw.ljtds.utils.GsonUtils;
+import com.wyw.ljtds.utils.PayUtil;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.Utils;
@@ -162,6 +164,9 @@ public class FragmentOrderList extends BaseFragment {
                                     payModel = new PayModel();
                                     payModel.setORDER_TRADE_ID(order.getOrderTradeId());
                                     payModel.setPAYMENT_METHOD(order.getPaymentMethod());
+                                    payModel.setPAYMENT_METHOD(order.getPaymentMethod());
+                                    payModel.setIp(Utils.getIPAddress(getActivity()));
+                                    payModel.setDevice(Utils.getImei(getActivity()));
                                     goPay(GsonUtils.Bean2Json(payModel));
                                 }
 
@@ -538,7 +543,7 @@ public class FragmentOrderList extends BaseFragment {
             }
             baseViewHolder.setText(R.id.item_order_group_status, status);
 //                    .setVisible(R.id.anniu, true)
-            baseViewHolder.setText(R.id.item_order_group_tv_cost, "共计" + orderModelMedicine.getGROUP_EXCHANGE_QUANLITY() + "件商品" + "￥" + orderModelMedicine.getPAY_AMOUNT());
+            baseViewHolder.setText(R.id.item_order_group_tv_cost, "共计" + orderModelMedicine.getGROUP_EXCHANGE_QUANLITY() + "件商品" + "￥" + orderModelMedicine.getGROUP_PAY_AMOUNT());
 
             RecyclerView goods = baseViewHolder.getView(R.id.goods);
             goods.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -581,82 +586,30 @@ public class FragmentOrderList extends BaseFragment {
         new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
+                Utils.log("data:" + data);
                 return GoodsBiz.onlinePay(data);
             }
 
             @Override
-            protected void onExecuteSucceeded(String data) {
+            protected void onExecuteSucceeded(String rltData) {
                 closeLoding();
-                Utils.log(data);
-                final OnlinePayModel aliPay;
-                final String orderInfo;
+                Map dataMap;
+                Map daraResult = null;
+                try {
+                    dataMap = GsonUtils.Json2Bean(rltData, HashMap.class);
+                    daraResult = (Map) dataMap.get("result");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    Utils.log("JsonSyntaxException:" + ex.getMessage());
+                    ToastUtil.show(getActivity(), "服务器数据格式有错误");
+                }
+                PayUtil payUtil = Utils.getPayUtilInstance(getActivity(), daraResult);
                 if (payModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_WECHAT)) {
-                    setLoding(getActivity(), false);
-                    HashMap<String, String> wechatData = GsonUtils.Json2Bean(data, HashMap.class);
-                    IWXAPI wxApi = ((MyApplication) (getActivity().getApplication())).wxApi;
-                    PayReq request = new PayReq();
-                    request.appId = AppConfig.WEIXIN_APP_ID;
-                    request.partnerId = "" + wechatData.get("mch_id");
-                    request.prepayId = "" + wechatData.get("prepay_id");
-                    request.packageValue = "Sign=WXPay";
-                    request.nonceStr = "" + wechatData.get("nonce_str");
-                    request.timeStamp = System.currentTimeMillis() + "";
-                    request.sign = "" + wechatData.get("sign");
-                    Utils.log("..............................................Begin send Req to Tencent" + GsonUtils.Bean2Json(request));
-                    wxApi.sendReq(request);
+                    payUtil.pay4Wechat();
                 } else if (payModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_ALI)) {
-                    //支付宝
-                    aliPay = GsonUtils.Json2Bean(data, OnlinePayModel.class);
-                    orderInfo = aliPay.getPay();
-                    if (!StringUtils.isEmpty(orderInfo)) {
-                        Runnable payRunnable = new Runnable() {
-
-                            @Override
-                            public void run() {
-                                //支付宝
-                                PayTask alipay = new PayTask(getActivity());
-                                Map<String, String> result = alipay.payV2(orderInfo, true);
-
-                                Message msg = new Message();
-                                msg.what = ALI_PAY;
-                                msg.obj = result;
-                                mHandler.sendMessage(msg);
-                            }
-                        };
-
-                        Thread payThread = new Thread(payRunnable);
-                        payThread.start();
-
-
-                    }
+                    payUtil.pay4Ali(mHandler);
                 } else if (payModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_UNION)) {
-                    //银联
-                    //union pay
-//                    Runnable payRunnable = new Runnable() {
-//
-//                        @Override
-//                        public void run() {
-                    aliPay = GsonUtils.Json2Bean(data, OnlinePayModel.class);
-                    orderInfo = aliPay.getPay();
-                    Log.e(AppConfig.ERR_TAG, orderInfo);
-//                    mLoadingDialog = ProgressDialog.show(ActivityGoodsSubmit.this, // context
-//                            "", // title
-//                            "正在努力加载,请稍候...", // message
-//                            true); // 进度是否是不确定的，这只和创建进度条有关
-
-                    //调用银联控件
-                    if (!StringUtils.isEmpty(orderInfo)) {
-                        jsonUnionOrder = orderInfo;
-                        Map m = GsonUtils.Json2Bean(jsonUnionOrder, Map.class);
-                        String tn = (String) m.get("tn");
-//                        Log.e("+++++",tn) ;
-                        UPPayAssistEx.startPay(getActivity(), null, null, tn, "00");
-                    }
-//                        }
-//                    };
-//
-//                    Thread payThread = new Thread( payRunnable );
-//                    payThread.start();
+                    payUtil.pay4Union();
                 } else {
                 }
 
@@ -825,7 +778,7 @@ public class FragmentOrderList extends BaseFragment {
                     Log.e("reslut", resultInfo);
 
                     if (!StringUtils.isEmpty(resultInfo)) {
-                        ActivityGoodsSubmit.AliResult aliResult = GsonUtils.Json2Bean(resultInfo, ActivityGoodsSubmit.AliResult.class);
+                        PayUtil.AliResult aliResult = GsonUtils.Json2Bean(resultInfo, PayUtil.AliResult.class);
                         aliResult.setORDER_TRADE_ID(payModel.getORDER_TRADE_ID());
 
                         String json = GsonUtils.Bean2Json(aliResult);
@@ -873,7 +826,10 @@ public class FragmentOrderList extends BaseFragment {
                         // 建议通过商户后台查询支付结果
                         ToastUtil.show(getActivity(), getResources().getString(R.string.pay_fail));
                     }
-                } catch (JSONException e) {
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Utils.log("JsonSyntaxException:" + e.getMessage());
+                    ToastUtil.show(getActivity(), "服务器数据格式有错误");
                 }
             } else {
                 // 未收到签名信息
@@ -882,7 +838,7 @@ public class FragmentOrderList extends BaseFragment {
             }
 
             if (!StringUtils.isEmpty(result)) {
-                ActivityGoodsSubmit.UnionResult unionResult = GsonUtils.Json2Bean(result, ActivityGoodsSubmit.UnionResult.class);
+                PayUtil.UnionResult unionResult = GsonUtils.Json2Bean(result, PayUtil.UnionResult.class);
                 unionResult.setORDER_TRADE_ID(payModel.getORDER_TRADE_ID());
 
                 String json = GsonUtils.Bean2Json(unionResult);
@@ -929,6 +885,8 @@ public class FragmentOrderList extends BaseFragment {
     public class PayModel {
         private String ORDER_TRADE_ID;
         private String PAYMENT_METHOD;
+        private String device;
+        private String ip;
 
         public String getORDER_TRADE_ID() {
             return ORDER_TRADE_ID;
@@ -944,6 +902,22 @@ public class FragmentOrderList extends BaseFragment {
 
         public void setPAYMENT_METHOD(String PAYMENT_METHOD) {
             this.PAYMENT_METHOD = PAYMENT_METHOD;
+        }
+
+        public String getIp() {
+            return ip;
+        }
+
+        public void setIp(String ip) {
+            this.ip = ip;
+        }
+
+        public String getDevice() {
+            return device;
+        }
+
+        public void setDevice(String device) {
+            this.device = device;
         }
     }
 

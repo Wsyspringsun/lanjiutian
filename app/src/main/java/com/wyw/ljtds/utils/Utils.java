@@ -647,4 +647,9 @@ public class Utils {
                 ((ip >> 16) & 0xFF) + "." +
                 (ip >> 24 & 0xFF);
     }
+
+    public static PayUtil getPayUtilInstance(Activity context,Map data) {
+        PayUtil instance = new PayUtil(context,data);
+        return instance;
+    }
 }

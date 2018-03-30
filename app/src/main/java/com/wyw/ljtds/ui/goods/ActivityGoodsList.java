@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,12 +14,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.CategoryBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
@@ -26,6 +29,7 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.CommodityListModel;
+import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.home.ActivitySearch;
 import com.wyw.ljtds.ui.user.ActivityMessage;
@@ -40,6 +44,8 @@ import org.xutils.view.annotation.ViewInject;
 
 import java.util.List;
 
+import static com.wyw.ljtds.adapter.goodsinfo.MedicineItemAdapter1.RESIZE;
+
 /**
  * Created by Administrator on 2016/12/27 0027.
  */
@@ -47,12 +53,18 @@ import java.util.List;
 @ContentView(R.layout.activity_goods_list)
 public class ActivityGoodsList extends BaseActivity {
     private static final String TAG_TYPE_ID = "com.wyw.ljtds.ui.goods.ActivityGoodsList.TAG_TYPE_ID";
+    @ViewInject(R.id.activity_goods_list_sr)
+    SwipeRefreshLayout srl;
     @ViewInject(R.id.recyclerView)
     private RecyclerView recyclerView;
     @ViewInject(R.id.back)
     private ImageView back;
+    @ViewInject(R.id.zxing)
+    private LinearLayout zxing;
     @ViewInject(R.id.edHeader)
     private TextView search;
+    @ViewInject(R.id.ll_message)
+    private LinearLayout llMessage;
     @ViewInject(R.id.xiaoxi)
     private ImageView image;
     @ViewInject(R.id.paixu1_tv)
@@ -68,6 +80,8 @@ public class ActivityGoodsList extends BaseActivity {
     @ViewInject(R.id.paixu4_tv)
     private TextView paixu4_tv;
 
+    @ViewInject(R.id.main_header_location)
+    TextView tvLocation;
 
     //无数据时的界面
     private View noData;
@@ -158,7 +172,13 @@ public class ActivityGoodsList extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getlist(classId, true, true, "", keyword);
+                srl.setRefreshing(false);
+            }
+        });
         keyword = getIntent().getStringExtra("search");
         if (!StringUtils.isEmpty(keyword)) {
             search.setText(keyword);
@@ -168,7 +188,6 @@ public class ActivityGoodsList extends BaseActivity {
         if (StringUtils.isEmpty(classId)) {
             classId = getIntent().getStringExtra(TAG_TYPE_ID);
         }
-        setLoding(this, false);
         getlist(classId, true, true, "", keyword);
 
 
@@ -198,11 +217,16 @@ public class ActivityGoodsList extends BaseActivity {
         });
         recyclerView.setAdapter(adapter);
 
+        zxing.setVisibility(View.GONE);
+        llMessage.setVisibility(View.GONE);
+        back.setVisibility(View.VISIBLE);
+        setLocation();
     }
 
     BizDataAsyncTask<List<CommodityListModel>> getListTask;
 
     private void getlist(final String classid, final boolean loadmore, final boolean refresh, final String orderby, final String keyword) {
+        setLoding(this, false);
         getListTask = new BizDataAsyncTask<List<CommodityListModel>>() {
             @Override
             protected List<CommodityListModel> doExecute() throws ZYException, BizFailure {
@@ -280,11 +304,13 @@ public class ActivityGoodsList extends BaseActivity {
             baseViewHolder.setText(R.id.goods_title, StringUtils.deletaFirst(commodityListModel.getTitle()))
                     .setText(R.id.money, commodityListModel.getCostMoney() + "");
 
-            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_goods_grid_sdv);
+//            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_goods_grid_sdv);
+            ImageView goods_img = baseViewHolder.getView(R.id.item_goods_grid_sdv);
             if (StringUtils.isEmpty(commodityListModel.getImgPath())) {
-                goods_img.setImageURI(Uri.parse(""));
             } else {
-                goods_img.setImageURI(Uri.parse("http://www.lanjiutian.com/upload/images" + commodityListModel.getImgPath()));
+//                goods_img.setImageURI(Uri.parse("http://www.lanjiutian.com/upload/images" + commodityListModel.getImgPath()));
+//                goods_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + commodityListModel.getImgPath()));
+                Picasso.with(mContext).load(Uri.parse(AppConfig.IMAGE_PATH_LJT + commodityListModel.getImgPath())).resize(RESIZE, RESIZE).into(goods_img);
             }
 
         }
@@ -299,5 +325,11 @@ public class ActivityGoodsList extends BaseActivity {
         paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_3));
         paixu4_tv.setTextColor(getResources().getColor(R.color.font_black2));
         isRise = true;
+    }
+
+    private void setLocation() {
+        if (SingleCurrentUser.location != null) {
+            tvLocation.setText(SingleCurrentUser.location.getAddrStr());
+        }
     }
 }

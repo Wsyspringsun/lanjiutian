@@ -13,21 +13,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
 import com.wyw.ljtds.R;
-import com.wyw.ljtds.biz.biz.UserBiz;
-import com.wyw.ljtds.biz.exception.BizFailure;
-import com.wyw.ljtds.biz.exception.ZYException;
-import com.wyw.ljtds.biz.task.BizDataAsyncTask;
-import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.MyLocation;
 import com.wyw.ljtds.model.SingleCurrentUser;
-import com.wyw.ljtds.ui.base.BaseActivity;
-import com.wyw.ljtds.ui.base.BaseFragment;
-import com.wyw.ljtds.utils.ToastUtil;
-import com.wyw.ljtds.utils.Utils;
 
 import java.util.List;
 

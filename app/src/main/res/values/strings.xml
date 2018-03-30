@@ -1,4 +1,11 @@
 <resources>
+    <!--注册页面-->
+    <string name="reg_title">用户注册</string>
+    <string name="reg_to_login">直接登录</string>
+    <string name="reg_to_find_pwd">找回密码</string>
+    <string name="reg_warning_phone_exist">手机号%s已注册过会员</string>
+    <string name="reg_warning_forget_pwd">忘记密码</string>
+
     <!-- main -->
     <string name="app_name">蓝九天</string>
     <string name="home">生活馆</string>
@@ -228,7 +235,7 @@
     <string name="order_point_info">医药馆药品统一包邮。生活馆商品市区满38元包邮，38元以下邮费3元。县区满58元包邮，58元以下邮费5元。</string>
 
 
-    消费1元送1积分，300积分抵1元现金，消费可用600积分。
+    <!--消费1元送1积分，300积分抵1元现金，消费可用600积分。-->
     <!-- 物流 -->
     <string name="logistic_null">没有获取物流信息</string>
     <string name="title_activity_web_show">WebShowActivity</string>
@@ -258,7 +265,7 @@
     <string name="confirm_order_del">要删除订单吗?</string>
     <string name="nil">未知</string>
     <string name="order_dianzibi">电子币抵扣</string>
-    <string name="postage_flg_display">(使用了牴邮券)</string>
+    <string name="postage_flg_display">(使用了抵邮券)</string>
     <string name="agree_license">请您同意协议</string>
     <string name="use_dianzibi_refuse">拒绝使用电子币</string>
     <string name="use_youfeiquan_refuse">拒绝使用邮费抵用券</string>
@@ -307,4 +314,20 @@
 
     <string name="launch_wx">启动微信</string>
     <string name="order_stat_return">退换货</string>
+    <string name="order_stat_applyreturned">申请退换货</string>
+    <string name="order_stat_agreereturned">同意退换货</string>
+    <string name="order_stat_refusereturned">拒绝退换货</string>
+    <string name="order_stat_returned">已退货</string>
+    <string name="order_stat_refunded">已退款</string>
+    <string name="xiaoneng_ljt_kefu">蓝九天客服</string>
+    <string name="xiaoneng_ljt_yaoshi">蓝九天药师</string>
+    <string name="tousu">投诉</string>
+    <string name="title_return">退换货</string>
+    <string name="title_view_detail">查看详情</string>
+    <string name="money_renminbi">￥%s</string>
+    <string name="discount_point_info">医药馆商品10元起送，1公里内免费派送，5公里内满38元包邮，详情见《帮助中心--物流配送--配送说明》。  医药馆消费1元赠送1积分，100积分可抵1元，每笔订单最多可用200积分。</string>
+    <string name="title_cat">类别</string>
+    <string name="title_size">规格</string>
+    <string name="real_name_protocal">实名认证后，您的账户将能得到更完整的保护，支付更安全</string>
+    <string name="medicine_info_busvalid_no">该店休息中,暂时无法为您服务</string>
 </resources>

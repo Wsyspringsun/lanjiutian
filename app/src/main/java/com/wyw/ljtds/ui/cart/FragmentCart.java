@@ -4,8 +4,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,11 +24,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.adapter.DataListAdapter;
@@ -77,7 +81,8 @@ public class FragmentCart extends BaseFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-
+    @ViewInject(R.id.fragment_cart_hader)
+    RelativeLayout rlCartHeader;
     @ViewInject(R.id.exListView)
     private RecyclerView recyclerView;
     //    @ViewInject(R.id.all_chekbox)
@@ -93,7 +98,9 @@ public class FragmentCart extends BaseFragment {
     @ViewInject(R.id.fragment_user_nologin)
     private LinearLayout layoutNologin;
     @ViewInject(R.id.fragment_user_logined)
-    private LinearLayout layoutlogin;
+    LinearLayout layoutlogin;
+    @ViewInject(R.id.fragment_cart_srf)
+    private SwipeRefreshLayout srf;
 
     private int totalCount = 0;// 购买的商品总数量
     //无数据时的界面
@@ -168,6 +175,7 @@ public class FragmentCart extends BaseFragment {
 
                 checkno = true;
                 OrderCommDto o = new OrderCommDto();
+                o.setCOMMODITY_ORDER_ID(commItem.getCOMMODITY_ORDER_ID());
                 o.setEXCHANGE_QUANLITY(commItem.getEXCHANGE_QUANLITY());
                 o.setCOMMODITY_COLOR(commItem.getCOMMODITY_COLOR());
                 o.setCOMMODITY_SIZE(commItem.getCOMMODITY_SIZE());
@@ -196,6 +204,11 @@ public class FragmentCart extends BaseFragment {
         ot.setINS_USER_ID(first);
         ot.setLAT(SingleCurrentUser.location.getLatitude() + "");
         ot.setLNG(SingleCurrentUser.location.getLongitude() + "");
+        String addrId = "";
+        if (!StringUtils.isEmpty(SingleCurrentUser.location.getADDRESS_ID())) {
+            addrId = SingleCurrentUser.location.getADDRESS_ID();
+        }
+        ot.setADDRESS_ID(addrId);
 
         return ot;
     }
@@ -249,6 +262,18 @@ public class FragmentCart extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        if (getActivity() instanceof CartActivity) {
+            rlCartHeader.setVisibility(View.GONE);
+        } else {
+            rlCartHeader.setVisibility(View.VISIBLE);
+        }
+        srf.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                showCart();
+                srf.setRefreshing(false);
+            }
+        });
         //添加登录事件
         layoutNologin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -317,6 +342,11 @@ public class FragmentCart extends BaseFragment {
             if (holder instanceof ShoppingcartGroupHolder) {
                 ShoppingCartGroupModel group = list.get(position);
                 ShoppingcartGroupHolder h = (ShoppingcartGroupHolder) holder;
+
+                ImageView imgGroup = (ImageView) h.itemView.findViewById(R.id.iv_source_image);
+                if (AppConfig.GROUP_LJT.equals(group.getINS_USER_ID())) {
+                    imgGroup.setImageDrawable(ActivityCompat.getDrawable(getActivity(), R.drawable.ic_biaozhi));
+                }
                 h.group = group;
                 h.tvName.setText(group.getBUSNAME());
                 h.tvBaoyou.setText("满" + group.getBAOYOU() + "包邮");
@@ -382,8 +412,6 @@ public class FragmentCart extends BaseFragment {
             });
 
 
-            ImageView imgGroup = (ImageView) itemView.findViewById(R.id.iv_source_image);
-            imgGroup.setImageDrawable(ActivityCompat.getDrawable(getActivity(), R.drawable.ic_biaozhi));
 //            Picasso.with(getActivity()).load(Uri.parse(g))
             tvName = (TextView) itemView.findViewById(R.id.tv_source_name);
             tvBaoyou = (TextView) itemView.findViewById(R.id.item_shpcart_group_postage);
@@ -460,7 +488,7 @@ public class FragmentCart extends BaseFragment {
         final ImageView btnEdit;
         final LinearLayout rlEdit;
         final LinearLayout rlShow;
-        SimpleDraweeView simpleDraweeView;
+        ImageView simpleDraweeView;
 
         public CartProductHolder(View itemView) {
             super(itemView);
@@ -468,7 +496,7 @@ public class FragmentCart extends BaseFragment {
             checkBox = (CheckBox) itemView.findViewById(R.id.item_shopcart_product_chk);
             tvInfo = (TextView) itemView.findViewById(R.id.item_shopcart_product_tv_info);
             tvNum = (TextView) itemView.findViewById(R.id.item_shopcart_product_tv_num);
-            simpleDraweeView = (SimpleDraweeView) itemView.findViewById(R.id.iv_adapter_list_pic);
+            simpleDraweeView = (ImageView) itemView.findViewById(R.id.iv_adapter_list_pic);
             btnEdit = (ImageView) itemView.findViewById(R.id.item_shopcart_product_btn_edit);
             btnSave = (Button) itemView.findViewById(R.id.item_shopcart_product_btn_save);
             rlEdit = (LinearLayout) itemView.findViewById(R.id.item_shopcart_product_rl_edit);
@@ -495,20 +523,26 @@ public class FragmentCart extends BaseFragment {
                 case R.id.item_shopcart_product_btn_save:
                     rlEdit.setVisibility(View.GONE);
                     rlShow.setVisibility(View.VISIBLE);
-                    calculate();
-                    doUpdate();
+
+                    if (btnNum.getNumber() != itemData.getEXCHANGE_QUANLITY()) {
+                        itemData.setEXCHANGE_QUANLITY(btnNum.getNumber());
+                        calculate();
+                        doUpdate();
+                    }
                     break;
                 case R.id.item_shopcart_product_chk:
                     itemData.checed = checkBox.isChecked();
                     calculate();
                     break;
                 default:
-                    if (AppConfig.GROUP_LJT.equals(itemData.getINS_USER_ID())) {
-                        Intent it = ActivityMedicinesInfo.getIntent(getActivity(), itemData.getCOMMODITY_ID(), itemData.getBUSNO());
-                        startActivity(it);
-                    } else {
-                        Intent it = ActivityLifeGoodsInfo.getIntent(getActivity(), itemData.getCOMMODITY_ID());
-                        startActivity(it);
+                    if (rlShow.getVisibility() == View.VISIBLE) {
+                        if (AppConfig.GROUP_LJT.equals(itemData.getINS_USER_ID())) {
+                            Intent it = ActivityMedicinesInfo.getIntent(getActivity(), itemData.getCOMMODITY_ID(), itemData.getBUSNO());
+                            startActivity(it);
+                        } else {
+                            Intent it = ActivityLifeGoodsInfo.getIntent(getActivity(), itemData.getCOMMODITY_ID());
+                            startActivity(it);
+                        }
                     }
                     break;
             }
@@ -516,7 +550,7 @@ public class FragmentCart extends BaseFragment {
 
         @Override
         public void OnNumberChange(int num) {
-            itemData.setEXCHANGE_QUANLITY(num);
+//            itemData.setEXCHANGE_QUANLITY(num);
         }
     }
 
@@ -559,10 +593,13 @@ public class FragmentCart extends BaseFragment {
 
                 vh.itemData = goods;
 
-                String spec = "规格：" + goods.getCOMMODITY_SIZE() + "\n",
-//                        name = goods.getCOMMODITY_NAME() + "\n\n",
-                        name = StringUtils.deletaFirst(goods.getWARENAME()) + "\n\n",
+                String name = StringUtils.deletaFirst(goods.getWARENAME()) + "\n\n",
                         price = "￥" + Utils.formatFee(goods.getCOST_MONEY());
+
+                String spec = "规格：" + goods.getCOMMODITY_SIZE() + "\n";
+                if (!AppConfig.GROUP_LJT.equals(goods.getINS_USER_ID())) {
+                    spec = getString(R.string.title_cat) + "：" + goods.getCOMMODITY_COLOR() + "," + spec;
+                }
 
                 StringBuilder sb = new StringBuilder().append(name).append(spec).append(price);
                 String[] strArr = new String[]{name, spec, price};
@@ -577,12 +614,10 @@ public class FragmentCart extends BaseFragment {
                     start += strArr[i].length();
                 }
                 vh.tvInfo.setText(sbs);
-                vh.simpleDraweeView.setImageURI(Uri.parse(goods.getIMG_PATH()));
+                Picasso.with(getActivity()).load(Uri.parse(goods.getIMG_PATH())).into(vh.simpleDraweeView);
                 vh.checkBox.setChecked(goods.checed);
                 vh.btnNum.setCurrentNumber(goods.getEXCHANGE_QUANLITY());
                 vh.tvNum.setText("x" + goods.getEXCHANGE_QUANLITY());
-
-
             }
         }
     }
@@ -636,33 +671,36 @@ public class FragmentCart extends BaseFragment {
      */
     private void calculate() {
         if (cartModel == null) return;
-        if (cartModel.getDETAILS() == null || cartModel.getDETAILS().size() <= 0) return;
-
         DecimalFormat df = new DecimalFormat("#.#");
         //cul total price
         BigDecimal totalPrice = new BigDecimal(0);
         List<ShoppingCartGroupModel> shops = cartModel.getDETAILS();
-        for (int i = 0; i < shops.size(); i++) {
-            ShoppingCartGroupModel shopItem = shops.get(i);
-            List<ShoppingCartMedicineModel> goods = shopItem.getDETAILS();
-            if (goods == null || goods.size() <= 0) continue;
-            BigDecimal shopTotal = new BigDecimal(0);
-            for (int j = 0; j < goods.size(); j++) {
-                ShoppingCartMedicineModel goodsItem = goods.get(j);
-                if (goodsItem == null) continue;
+        if (shops != null) {
+            for (int i = 0; i < shops.size(); i++) {
+                ShoppingCartGroupModel shopItem = shops.get(i);
+                List<ShoppingCartMedicineModel> goods = shopItem.getDETAILS();
+                if (goods == null || goods.size() <= 0) continue;
+                BigDecimal shopTotal = new BigDecimal(0);
+                for (int j = 0; j < goods.size(); j++) {
+                    ShoppingCartMedicineModel goodsItem = goods.get(j);
+                    if (goodsItem == null) continue;
 
-                if (goodsItem.checed) {
-                    BigDecimal goodsItemPrice = new BigDecimal(goodsItem.getCOST_MONEY());
-                    BigDecimal goodsItemCount = new BigDecimal(goodsItem.getEXCHANGE_QUANLITY());
-                    BigDecimal goodsItemCostMoneyAll = goodsItemPrice.multiply(goodsItemCount);
-                    goodsItem.setCOST_MONEY_ALL(df.format(goodsItemCostMoneyAll));
-                    shopTotal = shopTotal.add(goodsItemCostMoneyAll);
+                    if (goodsItem.checed) {
+                        BigDecimal goodsItemPrice = new BigDecimal(goodsItem.getCOST_MONEY());
+                        BigDecimal goodsItemCount = new BigDecimal(goodsItem.getEXCHANGE_QUANLITY());
+                        BigDecimal goodsItemCostMoneyAll = goodsItemPrice.multiply(goodsItemCount);
+                        goodsItem.setCOST_MONEY_ALL(df.format(goodsItemCostMoneyAll));
+                        shopTotal = shopTotal.add(goodsItemCostMoneyAll);
+                    }
                 }
+                shopItem.shopCostMoneyAll = df.format(shopTotal);
+                totalPrice = totalPrice.add(shopTotal);
             }
-            shopItem.shopCostMoneyAll = df.format(shopTotal);
-            totalPrice = totalPrice.add(shopTotal);
+        } else {
+            totalPrice = new BigDecimal(0);
         }
         cartModel.cartCostMoneyAll = df.format(totalPrice);
+
         bindData2View();
     }
 
@@ -721,7 +759,12 @@ public class FragmentCart extends BaseFragment {
     }
 
     private void bindData2View() {
-        if (cartModel == null) return;
+        if (cartModel == null) {
+            tv_total_price.setText("￥" + 0);
+            adapter.list = null;
+            adapter.notifyDataSetChanged();
+            return;
+        }
         tv_total_price.setText("￥" + cartModel.cartCostMoneyAll);
         adapter.list = cartModel.getDETAILS();
         adapter.notifyDataSetChanged();
@@ -741,8 +784,9 @@ public class FragmentCart extends BaseFragment {
             protected void onExecuteSucceeded(String s) {
                 closeLoding();
                 if ("ok".equals(s)) {
+                    showCart();
                     //delete from client
-                    List<ShoppingCartGroupModel> shops = cartModel.getDETAILS();
+                    /*List<ShoppingCartGroupModel> shops = cartModel.getDETAILS();
                     for (int i = shops.size() - 1; i >= 0; i--) {
                         ShoppingCartGroupModel shopItem = shops.get(i);
                         List<ShoppingCartMedicineModel> comms = shopItem.getDETAILS();
@@ -761,9 +805,10 @@ public class FragmentCart extends BaseFragment {
                             shops.remove(shopItem);
                         }
                     }
-                    if (shops.size() == 0) cartModel.setDETAILS(null);
+                    if (shops.size() <= 0) cartModel.setDETAILS(null);
 
-                    bindData2View();
+                    calculate();
+                    bindData2View();*/
                 }
             }
 
@@ -771,9 +816,7 @@ public class FragmentCart extends BaseFragment {
             protected void OnExecuteFailed() {
                 closeLoding();
             }
-        }.
-
-                execute();
+        }.execute();
     }
 
     private void updateCart(final String str, final String op) {

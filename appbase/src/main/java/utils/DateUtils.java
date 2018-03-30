@@ -65,7 +65,7 @@ public class DateUtils {
      * @return
      */
     public static String parseTime(String s) {
-        return parseTime(s, "yyyy-MM-dd");
+        return parseTime(s, "yyyy-MM-dd HH:mm:ss");
     }
 
     /**
@@ -74,7 +74,7 @@ public class DateUtils {
      * @return
      */
     public static String parseTime(String s, String format) {
-
+        if (s == null || "".equals(s)) return "";
         //将字符串转化为Long类型
         try {
             Long timeLong = Long.parseLong(s);

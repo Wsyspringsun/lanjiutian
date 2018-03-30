@@ -164,10 +164,10 @@ public class YouHuiQuanFragment extends BaseFragment {
         protected void convert(BaseViewHolder baseViewHolder, Ticket s) {
             Log.e(AppConfig.ERR_TAG, "ticket:" + GsonUtils.Bean2Json(s));
             baseViewHolder.setText(R.id.index, "" + (1 + list.indexOf(s)));
-            if (StringUtils.isEmpty(s.getSTART_DATE())) {
-                baseViewHolder.setText(R.id.item_ticket_datespan, "长期");
+            if (!StringUtils.isEmpty(s.getTERM())) {
+                baseViewHolder.setText(R.id.item_ticket_datespan, s.getTERM());
             }else{
-                baseViewHolder.setText(R.id.item_ticket_datespan, s.getSTART_DATE() + "~" + s.getEND_DATE());
+                baseViewHolder.setText(R.id.item_ticket_datespan, "");
             }
         }
     }

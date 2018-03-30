@@ -11,13 +11,16 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.R;
+import com.wyw.ljtds.adapter.goodsinfo.MedicineItemAdapter1;
 import com.wyw.ljtds.biz.biz.GoodsBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
@@ -54,6 +57,8 @@ import java.util.Map;
  */
 @ContentView(R.layout.fragment_shopgoods)
 public class ShopGoodsFragment extends BaseFragment {
+    @ViewInject(R.id.fragment_shopgoods_ll_paixu)
+    LinearLayout llPaixu;
     @ViewInject(R.id.fragment_shopgoods_ryv_goods)
     RecyclerView ryvGoods;
     @ViewInject(R.id.paixu1_tv)
@@ -67,6 +72,7 @@ public class ShopGoodsFragment extends BaseFragment {
     @ViewInject(R.id.paixu3_iv)
     private ImageView paixu3_iv;
 
+    GridLayoutManager glm;
     private List<MedicineListModel> medicineList;
 
     private static final String ARG_SHOPID = "param1";
@@ -74,12 +80,12 @@ public class ShopGoodsFragment extends BaseFragment {
 
     private String mParam1;
     private String mParam2;
-    private boolean end;
+    private boolean end = false;
     //    public List<MedicineListModel> list;
     private int pageIndex = 1;
     private BaseQuickAdapter<MedicineListModel> adapter;
     private View noData;
-    private boolean isRise;
+    private boolean isRise = true;
     private String orderby;
     private String keyword;
     private String category;
@@ -94,7 +100,7 @@ public class ShopGoodsFragment extends BaseFragment {
                 reset();
                 paixu1_tv.setTextColor(getResources().getColor(R.color.base_bar));
                 paixu1_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_1));
-                orderby = "1";
+                orderby = "";
                 sortData();
                 break;
             case R.id.paixu2:
@@ -110,12 +116,12 @@ public class ShopGoodsFragment extends BaseFragment {
                     paixu3_tv.setTextColor(getResources().getColor(R.color.base_bar));
                     paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_4));
                     isRise = false;
-                    orderby = "2 desc";
+                    orderby = "2";
                 } else {
                     paixu3_tv.setTextColor(getResources().getColor(R.color.base_bar));
                     paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_5));
                     isRise = true;
-                    orderby = "2 asc";
+                    orderby = "3";
                 }
                 sortData();
                 break;
@@ -134,7 +140,6 @@ public class ShopGoodsFragment extends BaseFragment {
         paixu3_tv.setTextColor(getResources().getColor(R.color.font_black2));
         paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_3));
 //        paixu4_tv.setTextColor(getResources().getColor(R.color.font_black2));
-        isRise = true;
     }
 
     /**
@@ -158,6 +163,13 @@ public class ShopGoodsFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        String type = getArguments().getString(ARG_TYPE);
+        if (TYPE_HOT.equals(type)) {
+            llPaixu.setVisibility(View.GONE);
+        } else {
+            llPaixu.setVisibility(View.VISIBLE);
+        }
+
         ((ShopActivity) getActivity()).addSearchCallBack(new MyCallback() {
             @Override
             public void callback(Object... params) {
@@ -173,11 +185,31 @@ public class ShopGoodsFragment extends BaseFragment {
             }
         });
 
-        GridLayoutManager glm = new GridLayoutManager(getActivity(), 2);
+        glm = new GridLayoutManager(getActivity(), 2);
         ryvGoods.setLayoutManager(glm);
 
         ryvGoods.setItemAnimator(new DefaultItemAnimator());
         ryvGoods.addItemDecoration(new DividerGridItemDecoration(getActivity()));
+
+        ryvGoods.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (adapter == null) return;
+                int cnt = adapter.getItemCount() - 1;
+                int lastVisibleItem = glm.findLastVisibleItemPosition();
+                Log.e(AppConfig.ERR_TAG, "scroll:l/cnt:" + lastVisibleItem + "/" + cnt);
+                if (!end && !loading && (lastVisibleItem >= cnt)) {
+                    pageIndex = pageIndex + 1;
+//                    loadData();
+                }
+            }
+        });
 
         ryvGoods.addOnItemTouchListener(new OnItemClickListener() {
             @Override
@@ -191,10 +223,9 @@ public class ShopGoodsFragment extends BaseFragment {
             }
         });
         noData = getActivity().getLayoutInflater().inflate(R.layout.main_empty_view, null);
-        adapter = new MyAdapter();
+        adapter = new MedicineItemAdapter1(getActivity(), medicineList);
         adapter.setEmptyView(noData);
         ryvGoods.setAdapter(adapter);
-        ryvGoods.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -234,7 +265,7 @@ public class ShopGoodsFragment extends BaseFragment {
                 } else if (TYPE_SHOP.equals(type)) {
                     data.put("sort", orderby);
                     data.put("pageIdx", "" + pageIndex);
-                    data.put("pageSize", "" + AppConfig.DEFAULT_PAGE_COUNT);
+                    data.put("pageSize", "" + 100);
                     data.put("busno", shopId);
                     if (!StringUtils.isEmpty(category)) {
                         data.put("wareType", category);
@@ -262,23 +293,6 @@ public class ShopGoodsFragment extends BaseFragment {
                 closeLoding();
             }
         }.execute();
-    }
-
-    private class MyAdapter extends BaseQuickAdapter<MedicineListModel> {
-
-        public MyAdapter() {
-            super(R.layout.item_goods_grid, medicineList);
-        }
-
-
-        @Override
-        protected void convert(BaseViewHolder baseViewHolder, MedicineListModel recommendModel) {
-            baseViewHolder.setText(R.id.goods_title, StringUtils.deletaFirst(recommendModel.getWARENAME()))
-                    .setText(R.id.money, "￥" + recommendModel.getSALEPRICE() + "");
-
-            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_goods_grid_sdv);
-            goods_img.setImageURI(Uri.parse(recommendModel.getIMG_PATH()));
-        }
     }
 
 }

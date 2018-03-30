@@ -12,12 +12,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.StringBuilderPrinter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,11 +36,13 @@ import com.wyw.ljtmgr.biz.OrderBiz;
 import com.wyw.ljtmgr.biz.SimpleCommonCallback;
 import com.wyw.ljtmgr.config.AppConfig;
 import com.wyw.ljtmgr.config.MyApplication;
+import com.wyw.ljtmgr.model.Header;
 import com.wyw.ljtmgr.model.LogisticInfo;
 import com.wyw.ljtmgr.model.OrderDetail;
 import com.wyw.ljtmgr.model.OrderDetailModel;
 import com.wyw.ljtmgr.model.OrderStat;
 import com.wyw.ljtmgr.model.OrderStatus;
+import com.wyw.ljtmgr.model.ReturnGoodsInfo;
 import com.wyw.ljtmgr.model.ServerResponse;
 import com.wyw.ljtmgr.utils.StringUtils;
 
@@ -49,6 +53,9 @@ import org.xutils.x;
 import java.util.LinkedList;
 import java.util.List;
 
+import cn.lemon.multi.MultiView;
+import utils.CommonUtil;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,6 +65,8 @@ public class OrderDetailFragment extends Fragment {
     private static final String ARG_ORDER_ID = "ARG_ORDER_ID";
     private static final String ARG_ORDER_STAT = "ARG_ORDER_STAT";
     private static final int REQUEST_DELEGATE_LOGISTIC = 1;
+    private static final int REQUEST_REJECTRETURN_MSG = 2;
+    private String DIALOG_REJECTRETURN = "DIALOG_REJECTRETURN";
     private String orderStat = "";
 
     MyApplication myApp = null;
@@ -68,6 +77,8 @@ public class OrderDetailFragment extends Fragment {
     Button btnSubmit;
     @ViewInject(R.id.fragment_order_detail_btn_songda)
     Button btnSongda;
+    @ViewInject(R.id.fragment_order_detail_btn_jushou)
+    Button btnJuShou;
     @ViewInject(R.id.fragment_order_detail_btn_shouhoutongyi)
     Button btnShouhouTongyi;
     @ViewInject(R.id.fragment_order_detail_btn_shouhoujujue)
@@ -76,6 +87,8 @@ public class OrderDetailFragment extends Fragment {
     LinearLayout llLogistic;
     @ViewInject(R.id.fragment_order_detail_tv_logistic_info)
     TextView tvLogiInfo;
+    @ViewInject(R.id.fragment_order_detail_tv_logistic_name)
+    TextView tvLogiUsername;
 
 
     public OrderDetailModel orderDetailModel;
@@ -107,7 +120,7 @@ public class OrderDetailFragment extends Fragment {
         sendOrderCallback = new SimpleCommonCallback<ServerResponse>(getActivity()) {
             @Override
             protected void handleResult(ServerResponse result) {
-                Toast.makeText(getActivity(), "成功", Toast.LENGTH_LONG);
+                Toast.makeText(getActivity(), "成功", Toast.LENGTH_LONG).show();
                 sendOK();
             }
         };
@@ -144,10 +157,10 @@ public class OrderDetailFragment extends Fragment {
     private void bindData2View() {
         if (orderDetailModel == null) return;
 
-        int distance = 0;
+        Double distance = 0d;
         if (orderDetailModel.getDistance() != null) {
             try {
-                distance = Integer.parseInt(orderDetailModel.getDistance());
+                distance = Double.parseDouble(orderDetailModel.getDistance());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -159,8 +172,10 @@ public class OrderDetailFragment extends Fragment {
         }
 
         tvLogiInfo.setText("预计" + orderDetailModel.getDistributionDate() + "送达");
+        tvLogiUsername.setText("派送员：" + orderDetailModel.getCourier());
 
 //        A”:新订单“B”:进行中“C”:已取消 “D”:售后 “E”：已完成
+//        控制按钮显示状态
         resetBtn();
         String stat = orderDetailModel.getGroupStatus();
         switch (stat) {
@@ -172,17 +187,43 @@ public class OrderDetailFragment extends Fragment {
             case OrderStatus.LOGISTICSALLOCATED:
             case OrderStatus.LOGISTICSSHIPPED:
                 btnSongda.setVisibility(View.VISIBLE);
+                btnJuShou.setVisibility(View.VISIBLE);
 //                btnSongda.setVisibility(View.VISIBLE);
+                break;
+
+            case OrderStatus.TRADECANCEL:
+                btnSongda.setVisibility(View.GONE);
+                btnJuShou.setVisibility(View.GONE);
+//                llLogistic.setVisibility(View.GONE);
+                tvLogiInfo.setText(orderDetailModel.getUpdDate() + "已取消");
                 break;
             case OrderStatus.LOGISTICSSERVICE:
                 btnSongda.setVisibility(View.GONE);
+                btnJuShou.setVisibility(View.GONE);
 //                llLogistic.setVisibility(View.GONE);
+                tvLogiInfo.setText(orderDetailModel.getUpdDate() + "已送达");
                 break;
             case OrderStatus.APPLYRETURNED:
                 btnShouhouTongyi.setVisibility(View.VISIBLE);
                 btnShouhouJujue.setVisibility(View.VISIBLE);
                 break;
+            default:
+                break;
         }
+      /*  针对售后进行判断
+        if (orderDetailModel.getReturnGoodsList() != null && !orderDetailModel.getReturnGoodsList().isEmpty()) {
+            List<ReturnGoodsInfo> returnInfos = orderDetailModel.getReturnGoodsList();
+            String retstat = returnInfos.get(0).getReturnStatus();
+            if (OrderStatus.APPLYRETURNED.equals(retstat)) {
+                btnShouhouTongyi.setVisibility(View.VISIBLE);
+                btnShouhouJujue.setVisibility(View.VISIBLE);
+            }
+        } else {
+
+        }*/
+
+
+//
 
 /*        if (OrderStatus.UNPAY.equals(orderDetailModel.getGroupStatus()) || OrderStatus.TOSHIPPED.equals(orderDetailModel.getGroupStatus())) {
             //没有分配 快递元
@@ -221,7 +262,13 @@ public class OrderDetailFragment extends Fragment {
 
         adapters.add(new HeadSubAdapter(getActivity(), new LinearLayoutHelper(), 1, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300)));
         adapters.add(new OrderAdapter(getActivity(), new LinearLayoutHelper(), orderDetailModel.getDetailList() == null ? 0 : orderDetailModel.getDetailList().size(), new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300)));
-        adapters.add(new FootSubAdapter(getActivity(), new LinearLayoutHelper(), 5, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300)));
+        if (orderDetailModel.getReturnGoodsInfo() != null) {
+            adapters.add(new ReturnGoodsSubAdapter(getActivity(), new LinearLayoutHelper(), 1, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300)));
+        }
+        adapters.add(new FootSubAdapter(getActivity(), new LinearLayoutHelper(), 1, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300)));
+
+//        adapters.add(new FootSubAdapter(getActivity(), new LinearLayoutHelper(), 5, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300)));
+
         delegateAdapter.setAdapters(adapters);
 
         final Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -238,6 +285,7 @@ public class OrderDetailFragment extends Fragment {
     private void resetBtn() {
         btnSubmit.setVisibility(View.GONE);
         btnSongda.setVisibility(View.GONE);
+        btnJuShou.setVisibility(View.GONE);
         btnShouhouTongyi.setVisibility(View.GONE);
         btnShouhouJujue.setVisibility(View.GONE);
         llLogistic.setVisibility(View.VISIBLE);
@@ -249,24 +297,21 @@ public class OrderDetailFragment extends Fragment {
 
         //是否同意退换货 0 同意 1 拒绝
         btnShouhouJujue.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                OrderBiz.orderAfterSale(orderDetailModel.getOrderId(), "1", new SimpleCommonCallback<ServerResponse>(getActivity()) {
-                    @Override
-                    protected void handleResult(ServerResponse result) {
-                        Toast.makeText(getActivity(), "成功", Toast.LENGTH_LONG);
-                        sendOK();
-                    }
-                });
+                RejectReturnDialogFragment frag = RejectReturnDialogFragment.newInstance();
+                frag.setTargetFragment(OrderDetailFragment.this, REQUEST_REJECTRETURN_MSG);
+                frag.show(getActivity().getSupportFragmentManager(), DIALOG_REJECTRETURN);
             }
         });
         btnShouhouTongyi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OrderBiz.orderAfterSale(orderDetailModel.getOrderId(), "0", new SimpleCommonCallback<ServerResponse>(getActivity()) {
+                OrderBiz.orderAfterSale(orderDetailModel.getOrderId(), "0", "", new SimpleCommonCallback<ServerResponse>(getActivity()) {
                     @Override
                     protected void handleResult(ServerResponse result) {
-                        Toast.makeText(getActivity(), "成功", Toast.LENGTH_LONG);
+                        Toast.makeText(getActivity(), "同意成功", Toast.LENGTH_LONG).show();
                         sendOK();
                     }
                 });
@@ -293,28 +338,47 @@ public class OrderDetailFragment extends Fragment {
             }
         });
 
+
         btnSongda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (OrderStatus.RECEIVED.equals(orderDetailModel.getGroupStatus())) {
                     return;
                 }
-                OrderBiz.orderArrived(orderDetailModel.getOrderId(), new SimpleCommonCallback<ServerResponse>(getActivity()) {
+                OrderBiz.orderArrived(orderDetailModel, new SimpleCommonCallback<ServerResponse>(getActivity()) {
                     @Override
                     protected void handleResult(ServerResponse result) {
-                        Toast.makeText(getActivity(), "成功", Toast.LENGTH_LONG);
+                        Toast.makeText(getActivity(), "送达成功", Toast.LENGTH_LONG).show();
                         sendOK();
                     }
                 });
             }
         });
+        btnJuShou.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (OrderStatus.RECEIVED.equals(orderDetailModel.getGroupStatus())) {
+                    return;
+                }
+                OrderBiz.orderRefused(orderDetailModel, new SimpleCommonCallback<ServerResponse>(getActivity()) {
+                    @Override
+                    protected void handleResult(ServerResponse result) {
+                        Toast.makeText(getActivity(), "拒收成功", Toast.LENGTH_LONG).show();
+                        sendOK();
+                    }
+                });
+            }
+        });
+
     }
 
     private void sendOK() {
         loadData();
     }
 
-    class HeadSubAdapter extends DelegateAdapter.Adapter<TitleTextViewHolder> {
+
+    //    头部订单信息
+    class HeadSubAdapter extends DelegateAdapter.Adapter<HeaderViewHolder> {
         private final LayoutHelper mLayoutHelper;
         private final int mCount;
         private final LayoutParams mLayoutParams;
@@ -333,21 +397,25 @@ public class OrderDetailFragment extends Fragment {
         }
 
         @Override
-        public TitleTextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(getActivity()).inflate(R.layout.textview_title, parent, false);
-            return new TitleTextViewHolder(v);
+        public HeaderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_orderdetail_header, parent, false);
+            return new HeaderViewHolder(v);
         }
 
         @Override
-        public void onBindViewHolder(TitleTextViewHolder holder, int position) {
+        public void onBindViewHolder(HeaderViewHolder holder, int position) {
             Log.e(AppConfig.TAG_ERR, "OneColSubAdapter onBindViewHolder:" + position);
             StringBuilder sb = new StringBuilder("");
             sb.append("订单编号:" + OrderDetailFragment.this.orderDetailModel.getOrderId() + "\n");
             sb.append("订单生成时间:" + utils.DateUtils.parseTime(orderDetailModel.getInsDate()) + "\n");
             sb.append("订单完成时间:" + utils.DateUtils.parseTime(orderDetailModel.getUpdDate()) + "\n");
             sb.append("订单状态:" + OrderStatus.getStatus(orderDetailModel.getGroupStatus()));
-            holder.tvTitle.setText(sb.toString());
-            holder.tvContent.setText("");
+            holder.itemdata = orderDetailModel;
+            holder.tvOrderInfo.setText(sb.toString());
+            holder.tvName.setText(getString(R.string.order_detail_user_info_name, orderDetailModel.getReceiverName()));
+            holder.tvMobile.setText(getString(R.string.order_detail_user_info_mobile, orderDetailModel.getReceiverPhone()));
+            holder.tvAddr.setText(getString(R.string.order_detail_user_addr, orderDetailModel.getReceiverAddress()));
+            holder.tvDistance.setText(getString(R.string.order_detail_group_distance, orderDetailModel.getDistance()));
         }
 
         @Override
@@ -356,13 +424,101 @@ public class OrderDetailFragment extends Fragment {
         }
     }
 
-    class FootSubAdapter extends DelegateAdapter.Adapter<TitleTextViewHolder> {
+    //退货信息
+    class ReturnGoodsSubAdapter extends DelegateAdapter.Adapter<ReturnGoodsViewHolder> {
+        private final LayoutHelper mLayoutHelper;
+        private final int mCount;
+        private final LayoutParams mLayoutParams;
+        private Context mContext;
+
+        public ReturnGoodsSubAdapter(Context context, LayoutHelper layoutHelper, int count, @NonNull LayoutParams layoutParams) {
+            this.mContext = context;
+            this.mLayoutHelper = layoutHelper;
+            this.mCount = count;
+            this.mLayoutParams = layoutParams;
+        }
+
+        @Override
+        public LayoutHelper onCreateLayoutHelper() {
+            return this.mLayoutHelper;
+        }
+
+        @Override
+        public ReturnGoodsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_orderdetail_returngoods, parent, false);
+            return new ReturnGoodsViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(ReturnGoodsViewHolder holder, int position) {
+            //退货单详情
+            ReturnGoodsInfo r = orderDetailModel.getReturnGoodsInfo();
+            if (r == null) return;
+            holder.tvReason.setText(getString(R.string.order_detail_return_reason, r.getReturnReason()));
+            holder.tvMoney.setText(getString(R.string.order_detail_return_money, CommonUtil.formatFee(r.getReturnMoney() + "")));
+            holder.tvRemark.setText(getString(R.string.order_detail_return_remark, r.getReturnRemarks()));
+            holder.imgs.setLayoutParams(new LinearLayout.LayoutParams(400, ViewGroup.LayoutParams.WRAP_CONTENT));
+            holder.imgs.setImages(r.getImgPathList());
+//            设置图片资源
+        }
+
+        @Override
+        public int getItemCount() {
+            return mCount;
+        }
+    }
+
+    class FootSubAdapter extends DelegateAdapter.Adapter<FooterViewHolder> {
         private final LayoutHelper mLayoutHelper;
         private final int mCount;
         private final LayoutParams mLayoutParams;
         private Context mContext;
 
         public FootSubAdapter(Context context, LayoutHelper layoutHelper, int count, @NonNull LayoutParams layoutParams) {
+            this.mContext = context;
+            this.mLayoutHelper = layoutHelper;
+            this.mCount = count;
+            this.mLayoutParams = layoutParams;
+        }
+
+        @Override
+        public LayoutHelper onCreateLayoutHelper() {
+            return mLayoutHelper;
+        }
+
+        @Override
+        public FooterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_orderdetail_footer, parent, false);
+            return new FooterViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(FooterViewHolder holder, int position) {
+            holder.tvDiscount.setText(orderDetailModel.getDiscount() + "元");
+            holder.tvPayamount.setText(getString(R.string.order_detail_group_payamount, CommonUtil.formatFee(orderDetailModel.getPayAmount())));
+            holder.tvCostMoney.setText(getString(R.string.order_detail_group_costmoney, CommonUtil.formatFee(orderDetailModel.getCostMoneyAll()), CommonUtil.formatFee(orderDetailModel.getPostageMoneyAll())));
+            String invoiceTitle = orderDetailModel.getInvoiceTitle() == null ? "" : orderDetailModel.getInvoiceTitle();
+            String invoiceTax = orderDetailModel.getInvoiceTax() == null ? "" : orderDetailModel.getInvoiceTax();
+            holder.tvInvoice.setText(getString(R.string.order_detail_group_invoice, invoiceTitle, invoiceTax));
+            String remark = orderDetailModel.getRemark() == null ? "" : orderDetailModel.getRemark() + "";
+            holder.tvRemark.setText(getString(R.string.order_detail_group_remark, remark));
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return mCount;
+        }
+    }
+
+    /*class ReturnInfoSubAdapter extends DelegateAdapter.Adapter<TitleTextViewHolder> {
+        private final LayoutHelper mLayoutHelper;
+        private final int mCount;
+        private final LayoutParams mLayoutParams;
+        private Context mContext;
+
+        public ReturnInfoSubAdapter(Context context, LayoutHelper layoutHelper, int count, @NonNull LayoutParams layoutParams) {
             this.mContext = context;
             this.mLayoutHelper = layoutHelper;
             this.mCount = count;
@@ -392,7 +548,9 @@ public class OrderDetailFragment extends Fragment {
                     holder.tvContent.setText("");
                     break;
                 case 2:
-                    holder.tvTitle.setText("发票信息: " + orderDetailModel.getInvoiceTitle() + " " + orderDetailModel.getInvoiceTax());
+                    String invoiceTitle = orderDetailModel.getInvoiceTitle() == null ? "" : orderDetailModel.getInvoiceTitle();
+                    String invoiceTax = orderDetailModel.getInvoiceTax() == null ? "" : orderDetailModel.getInvoiceTax();
+                    holder.tvTitle.setText("发票信息: " + invoiceTitle + " " + invoiceTax);
                     holder.tvContent.setText("");
 
                     break;
@@ -408,7 +566,8 @@ public class OrderDetailFragment extends Fragment {
                     });
                     break;
                 case 4:
-                    holder.tvTitle.setText("备注：" + orderDetailModel.getRemark() + "");
+                    String remark = orderDetailModel.getRemark() == null ? "" : orderDetailModel.getRemark() + "";
+                    holder.tvTitle.setText("备注：" + remark);
                     holder.tvContent.setText("");
                     break;
             }
@@ -420,7 +579,95 @@ public class OrderDetailFragment extends Fragment {
         }
     }
 
-    class TitleTextViewHolder extends RecyclerView.ViewHolder {
+    class ReturnInfoViewHolder extends RecyclerView.ViewHolder {
+        public final View view;
+
+        public ReturnInfoViewHolder(View itemView) {
+            super(itemView);
+            view = itemView;
+        }
+    }*/
+
+    class FooterViewHolder extends RecyclerView.ViewHolder {
+        public final View view;
+        TextView tvDiscount;
+        TextView tvPayamount;
+        TextView tvCostMoney;
+        TextView tvInvoice;
+        TextView tvRemark;
+
+
+        public FooterViewHolder(View itemView) {
+            super(itemView);
+            view = itemView;
+
+            tvDiscount = (TextView) itemView.findViewById(R.id.fragment_orderdetail_tv_groupdiscount);
+            tvPayamount = (TextView) itemView.findViewById(R.id.fragment_orderdetail_tv_payamount);
+            tvCostMoney = (TextView) itemView.findViewById(R.id.fragment_orderdetail_tv_costmoney);
+            tvInvoice = (TextView) itemView.findViewById(R.id.fragment_orderdetail_tv_invoice);
+            tvRemark = (TextView) itemView.findViewById(R.id.fragment_orderdetail_tv_remark);
+        }
+    }
+
+    class HeaderViewHolder extends RecyclerView.ViewHolder {
+        public final View view;
+        RelativeLayout rlLoc;
+        TextView tvOrderInfo;
+        TextView tvDistance;
+        TextView tvMobile;
+        TextView tvName;
+        TextView tvAddr;
+        public OrderDetailModel itemdata;
+
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+            view = itemView;
+
+            tvOrderInfo = (TextView) itemView.findViewById(R.id.fragment_orderdetail_tv_orderinfo);
+            tvDistance = (TextView) itemView.findViewById(R.id.fragment_orderdetail_distance);
+            tvName = (TextView) itemView.findViewById(R.id.fragment_orderdetail_tv_user_name);
+            tvMobile = (TextView) itemView.findViewById(R.id.fragment_orderdetail_tv_user_mobile);
+            tvAddr = (TextView) itemView.findViewById(R.id.fragment_orderdetail_tv_user_addr);
+            rlLoc = (RelativeLayout) itemView.findViewById(R.id.fragment_orderdetail_rl_loc);
+
+            tvMobile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (itemdata != null && !StringUtils.isEmpty(itemdata.getReceiverPhone())) {
+                        com.wyw.ljtmgr.utils.CommonUtil.call(getActivity(), itemdata.getReceiverPhone());
+                    }
+                }
+            });
+            rlLoc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent it = LogisticMapActivity.getIntent(getActivity(), "35.504755", "112.839483", orderDetailModel.getLat(), orderDetailModel.getLng());
+                    startActivity(it);
+                }
+            });
+        }
+    }
+
+    class ReturnGoodsViewHolder extends RecyclerView.ViewHolder {
+        public final View view;
+        public OrderDetailModel itemdata;
+        TextView tvReason;
+        TextView tvMoney;
+        TextView tvRemark;
+        MultiView imgs;
+
+        public ReturnGoodsViewHolder(View itemView) {
+            super(itemView);
+            view = itemView;
+
+            tvReason = (TextView) view.findViewById(R.id.fragment_orderdetail_return_reason);
+            tvMoney = (TextView) view.findViewById(R.id.fragment_orderdetail_return_money);
+            tvRemark = (TextView) view.findViewById(R.id.fragment_orderdetail_return_remark);
+            imgs = (MultiView) view.findViewById(R.id.fragment_orderdetail_return_imgs);
+        }
+    }
+
+    /*class TitleTextViewHolder extends RecyclerView.ViewHolder {
         public final View view;
         TextView tvTitle;
         TextView tvContent;
@@ -431,7 +678,7 @@ public class OrderDetailFragment extends Fragment {
             tvTitle = (TextView) itemView.findViewById(R.id.textview_title);
             tvContent = (TextView) itemView.findViewById(R.id.textview_content);
         }
-    }
+    }*/
 
 
     class OrderAdapter extends DelegateAdapter.Adapter<OrderViewHolder> {
@@ -464,7 +711,21 @@ public class OrderDetailFragment extends Fragment {
             if (list == null || list.size() <= 0) return;
             OrderDetail item = list.get(position);
             holder.tvNum.setText("x" + item.getExchangeQuanlity());
-            holder.tvInfo.setText(StringUtils.deletaFirst(item.getTitle()) + "\n\n" + item.getCommoditySize() + "\n" + (item.getCostMoneyAll() + ""));
+//            item_order_goods_price
+            StringBuilder sbInfo = new StringBuilder();
+            sbInfo.append(StringUtils.deletaFirst(item.getTitle())).append("\n");
+            String size = "";
+            if ("0".equals(orderDetailModel.getFlag())) {
+                String barCode = getString(R.string.title_code) + ":" + item.getBarCode() + "\n";
+                sbInfo.append(barCode);
+                size = getString(R.string.title_factory) + ":" + item.getCommodityColor() + "\n" + getString(R.string.title_size) + ": " + item.getCommoditySize() + "\n";
+            } else {
+                sbInfo.append("\n");
+                size = getString(R.string.title_cat) + ":" + item.getCommodityColor() + "," + getString(R.string.title_size) + ": " + item.getCommoditySize();
+            }
+            sbInfo.append(size);
+            holder.tvInfo.setText(sbInfo.toString());
+            holder.tvPrice.setText("￥" + CommonUtil.formatFee("" + item.getCostMoney()));
             Picasso.with(getActivity()).load(Uri.parse(AppConfig.IMAGE_PATH_LJT + item.getImgPath())).into(holder.imv);
         }
 
@@ -477,6 +738,7 @@ public class OrderDetailFragment extends Fragment {
     class OrderViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imv;
         private final TextView tvInfo;
+        private final TextView tvPrice;
         private final TextView tvNum;
 
         public OrderViewHolder(View itemView) {
@@ -484,6 +746,8 @@ public class OrderDetailFragment extends Fragment {
             imv = (ImageView) itemView.findViewById(R.id.item_order_goods_img);
             tvInfo = (TextView) itemView.findViewById(R.id.item_order_goods_info);
             tvNum = (TextView) itemView.findViewById(R.id.item_order_goods_num);
+            tvPrice = (TextView) itemView.findViewById(R.id.item_order_goods_price);
+
         }
     }
 
@@ -492,6 +756,16 @@ public class OrderDetailFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_OK) return;
         switch (requestCode) {
+            case REQUEST_REJECTRETURN_MSG:
+                String rejectMsg = data.getStringExtra(RejectReturnDialogFragment.TAG_RETURN_MSG);
+                OrderBiz.orderAfterSale(orderDetailModel.getOrderId(), "1", rejectMsg, new SimpleCommonCallback<ServerResponse>(getActivity()) {
+                    @Override
+                    protected void handleResult(ServerResponse result) {
+                        Toast.makeText(getActivity(), "拒绝成功", Toast.LENGTH_LONG).show();
+                        sendOK();
+                    }
+                });
+                break;
             case REQUEST_DELEGATE_LOGISTIC:
                 String delegateName = data.getStringExtra(LogisticInfoActivity.TAG_NAME);
                 String delegateCode = data.getStringExtra(LogisticInfoActivity.TAG_CODE);

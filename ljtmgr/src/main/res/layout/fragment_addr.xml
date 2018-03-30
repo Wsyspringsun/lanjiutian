@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basebackground"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/fragment_addr_more"
+        android:layout_width="@dimen/x10"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/margin2"
+        android:text=">" />
+
+    <TextView
+        android:id="@+id/fragment_addr_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/fragment_addr_more"
+        android:text="地址信息" />
+
+
+</RelativeLayout>

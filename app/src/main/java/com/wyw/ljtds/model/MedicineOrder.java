@@ -9,7 +9,7 @@ public class MedicineOrder {
 
     static {
         // "申请换退货"
-        StatData.put("9", "申请换退货");
+        StatData.put("9", "申请退换货");
         // 同意退换货
         StatData.put("10", "同意退换货");
         // 拒绝退换货

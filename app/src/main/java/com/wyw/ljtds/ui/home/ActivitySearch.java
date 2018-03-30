@@ -93,6 +93,8 @@ public class ActivitySearch extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        edHeader.setSelection(edHeader.getText().length());
+
         List<String> list = new ArrayList<>();
         if (getIntent().getIntExtra("from", 0) == 1) {
             list.add("女式拖鞋");
@@ -135,6 +137,7 @@ public class ActivitySearch extends BaseActivity {
         String keyword = getIntent().getStringExtra(TAG_INIT_KEYWORD);
         if (!StringUtils.isEmpty(keyword)) {
             edHeader.setText(keyword);
+            edHeader.setSelection(edHeader.getText().length());
         }
         final AbstractListViewAdapter<String> adapter2 = new AbstractListViewAdapter<String>(this, R.
                 layout.item_search_tuijian) {
@@ -159,6 +162,7 @@ public class ActivitySearch extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String k = adapter2.getItem(position);
                 edHeader.setText(k);
+                edHeader.setSelection(edHeader.getText().length());
                 goSearchRlt();
             }
         });

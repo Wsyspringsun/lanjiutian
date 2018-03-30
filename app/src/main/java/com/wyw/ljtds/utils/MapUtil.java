@@ -5,6 +5,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.provider.SyncStateContract;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -26,6 +27,9 @@ import com.baidu.trace.model.TraceLocation;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.model.CurrentLocation;
+import com.wyw.ljtds.model.SingleCurrentUser;
+
+import net.sf.retrotranslator.runtime.impl.SignatureList;
 
 import java.util.List;
 
@@ -154,13 +158,22 @@ public class MapUtil {
      *
      * @param trackApp
      */
-    public void setCenter(MyApplication trackApp) {
-        if (!isZeroPoint(CurrentLocation.latitude, CurrentLocation.longitude)) {
+    public void setCenter() {
+        //wsy modify
+        if (!isZeroPoint(SingleCurrentUser.defaultLat, SingleCurrentUser.defaultLng)) {
+            LatLng currentLatLng = new LatLng(SingleCurrentUser.defaultLat, SingleCurrentUser.defaultLng);
+//            updateStatus(currentLatLng, false);
+            setMapStatus(currentLatLng, AppConfig.MAP_ZOOM);
+            return;
+        }
+
+        /*if (!isZeroPoint(CurrentLocation.latitude, CurrentLocation.longitude)) {
             LatLng currentLatLng = new LatLng(CurrentLocation.latitude, CurrentLocation.longitude);
             updateStatus(currentLatLng, false);
             return;
-        }
+        }*/
     }
+
 
     private boolean isZeroPoint(double latitude, double longitude) {
         return isEqualToZero(latitude) && isEqualToZero(longitude);
@@ -176,9 +189,33 @@ public class MapUtil {
         return Math.abs(value - 0.0) < 0.01 ? true : false;
     }
 
+    public void updateStatus(LatLng currentPoint, boolean showMarker, String title) {
+        if (null == baiduMap || null == currentPoint) {
+            return;
+        }
+
+        if (null != baiduMap.getProjection()) {
+            Point screenPoint = baiduMap.getProjection().toScreenLocation(currentPoint);
+            // 点在屏幕上的坐标超过限制范围，则重新聚焦底图
+            if (screenPoint.y < 200 || screenPoint.y > MyApplication.screenHeight - 500
+                    || screenPoint.x < 200 || screenPoint.x > MyApplication.screenWidth - 200
+                    || null == mapStatus) {
+                animateMapStatus(currentPoint, AppConfig.MAP_ZOOM);
+            }
+        } else if (null == mapStatus) {
+            // 第一次定位时，聚焦底图
+            setMapStatus(currentPoint, AppConfig.MAP_ZOOM);
+        }
+
+        if (showMarker) {
+            addMarker(currentPoint, title);
+        }
+
+    }
 
     public void updateStatus(LatLng currentPoint, boolean showMarker) {
         if (null == baiduMap || null == currentPoint) {
+            Log.e(AppConfig.ERR_TAG,"baiduMap null");
             return;
         }
 
@@ -201,6 +238,16 @@ public class MapUtil {
 
     }
 
+    public Marker addOverlay(LatLng currentPoint, BitmapDescriptor icon, Bundle bundle, String title) {
+        OverlayOptions overlayOptions = new MarkerOptions().position(currentPoint)
+                .icon(icon).title(title).zIndex(9).draggable(true);
+        Marker marker = (Marker) baiduMap.addOverlay(overlayOptions);
+        if (null != bundle) {
+            marker.setExtraInfo(bundle);
+        }
+        return marker;
+    }
+
     public Marker addOverlay(LatLng currentPoint, BitmapDescriptor icon, Bundle bundle) {
         OverlayOptions overlayOptions = new MarkerOptions().position(currentPoint)
                 .icon(icon).zIndex(9).draggable(true);
@@ -216,7 +263,23 @@ public class MapUtil {
      */
     public void addMarker(LatLng currentPoint) {
         if (null == mMoveMarker) {
+            //baidu old
             mMoveMarker = addOverlay(currentPoint, BitmapUtil.bmArrowPoint, null);
+            return;
+        }
+
+        if (null != lastPoint) {
+            moveLooper(currentPoint);
+        } else {
+            lastPoint = currentPoint;
+            mMoveMarker.setPosition(currentPoint);
+        }
+    }
+
+    public void addMarker(LatLng currentPoint, String title) {
+        if (null == mMoveMarker) {
+            //wsy add title
+            mMoveMarker = addOverlay(currentPoint, BitmapUtil.bmArrowPoint, null, title);
             return;
         }
 

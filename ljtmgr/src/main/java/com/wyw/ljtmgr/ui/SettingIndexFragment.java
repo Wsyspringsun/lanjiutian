@@ -110,7 +110,7 @@ public class SettingIndexFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fragment_setting_index_btnlogout:
-                UserBiz.logout();
+                UserBiz.logout(getActivity());
 
                 Intent it = ActivityLogin.getIntent(getActivity());
                 startActivity(it);

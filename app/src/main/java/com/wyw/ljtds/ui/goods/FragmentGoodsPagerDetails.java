@@ -135,6 +135,7 @@ public class FragmentGoodsPagerDetails extends BaseFragment {
     }
 
     public void bindData2View(MedicineDetailsModel medicineModel) {
+        if (!isAdded()) return;
         if (medicineModel == null) return;
         this.fragmentGoodsDetails.bindData2View(medicineModel.getHTML_PATH());
         this.fragmentGoodsParameter.bindData2View(medicineModel);

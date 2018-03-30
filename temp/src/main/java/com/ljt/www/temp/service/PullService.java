@@ -84,6 +84,28 @@ public class PullService extends IntentService {
         if (isNeedNotify) {
             PendingIntent pi = PendingIntent.getActivity(this, 0, it, PendingIntent.FLAG_ONE_SHOT); // 启动 Activity
 
+/*            Intent intentClick = new Intent(this, NotificationBroadcastReceiver.class);
+intentClick.setAction("notification_clicked");
+intentClick.putExtra(NotificationBroadcastReceiver.TYPE, type);
+PendingIntent pendingIntentClick = PendingIntent.getBroadcast(this, 0, intentClick, PendingIntent.FLAG_ONE_SHOT);
+
+Intent intentCancel = new Intent(this, NotificationBroadcastReceiver.class);
+intentCancel.setAction("notification_cancelled");
+intentCancel.putExtra(NotificationBroadcastReceiver.TYPE, type);
+PendingIntent pendingIntentCancel = PendingIntent.getBroadcast(this, 0, intentCancel, PendingIntent.FLAG_ONE_SHOT);
+
+Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+        .setSmallIcon(R.drawable.ic_launcher)
+        .setContentTitle(getString(R.string.setting_gcm_title))
+        .setContentText(message)
+        .setSound(defaultSoundUri)
+        .setContentIntent(pendingIntentClick)
+        .setDeleteIntent(pendingIntentCancel);
+
+notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+notificationManager.notify(type *//* ID of notification *//*, notificationBuilder.build());  //这就是那个type，相同的update，不同add
+ */
             Notification notification = new NotificationCompat.Builder(this)
                     .setTicker("蓝九天通知").setSmallIcon(R.drawable.ic_notifications_black_24dp)
                     .setContentTitle("你有新的dingdan").setContentText("总价188").setContentIntent(pi).setAutoCancel(true).build();

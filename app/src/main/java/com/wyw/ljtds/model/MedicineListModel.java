@@ -7,6 +7,8 @@ import com.wyw.ljtds.utils.Utils;
  */
 
 public class MedicineListModel extends GoodsModel {
+    public static final String BUSAVLID_FLG_YES = "0"; // 营业状态  0:营业中，1:休息中
+    public static final String BUSAVLID_FLG_NO = "1"; // 营业状态  0:营业中，1:休息中
     //id
     private String WAREID;
     //名字

@@ -117,6 +117,7 @@ public class ActivityLogin extends BaseActivity {
                 PreferenceCache.putUser(new Gson().toJson(result)); // 持久化缓存token
 
                 startActivity(MainActivity.getIntent(ActivityLogin.this));
+                ActivityLogin.this.finish();
             }
         });
     }

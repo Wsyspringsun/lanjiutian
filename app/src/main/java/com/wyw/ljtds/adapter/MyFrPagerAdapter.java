@@ -20,11 +20,11 @@ import java.util.List;
  * @time 下午12:53
  */
 public class MyFrPagerAdapter extends FragmentPagerAdapter  {
-    private ArrayList<String> titles;
+    private List<String> titles;
 
     private List<Fragment> fragments;
 
-    public MyFrPagerAdapter(FragmentManager fm, ArrayList<String> list,List<Fragment> fragments) {
+    public MyFrPagerAdapter(FragmentManager fm, List<String> list,List<Fragment> fragments) {
         super(fm);
         this.titles = list;
         this.fragments=fragments;

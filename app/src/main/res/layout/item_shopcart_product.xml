@@ -20,18 +20,14 @@
             android:layout_gravity="center_vertical"
             android:visibility="visible" />
 
-        <com.facebook.drawee.view.SimpleDraweeView
+        <ImageView
             android:id="@+id/iv_adapter_list_pic"
             android:layout_width="@dimen/x78"
             android:layout_height="@dimen/x78"
             android:layout_marginBottom="@dimen/x8"
             android:layout_marginLeft="@dimen/x8"
             android:layout_marginTop="@dimen/x8"
-            fresco:actualImageScaleType="centerCrop"
-            fresco:fadeDuration="200"
-            fresco:failureImage="@mipmap/zhanweitu"
-            fresco:failureImageScaleType="centerInside"
-            fresco:placeholderImage="@mipmap/zhanweitu" />
+            android:src="@mipmap/zhanweitu" />
 
         <LinearLayout
             android:id="@+id/item_shopcart_product_rl_show"

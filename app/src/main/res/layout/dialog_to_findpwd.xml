@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/vertical_margin_lg">
+
+
+        <TextView
+            android:id="@+id/dialog_to_findpwd_tv_warning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/vertical_margin_lg"
+            android:text="@string/reg_warning_phone_exist"
+            android:textColor="@color/font_blue"
+            android:textSize="@dimen/font_4"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/vertical_margin_lg"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/dialog_to_findpwd_tv_gologin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/reg_to_login"
+                android:textAlignment="center"
+                android:textColor="@color/font_blue"
+                android:textSize="@dimen/font_4" />
+
+            <TextView
+                android:id="@+id/dialog_to_findpwd_tv_findpwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/reg_warning_forget_pwd"
+                android:textAlignment="center"
+                android:textColor="@color/font_3"
+                android:textSize="@dimen/font_4" />
+
+        </LinearLayout>
+
+
+        <ImageButton
+            android:id="@+id/dialog_to_findpwd_cancel"
+            android:layout_width="@dimen/x30"
+            android:layout_height="@dimen/x30"
+            android:layout_marginBottom="@dimen/vertical_margin_mid"
+            android:layout_marginTop="@dimen/vertical_margin_mid"
+            android:src="@drawable/ic_action_cancel_solid"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/dialog_sel_address_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:elevation="@dimen/x3"
+        android:gravity="center"
+        android:text="@string/loading"
+        android:textSize="@dimen/font_1"
+        android:visibility="gone" />
+</FrameLayout>
+
+

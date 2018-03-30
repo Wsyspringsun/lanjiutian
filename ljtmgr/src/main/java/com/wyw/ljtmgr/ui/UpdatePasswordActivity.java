@@ -11,12 +11,16 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.wyw.ljtmgr.R;
+import com.wyw.ljtmgr.biz.SimpleCommonCallback;
+import com.wyw.ljtmgr.biz.UserBiz;
 import com.wyw.ljtmgr.config.MyApplication;
 import com.wyw.ljtmgr.config.PreferenceCache;
 import com.wyw.ljtmgr.model.BaseJson;
 import com.wyw.ljtmgr.model.Header;
 import com.wyw.ljtmgr.model.LoginModel;
+import com.wyw.ljtmgr.model.ServerResponse;
 import com.wyw.ljtmgr.model.UpdatePassWordModel;
+import com.wyw.ljtmgr.utils.CommonUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +30,8 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
+
+import utils.GsonUtils;
 
 /**
  * Created by Administrator on 2017/8/9.
@@ -45,7 +51,7 @@ public class UpdatePasswordActivity extends BaseActivity {
                 BaseJson<UpdatePassWordModel> baseJson = new BaseJson<UpdatePassWordModel>();
                 String token = PreferenceCache.getToken();
                 String userId = loginer.getAdminUserId();
-                String oldPwd = tvNewPwd.getText().toString();
+                String oldPwd = tvOldPwd.getText().toString();
                 String newPwd = tvNewPwd.getText().toString();
                 Header head = new Header();
                 head.setToken(token);
@@ -53,12 +59,15 @@ public class UpdatePasswordActivity extends BaseActivity {
                 updatePassWordModel.setAdminUserId(userId);
                 updatePassWordModel.setNewPwd(newPwd);
                 updatePassWordModel.setOldPwd(oldPwd);
-                baseJson.setHead(head);
-                baseJson.setBody(updatePassWordModel);
-                Gson gson = new Gson();
-                String data = gson.toJson(baseJson);
-                Log.e("jsondata", data);
-                doUpdate(data);
+
+                UserBiz.updatePwd(updatePassWordModel, new SimpleCommonCallback<ServerResponse>(UpdatePasswordActivity.this) {
+                    @Override
+                    protected void handleResult(ServerResponse result) {
+                        Toast.makeText(getApplicationContext(), "修改成功", Toast.LENGTH_SHORT).show();
+                        UserBiz.logout(UpdatePasswordActivity.this);
+                        finish();
+                    }
+                });
                 break;
         }
     }
@@ -75,51 +84,4 @@ public class UpdatePasswordActivity extends BaseActivity {
         return it;
     }
 
-    public void doUpdate(String data) {
-        RequestParams params = new RequestParams("http://www.lanjiutian.com/ljt_mobile_store/v/user/updatePwd");
-
-        params.setAsJsonContent(true);
-        params.setBodyContent(data);
-//                setLoding(getActivity(), false);
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.e("err", result);
-                try {
-                    JSONObject jsonData = new JSONObject(result);
-                    String success = jsonData.getString("success");
-                    String msg = jsonData.getString("msg");
-                    Log.e("success", success);
-                    if (success.equals("0")) {
-                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-
-                        finish();
-                        // Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                    } else if (success.equals("2")) {
-                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                //解析result
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                Log.e("err", ex.getMessage());
-                Log.e("err", "error.........");
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-                closeLoding();
-                Log.e("err", "cancel.........");
-            }
-
-            @Override
-            public void onFinished() {
-                Log.e("err", "finished.........");
-            }
-        });
-    }
 }

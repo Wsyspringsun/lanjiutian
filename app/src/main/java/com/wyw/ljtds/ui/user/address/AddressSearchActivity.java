@@ -177,7 +177,7 @@ public class AddressSearchActivity extends BaseActivity {
                 PoiInfo itemData = adapter.getItem(i);
                 Intent it = new Intent();
                 it.putExtra(TAG_SELECT_ADDR, GsonUtils.Bean2Json(itemData));
-                Log.e(AppConfig.ERR_TAG, "..Click...PoiInfo:" + GsonUtils.Bean2Json(itemData));
+                Log.e(AppConfig.ERR_TAG, "..Click...PoiInfo index-" + i + ":" + GsonUtils.Bean2Json(itemData));
                 setResult(Activity.RESULT_OK, it);
                 finish();
             }
@@ -229,7 +229,6 @@ public class AddressSearchActivity extends BaseActivity {
 
         @Override
         public void onGetPoiResult(PoiResult poiResult) {
-//            Log.e(AppConfig.ERR_TAG, "poiResult:" + GsonUtils.Bean2Json(poiResult));
             rltData = poiResult.getAllPoi();
             bindData2Adapter();
         }
@@ -264,11 +263,10 @@ public class AddressSearchActivity extends BaseActivity {
         @Override
         protected void convert(BaseViewHolder baseViewHolder, PoiInfo poiInfo) {
             String rlt = poiInfo.name + "\n" + poiInfo.address;
-            String key = etKeyword.getText().toString();
+            String key = poiInfo.name;
 //
             SpannableString spanRlt = new SpannableString(rlt);
             int startIdx = rlt.indexOf(key), len = key.length();
-            Log.e(AppConfig.ERR_TAG, "" + startIdx + "/" + len);
             if (startIdx < 0 || startIdx > rlt.length()) startIdx = 0;
             if (StringUtils.isEmpty(rlt) || StringUtils.isEmpty(key)) len = 0;
             spanRlt.setSpan(new ForegroundColorSpan(Color.RED), startIdx, startIdx + len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

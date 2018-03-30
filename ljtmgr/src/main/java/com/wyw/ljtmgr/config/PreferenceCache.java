@@ -12,6 +12,7 @@ import android.content.SharedPreferences.Editor;
  */
 public class PreferenceCache {
 
+    public static final String PF_ACTIVE = "active"; // token
     public static final String PF_TOKEN = "token"; // token
     public static final String PF_VERSION = "";//版本号
     public static final String PF_USER = "user";// 保存上次登录的用户名
@@ -65,5 +66,17 @@ public class PreferenceCache {
      */
     public static String getCouriorData() {
         return getSharedPreferences().getString(PF_COURIORDATA, "");
+    }
+
+    public static void putActived(Boolean isActive) {
+        SharedPreferences pref = getSharedPreferences();
+
+        Editor editor = pref.edit();
+        editor.putBoolean(PF_ACTIVE, isActive);
+        editor.commit();
+    }
+
+    public static Boolean getActived() {
+        return getSharedPreferences().getBoolean(PF_ACTIVE, false);
     }
 }

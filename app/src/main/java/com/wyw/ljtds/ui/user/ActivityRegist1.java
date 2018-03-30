@@ -152,6 +152,7 @@ public class ActivityRegist1 extends BaseActivity {
             protected void onExecuteSucceeded(String result) {
                 closeLoding();
 
+//                getLog = 1
                 PreferenceCache.putToken(result); // 持久化缓存token
                 PreferenceCache.putAutoLogin(true);// 记录是否自动登录
                 PreferenceCache.putUsername(phone);
@@ -162,8 +163,6 @@ public class ActivityRegist1 extends BaseActivity {
 
                 //显示赠送优惠券的
                 showSentTicket();
-
-
             }
 
             @Override

@@ -16,8 +16,8 @@ android {
         applicationId "com.wyw.ljtds"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 15
-        versionName "1.2.0"
+        versionCode 16
+        versionName "1.2.1"
         multiDexEnabled = true
         manifestPlaceholders = [
                 JPUSH_PKGNAME: applicationId,

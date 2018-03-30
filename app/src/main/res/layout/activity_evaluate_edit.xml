@@ -104,10 +104,11 @@
                     android:layout_toRightOf="@id/activity_evaluate_edit_imgshop"
                     android:text="店铺评价"
                     android:textColor="@color/font_0"
-                    android:textSize="@dimen/font_2" />
+                    android:textSize="@dimen/font_4" />
 
                 <TextView
                     android:id="@+id/group_name"
+                    android:visibility="gone"
                     style="@style/font_ww_14"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -136,7 +137,8 @@
                     android:layout_marginLeft="@dimen/vertical_margin_lg"
                     android:numStars="5"
                     android:progressDrawable="@drawable/bg_starbar"
-                    android:rating="5" />
+                    android:rating="5"
+                    android:stepSize="1" />
 
             </LinearLayout>
 
@@ -160,7 +162,8 @@
                     android:layout_marginLeft="@dimen/vertical_margin_lg"
                     android:numStars="5"
                     android:progressDrawable="@drawable/bg_starbar"
-                    android:rating="5" />
+                    android:rating="5"
+                    android:stepSize="1" />
 
             </LinearLayout>
 
@@ -184,7 +187,8 @@
                     android:layout_marginLeft="@dimen/vertical_margin_lg"
                     android:numStars="5"
                     android:progressDrawable="@drawable/bg_starbar"
-                    android:rating="5" />
+                    android:rating="5"
+                    android:stepSize="1" />
 
             </LinearLayout>
         </LinearLayout>

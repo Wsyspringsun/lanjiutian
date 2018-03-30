@@ -10,9 +10,13 @@ public class OrderDetail {
 
     private String commodityColor;
 
-    private String exchangeQuanlity;
+    private String barCode; //条形码
+
+    private String exchangeQuanlity; //交易 数量
 
     private Double costMoneyAll;
+
+    private Double costMoney;
 
     private String commoditySize;
 
@@ -74,5 +78,21 @@ public class OrderDetail {
 
     public void setImgPath(String imgPath) {
         this.imgPath = imgPath;
+    }
+
+    public Double getCostMoney() {
+        return costMoney;
+    }
+
+    public void setCostMoney(Double costMoney) {
+        this.costMoney = costMoney;
+    }
+
+    public String getBarCode() {
+        return barCode;
+    }
+
+    public void setBarCode(String barCode) {
+        this.barCode = barCode;
     }
 }

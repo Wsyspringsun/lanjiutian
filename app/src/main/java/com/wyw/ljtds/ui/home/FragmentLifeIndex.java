@@ -3,9 +3,13 @@ package com.wyw.ljtds.ui.home;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,12 +44,20 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
+import static android.R.attr.y;
+import static com.wyw.ljtds.R.id.header;
+
 /**
  * Created by Administrator on 2016/12/9 0009.
  */
 
 @ContentView(R.layout.fragment_life_index)
 public class FragmentLifeIndex extends BaseFragment {
+
+    @ViewInject(R.id.fragment_life_sr)
+    SwipeRefreshLayout srf;
+    @ViewInject(R.id.fragment_life_sv)
+    NestedScrollView sv;
     @ViewInject(R.id.fragment_life_index_main)
     RecyclerView rylvIndexMain;
     @ViewInject(R.id.fragment_life_index_header)
@@ -82,7 +94,6 @@ public class FragmentLifeIndex extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
     @Override
@@ -128,7 +139,15 @@ public class FragmentLifeIndex extends BaseFragment {
         return fragment;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void initView() {
+        srf.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadhomeData();
+                srf.setRefreshing(false);
+            }
+        });
         //location info
         tvLocation.setText("定位中...");
         setLocation();
@@ -144,19 +163,43 @@ public class FragmentLifeIndex extends BaseFragment {
         GridLayoutManager layoutManger = new GridLayoutManager(getActivity(), 12);
         rylvIndexMain.setLayoutManager(layoutManger);
         rylvIndexMain.setItemAnimator(new DefaultItemAnimator());
-        rylvIndexMain.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        sv.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                int ivHeight = (int) getResources().getDimension(R.dimen.x150);
+                if (scrollY <= 0) {
+                    llLifeHeader.setBackgroundColor(Color.TRANSPARENT);
+                } else if (scrollY < ivHeight) {
+                    float scale = (float) scrollY / (float) ivHeight;
+                    float alpha = 255 * scale;
+                    // TODO: 2016/9/3 注释里面的方法也可以实现
+                    //先设置一个背景，然后在让背景乘以透明度
+//                    header.setBackgroundColor(getResources().getColor(R.color.base_bar));
+                    llLifeHeader.setBackgroundColor(getResources().getColor(R.color.base_bar));
+                    llLifeHeader.getBackground().setAlpha((int) alpha);
+
+                } else if (scrollY >= ivHeight) {
+                    llLifeHeader.setBackgroundColor(getResources().getColor(R.color.base_bar));
+                }
+//                Log.e(AppConfig.ERR_TAG, "ivHeight:" + ivHeight + "int scrollX:" + scrollX + "int scrollY:" + scrollY + "int oldScrollX:" + oldScrollX + "int oldScrollY:" + oldScrollY);
+            }
+        });
+
+        /*rylvIndexMain.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (0 == newState) {
                     //0标识到达了
-                    int fp = ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+//                    int fp = ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
                     //完成滑动
-                    if (fp == 0) {
+                    *//*if (fp == 0) {
                         llLifeHeader.setBackgroundColor(Color.TRANSPARENT);
                     } else {
                         llLifeHeader.setBackgroundColor(getResources().getColor(R.color.base_bar));
-                    }
+                    }*//*
                 }
 //                Log.e(AppConfig.ERR_TAG, "newState:" + newState);
             }
@@ -166,7 +209,7 @@ public class FragmentLifeIndex extends BaseFragment {
                 super.onScrolled(recyclerView, dx, dy);
 //
             }
-        });
+        });*/
     }
 
     //从网络加载首页所有数据
@@ -231,6 +274,7 @@ public class FragmentLifeIndex extends BaseFragment {
                                 String sLoc = addr.getADDRESS_LOCATION();
                                 StringBuilder err = new StringBuilder();
                                 MyLocation loc = AddressModel.parseLocation(err, sLoc);
+                                loc.setADDRESS_ID(addr.getADDRESS_ID() + "");
                                 if (err.length() > 0) {
                                     ToastUtil.show(getActivity(), err.toString());
                                     return;
@@ -255,8 +299,9 @@ public class FragmentLifeIndex extends BaseFragment {
     }
 
     public void setLocation() {
-        if (SingleCurrentUser.location != null) {
+        if (SingleCurrentUser.location != null && !SingleCurrentUser.location.getAddrStr().equals(tvLocation.getText())) {
             tvLocation.setText(SingleCurrentUser.location.getAddrStr());
         }
+
     }
 }

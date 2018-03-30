@@ -51,6 +51,7 @@
     <color name="font_3">#888</color>
     <color name="font_4">#999</color>
     <color name="font_blue">#2b7ff5</color>
+    <color name="font_money">#F51424</color>
     <!-- 茶色 -->
     <!-- 分割线 -->
     <color name="gray1">#eeeeee</color>

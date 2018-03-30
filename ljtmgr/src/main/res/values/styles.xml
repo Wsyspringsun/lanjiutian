@@ -37,4 +37,11 @@
         <item name="android:textColor">#333</item>
         <item name="android:textSize">12dp</item>
     </style>
+
+    <style name="MyTab" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textSize">9dp</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
 </resources>

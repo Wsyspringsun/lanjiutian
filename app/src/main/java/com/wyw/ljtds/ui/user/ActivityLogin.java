@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.UserBiz;
@@ -48,7 +50,7 @@ public class ActivityLogin extends BaseActivity {
     @ViewInject(R.id.ed_pass)
     private EditText ed_pass;
 
-    @Event(value = {R.id.guanbi, R.id.zhuce, R.id.next, R.id.chongzhi})
+    @Event(value = {R.id.activity_login_third_wechat, R.id.guanbi, R.id.zhuce, R.id.next, R.id.chongzhi})
     private void onclick(View view) {
         Intent it;
         switch (view.getId()) {
@@ -76,6 +78,14 @@ public class ActivityLogin extends BaseActivity {
             case R.id.chongzhi:
                 finish();
                 startActivity(new Intent(this, ActivityAmendPassword1.class));
+                break;
+            case R.id.activity_login_third_wechat:
+                // send oauth request
+                IWXAPI wxApi = ((MyApplication) getApplication()).wxApi;
+                SendAuth.Req req = new SendAuth.Req();
+                req.scope = "snsapi_userinfo";
+                req.state = System.currentTimeMillis() + "";
+                wxApi.sendReq(req);
                 break;
         }
     }

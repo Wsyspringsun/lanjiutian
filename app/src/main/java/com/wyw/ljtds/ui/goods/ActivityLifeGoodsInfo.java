@@ -41,6 +41,8 @@ import org.xutils.view.annotation.ViewInject;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.xiaoneng.uiapi.Ntalker;
+
 
 /**
  * Created by Administrator on 2016/12/26 0026.
@@ -57,6 +59,7 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
     private void onClick(View v) {
 //        super.onClick(v);
         Log.e(AppConfig.ERR_TAG, "shop");
+        if (commodityModel == null) return;
         switch (v.getId()) {
             case R.id.activity_goods_info_tv_goumai:
                 if (!UserBiz.isLogined()) {
@@ -64,7 +67,6 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
                     return;
                 }
 
-                if (commodityModel == null) return;
                 if (fragmentCommodityInfo.seledSize == null) {
                     fragmentCommodityInfo.showSelDialog(new MyCallback() {
                         @Override
@@ -196,6 +198,9 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
         ot.setLAT(SingleCurrentUser.location.getLatitude() + "");
         ot.setLNG(SingleCurrentUser.location.getLongitude() + "");
         ot.setINS_USER_ID(AppConfig.GROUP_LIFE);
+        if (SingleCurrentUser.location != null && !StringUtils.isEmpty(SingleCurrentUser.location.getADDRESS_ID())) {
+            ot.setADDRESS_ID(SingleCurrentUser.location.getADDRESS_ID() + "");
+        }
 
         return ot;
     }
@@ -207,6 +212,7 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
 
     @Override
     protected void handleClickEvent(View v) {
+        if (commodityModel == null) return;
         switch (v.getId()) {
             case R.id.fragment_consult_ll_kefu:
                 //开启客服
@@ -256,12 +262,12 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
                     v.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            if (commodityModel == null) return;
                             String price = "";
                             if (commodityModel.getColorList() != null && commodityModel.getColorList().size() > 0 && commodityModel.getColorList().get(0).getSizeList() != null && commodityModel.getColorList().get(0).getSizeList().size() > 0) {
                                 price = commodityModel.getColorList().get(0).getSizeList().get(0).getMarketPrice() + "";
                             }
                             String description = commodityModel.getTitle() + "  " + price;
-                            Utils.log("description:" + description + "getIMG_PATH:" + AppConfig.IMAGE_PATH_LJT + commodityModel.getImgPath());
                             wechatShare(commodityModel.getTitle(), description, AppConfig.IMAGE_PATH_LJT + commodityModel.getImgPath(), AppConfig.WEB_APP_URL + "/lifeDetail.html?commodityId=" + commodityModel.getCommodityId());
                         }
                     });
@@ -317,6 +323,9 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
 //            settingid1 = xnd.getSettingid1();
         } else {
 //            Log.e(AppConfig.ERR_EXCEPTION, "XiaoNengData is null");
+
+            String startPageUrl = AppConfig.WEB_APP_URL + "/lifeDetail.html?commodityId=" + commodityModel.getCommodityId();
+            Ntalker.getBaseInstance().startAction_goodsDetail(commodityModel.getTitle(), startPageUrl, xnd.getSellerid(), "");
         }
 //        groupName = model.getGroupName();
 

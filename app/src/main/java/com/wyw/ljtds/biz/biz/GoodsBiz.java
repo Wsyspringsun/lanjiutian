@@ -123,7 +123,7 @@ public class GoodsBiz extends BaseBiz {
     public static List<MedicineDetailsEvaluateModel> getEvaluate(String id, String startIdx, String pageSize) throws BizFailure, ZYException {
         SoapProcessor ksoap = new SoapProcessor("Service", "getEvaluate", false);
 
-        ksoap.setProperty("wareId", id, SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("commodityId", id, SoapProcessor.PropertyType.TYPE_STRING);
         ksoap.setProperty("startIdx", startIdx, SoapProcessor.PropertyType.TYPE_STRING);
         ksoap.setProperty("pageSize", pageSize, SoapProcessor.PropertyType.TYPE_STRING);
 
@@ -423,6 +423,7 @@ public class GoodsBiz extends BaseBiz {
     }
 
     public static List<MedicineListModel> loadGoodsOfShop(String data) throws BizFailure, ZYException {
+        Log.e(AppConfig.ERR_TAG, "data:" + data);
         SoapProcessor ksoap = new SoapProcessor("Service", "shop", false);
         ksoap.setProperty("op", "shopMedicineList", SoapProcessor.PropertyType.TYPE_STRING);
         ksoap.setProperty("data", data, SoapProcessor.PropertyType.TYPE_STRING);

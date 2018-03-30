@@ -23,15 +23,20 @@
             app:tabSelectedTextColor="@android:color/holo_orange_dark"
             app:theme="@style/Widget.Design.TabLayout" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/fragment_order_index_ryv"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/fragment_order_index_sr"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/x3"
-            android:background="@color/basebackground">
+            android:layout_height="match_parent">
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_order_index_ryv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/x3"
+                android:background="@color/basebackground">
 
+            </android.support.v7.widget.RecyclerView>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <!--<android.support.v4.view.ViewPager
             android:id="@+id/fragment_order_index_vp"

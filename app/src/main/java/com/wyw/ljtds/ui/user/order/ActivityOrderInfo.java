@@ -164,14 +164,20 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
 
             case R.id.lianxi:
                 //Log.e(AppConfig.ERR_TAG, "group_id:" + group_id);
-//                openChat( model.getTitle(), "", settingid1, groupName, true, model.getCommodityId() );
-//                if (!StringUtils.isEmpty(group_id) && group_id.equals("sxljt")) {
-//                    openChat("交易订单号：" + trade_id, "", settingid0, groupName, false, "");
-//                } else if (!StringUtils.isEmpty(group_id)) {
-//                    openChat("交易订单号：" + trade_id, "", settingid1, groupName, false, "");
-//                }
 
-                openChat("交易订单号：" + trade_id, "", settingid1, groupName, false, "");
+                openChat("交易订单号：" + trade_id, "", model.getXiaonengData().getSettingid1(), model.getLOGISTICS_COMPANY(), false, "");
+                if (model != null && !AppConfig.GROUP_LJT.equals(model.getINS_USER_ID())) {
+                    openChat("交易订单号：" + trade_id, "", model.getXiaonengData().getSettingid1(), model.getLOGISTICS_COMPANY(), false, "");
+                } else {
+                    openChat("交易订单号：" + trade_id, "", AppConfig.CHAT_XN_LJT_SETTINGID1, AppConfig.CHAT_XN_LJT_TITLE1, false, "");
+                }
+                /*if (!StringUtils.isEmpty(group_id) && group_id.equals(AppConfig.GROUP_LJT)) {
+                    openChat("交易订单号：" + trade_id, "", settingid0, groupName, false, "");
+                } else if (!StringUtils.isEmpty(group_id)) {
+                    openChat("交易订单号：" + trade_id, "", settingid1, groupName, false, "");
+                }*/
+
+//                openChat("交易订单号：" + trade_id, "", AppConfig.CHAT_XN_LJT_SETTINGID1, AppConfig.CHAT_XN_LJT_TITLE1, false, "");
                 break;
 
             case R.id.boda:
@@ -282,7 +288,7 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 dingdan.setText("订单号：" + orderModelInfoMedicine.getORDER_TRADE_ID());
                 dingdan1.setText("创建时间：" + DateUtils.parseTime(orderModelInfoMedicine.getCREATE_DATE() + ""));
                 shangp_z.setText("￥" + orderModelInfoMedicine.getGROUP_MONEY_ALL() + "");
-                zongjia.setText("￥" + orderModelInfoMedicine.getPAY_AMOUNT());
+                zongjia.setText("￥" + orderModelInfoMedicine.getGROUP_PAY_AMOUNT());
                 jifen_d.setText("￥" + orderModelInfoMedicine.getPOINT_MONEY());
                 if (orderModelInfoMedicine.getCOMPLETE_DATE() != null) {
                     dingdan2.setVisibility(View.VISIBLE);

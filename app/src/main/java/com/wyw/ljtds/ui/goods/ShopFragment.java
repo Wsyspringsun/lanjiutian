@@ -41,6 +41,7 @@ public class ShopFragment extends BaseFragment {
 
     private String mParam1;
     private String mParam2;
+    private ShopModel shopModel;
 
     /**
      * Use this factory method to create a new instance of
@@ -87,9 +88,8 @@ public class ShopFragment extends BaseFragment {
             @Override
             protected void onExecuteSucceeded(ShopModel shop) {
                 closeLoding();
-                String shopname = shop.getLOGISTICS_COMPANY();
-                String shopTel = AppConfig.LJG_TEL;
-                tvInfo.setText("店铺信息：" + shopname + "\n" + "联系我们：" + shopTel);
+                shopModel = shop;
+                bindData2View();
             }
 
             @Override
@@ -97,5 +97,13 @@ public class ShopFragment extends BaseFragment {
                 closeLoding();
             }
         }.execute();
+    }
+
+    private void bindData2View() {
+        if (!isAdded()) return;
+        if (shopModel == null) return;
+        String shopname = shopModel.getLOGISTICS_COMPANY();
+        String shopTel = AppConfig.LJG_TEL;
+        tvInfo.setText("店铺信息：" + shopname + "\n" + "联系我们：" + shopTel);
     }
 }

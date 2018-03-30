@@ -22,17 +22,23 @@ import com.baidu.trace.model.ProcessOption;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.model.AddressModel;
+import com.wyw.ljtds.model.MessageLib;
 import com.wyw.ljtds.model.MyLocation;
 import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.service.LocationService;
+import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
+import com.wyw.ljtds.ui.user.ActivityMessage;
 import com.wyw.ljtds.utils.CommonUtil;
+import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.NetUtil;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.x;
@@ -42,8 +48,13 @@ import java.util.List;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 import cn.jpush.android.api.JPushInterface;
+import cn.xiaoneng.activity.ChatActivity;
 import cn.xiaoneng.uiapi.Ntalker;
+import cn.xiaoneng.uiapi.OnChatmsgListener;
+import cn.xiaoneng.uiapi.OnMsgUrlClickListener;
 import cn.xiaoneng.uiapi.OnUnreadmsgListener;
+import cn.xiaoneng.uiapi.XNClickGoodsListener;
+import cn.xiaoneng.xpush.XPush;
 
 /**
  * Created by Administrator on 2016/12/8 0008.
@@ -68,11 +79,9 @@ public class MyApplication extends Application {
     private static Context mAppContext;
     public LBSTraceClient mTraceClient = null;
     //    public long serviceId = 155924;
-    public long serviceId = 158684;
     public String entityName = "";
-    public Trace mTrace;
+    //    public Trace mTrace;
     public boolean isServerOk;//valid is server can connect
-    private LocRequest locRequest;
 
     // Location listener
     private BDLocationListener locationListner = new BDLocationListener() {
@@ -106,7 +115,13 @@ public class MyApplication extends Application {
         //fresco
         Fresco.initialize(this);
         //app crash收集
+        CustomActivityOnCrash.setLaunchErrorActivityWhenInBackground(false);
         CustomActivityOnCrash.install(this);
+//        CustomActivityOnCrash.setShowErrorDetails(true);
+        CustomActivityOnCrash.setEventListener(new MyCrashEventListener());
+//        CustomActivityOnCrash.setEnableAppRestart(true);
+//        CustomActivityOnCrash.setRestartActivityClass(MainActivity.class);
+        CustomActivityOnCrash.setErrorActivityClass(MainActivity.class);
         //小能
 //        Ntalker.getInstance().initSDK(this, "lj_1000", "lanjiutian"); //old version
         /**
@@ -123,6 +138,7 @@ public class MyApplication extends Application {
             Ntalker.getBaseInstance().initSDK(this, siteId, appkey, entityName);
         }
 //        Ntalker.getInstance().enableDebug( true );
+        //未读消息的监听
         Ntalker.getExtendInstance().message().setOnUnreadmsgListener(new OnUnreadmsgListener() {
             /**
              * @param settingid: 接待组id
@@ -132,9 +148,24 @@ public class MyApplication extends Application {
              */
             @Override
             public void onUnReadMsg(String settingid, String username, String msgcontent, int messagecount) {
-                Log.e(AppConfig.ERR_TAG, settingid + "/" + username + ":" + msgcontent);
+                Log.e(AppConfig.ERR_TAG, "xiaoneng setOnUnreadmsgListener" + settingid + "/" + username + ":" + msgcontent + ",messagecount:" + messagecount);
+                MessageLib.getInstance(getApplicationContext()).saveUnreadMsgCount(settingid, messagecount);
             }
         });
+        //处理 点击通知事件
+        XPush.setNotificationClickToActivity(mAppContext, ActivityMessage.class);
+
+
+        /*Ntalker.getExtendInstance().message().setOnChatmsgListener(new OnChatmsgListener() {
+            @Override
+            public void onChatMsg(boolean isSelfMsg, String settingid, String username, String msgcontent, long msgtime, boolean isunread, int unreadcount, String uicon) {
+                Log.e(AppConfig.ERR_TAG, "xiaoneng setOnChatmsgListener" + settingid + "/" + username + ":" + msgcontent);
+*//*                if (ringtonenotification == null)
+                    return;
+                if (isSelfMsg == false)
+                    ringtonenotification.play();*//*
+            }
+        });*/
 
         //极光推送通知
         JPushInterface.setDebugMode(true);
@@ -153,8 +184,7 @@ public class MyApplication extends Application {
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
         SDKInitializer.setCoordType(CoordType.BD09LL);
         mTraceClient = new LBSTraceClient(mAppContext);
-        mTrace = new Trace(serviceId, entityName);
-        locRequest = new LocRequest(serviceId);
+//        mTrace = new Trace(serviceId, entityName);
 
         //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
         locationService.registerListener(locationListner);
@@ -180,7 +210,7 @@ public class MyApplication extends Application {
 
     /**
      * 获取当前位置
-     */
+     *//*
     public void getCurrentLocation(OnEntityListener entityListener, OnTrackListener trackListener, String entityName) {
         // 网络连接正常，开启服务及采集，则查询纠偏后实时位置；否则进行实时定位
         if (NetUtil.isNetworkAvailable(mAppContext)) {
@@ -195,7 +225,7 @@ public class MyApplication extends Application {
             Log.e(AppConfig.ERR_TAG, "queryRealTimeLoc.........");
             mTraceClient.queryRealTimeLoc(locRequest, entityListener);
         }
-    }
+    }*/
 
 
     /**
@@ -247,6 +277,24 @@ public class MyApplication extends Application {
             protected void OnExecuteFailed() {
             }
         }.execute();
+    }
+
+    private static class MyCrashEventListener implements CustomActivityOnCrash.EventListener {
+        @Override
+        public void onLaunchErrorActivity() {
+            Log.i(AppConfig.ERR_TAG, "onLaunchErrorActivity 抱歉，系统竟然崩溃了！");
+            ToastUtil.show(getAppContext(), "抱歉，网络异常，请检查网络环境！");
+        }
+
+        @Override
+        public void onRestartAppFromErrorActivity() {
+            Log.i(AppConfig.ERR_TAG, "onRestartAppFromErrorActivity");
+        }
+
+        @Override
+        public void onCloseAppFromErrorActivity() {
+            Log.i(AppConfig.ERR_TAG, "onCloseAppFromErrorActivity");
+        }
     }
 
 }

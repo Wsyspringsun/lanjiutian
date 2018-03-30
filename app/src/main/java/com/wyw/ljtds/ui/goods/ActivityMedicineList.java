@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,6 +64,11 @@ public class ActivityMedicineList extends BaseActivity {
     public static final String TAG_PARAM_CLASSID = "com.wyw.ljtds.ui.goods.ActivityMedicineList.TAG_PARAM_CLASSID";
     public static final String TAG_PARAM_TYPE = "com.wyw.ljtds.ui.goods.ActivityMedicineList.TAG_PARAM_TYPE";
     public static final String TAG_PARAM_KEYWORD = "com.wyw.ljtds.ui.goods.ActivityMedicineList.TAG_PARAM_KEYWORD";
+
+
+    @ViewInject(R.id.activity_goods_list_sr)
+    SwipeRefreshLayout srf;
+
     @ViewInject(R.id.recyclerView)
     private RecyclerView recyclerView; //药品列表
     @ViewInject(R.id.back)
@@ -177,8 +183,8 @@ public class ActivityMedicineList extends BaseActivity {
 
     /**
      * @param context
-     * @param type 0:获取一对多关系 ，1 ： 获取多对多关系列表
-     * @param topFlg 活动标识
+     * @param type    0:获取一对多关系 ，1 ： 获取多对多关系列表
+     * @param topFlg  活动标识
      * @param classId 分类
      * @param keyword 查询关键字
      * @return
@@ -219,6 +225,13 @@ public class ActivityMedicineList extends BaseActivity {
 //        final GridLayoutManager glm = new GridLayoutManager(this, 1);
         final LinearLayoutManager glm = new LinearLayoutManager(this);
         setLocation();
+        srf.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getlist();
+                srf.setRefreshing(false);
+            }
+        });
         recyclerView.setLayoutManager(glm);
 //        recyclerView.setItemAnimator(new DefaultItemAnimator());
 //        recyclerView.addItemDecoration(new SpaceItemDecoration(10));
@@ -253,14 +266,15 @@ public class ActivityMedicineList extends BaseActivity {
         adapter.setEmptyView(noData);
         recyclerView.setAdapter(adapter);
 
+
+        initParams();
+        getlist();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        initParams();
-        getlist();
     }
 
     private void getlist() {

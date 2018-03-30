@@ -24,8 +24,11 @@ import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.AreaModel;
+import com.wyw.ljtds.model.MyLocation;
+import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.InputMethodUtils;
@@ -37,6 +40,7 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -108,6 +112,12 @@ public class ActivityAddressEdit extends BaseActivity {
         }
     }
 
+    /**
+     *
+     * @param ctx
+     * @param addrModel 编辑状态要有 ,新增是传null
+     * @return
+     */
     public static Intent getIntent(Context ctx, AddressModel addrModel) {
         Intent it = new Intent(ctx, ActivityAddressEdit.class);
         it.putExtra(TAG_ADDRESS, addrModel);
@@ -166,6 +176,7 @@ public class ActivityAddressEdit extends BaseActivity {
             protected void onExecuteSucceeded(Integer s) {
                 closeLoding();
                 ToastUtil.show(ActivityAddressEdit.this, getResources().getString(R.string.add_succeed));
+                setResult(Activity.RESULT_OK);
                 finish();
             }
 
@@ -182,7 +193,7 @@ public class ActivityAddressEdit extends BaseActivity {
         new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                Log.e(AppConfig.ERR_TAG, "uodate=====" + GsonUtils.Bean2Json(addrModel));
+                Utils.log("uodate addr=====" + GsonUtils.Bean2Json(addrModel));
                 return UserBiz.updateUserAddress(addrModel);
             }
 

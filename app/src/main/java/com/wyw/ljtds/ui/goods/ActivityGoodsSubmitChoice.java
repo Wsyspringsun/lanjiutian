@@ -1,5 +1,6 @@
 package com.wyw.ljtds.ui.goods;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
     public static final String TAG_PEISONG = "TAG_PEISONG";
     public static final String TAG_IIME_START = "TAG_IIME_START";
     public static final String TAG_IIME_END = "TAG_IIME_END";
+    private static final String TAG_DISTRIBUTIONMODE = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmitChoice.TAG_DISTRIBUTIONMODE";
+    private static final String TAG_PAYMENTMETHOD = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmitChoice.TAG_PAYMENTMETHOD";
     @ViewInject(R.id.header_title)
     private TextView title;
     @ViewInject(R.id.time1)
@@ -77,8 +80,15 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
 //        cOrderModel.setDISTRIBUTION_DATE_START(spinner1.getSelectedItem().toString());
 //        cOrderModel.setDISTRIBUTION_DATE_END(spinner2.getSelectedItem().toString());
 //        mIntent.putExtra(TAG_CREATE_ORDER_MODEL, GsonUtils.Bean2Json(cOrderModel));
-        setResult(AppConfig.IntentExtraKey.RESULT_OK, mIntent);
-        finish();
+        switch (v.getId()) {
+            case R.id.queding:
+                setResult(Activity.RESULT_OK, mIntent);
+                finish();
+                break;
+            case R.id.header_return:
+                finish();
+                break;
+        }
     }
 
 
@@ -106,8 +116,23 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
 //        spinner1.setSelection(posStart, true);
 //        spinner2.setSelection(posEnd, true);
 
-        /** wsy c **/
-//        if (cOrderModel.getPAYMENT_METHOD().equals("0")) {
+        //设置默认值
+        String disMtd = getIntent().getStringExtra(TAG_DISTRIBUTIONMODE);
+        String payMtd = getIntent().getStringExtra(TAG_PAYMENTMETHOD);
+        if (OrderTrade.DISTRIBUTION_MODE_SEND.equals(disMtd)) {
+            rgPeisong.check(R.id.dialog_pay_choice_peisong_send);
+        } else if (OrderTrade.DISTRIBUTION_MODE_DIY.equals(disMtd)) {
+            rgPeisong.check(R.id.dialog_pay_choice_peisong_gain);
+        }
+
+        if (OrderTrade.PAYMTD_ONLINE.equals(payMtd)) {
+            rgZhifu.check(R.id.zhifu_rb1);
+        } else if (OrderTrade.PAYMTD_MONEY.equals(payMtd)) {
+            rgZhifu.check(R.id.zhifu_rb2);
+        }
+
+
+//       if (cOrderModel.getPAYMENT_METHOD().equals("0")) {
 //            zhifu_s = "在线支付";
 //        } else if (cOrderModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_MONEY)) {
 //            zhifu_s = "货到付款";
@@ -122,8 +147,10 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
     }
 
 
-    public static Intent getIntent(Context context) {
+    public static Intent getIntent(Context context, String distributionMode, String paymentMethod) {
         Intent it = new Intent(context, ActivityGoodsSubmitChoice.class);
+        it.putExtra(TAG_DISTRIBUTIONMODE, distributionMode);
+        it.putExtra(TAG_PAYMENTMETHOD, paymentMethod);
         return it;
     }
 }

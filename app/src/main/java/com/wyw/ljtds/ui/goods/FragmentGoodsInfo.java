@@ -31,6 +31,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.gxz.PagerSlidingTabStrip;
+import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.GoodsBiz;
 import com.wyw.ljtds.biz.biz.UserBiz;
@@ -57,6 +58,8 @@ import com.wyw.ljtds.widget.commodity.CheckInchModel;
 import com.wyw.ljtds.widget.commodity.CheckInchPopWindow;
 import com.wyw.ljtds.widget.dialog.LifeGoodsSelectDialog;
 import com.wyw.ljtds.widget.goodsinfo.SlideDetailsLayout;
+import com.ysnows.page.PageBehavior;
+import com.ysnows.page.PageContainer;
 
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
@@ -72,16 +75,18 @@ import java.util.List;
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPreviewActivity;
 import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
 
+import static com.squareup.picasso.MemoryPolicy.NO_CACHE;
+import static com.squareup.picasso.MemoryPolicy.NO_STORE;
+
 /**
  * Created by Administrator on 2017/3/12 0012.
  */
 
 @ContentView(R.layout.fragment_goods_info)
 public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayout.OnSlideDetailsListener {
-    @ViewInject(R.id.sv_switch)
-    private SlideDetailsLayout sv_switch;
-    @ViewInject(R.id.sv_goods_info)
-    private ScrollView sv_goods_info;
+    @ViewInject(R.id.fragment_goods_info_container)
+    private PageContainer container;
+
     @ViewInject(R.id.fab_up_slide)
     private FloatingActionButton fab_up_slide;
     @ViewInject(R.id.vp_item_goods_img)
@@ -98,7 +103,7 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
     private TextView tv_goods_config;
     @ViewInject(R.id.v_tab_cursor)
     private View v_tab_cursor;
-//    @ViewInject(R.id.flag_otc)
+    //    @ViewInject(R.id.flag_otc)
 //    private ImageView flag_otc;
     @ViewInject(R.id.goods_changjia)
     private TextView goods_changjia;
@@ -149,13 +154,12 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
         switch (v.getId()) {
             case R.id.ll_pull_up:
                 //上拉查看图文详情
-                sv_switch.smoothOpen(true);
+                container.scrollToBottom();
                 break;
 
             case R.id.fab_up_slide:
                 //点击滑动到顶部
-                sv_goods_info.smoothScrollTo(0, 0);
-                sv_switch.smoothClose(true);
+                container.backToTop();
                 break;
 
             case R.id.ll_goods_detail:
@@ -316,19 +320,7 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
         //默认显示商品详情tab
         fragmentManager.beginTransaction().replace(R.id.fl_content, nowFragment).commitAllowingStateLoss();
 
-        sv_switch.setOnSlideDetailsListener(this);
-
         //ScrollView和edittext焦点冲突问题
-        sv_goods_info.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
-        sv_goods_info.setFocusable(true);
-        sv_goods_info.setFocusableInTouchMode(true);
-        sv_goods_info.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                v.requestFocusFromTouch();
-                return false;
-            }
-        });
 
         //设置文字中间一条横线
 //        tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
@@ -339,6 +331,20 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
 
         //浮标隐藏
         fab_up_slide.hide();
+        container.setOnPageChanged(new PageBehavior.OnPageChanged() {
+
+            @Override
+            public void toTop() {
+                //位于第一页
+                fab_up_slide.hide();
+            }
+
+            @Override
+            public void toBottom() {
+                //位于第二页
+                fab_up_slide.show();
+            }
+        });
 
 
         //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
@@ -381,6 +387,80 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
         }, imgUrls);
     }
 
+/*    public void bindData2View(CommodityDetailsModel model) {
+        if (model == null) return;
+        this.medicineModel = model;
+
+        //轮播图
+        if (model.getIMAGES() != null) {
+            setLoopView(model.getIMAGES());
+        }
+        //内容
+        String wareName = StringUtils.deletaFirst(model.getWARENAME()),
+                detailFlg = model.getCOMMODITY_PARAMETER() == null ? "" : model.getCOMMODITY_PARAMETER(),
+                size = model.getWARESPEC(),
+                brand = model.getCOMMODITY_BRAND() + "  ",
+                price = "\n￥" + model.getSALEPRICE(),
+                treatment = model.getTREATMENT() == null ? "\n\n" : "\n\n" + StringUtils.sub(model.getTREATMENT(), 0, 50),
+                postage = model.getPOSTAGE(),
+                prodAdd = "\n\n生产企业: " + model.getPRODUCER();
+//                detailFlg = model.getFLG_DETAIL()"[买而送一]",
+        StringBuilder sb = new StringBuilder().append(detailFlg).append(brand).append(wareName).append(size).append(postage).append(price).append(prodAdd).append(treatment);
+        int priceStart = sb.indexOf(price), priceEnd = priceStart + price.length();
+        int prodaddStart = sb.indexOf(prodAdd), prodaddEnd = prodaddStart + prodAdd.length();
+        int treatmentStart = sb.indexOf(treatment), treatmentEnd = treatmentStart + treatment.length();
+        SpannableString sbs = new SpannableString(sb.toString());
+        sbs.setSpan(new ForegroundColorSpan(ActivityCompat.getColor(getActivity(), R.color.base_red)), priceStart, priceEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sbs.setSpan(new RelativeSizeSpan(1.2f), priceStart, priceEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sbs.setSpan(new ForegroundColorSpan(ActivityCompat.getColor(getActivity(), R.color.font_3)), prodaddStart, prodaddEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sbs.setSpan(new RelativeSizeSpan(0.8f), prodaddStart, prodaddEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sbs.setSpan(new RelativeSizeSpan(0.8f), treatmentStart, treatmentEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tvContent.setText(sbs);
+        //合计
+        setHejiVal(numberButton.getNumber());
+        //default address or location
+        *//*if (model.getUSER_ADDRESS() != null) {
+            //default address
+//            AddressModel addr = model.getUSER_ADDRESS();
+//            addrText = addr.getCONSIGNEE_ADDRESS();
+
+            addrText = model.getUSER_ADDRESS();
+
+        } else {
+            //default location
+            addrText = SingleCurrentUser.location.getAddrStr();
+        }
+*//*
+
+        //default shop address
+        String shopname = model.getLOGISTICS_COMPANY(),
+                distanceText = model.getDISTANCE_TEXT(),
+                durationText = model.getDURATION_TEXT(),
+                qisong = "￥" + model.getQISONG() + "起送",
+                baoyou = model.getBAOYOU() + "包邮",
+                busFlg = model.getBUSAVLID_FLGText();
+        tvBusFlg.setText(busFlg);
+
+        StringBuilder sbShop = new StringBuilder().append(shopname).append(" " + postage);
+        SpannableString sbsShop = new SpannableString(sbShop.toString());
+        *//*int busFlgStart = sbShop.toString().indexOf(busFlg);
+        int busFlgEnd = busFlgStart + busFlg.length();
+        if (busFlgStart >= 0) {
+            sbsShop.setSpan(new BackgroundColorSpan(Color.RED), busFlgStart, busFlgEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sbsShop.setSpan(new ForegroundColorSpan(Color.WHITE), busFlgStart, busFlgEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sbsShop.setSpan(new RelativeSizeSpan(0.8f), busFlgStart, busFlgEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }*//*
+        tvShopAddress.setText(sbsShop);
+
+        StringBuilder sbShopExtra = new StringBuilder();
+        sbShopExtra.append(distanceText).append("|" + durationText).append("   ").append(qisong).append("|" + baoyou);
+        tvShopExtra.setText(sbShopExtra.toString());
+
+        //门店信息
+        //评论
+        setEvaluateData();
+
+    }*/
 
     public void updeta(CommodityDetailsModel commodityDetailsModel) {
         model = commodityDetailsModel;
@@ -453,6 +533,9 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
         } else {
             shoucang_img.setImageDrawable(getResources().getDrawable(R.mipmap.icon_shoucang_weixuan));
         }
+
+        fragmentGoodsDetails.bindData2View(model.getHtmlPath());
+        fragmentGoodsParameter.bindData2View(model);
     }
 
     //
@@ -510,13 +593,13 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
 //     */
     public class NetworkImageHolderView implements Holder<String> {
         private View rootview;
-        private SimpleDraweeView imageView;
+        private ImageView imageView;
 
         @Override
         public View createView(Context context) {
             rootview = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.goods_item_head_img1, null);
-            imageView = (SimpleDraweeView) rootview.findViewById(R.id.sdv_item_head_img);
-            final ArrayList<String> arrayList = new ArrayList();
+            imageView = (ImageView) rootview.findViewById(R.id.sdv_item_head_img);
+            /*final ArrayList<String> arrayList = new ArrayList();
             for (int i = 0; i < checkInchModel.getImage().length; i++) {
                 arrayList.add(checkInchModel.getImage()[i]);
             }
@@ -527,15 +610,15 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
                     it.putStringArrayListExtra("imgs", arrayList);
                     startActivity(it);
                 }
-            });
+            });*/
             return rootview;
         }
 
         @Override
         public void UpdateUI(Context context, int position, final String data) {
 //        if (!StringUtils.isEmpty( data )){
-            imageView.setImageURI(Uri.parse(data));
-
+//            imageView.setImageURI(Uri.parse(data));
+            Picasso.with(context).load(Uri.parse(data)).fit().memoryPolicy(NO_CACHE, NO_STORE).into(imageView);
 //        }
 
         }

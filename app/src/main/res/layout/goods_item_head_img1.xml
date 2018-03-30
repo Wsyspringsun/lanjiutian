@@ -6,7 +6,7 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <!--<com.facebook.drawee.view.SimpleDraweeView
         fresco:failureImage="@mipmap/zhanweitu_lunbo"
         fresco:placeholderImage="@mipmap/zhanweitu_lunbo"
         fresco:fadeDuration="200"
@@ -14,6 +14,14 @@
         fresco:actualImageScaleType="fitCenter"
         android:id="@+id/sdv_item_head_img"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" />-->
+    <ImageView
+        android:id="@+id/sdv_item_head_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:gravity="center"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/zhanweitu_lunbo" />
 
 </LinearLayout>

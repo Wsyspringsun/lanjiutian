@@ -73,13 +73,13 @@ public class OrderStatus {
                 cStatus = "未确认";
                 break;
             case APPLYRETURNED:
-                cStatus = "申请换退货";
+                cStatus = "申请退换货";
                 break;
             case AGREERETURNED:
-                cStatus = "同意换退货";
+                cStatus = "同意退换货";
                 break;
             case REFUSERETURNED:
-                cStatus = "拒绝换退货";
+                cStatus = "拒绝退换货";
                 break;
             case RETURNED:
                 cStatus = "已退货";

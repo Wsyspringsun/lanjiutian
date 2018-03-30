@@ -106,7 +106,7 @@
                 android:layout_width="@dimen/x22"
                 android:layout_height="@dimen/x22"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/icon_ticket_mianyouquan" />
+                android:src="@mipmap/icon_ticket_youhuiquan" />
 
             <TextView
                 style="@style/font_ww_14"

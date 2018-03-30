@@ -9,15 +9,19 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.baidu.trace.Trace;
 import com.baidu.trace.model.OnTraceListener;
 import com.baidu.trace.model.PushMessage;
+import com.wyw.ljtmgr.biz.UserBiz;
 import com.wyw.ljtmgr.config.AppConfig;
 import com.wyw.ljtmgr.config.MyApplication;
+
 
 /**
  * 拉取服务器消息的后台服务
  */
 public class BackgroundService extends IntentService {
+
     public static final String PREF_IS_ALARM_ON = "PREF_IS_ALARM_ON";
     public static final String BROADCAST_NOTIFICATION = "com.ljt.www.temp.service.IntentService.BROADCAST_NOTIFICATION";
 
@@ -99,15 +103,18 @@ public class BackgroundService extends IntentService {
      */
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.e(AppConfig.TAG_ERR, "intent.........." + intent);
+        Log.e(AppConfig.TAG_ERR, "background intent.........." + System.currentTimeMillis() + "--" + intent);
 
-        if (intent != null) {
+        /*if (intent != null) {
             final String action = intent.getAction();
             Log.e(AppConfig.TAG_ERR, "action:" + action);
             if (!startTrace) {
-
+                if (!UserBiz.isLogined()) return;
+                myApp = (MyApplication) getApplication();
+                Trace mTrace = new Trace(myApp.serviceId, myApp.getCurrentLoginer().getAdminUserId());
+                myApp.mTraceClient.startTrace(mTrace, traceListener);
             }
-        }
+        }*/
     }
 
     public static void setServiceNotifyStat(boolean isNeedNotify) {

@@ -33,6 +33,8 @@ public abstract class SimpleCommonCallback<T extends ServerResponse> implements 
         Gson gson = new Gson();
 //        Type tt = new TypeToken<T>() {
 //        }.getType();
+        //获取泛型的 Class
+        //当前类必须有泛型类，否则会异常
         Class<T> clz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         T rlt = gson.fromJson(result, clz);
 
@@ -43,7 +45,7 @@ public abstract class SimpleCommonCallback<T extends ServerResponse> implements 
             Toast.makeText(context, "错误:" + rlt.getMsg(), Toast.LENGTH_LONG).show();
         } else if (ServerResponse.TOKEN_DEP.equals(rlt.getSuccess()) || ServerResponse.TOKEN_ERR.equals(rlt.getSuccess())) {
             Toast.makeText(context, "登录错误:" + rlt.getMsg(), Toast.LENGTH_LONG).show();
-            UserBiz.logout();
+            UserBiz.logout(context);
 
             if (!(context instanceof ActivityLogin)) {
                 Intent it = ActivityLogin.getIntent(context);

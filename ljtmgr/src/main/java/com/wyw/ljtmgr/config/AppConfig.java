@@ -17,28 +17,31 @@ public class AppConfig {
     public static final int PHASE_SERVER_OK = 1 << 3; //服务端正常
     public static final String PAGE_NUM = "10";
     public static final float MAP_ZOOM = 18.0f;//地图 缩放比例尺
-    public static final int SEQUENCE = 1000 ;
+    public static final int SEQUENCE = 1000;
 
 
     //    private static boolean test = false;
-    private static int TAG_DOMAIN = 2;
+    private static int TAG_DOMAIN = 3;
     public static String WEB_DOMAIN = "";
+    public static String IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";
 
     static {
         switch (TAG_DOMAIN) {
             case 1:
                 WEB_DOMAIN = "http://192.168.2.114:8080/ljt_mobile_store";
+                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/upload/images";
                 break;
             case 2:
                 WEB_DOMAIN = "http://cs.lanjiutian.com/ljt_mobile_store";
+                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/upload/images";
                 break;
             case 3:
-                WEB_DOMAIN = "http://www.lanjiutian.com/ljt_mobile_logistics";
+                WEB_DOMAIN = "http://www.lanjiutian.com/ljt_mobile_store";
+                IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";
                 break;
         }
     }
 
-    public static final String IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";
 
 /*
     public static class IntentExtraKey {

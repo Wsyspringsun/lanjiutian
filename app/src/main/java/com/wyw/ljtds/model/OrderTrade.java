@@ -8,6 +8,9 @@ import java.util.Map;
  * trade order
  **/
 public class OrderTrade {
+    public static final String DISTRIBUTION_MODE_SEND = "0";//送货上门
+    public static final String DISTRIBUTION_MODE_DIY = "1";//自己去取
+
     public static final String PAYMTD_ONLINE = "0";// 在线支付
     public static final String PAYMTD_MONEY = "C";// 货到付款
     public static final String PAYMTD_WECHAT = "1";// 微信支付
@@ -16,6 +19,23 @@ public class OrderTrade {
     public static final String PAYMTD_UNION = "4";// 银联支付
     public static final String PAYMTD_MEDICINE = "5";// 线下医保卡
     public static final String PAYMTD_OTHER = "6";// 线下其他
+    public static final String ALL = "";//全部
+
+    public static final String UNPAY = "0";//未付款
+    public static final String TOSHIPPED = "1";//待发货
+    public static final String SHIPPED = "2";//已发货
+    public static final String RECEIVED = "3";//已签收
+    public static final String LOGISTICSALLOCATED = "4";//物流已分配
+    public static final String LOGISTICSSHIPPED = "5";//物流已发货
+    public static final String LOGISTICSSERVICE = "6";//物流已送达
+    public static final String TRADECANCEL = "7";//物流已取消
+    public static final String UNCONFIRM = "8";//未确认
+    public static final String APPLYRETURNED = "9";//申请换退货
+    public static final String AGREERETURNED = "10";//同意换退货
+    public static final String REFUSERETURNED = "11";//拒绝换退货
+    public static final String RETURNED = "12";//已退货
+    public static final String REFUNDED = "13";//已退款
+    public static final String REJECTEDGOODS = "15";//客户拒收
 
     private String orderTradeId;
     private String oidUserId;

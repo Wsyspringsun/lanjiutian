@@ -5,15 +5,14 @@
     android:background="@color/basebackground"
     android:orientation="vertical">
 
-    <include layout="@layout/fragment_toolbar_common"/>
+    <include android:id="@+id/activity_address_list_head" layout="@layout/fragment_toolbar_common"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/activity_address_list_rv_addrlist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/activity_address_list_tv_tianjia"
-        android:layout_below="@+id/header">
-
+        android:layout_below="@+id/activity_address_list_head">
     </android.support.v7.widget.RecyclerView>
 
     <TextView

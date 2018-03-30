@@ -7,7 +7,7 @@ import java.util.List;
  */
 
 public class GoodsHandingModel extends BaseModel {
-    private String returnGoodsHandingId;
+    private String returnGoodsHandingId = "";
     private String orderTradeId;
     private String orderGroupId;
     private String commodityOrderId;
@@ -18,13 +18,16 @@ public class GoodsHandingModel extends BaseModel {
     private String quanlity;
     private String returnQuanlity;
     private String costMoney;
-    private String returnMoney;
+    private String returnMoney = "";
     private String returnStatus;
     private String userAddress;
+    private String orgAddress;
+    private String orgMobile;
     private String returnOrChange;
-    private String returnReason;
-    private String returnRemarks;
-    private String imgPath;
+    private String returnReason = "";
+    private String returnReasonText = "";
+    private String returnRemarks = "";
+    private String imgPath = "";
     private String imgPath2;
     private String imgPath3;
     private String imgPath4;
@@ -32,9 +35,10 @@ public class GoodsHandingModel extends BaseModel {
     private String logisticsOrderId;
     private String examineVerifyReason;
     private String delFlg;
-    private String insDate;
+    private String insDate = "";
     private String updDate;
     private String[] imgs;
+    private XiaoNengData xiaonengData;
 
     public void setReturnGoodsHandingId(String returnGoodsHandingId) {
         this.returnGoodsHandingId = returnGoodsHandingId;
@@ -259,5 +263,37 @@ public class GoodsHandingModel extends BaseModel {
 
     public void setCommodityOrderId(String commodityOrderId) {
         this.commodityOrderId = commodityOrderId;
+    }
+
+    public String getOrgMobile() {
+        return orgMobile;
+    }
+
+    public void setOrgMobile(String orgMobile) {
+        this.orgMobile = orgMobile;
+    }
+
+    public String getOrgAddress() {
+        return orgAddress;
+    }
+
+    public void setOrgAddress(String orgAddress) {
+        this.orgAddress = orgAddress;
+    }
+
+    public String getReturnReasonText() {
+        return returnReasonText;
+    }
+
+    public void setReturnReasonText(String returnReasonText) {
+        this.returnReasonText = returnReasonText;
+    }
+
+    public XiaoNengData getXiaonengData() {
+        return xiaonengData;
+    }
+
+    public void setXiaonengData(XiaoNengData xiaonengData) {
+        this.xiaonengData = xiaonengData;
     }
 }

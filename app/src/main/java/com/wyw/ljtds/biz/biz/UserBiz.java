@@ -1,5 +1,6 @@
 package com.wyw.ljtds.biz.biz;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -269,7 +270,6 @@ public class UserBiz extends BaseBiz {
     public static int updateUserAddress(AddressModel model) throws BizFailure, ZYException {
 
         SoapProcessor ksoap = new SoapProcessor("Service", "updateUserAddress2", false);
-
         ksoap.setProperty("addressId", model.getADDRESS_ID(), PropertyType.TYPE_STRING);
         ksoap.setProperty("consigneeName", model.getCONSIGNEE_NAME(), PropertyType.TYPE_STRING);
         ksoap.setProperty("consigneeMobile", model.getCONSIGNEE_MOBILE(), PropertyType.TYPE_STRING);
@@ -278,6 +278,7 @@ public class UserBiz extends BaseBiz {
         ksoap.setProperty("consigneeCity", model.getCONSIGNEE_CITY(), PropertyType.TYPE_STRING);
         ksoap.setProperty("consigneeCounty", model.getCONSIGNEE_COUNTY(), PropertyType.TYPE_STRING);
         ksoap.setProperty("consigneeAddress", model.getCONSIGNEE_ADDRESS(), PropertyType.TYPE_STRING);
+        ksoap.setProperty("addressLocation", model.getADDRESS_LOCATION(), PropertyType.TYPE_STRING);
         return ksoap.request().getAsInt();
     }
 
@@ -327,9 +328,7 @@ public class UserBiz extends BaseBiz {
         TypeToken<List<AddressModel>> tt = new TypeToken<List<AddressModel>>() {
         };
         List<AddressModel> fs = gson.fromJson(element, tt.getType());
-        List<AddressModel> bms = new ArrayList<AddressModel>();
-        bms.addAll(fs);
-        return bms;
+        return fs;
     }
 
 

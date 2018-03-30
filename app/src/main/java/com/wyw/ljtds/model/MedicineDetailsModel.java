@@ -1,5 +1,7 @@
 package com.wyw.ljtds.model;
 
+import android.support.annotation.IntegerRes;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -11,6 +13,7 @@ public class MedicineDetailsModel extends MedicineListModel {
     public static final String PRESCRIPTION_FLG_OTC = "1";
     //商品折扣
     private int COMMODITY_DISCOUNT;
+    private Integer SUMQTY;
     //批准文号
     private String FILENO;
     //html
@@ -285,4 +288,11 @@ public class MedicineDetailsModel extends MedicineListModel {
     }
 
 
+    public Integer getSUMQTY() {
+        return SUMQTY;
+    }
+
+    public void setSUMQTY(Integer SUMQTY) {
+        this.SUMQTY = SUMQTY;
+    }
 }

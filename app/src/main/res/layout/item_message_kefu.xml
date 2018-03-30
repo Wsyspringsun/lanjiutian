@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x55"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/activity_message_kefu_fl_yaoshi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x10">
+
+        <ImageView
+            android:id="@+id/activity_message_kefu_img_kefu"
+            android:layout_width="@dimen/x30"
+            android:layout_height="@dimen/x30"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/msg_kefu" />
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/activity_message_tv_kefu_name"
+        style="@style/font_ww_14"
+        android:layout_marginLeft="@dimen/x12"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_toRightOf="@id/activity_message_kefu_fl_yaoshi"
+        android:text="@string/kefu"
+        android:textColor="@color/font_black2" />
+
+    <TextView
+        android:id="@+id/activity_message_kwfu_tv_msg_content"
+        style="@style/font_ww_12"
+        android:layout_alignBottom="@id/activity_message_kefu_fl_yaoshi"
+        android:layout_alignLeft="@id/activity_message_tv_kefu_name"
+        android:layout_below="@id/activity_message_tv_kefu_name"
+        android:layout_marginRight="@dimen/x10"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="点击查看您与客服的沟通记录"
+        android:textColor="@color/gray" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_alignParentBottom="true"
+        android:background="@color/basebackground" />
+
+</RelativeLayout>

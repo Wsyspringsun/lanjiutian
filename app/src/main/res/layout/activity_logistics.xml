@@ -35,8 +35,8 @@
 
                 <TextView
                     android:id="@+id/wuliu"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/x4"
                     android:text="物流"
                     android:textColor="@color/font_1"
@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/x4"
-                    android:text="Info"
+                    android:text="订单编号"
                     android:textColor="@color/font_1"
                     android:textSize="@dimen/font_5" />
 
@@ -102,6 +102,7 @@
                         android:id="@+id/activity_logistic_tel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/vertical_margin"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -125,6 +126,8 @@
                         android:id="@+id/activity_logistic_trace"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/vertical_margin_mid"
+                        android:layout_marginRight="@dimen/vertical_margin_mid"
                         android:orientation="horizontal">
 
                         <ImageView

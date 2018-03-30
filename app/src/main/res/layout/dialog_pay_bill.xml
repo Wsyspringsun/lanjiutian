@@ -177,8 +177,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/x15"
-                            android:text="@string/fapiao_gs"
                             android:tag="1"
+                            android:text="@string/fapiao_gs"
                             android:textSize="@dimen/font_5" />
 
                     </RadioGroup>
@@ -195,7 +195,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/fapiao_tt_rg"
-                            android:hint="请填写单位税务登记号" />
+                            android:digits="1234567890QWERTYUIOPASDFGHJKLZXCVBNM"
+                            android:hint="请填写单位税务登记号"
+                            android:inputType="textCapCharacters"
+                            android:maxLength="20" />
 
                         <EditText
                             android:id="@+id/dialog_bill_ed_title"

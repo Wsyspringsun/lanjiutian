@@ -50,7 +50,7 @@ public class LifeShopActivity extends BaseActivity {
 
     @ViewInject(R.id.activity_lifeshop_tabs)
     TabLayout tabLayout;
-    @ViewInject(R.id.fragment_shopimg_vp_main)
+    @ViewInject(R.id.fragment_lifeshop_shopimg_vp_main)
     ViewPager vpMain;
     String[] tabTitles = {"店铺首页", "全部宝贝", "新品上架"};
     private String shopId;
@@ -59,6 +59,7 @@ public class LifeShopActivity extends BaseActivity {
 
     public static Intent getIntent(Context ctx, String shopId) {
         Intent it = new Intent(ctx, LifeShopActivity.class);
+        it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         it.putExtra(TAG_SHOP_ID, shopId);
         return it;
     }

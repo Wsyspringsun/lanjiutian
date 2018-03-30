@@ -1,13 +1,11 @@
 package com.wyw.ljtds.ui.goods;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -21,12 +19,8 @@ import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
-import com.wyw.ljtds.model.CommodityDetailsModel;
 import com.wyw.ljtds.model.MedicineDetailsEvaluateModel;
-import com.wyw.ljtds.model.MedicineDetailsModel;
 import com.wyw.ljtds.ui.base.BaseFragment;
-import com.wyw.ljtds.utils.DateUtils;
-import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.RecycleViewDivider;
@@ -50,7 +44,6 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
     @ViewInject(R.id.fragment_goods_evaluate_data)
     private RecyclerView rylvData;
 
-    private int pageIndex = 1;
     private boolean end = false;
     private MyAdapter adapter;
     private List<MedicineDetailsEvaluateModel> list_eva;
@@ -58,6 +51,7 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
 
     @ViewInject(R.id.tv_evaluate_cnt)
     TextView tvGoodComment;
+    private int pageIdx = 0;
 
     public static FragmentGoodsPagerEvaluate newInstance(String commId) {
         FragmentGoodsPagerEvaluate frag = new FragmentGoodsPagerEvaluate();
@@ -68,12 +62,23 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        refreshData();
+    }
+
+    @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            String commid = getArguments().getString(ARG_COMMID);
-            geteva(false, true);
+            refreshData();
         }
+    }
+
+    private void refreshData() {
+        pageIdx = 0;
+        end = false;
+        geteva();
     }
 
     @Override
@@ -83,28 +88,54 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
         tvGoodComment.setText("0");
 
         noData = getActivity().getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) rylvData.getParent(), false);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());//必须有
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());//必须有
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动
         rylvData.setLayoutManager(linearLayoutManager);
         rylvData.setItemAnimator(new DefaultItemAnimator());
         rylvData.addItemDecoration(new RecycleViewDivider(getActivity(), LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.font_black2)));
+
+        rylvData.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (0 == newState) {
+                    //0标识到达了
+                    int fp = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                    //完成滑动
+                    if (fp == 1 && !end) {
+                        pageIdx = pageIdx + 1;
+                        geteva();
+                    }
+//                    Log.e(AppConfig.TAG_ERR, "newState:" + newState + " fp" + fp);
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+            }
+        });
     }
 
-    public void bindData2View(List<MedicineDetailsEvaluateModel> medicineDetailsEvaluateModels) {
-        if (medicineDetailsEvaluateModels == null) return;
-        tvGoodComment.setText("(" + medicineDetailsEvaluateModels.size() + ")");
+    private void bindData2View() {
         if (adapter == null) {
             adapter = new MyAdapter();
-            adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-                @Override
-                public void onLoadMoreRequested() {
-                    geteva(true, false);
-                }
-            });
             rylvData.setAdapter(adapter);
         }
-        adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
-        adapter.addData(medicineDetailsEvaluateModels);
+        if (list_eva == null) {
+            end = true;
+        }
+        if (end) {
+            adapter.addFooterView(getFooterView());
+        } else {
+            adapter.removeAllFooterView();
+        }
+        if (pageIdx <= 0) {
+            adapter.setNewData(list_eva);
+        } else {
+            adapter.addData(list_eva);
+        }
         adapter.notifyDataSetChanged();
     }
 
@@ -122,56 +153,20 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
         rylvData.setAdapter(adapter);
     }*/
 
-    private void geteva(final boolean loadmore, final boolean refresh) {
+    private void geteva() {
         setLoding(getActivity(), false);
         new BizDataAsyncTask<List<MedicineDetailsEvaluateModel>>() {
             @Override
             protected List<MedicineDetailsEvaluateModel> doExecute() throws ZYException, BizFailure {
-                String classid = getArguments().getString(ARG_COMMID);
-                if (refresh) {
-                    return GoodsBiz.getEvaluate(classid, "0", AppConfig.DEFAULT_PAGE_COUNT + "");
-                } else {
-                    return GoodsBiz.getEvaluate(classid, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "");
-                }
+                String commId = getArguments().getString(ARG_COMMID);
+                return GoodsBiz.getEvaluate(commId, pageIdx + "", AppConfig.DEFAULT_PAGE_COUNT + "");
             }
 
             @Override
             protected void onExecuteSucceeded(List<MedicineDetailsEvaluateModel> medicineDetailsEvaluateModels) {
                 closeLoding();
-                if (medicineDetailsEvaluateModels.size() < AppConfig.DEFAULT_PAGE_COUNT) {
-                    end = true;
-                    //可以加入emptyview
-                    if (loadmore && medicineDetailsEvaluateModels.size() == 0) {
-                        adapter.setEmptyView(noData);
-                    }
-                } else {
-                    end = false;
-
-                }
-
                 list_eva = medicineDetailsEvaluateModels;
-                if (loadmore) {
-                    adapter.addData(list_eva);
-                    adapter.notifyDataSetChanged();
-                }
-                if (refresh) {
-                    adapter.setNewData(list_eva);
-                    adapter.notifyDataSetChanged();
-                }
-
-
-                if (end) {
-                    adapter.addFooterView(getFooterView());
-                    adapter.notifyDataSetChanged();
-                } else {
-                    adapter.removeAllFooterView();
-                    adapter.notifyDataSetChanged();
-                }
-
-
-                pageIndex++;
-
-                bindData2View(medicineDetailsEvaluateModels);
+                bindData2View();
             }
 
             @Override
@@ -196,7 +191,7 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
         @Override
         protected void convert(BaseViewHolder baseViewHolder, MedicineDetailsEvaluateModel models) {
             String str = models.getMOBILE();
-            baseViewHolder.setText(R.id.time, DateUtils.parseTime(models.getINS_DATE() + ""))
+            baseViewHolder.setText(R.id.time, models.getINS_DATE())
                     .setText(R.id.name, str.substring(0, str.length() - (str.substring(3)).length()) + "****" + str.substring(7))
                     .setText(R.id.context, models.getEVALUATE_CONTGENT());
 
@@ -204,8 +199,8 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
             if (StringUtils.isEmpty(models.getUSER_ICON_FILE_ID())) {
                 user_img.setImageURI(Uri.parse(""));
             } else {
-//                Utils.log(AppConfig.IMAGE_PATH_LJT + models.getUSER_ICON_FILE_ID());
-                user_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + models.getUSER_ICON_FILE_ID()));
+                Utils.log(AppConfig.IMAGE_PATH_LJT + models.getUSER_ICON_FILE_ID());
+                user_img.setImageURI(Uri.parse(models.getUSER_ICON_FILE_ID()));
             }
 
 

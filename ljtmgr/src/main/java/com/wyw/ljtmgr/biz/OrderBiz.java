@@ -10,6 +10,7 @@ import com.wyw.ljtmgr.model.Header;
 import com.wyw.ljtmgr.model.LoginModel;
 import com.wyw.ljtmgr.model.LogisticInfo;
 import com.wyw.ljtmgr.model.OrderDetailGetModel;
+import com.wyw.ljtmgr.model.OrderDetailModel;
 import com.wyw.ljtmgr.model.ServerResponse;
 import com.wyw.ljtmgr.model.UserModel;
 
@@ -61,19 +62,19 @@ public class OrderBiz {
      * @param orderId  order unique id
      * @param callback callback
      */
-    public static void loadOrderDetail(String orderId,String orderStat, Callback.CommonCallback callback) {
+    public static void loadOrderDetail(String orderId, String orderStat, Callback.CommonCallback callback) {
         Header head = CommonBiz.getDataHeader();
 
 //        OrderDetailGetModel orderDetailGetModel = new OrderDetailGetModel();
 //        orderDetailGetModel.setOrderGroupId(orderId);
-        Map<String,String> map = new HashMap<>();
-        map.put("orderGroupId",orderId);
-        map.put("classify",orderStat);
+        Map<String, String> map = new HashMap<>();
+        map.put("orderGroupId", orderId);
+        map.put("classify", orderStat);
 //        orderDetailGetModel.setOrderGroupId(orderId);
 //        orderDetailGetModel.setOrderTradeId(orderId);
 //        orderDetailGetModel.setOidGroupId("sxljt");
 
-        BaseJson<Map<String,String>> baseJson = new BaseJson<>();
+        BaseJson<Map<String, String>> baseJson = new BaseJson<>();
         baseJson.setHead(head);
         baseJson.setBody(map);
         Gson gson = new Gson();
@@ -101,11 +102,13 @@ public class OrderBiz {
         x.http().post(params, callback);
     }
 
-    public static void orderAfterSale(String orderid, String isAgree, Callback.CommonCallback callback) {
+    public static void orderAfterSale(String orderid, String isAgree, String handleReason, Callback.CommonCallback callback) {
         Header head = CommonBiz.getDataHeader();
         Map<String, String> model = new HashMap<>();
         model.put("orderGroupId", orderid);
         model.put("handleStatus", isAgree);
+        model.put("handleReason", handleReason);
+
 
         BaseJson<Map<String, String>> baseJson = new BaseJson<>();
         baseJson.setHead(head);
@@ -119,17 +122,38 @@ public class OrderBiz {
         x.http().post(params, callback);
     }
 
-    public static void orderArrived(String id, SimpleCommonCallback<ServerResponse> callback) {
+    public static void orderArrived(OrderDetailModel model, SimpleCommonCallback<ServerResponse> callback) {
         Header head = CommonBiz.getDataHeader();
         BaseJson<Map<String, String>> baseJson = new BaseJson<>();
         baseJson.setHead(head);
         Map<String, String> m = new HashMap<>();
-        m.put("orderGroupId", id);
+        m.put("orderGroupId", model.getOrderId());
+        m.put("courier", model.getCourier());
+        m.put("courierMobile", model.getCourierMobile());
         baseJson.setBody(m);
         Gson gson = new Gson();
         String data = gson.toJson(baseJson);
 
-        RequestParams params = new RequestParams(AppConfig.WEB_DOMAIN + "/v/order/orderSend");
+        RequestParams params = new RequestParams(AppConfig.WEB_DOMAIN + "/v/order/orderArrived");
+        params.setAsJsonContent(true);
+        params.setBodyContent(data);
+        x.http().post(params, callback);
+    }
+
+    public static void orderRefused(OrderDetailModel model, SimpleCommonCallback<ServerResponse> callback) {
+        Header head = CommonBiz.getDataHeader();
+        BaseJson<Map<String, String>> baseJson = new BaseJson<>();
+        baseJson.setHead(head);
+        Map<String, String> m = new HashMap<>();
+
+        m.put("orderGroupId", model.getOrderId());
+        m.put("courier", model.getCourier());
+        m.put("courierMobile", model.getCourierMobile());
+        baseJson.setBody(m);
+        Gson gson = new Gson();
+        String data = gson.toJson(baseJson);
+
+        RequestParams params = new RequestParams(AppConfig.WEB_DOMAIN + "/v/order/orderRefused");
         params.setAsJsonContent(true);
         params.setBodyContent(data);
         x.http().post(params, callback);

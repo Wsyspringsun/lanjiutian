@@ -75,6 +75,7 @@
                     android:layout_width="@dimen/x16"
                     android:layout_height="@dimen/x16"
                     android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/x10"
                     android:scaleType="fitCenter"
                     android:src="@mipmap/icon_dianpu" />
@@ -82,6 +83,7 @@
                 <TextView
                     android:id="@+id/activity_order_info_dianpu"
                     style="@style/font_ww_14"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/x7"
                     android:layout_toRightOf="@id/activity_order_info_shop_pic"
                     android:text="店铺名称"
@@ -92,9 +94,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:layout_gravity="right|center_vertical"
                     android:layout_marginRight="@dimen/vertical_margin_mid"
                     android:background="@drawable/background_text_button"
+                    android:paddingBottom="@dimen/padding0"
+                    android:paddingLeft="@dimen/padding1"
+                    android:paddingRight="@dimen/padding1"
+                    android:paddingTop="@dimen/padding0"
                     android:text="@string/shouhou_shenqing"
                     android:textColor="@color/base_bar"
                     android:textSize="@dimen/font_5" />
@@ -239,7 +246,7 @@
                 android:layout_marginTop="@dimen/x7"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:padding="@dimen/x6">
+                android:padding="@dimen/x10">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -270,14 +277,7 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/activity_order_info_tv_shopaddr"
-                    style="@style/font_ww_14"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/x10"
-                    android:text="@string/shop_addr"
-                    android:textColor="@color/font_black2" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -288,15 +288,28 @@
                 android:padding="@dimen/x10">
 
                 <TextView
+                    android:id="@+id/activity_order_info_tv_shopaddr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/vertical_margin_lg"
+                    android:text="@string/shop_addr"
+                    android:textColor="@color/font_1" />
+
+                <TextView
                     android:id="@+id/dingdan"
-                    style="@style/font_ww_14"
-                    android:textColor="@color/font_black2" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/vertical_margin_lg"
+                    android:text="ER ID .."
+                    android:textColor="@color/font_1" />
 
                 <TextView
                     android:id="@+id/dingdan1"
-                    style="@style/font_ww_14"
-                    android:layout_marginTop="@dimen/x7"
-                    android:textColor="@color/font_black2" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/vertical_margin_lg"
+                    android:text="创建时间"
+                    android:textColor="@color/font_1" />
 
                 <TextView
                     android:id="@+id/dingdan2"

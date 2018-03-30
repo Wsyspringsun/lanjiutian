@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/basebackground"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/padding"
+        android:paddingLeft="@dimen/padding2"
+        android:paddingRight="@dimen/padding2"
+        android:paddingTop="@dimen/padding">
+
+        <TextView
+            android:id="@+id/fragment_orderdetail_return_reason"
+            style="@style/base_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.1"
+            android:paddingBottom="@dimen/padding"
+            android:paddingTop="@dimen/padding"
+            android:text="@string/order_detail_return_reason" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/padding"
+        android:paddingLeft="@dimen/padding2"
+        android:paddingRight="@dimen/padding2"
+        android:paddingTop="@dimen/padding">
+
+        <TextView
+            android:id="@+id/fragment_orderdetail_return_money"
+            style="@style/base_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.1"
+            android:paddingBottom="@dimen/padding"
+            android:paddingTop="@dimen/padding"
+            android:text="@string/order_detail_return_money" />
+
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/padding"
+        android:paddingLeft="@dimen/padding2"
+        android:paddingRight="@dimen/padding2"
+        android:paddingTop="@dimen/padding">
+
+        <TextView
+            android:id="@+id/fragment_orderdetail_return_remark"
+            style="@style/base_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.1"
+            android:paddingBottom="@dimen/padding"
+            android:paddingTop="@dimen/padding"
+            android:text="@string/order_detail_return_remark" />
+
+    </FrameLayout>
+
+
+    <cn.lemon.multi.MultiView
+        android:id="@+id/fragment_orderdetail_return_imgs"
+        app:divideSpace="@dimen/margin"
+        app:placeholder="@mipmap/zhanweitu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin"
+        android:background="#f1506d" />
+
+
+</LinearLayout>

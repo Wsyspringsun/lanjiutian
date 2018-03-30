@@ -8,12 +8,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wyw.ljtds.R;
@@ -23,6 +25,7 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.AddressModel;
+import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.user.ActivityLogin;
 import com.wyw.ljtds.utils.GsonUtils;
@@ -41,7 +44,10 @@ import java.util.List;
 
 @ContentView(R.layout.activity_address_list)
 public class AddressActivity extends BaseActivity {
+    public static final String TAG_CMD = "com.wyw.ljtds.ui.user.address.ActivityAddress.TAG_CMD";
     public static final String TAG_SELECTED_ADDRESS = "com.wyw.ljtds.ui.user.address.ActivityAddress.tag_selected_address";
+    public static final String CMD_CREATE = "com.wyw.ljtds.ui.user.address.ActivityAddress.CMD_CREATE";
+
 
     @ViewInject(R.id.activity_address_list_rv_addrlist)
     private RecyclerView recyclerView;
@@ -53,14 +59,34 @@ public class AddressActivity extends BaseActivity {
     private List<AddressModel> list;
     private AddressAdapter adapter;
 
+    private void initIconBtnStat() {
+        LinearLayout btnBack = (LinearLayout) findViewById(R.id.back);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddressActivity.this.finish();
+            }
+        });
+        TextView tvTitle = (TextView) findViewById(R.id.activity_fragment_title);
+        tvTitle.setText(getTitle());
+    }
+
     @Event(value = {R.id.activity_address_list_tv_tianjia, R.id.header_return})
     private void onClick(View view) {
         Intent it;
         switch (view.getId()) {
             case R.id.activity_address_list_tv_tianjia:
-                it = new Intent(this, ActivityAddressEdit.class);
-                it.putExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, 1);
-                startActivity(it);
+                Boolean isSel = AddressActivity.this.getIntent().getBooleanExtra(TAG_SELECTED_ADDRESS, false);
+                if (isSel) {
+                    it = new Intent();
+                    it.putExtra(TAG_CMD, CMD_CREATE);
+                    setResult(Activity.RESULT_OK, it);
+                    finish();
+                } else {
+                    it = new Intent(this, ActivityAddressEdit.class);
+                    it.putExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, 1);
+                    startActivity(it);
+                }
                 break;
         }
     }
@@ -74,6 +100,7 @@ public class AddressActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initIconBtnStat();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动 recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -145,6 +172,8 @@ public class AddressActivity extends BaseActivity {
             protected void onExecuteSucceeded(Integer rlt) {
                 closeLoding();
                 if (1 == rlt) {
+                    //删除成功
+                    SingleCurrentUser.location = null;
                     ToastUtil.show(AddressActivity.this, getResources().getString(R.string.delete_succeed));
                     getAddress();
                 }
@@ -189,6 +218,7 @@ public class AddressActivity extends BaseActivity {
         LinearLayout llytIsCheck;
         LinearLayout llytBianji;
         LinearLayout llytShanchu;
+        RelativeLayout rlOp;
 
         public AddressModel getData() {
             return data;
@@ -209,6 +239,14 @@ public class AddressActivity extends BaseActivity {
             llytIsCheck = (LinearLayout) itemView.findViewById(R.id.item_address_llyt_ischeck);
             llytBianji = (LinearLayout) itemView.findViewById(R.id.bianji);
             llytShanchu = (LinearLayout) itemView.findViewById(R.id.shanchu);
+
+            rlOp = (RelativeLayout) itemView.findViewById(R.id.item_address_rl_op);
+            Boolean isSel = AddressActivity.this.getIntent().getBooleanExtra(TAG_SELECTED_ADDRESS, false);
+            if (isSel) {
+                rlOp.setVisibility(View.GONE);
+            } else {
+                rlOp.setVisibility(View.VISIBLE);
+            }
 
             itemView.setOnClickListener(this);
             llytIsCheck.setOnClickListener(this);

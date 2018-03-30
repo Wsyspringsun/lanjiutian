@@ -6,6 +6,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.wyw.ljtds.R;
+import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.OrderCommDto;
 import com.wyw.ljtds.utils.StringUtils;
 
@@ -22,11 +23,13 @@ public class CommOrderAdapter extends BaseQuickAdapter<OrderCommDto> {
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, OrderCommDto goods) {
-        if (StringUtils.isEmpty(goods.getCOMMODITY_COLOR())) {
-            baseViewHolder.setText(R.id.item_order_submit_goods_size, " 规格：" + goods.getCOMMODITY_SIZE());
+        if (AppConfig.GROUP_LJT.equals(goods.getINS_USER_ID())) {
+            //医药
+            baseViewHolder.setText(R.id.item_order_submit_goods_size, "产地：" + goods.getCOMMODITY_COLOR() + " ;" + mContext.getString(R.string.title_cat) + "：" + goods.getCOMMODITY_SIZE());
         } else {
-            baseViewHolder.setText(R.id.item_order_submit_goods_size, "产地：" + goods.getCOMMODITY_COLOR() + " ;规格：" + goods.getCOMMODITY_SIZE());
+            baseViewHolder.setText(R.id.item_order_submit_goods_size, mContext.getString(R.string.title_cat) + " ;" + mContext.getString(R.string.title_size) + "：" + goods.getCOMMODITY_SIZE());
         }
+
         baseViewHolder.setText(R.id.item_order_submit_goods_title, StringUtils.deletaFirst(goods.getCOMMODITY_NAME()))
                 .setText(R.id.item_order_submit_goods_money, "￥" + goods.getCOST_MONEY())
                 .setText(R.id.item_order_submit_goods_number, "X" + goods.getEXCHANGE_QUANLITY());

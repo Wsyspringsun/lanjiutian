@@ -21,16 +21,19 @@ public class SingleCurrentUser {
     public static int locStyleCustom = 1;//通过用户选择
 
     public static void updateLocation(MyLocation loc) {
-        Utils.log(loc.getLatitude() + "|" + loc.getLongitude() + "|" + loc.getAddrStr());
-        SingleCurrentUser.location = loc;
+//        Utils.log(loc.getLatitude() + "|" + loc.getLongitude() + "|" + loc.getAddrStr());
+        if (SingleCurrentUser.location == null) {
+            SingleCurrentUser.location = MyLocation.newInstance(loc.getLatitude(), loc.getLongitude(), loc.getAddrStr());
+        }
+        SingleCurrentUser.location.setADDRESS_ID(loc.getADDRESS_ID());
+        SingleCurrentUser.location.setAddrStr(loc.getAddrStr());
+        SingleCurrentUser.location.setLatitude(loc.getLatitude());
+        SingleCurrentUser.location.setLongitude(loc.getLongitude());
     }
 
     public static void updateLocation(double lat, double lng, String addr) {
-        MyLocation location = MyLocation.newInstance(lat, lng, addr);
-        location.setAddrStr(addr);
-        location.setLongitude(lng);
-        location.setLatitude(lat);
-        SingleCurrentUser.location = location;
-        Utils.log(location.getLatitude() + "|" + location.getLongitude() + "|" + location.getAddrStr());
+        MyLocation loc = MyLocation.newInstance(lat, lng, addr);
+        updateLocation(loc);
+//        Utils.log(location.getLatitude() + "|" + location.getLongitude() + "|" + location.getAddrStr());
     }
 }

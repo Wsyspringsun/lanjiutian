@@ -57,6 +57,7 @@ import com.wyw.ljtds.ui.home.ActivityHomeWeb;
 import com.wyw.ljtds.ui.home.HuoDongActivity;
 import com.wyw.ljtds.ui.user.ActivityCollect;
 import com.wyw.ljtds.ui.user.ActivityLogin;
+import com.wyw.ljtds.ui.user.ActivityMessage;
 import com.wyw.ljtds.ui.user.ActivityWallet;
 import com.wyw.ljtds.ui.user.manage.ActivityManage;
 import com.wyw.ljtds.ui.user.order.ActivityAfterMarket;
@@ -69,6 +70,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import static com.wyw.ljtds.adapter.goodsinfo.MedicineItemAdapter1.RESIZE;
 
 /**
  * Created by wsy on 17-12-9.
@@ -273,9 +276,8 @@ public class UserIndexAdapter extends RecyclerView.Adapter {
             hRecommandGoodsHolder.tvMoney.setText("￥" + data.getSALEPRICE());
             hRecommandGoodsHolder.tvTitle.setText(StringUtils.deletaFirst(data.getWARENAME()));
             if (StringUtils.isEmpty(data.getIMG_PATH())) {
-                hRecommandGoodsHolder.sdv.setImageURI(Uri.parse(""));
             } else {
-                hRecommandGoodsHolder.sdv.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + data.getIMG_PATH()));
+                Picasso.with(context).load(Uri.parse(AppConfig.IMAGE_PATH_LJT + data.getIMG_PATH())).resize(RESIZE, RESIZE).into(hRecommandGoodsHolder.sdv);
             }
         }
     }
@@ -330,24 +332,37 @@ public class UserIndexAdapter extends RecyclerView.Adapter {
         SimpleDraweeView photo;
         TextView infoname;
         TextView infojifen;
+        ImageView message;
         LinearLayout zhanghuguanli;
         public UserModel data;
 
         public BannerHolder(View itemView) {
             super(itemView);
             photo = (SimpleDraweeView) itemView.findViewById(R.id.fragment_user_index_userinfo_img_photo);
+            message = (ImageView) itemView.findViewById(R.id.fragment_user_index_userinfo_img_message);
             infoname = (TextView) itemView.findViewById(R.id.fragment_user_index_userinfo_ll_infoname);
             infojifen = (TextView) itemView.findViewById(R.id.fragment_user_index_userinfo_ll_infoname);
             zhanghuguanli = (LinearLayout) itemView.findViewById(R.id.fragment_user_info_userinfo_zhanghuguanli);
+
+            message.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             if (data == null) return;
-            Intent it = new Intent(context, ActivityManage.class);
-            it.putExtra("user", data);
+            Intent it = null;
+            switch (v.getId()) {
+                case R.id.fragment_user_index_userinfo_img_message:
+                    it = ActivityMessage.getIntent(context);
+                    break;
+                default:
+                    it = new Intent(context, ActivityManage.class);
+                    it.putExtra("user", data);
+                    break;
+            }
             context.startActivity(it);
+
         }
     }
 
@@ -436,7 +451,7 @@ public class UserIndexAdapter extends RecyclerView.Adapter {
     public class RecommandGoodsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvTitle;
         TextView tvMoney;
-        SimpleDraweeView sdv;
+        ImageView sdv;
         public RecommendModel model;
 
         public RecommandGoodsHolder(View itemView) {
@@ -444,7 +459,7 @@ public class UserIndexAdapter extends RecyclerView.Adapter {
 //             item_goods_grid
             tvTitle = (TextView) itemView.findViewById(R.id.goods_title);
             tvMoney = (TextView) itemView.findViewById(R.id.money);
-            sdv = (SimpleDraweeView) itemView.findViewById(R.id.item_goods_grid_sdv);
+            sdv = (ImageView) itemView.findViewById(R.id.item_goods_grid_sdv);
             itemView.setOnClickListener(this);
         }
 

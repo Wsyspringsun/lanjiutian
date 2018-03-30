@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basebackground"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/padding"
+        android:paddingLeft="@dimen/padding2"
+        android:paddingRight="@dimen/padding2"
+        android:paddingTop="@dimen/padding">
+
+        <TextView
+            android:id="@+id/fragment_orderdetail_tv_orderinfo"
+            style="@style/base_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.1"
+            android:paddingBottom="@dimen/padding"
+            android:paddingTop="@dimen/padding"
+            android:text="@string/order_detail_group_remark" />
+
+    </FrameLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x60"
+        android:layout_marginBottom="@dimen/margin"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/padding"
+        android:paddingLeft="@dimen/padding2"
+        android:paddingRight="@dimen/padding2"
+        android:paddingTop="@dimen/padding">
+
+
+        <RelativeLayout
+            android:id="@+id/fragment_orderdetail_rl_loc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true">
+
+            <TextView
+                android:id="@+id/fragment_orderdetail_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:text="@string/order_detail_group_distance"
+                android:textSize="@dimen/font_5" />
+
+            <ImageView
+                android:layout_width="@dimen/x32"
+                android:layout_height="@dimen/x32"
+                android:layout_above="@id/fragment_orderdetail_distance"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_location_on" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/fragment_orderdetail_rl_loc"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/fragment_orderdetail_tv_user_name"
+                    style="@style/base_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/order_detail_user_info_name" />
+
+                <TextView
+                    android:id="@+id/fragment_orderdetail_tv_user_mobile"
+                    style="@style/base_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/margin"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/order_detail_user_info_mobile"
+                    android:textColor="@color/font_2" />
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/fragment_orderdetail_tv_user_addr"
+                style="@style/base_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/order_detail_user_addr" />
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

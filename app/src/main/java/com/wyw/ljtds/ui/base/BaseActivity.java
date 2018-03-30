@@ -6,6 +6,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,6 +28,9 @@ import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.AppManager;
 import com.wyw.ljtds.config.PreferenceCache;
+import com.wyw.ljtds.model.MessageLib;
+import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
+import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.ui.user.ActivityLogin;
 import com.wyw.ljtds.ui.user.address.ActivityAddress;
 import com.wyw.ljtds.ui.user.address.ActivityAddressEdit;
@@ -36,6 +42,7 @@ import com.wyw.ljtds.widget.dialog.LoadingDialogUtils;
 
 import org.xutils.x;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -43,6 +50,8 @@ import java.util.TimerTask;
 
 import cn.xiaoneng.coreapi.ChatParamsBody;
 import cn.xiaoneng.uiapi.Ntalker;
+import cn.xiaoneng.uiapi.OnMsgUrlClickListener;
+import cn.xiaoneng.uiapi.XNClickGoodsListener;
 import cn.xiaoneng.uiapi.XNSDKListener;
 import cn.xiaoneng.utils.CoreData;
 import pub.devrel.easypermissions.AppSettingsDialog;
@@ -55,6 +64,10 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class BaseActivity extends AppCompatActivity implements XNSDKListener, EasyPermissions.PermissionCallbacks {
     BroadcastReceiver receiver;
+
+    private final String HTML_MEDICINE = "medicineDetail.html";
+    private final String HTML_LIFE = "lifeDetail.html";
+    protected static final int REQUEST_CODE_PERMS = 100;
 
     protected boolean canShowLogin = true;
     protected boolean canShowAddress = true;
@@ -79,6 +92,63 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 适配android M，检查权限
+        List<String> permissions = new ArrayList<>();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isNeedRequestPermissions(permissions)) {
+
+            String[] perms = new String[permissions.size()];
+            permissions.toArray(perms);
+            if (!EasyPermissions.hasPermissions(this, perms)) {
+                EasyPermissions.requestPermissions(this, "需要以下权限:", REQUEST_CODE_PERMS, perms);
+            }
+            /*if (!isNotificationEnabled(this)) {
+                // 6.0以上系统才可以判断权限
+                // 进入设置系统应用权限界面
+                final AlertDialog alert = new AlertDialog.Builder(this).create();
+                alert.setTitle(R.string.alert_tishi);
+                alert.setMessage(getResources().getString(R.string.confirm_order_submit));
+                alert.setButton(DialogInterface.BUTTON_POSITIVE, "开启通知", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                        startActivity(intent);
+                    }
+                });
+            }*/
+        }
+
+
+        //聊窗链接点击事件的监听
+        Ntalker.getExtendInstance().message().setOnMsgUrlClickListener(new OnMsgUrlClickListener() {
+            @Override
+            public void onClickUrlorEmailorNumber(int contentType, String s) {
+                Log.e(AppConfig.ERR_TAG, "contentType:" + contentType + "----data:" + s);
+                if (contentType == 1) {
+                    // 网址;
+                    Uri uri = Uri.parse(s);
+
+                    Log.e(AppConfig.ERR_TAG, "uri.getPath():" + uri.getPath());
+                    Log.e(AppConfig.ERR_TAG, "uri.getLastPathSegment():" + uri.getLastPathSegment());
+                    String seg = uri.getLastPathSegment();
+                    String commodityId = uri.getQueryParameter("commodityId");
+                    if (!StringUtils.isEmpty(commodityId)) {
+                        if (HTML_MEDICINE.equals(seg)) {
+                            startActivity(ActivityMedicinesInfo.getIntent(BaseActivity.this, commodityId, ""));
+                        } else if (HTML_LIFE.equals(seg)) {
+                            startActivity(ActivityLifeGoodsInfo.getIntent(BaseActivity.this, commodityId));
+                        }
+                    }
+                }
+            }
+        });
+
+        Ntalker.getExtendInstance().message().onClickShowGoods(new XNClickGoodsListener() {
+            @Override
+            public void onClickShowGoods(int appgoodsinfo_type, int clientgoodsinfo_type, String goods_id, String goods_name, String goods_price, String goods_image, String goods_url, String goods_showurl) {
+                Log.e(AppConfig.ERR_TAG, "appgoodsinfo_type:" + appgoodsinfo_type + "----goods_id:" + goods_id);
+                Ntalker.getExtendInstance().chatHeadBar().setFinishButtonFunctions();
+            }
+        });
 //        Utils.log(this.getClass().getName() + "................");
 
         AppManager.getAppManager().addActivity(this);//activity管理
@@ -123,7 +193,6 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     protected void onStart() {
         super.onStart();
 //        Log.e(AppConfig.ERR_TAG, "onStart:" + this.getClass().getName());
-
     }
 
     @Override
@@ -211,6 +280,7 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
         if (EasyPermissions.hasPermissions(this, perms)) {
             ChatParamsBody chatparams = new ChatParamsBody();
 
+
             // 咨询发起页（专有参数）
             chatparams.startPageTitle = startPageTitle;// 咨询发起页标题(必填)
             chatparams.startPageUrl = startPageUrl;//咨询发起页URL，必须以"http://"开头 （必填）
@@ -221,6 +291,7 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
             // erp参数
             chatparams.erpParam = "";
 
+            chatparams.clickurltoshow_type = CoreData.CLICK_TO_APP_COMPONENT;
 
             if (showGood) {
                 // 商品展示（专有参数）
@@ -229,18 +300,18 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
                 chatparams.itemparams.clicktoshow_type = CoreData.CLICK_TO_APP_COMPONENT;// 点击SDK商品详情,
 
                 chatparams.itemparams.itemparam = "";
-
                 chatparams.itemparams.goods_id = goods_id;//SHOW_GOODS_BY_ID方式的 商品id
             }
 
             //判断是否登陆   是否为游客模式
             if (!StringUtils.isEmpty(PreferenceCache.getToken())) {
-                Ntalker.getInstance().login(PreferenceCache.getPhoneNum(), PreferenceCache.getPhoneNum(), 0);
+                Ntalker.getBaseInstance().login(PreferenceCache.getPhoneNum(), PreferenceCache.getPhoneNum(), 0);
             } else {
-                Ntalker.getInstance().logout();
+                Ntalker.getBaseInstance().logout();
             }
-            int code = Ntalker.getBaseInstance().startChat(getApplicationContext(), settingid, groupName, null);
-            Log.e("xiaoneng_code", code + "");
+
+            Ntalker.getBaseInstance().startChat(getApplicationContext(), settingid, groupName, chatparams);
+            MessageLib.getInstance(getApplicationContext()).saveXnGroup(settingid,groupName);
         } else {
             EasyPermissions.requestPermissions(this, "需要以下权限:", REQUEST_CODE_PERMISSION_XIAONENG, perms);
         }
@@ -318,10 +389,30 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
                     .setTitle(getString(R.string.alert_tishi))
                     .setPositiveButton("设置")
                     .setNegativeButton("取消", null)
-                    .setRequestCode(100)
+                    .setRequestCode(REQUEST_CODE_PERMS)
                     .build()
                     .show();
         }
     }
+
+    private boolean isNeedRequestPermissions(List<String> permissions) {
+        // 定位精确位置
+//        addPermission(permissions, Manifest.permission.WRITE_SETTINGS);
+        // 定位精确位置
+        addPermission(permissions, android.Manifest.permission.ACCESS_FINE_LOCATION);
+        // 存储权限
+        addPermission(permissions, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        // 读取手机状态
+        addPermission(permissions, android.Manifest.permission.READ_PHONE_STATE);
+        return permissions.size() > 0;
+    }
+
+    private void addPermission(List<String> permissionsList, String permission) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+            permissionsList.add(permission);
+        }
+    }
+
 
 }

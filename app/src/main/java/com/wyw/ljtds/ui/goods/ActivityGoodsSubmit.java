@@ -1,21 +1,11 @@
 package com.wyw.ljtds.ui.goods;
 
-import com.tencent.mm.opensdk.constants.ConstantsAPI;
-import com.tencent.mm.opensdk.modelbase.BaseReq;
-import com.tencent.mm.opensdk.modelbase.BaseResp;
-import com.tencent.mm.opensdk.modelpay.PayReq;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
-import com.wyw.ljtds.R;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,42 +21,30 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alipay.PayResult;
-import com.alipay.sdk.app.PayTask;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.unionpay.UPPayAssistEx;
+import com.wyw.ljtds.R;
 import com.wyw.ljtds.adapter.CommOrderAdapter;
 import com.wyw.ljtds.biz.biz.GoodsBiz;
-import com.wyw.ljtds.biz.biz.OrderBiz;
 import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.AppManager;
-import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.Business;
 import com.wyw.ljtds.model.CreatOrderModel;
-import com.wyw.ljtds.model.GoodCreatModel1;
-import com.wyw.ljtds.model.GoodCreatModel2;
-import com.wyw.ljtds.model.GoodCreatModel3;
 import com.wyw.ljtds.model.GoodSubmitModel1;
-import com.wyw.ljtds.model.MedicineDetailsModel;
 import com.wyw.ljtds.model.MyLocation;
-import com.wyw.ljtds.model.OnlinePayModel;
-import com.wyw.ljtds.model.OrderCommDto;
 import com.wyw.ljtds.model.OrderGroupDto;
 import com.wyw.ljtds.model.OrderTrade;
 import com.wyw.ljtds.model.OrderTradeDto;
@@ -75,8 +53,8 @@ import com.wyw.ljtds.ui.user.address.ActivityAddress;
 import com.wyw.ljtds.ui.user.address.ActivityAddressEdit;
 import com.wyw.ljtds.ui.user.address.AddressActivity;
 import com.wyw.ljtds.ui.user.order.ActivityOrder;
-import com.wyw.ljtds.utils.DateUtils;
 import com.wyw.ljtds.utils.GsonUtils;
+import com.wyw.ljtds.utils.PayUtil;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.Utils;
@@ -84,14 +62,11 @@ import com.wyw.ljtds.widget.MyCallback;
 import com.wyw.ljtds.widget.PayDialog;
 import com.wyw.ljtds.widget.dialog.DiscountDialog;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,6 +74,7 @@ import java.util.Map;
 import cn.xiaoneng.uiapi.Ntalker;
 
 import static com.wyw.ljtds.ui.goods.ActivityGoodsSubmitBill.TAG_ORDER;
+import static com.wyw.ljtds.utils.PayUtil.ALI_PAY;
 
 
 /**
@@ -107,11 +83,11 @@ import static com.wyw.ljtds.ui.goods.ActivityGoodsSubmitBill.TAG_ORDER;
  */
 @ContentView(R.layout.activity_order_submit)
 public class ActivityGoodsSubmit extends BaseActivity {
-    public IWXAPI wxApi;
     public static final String TAG_INFO_SOURCE = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmit.TAG_INFO_SOURCE";
     private static final int REQUEST_SETTING = 0;
     private static final int REQUEST_FAPIAO = 1;
     private static final int REQUEST_SELECT_ADDRESS = 2;
+    private static final int REQUEST_ADD_ADDRESS = 3;
     private static final String TAG_SELLERID = "com.wyw.ljtds.ui.goods.tag_sellerid";
     private static final String TAG_ORDER_DATA = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmit.TAG_ORDER_DATA";
     private String flgInfoSrc = "";
@@ -143,13 +119,12 @@ public class ActivityGoodsSubmit extends BaseActivity {
     private PayModel payModel = new PayModel();//在线支付所需参数封装java类
     private ProgressDialog mLoadingDialog = null;
 
-    private static final int ALI_PAY = 1;
     private static final int UP_PAY = 2;
     private String upJson = null;
     private String jsonUnionOrder;
     private CreatOrderModel cOrderModel;
     private boolean isUpdFooter;
-    private BroadcastReceiver addrReciver;
+    //    private BroadcastReceiver addrReciver;
     private CreatOrderModel.USER_ADDRESS addressInfo;
     private int REQUEST_ADDRESS_EDIT = 7;
     private boolean isResult = false;
@@ -220,7 +195,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
      *
      * @param intent
      */
-    public void handleAddressExpire(Intent intent) {
+    /*public void handleAddressExpire(Intent intent) {
         String action = intent.getAction();
         Log.e(AppConfig.ERR_TAG, ".....handleAddressExpire");
         if (action.equals(AppConfig.AppAction.ACTION_ADDRESS_EXPIRE)) {
@@ -261,20 +236,18 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 }
             }.execute();
         }
-    }
-
-
+    }*/
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //注册广播接收器
-        addrReciver = new BroadcastReceiver() {
+        /*addrReciver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 handleAddressExpire(intent);
             }
-        };
+        };*/
 
         AppManager.addDestoryActivity(this, "submit");
 
@@ -308,10 +281,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
                         startActivityForResult(it, REQUEST_FAPIAO);
                         break;
                     case R.id.item_order_submit_bottom_paymethod:
-                        it = ActivityGoodsSubmitChoice.getIntent(ActivityGoodsSubmit.this);
-//                        old
-//                        it.putExtra(ActivityGoodsSubmit.TAG_INFO_SOURCE, ActivityGoodsSubmit.this.flgInfoSrc);
-//                        it.putExtra(ActivityGoodsSubmitChoice.TAG_CREATE_ORDER_MODEL, json);
+                        it = ActivityGoodsSubmitChoice.getIntent(ActivityGoodsSubmit.this, cOrderModel.getDISTRIBUTION_MODE(), cOrderModel.getPAYMENT_METHOD());
                         startActivityForResult(it, REQUEST_SETTING);
                         break;
                     default:
@@ -352,6 +322,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.e(AppConfig.ERR_TAG, "isResult:" + isResult);
         if (!isResult) {
             loadData();
         }
@@ -359,18 +330,19 @@ public class ActivityGoodsSubmit extends BaseActivity {
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(AppConfig.AppAction.ACTION_ADDRESS_EXPIRE);//没有地址
-        registerReceiver(addrReciver, filter);
+//        registerReceiver(addrReciver, filter);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(addrReciver);
+//        unregisterReceiver(addrReciver);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
     /**
@@ -521,7 +493,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
                     ActivityGoodsSubmit.this.goOrderList();
                 } else {
                     OrderTrade orderTrade = new OrderTrade();
-                    orderTrade.setPayAmount(money_all.getText().toString());
+                    orderTrade.setPayAmount(cOrderModel.getPAY_AMOUNT());
                     PayDialog.showDialog(ActivityGoodsSubmit.this, orderTrade, new PayDialog.PayMethodSelectedListener() {
                         @Override
                         public void onItemSelected(OrderTrade order) {
@@ -568,6 +540,8 @@ public class ActivityGoodsSubmit extends BaseActivity {
         new BizDataAsyncTask<CreatOrderModel>() {
             @Override
             protected CreatOrderModel doExecute() throws ZYException, BizFailure {
+                Utils.log(str);
+                ;
                 CreatOrderModel rlt = GoodsBiz.getOrderShow(str, op);
                 return rlt;
             }
@@ -577,8 +551,6 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 closeLoding();
                 cOrderModel = creatOrderModel;
                 bindData2View();
-
-
             }
 
             @Override
@@ -616,7 +588,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
         }
 
         AddressModel addr = cOrderModel.getUSER_ADDRESS();
-        if (addr != null) {
+        if (addr != null && addr.getADDRESS_ID() > 0) {
             StringBuilder err = new StringBuilder();
             MyLocation location = AddressModel.parseLocation(err, addr.getADDRESS_LOCATION());
             String addrLocation = "未知";
@@ -624,9 +596,11 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 addrLocation = location.getAddrStr();
             }
             tvAddrInfo.setText(addr.getCONSIGNEE_NAME() + "      " + addr.getCONSIGNEE_MOBILE() + "\n" + addrLocation + addr.getCONSIGNEE_ADDRESS());
+        } else {
+            tvAddrInfo.setText("请选择地址");
         }
 
-        money_all.setText("合计: ￥" + cOrderModel.getPAY_AMOUNT() + "(含运费" + cOrderModel.getPOSTAGE_ALL() + ")");
+        money_all.setText("合计: ￥" + cOrderModel.getPAY_AMOUNT() + "(含运费￥" + cOrderModel.getPOSTAGE_ALL() + ")");
 
         adapter.setNewData(cOrderModel.getDETAILS());
         adapter.notifyDataSetChanged();
@@ -703,7 +677,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 public DiscountDialog dialog;
 
                 private void showDiscountDialog() {
-                    dialog = new DiscountDialog(ActivityGoodsSubmit.this);
+                    dialog = new DiscountDialog(ActivityGoodsSubmit.this, group);
                     dialog.setCallback(new MyCallback() {
                         @Override
                         public void callback(Object... params) {
@@ -713,6 +687,8 @@ public class ActivityGoodsSubmit extends BaseActivity {
                             } else {
                                 group.setPOSTAGE_FLG("0");
                             }
+                            Utils.log("set postage:" + group.getPOSTAGE_FLG());
+
                             final CheckBox dianzibi = (CheckBox) params[1];
                             if (dianzibi.isChecked()) {
                                 group.setCOIN_FLG("1");
@@ -728,13 +704,13 @@ public class ActivityGoodsSubmit extends BaseActivity {
                             final RadioGroup rgPoint = (RadioGroup) params[3];
                             switch (rgPoint.getCheckedRadioButtonId()) {
                                 case R.id.dialog_discount_jifen_rb2:
-                                    group.setCOST_POINT("100");
+                                    group.setCOST_POINT(100);
                                     break;
                                 case R.id.dialog_discount_jifen_rb3:
-                                    group.setCOST_POINT("200");
+                                    group.setCOST_POINT(200);
                                     break;
                                 default:
-                                    group.setCOST_POINT("0");
+                                    group.setCOST_POINT(0);
                                     break;
                             }
 //                            group.
@@ -759,10 +735,13 @@ public class ActivityGoodsSubmit extends BaseActivity {
             RelativeLayout vDiscount = baseViewHolder.getView(R.id.item_order_submit_group_discount);
             vDiscount.setOnClickListener(groupListener);
             initTextViewTItle(vDiscount, "店铺优惠");
+            if (group.getCOST_POINT() > 0 || "1".equals(group.getPOSTAGE_FLG()) || "1".equals(group.getPREFERENTIAL_FLG()) || "1".equals(group.getCOIN_FLG())) {
+                setTextViewContent(vDiscount, "已优惠");
+            }
 
             baseViewHolder.setText(R.id.item_order_submit_group_tv_cost, "共" + group.getGROUP_EXCHANGE_QUANLITY() + "件商品  小计:￥" + group.getGROUP_MONEY_ALL())
                     .setText(R.id.item_order_submit_group_groupname, group.getLOGISTICS_COMPANY())
-                    .setText(R.id.item_order_submit_group_arrivedate, group.getDISTRIBUTION_DATE_END());
+                    .setText(R.id.item_order_submit_group_arrivedate, group.getDISTRIBUTION_DATE());
 
             EditText edRemark = baseViewHolder.getView(R.id.item_order_submit_group_edremark);
             edRemark.setText(group.getGROUP_REMARKS());
@@ -802,84 +781,30 @@ public class ActivityGoodsSubmit extends BaseActivity {
         new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
+                Utils.log("data:" + data);
                 return GoodsBiz.onlinePay(data);
             }
 
             @Override
-            protected void onExecuteSucceeded(String data) {
+            protected void onExecuteSucceeded(String rltData) {
                 closeLoding();
-                final OnlinePayModel aliPay;
-                final String orderInfo;
+                Map dataMap;
+                Map daraResult = null;
+                try {
+                    dataMap = GsonUtils.Json2Bean(rltData, HashMap.class);
+                    daraResult = (Map) dataMap.get("result");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    Utils.log("JsonSyntaxException:" + ex.getMessage());
+                    ToastUtil.show(ActivityGoodsSubmit.this, "服务器数据格式有错误");
+                }
+                PayUtil payUtil = Utils.getPayUtilInstance(ActivityGoodsSubmit.this, daraResult);
                 if (payModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_WECHAT)) {
-                    Utils.log(data);
-                    setLoding(ActivityGoodsSubmit.this, false);
-                    Map dataMap = GsonUtils.Json2Bean(data, HashMap.class);
-                    Map wechatData = (Map) dataMap.get("result");
-                    wxApi = ((MyApplication) getApplication()).wxApi;
-
-                    PayReq request = new PayReq();
-                    request.appId = AppConfig.WEIXIN_APP_ID;
-                    request.partnerId = wechatData.get("partnerid").toString();
-                    request.prepayId = wechatData.get("prepayid").toString();
-                    request.packageValue = "Sign=WXPay";
-                    request.nonceStr = "" + wechatData.get("noncestr");
-                    request.timeStamp = wechatData.get("timestamp").toString();
-                    request.sign = "" + wechatData.get("sign");
-
-                    wxApi.sendReq(request);
+                    payUtil.pay4Wechat();
                 } else if (payModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_ALI)) {
-                    //支付宝
-                    aliPay = GsonUtils.Json2Bean(data, OnlinePayModel.class);
-                    orderInfo = aliPay.getPay();
-                    if (!StringUtils.isEmpty(orderInfo)) {
-                        Runnable payRunnable = new Runnable() {
-
-                            @Override
-                            public void run() {
-                                //支付宝
-                                PayTask alipay = new PayTask(ActivityGoodsSubmit.this);
-                                Map<String, String> result = alipay.payV2(orderInfo, true);
-
-                                Message msg = new Message();
-                                msg.what = ALI_PAY;
-                                msg.obj = result;
-                                mHandler.sendMessage(msg);
-                            }
-                        };
-
-                        Thread payThread = new Thread(payRunnable);
-                        payThread.start();
-
-
-                    }
+                    payUtil.pay4Ali(mHandler);
                 } else if (payModel.getPAYMENT_METHOD().equals(OrderTrade.PAYMTD_UNION)) {
-                    //银联
-                    //union pay
-//                    Runnable payRunnable = new Runnable() {
-//
-//                        @Override
-//                        public void run() {
-                    aliPay = GsonUtils.Json2Bean(data, OnlinePayModel.class);
-                    orderInfo = aliPay.getPay();
-                    Log.e(AppConfig.ERR_TAG, orderInfo);
-//                    mLoadingDialog = ProgressDialog.show(ActivityGoodsSubmit.this, // context
-//                            "", // title
-//                            "正在努力加载,请稍候...", // message
-//                            true); // 进度是否是不确定的，这只和创建进度条有关
-
-                    //调用银联控件
-                    if (!StringUtils.isEmpty(orderInfo)) {
-                        jsonUnionOrder = orderInfo;
-                        Map m = GsonUtils.Json2Bean(jsonUnionOrder, Map.class);
-                        String tn = (String) m.get("tn");
-//                        Log.e("+++++",tn) ;
-                        UPPayAssistEx.startPay(ActivityGoodsSubmit.this, null, null, tn, "00");
-                    }
-//                        }
-//                    };
-//
-//                    Thread payThread = new Thread( payRunnable );
-//                    payThread.start();
+                    payUtil.pay4Union();
                 } else {
                 }
 
@@ -899,19 +824,51 @@ public class ActivityGoodsSubmit extends BaseActivity {
         isResult = true;
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case REQUEST_SELECT_ADDRESS:
-                    Parcelable addr = data.getParcelableExtra(ActivityAddress.TAG_SELECTED_ADDRESS);
-                    if (addr != null) {
-                        int addrId = ((AddressModel) addr).getADDRESS_ID();
-                        cOrderModel.setADDRESS_ID(addrId + "");
+                case REQUEST_ADD_ADDRESS:
+                    new BizDataAsyncTask<List<AddressModel>>() {
+                        @Override
+                        protected List<AddressModel> doExecute() throws ZYException, BizFailure {
+                            return UserBiz.selectUserAddress();
+                        }
 
-                        String str = GsonUtils.Bean2Json(cOrderModel);
-                        showOrder(str, "changeOrder");
+                        @Override
+                        protected void onExecuteSucceeded(List<AddressModel> addressModels) {
+                            closeLoding();
+                            if (addressModels == null) return;
+                            if (addressModels.size() <= 0) return;
+                            AddressModel addr = addressModels.get(0);
+                            int addrId = addr.getADDRESS_ID();
+                            cOrderModel.setADDRESS_ID(addrId + "");
+                            cOrderModel.setLAT(addr.getLAT());
+                            cOrderModel.setLNG(addr.getLNG());
+                            String str = GsonUtils.Bean2Json(cOrderModel);
+                            showOrder(str, "changeOrder");
+                        }
+
+                        @Override
+                        protected void OnExecuteFailed() {
+                            closeLoding();
+                        }
+                    }.execute();
+
+                    break;
+                case REQUEST_SELECT_ADDRESS:
+                    String cmd = data.getStringExtra(AddressActivity.TAG_CMD);
+                    if (AddressActivity.CMD_CREATE.equals(cmd)) {
+                        startActivityForResult(ActivityAddressEdit.getIntent(this, null), REQUEST_ADD_ADDRESS);
+                    } else {
+                        Parcelable addr = data.getParcelableExtra(ActivityAddress.TAG_SELECTED_ADDRESS);
+                        if (addr != null) {
+                            AddressModel addrM = (AddressModel) addr;
+                            int addrId = addrM.getADDRESS_ID();
+                            cOrderModel.setADDRESS_ID(addrId + "");
+                            cOrderModel.setLAT(addrM.getLAT());
+                            cOrderModel.setLNG(addrM.getLNG());
+                            String str = GsonUtils.Bean2Json(cOrderModel);
+                            showOrder(str, "changeOrder");
+                        }
                     }
                     break;
-            }
-        } else if (resultCode == AppConfig.IntentExtraKey.RESULT_OK) {
-            switch (requestCode) {
                 case REQUEST_SETTING:
                     String zhifu_s = data.getStringExtra(ActivityGoodsSubmitChoice.TAG_ZHIFU);
                     cOrderModel.setPAYMENT_METHOD(zhifu_s);
@@ -921,8 +878,18 @@ public class ActivityGoodsSubmit extends BaseActivity {
                     String dateEnd = data.getStringExtra(ActivityGoodsSubmitChoice.TAG_IIME_END);
                     cOrderModel.setDISTRIBUTION_DATE_START(dateStart);
                     cOrderModel.setDISTRIBUTION_DATE_END(dateEnd);
-                    bindData2View();
+                    if (cOrderModel.getDETAILS() != null && cOrderModel.getDETAILS().size() > 0) {
+                        for (OrderGroupDto group : cOrderModel.getDETAILS()) {
+                            group.setDISTRIBUTION_MODE(cOrderModel.getDISTRIBUTION_MODE());
+                        }
+                    }
+                    showOrder(GsonUtils.Bean2Json(cOrderModel), "changeOrder");
+//                    bindData2View();
                     break;
+
+            }
+        } else if (resultCode == AppConfig.IntentExtraKey.RESULT_OK) {
+            switch (requestCode) {
 
                 case REQUEST_FAPIAO:
                     //配送信息 和 发票信息
@@ -939,6 +906,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
                         cOrderModel.setINVOICE_TAX(fapiaoModel.getINVOICE_TAX());
                         for (OrderGroupDto groupItem : cOrderModel.getDETAILS()) {
                             groupItem.setINVOICE_FLG(fapiaoModel.getINVOICE_FLG());
+                            groupItem.setINVOICE_ORG(fapiaoModel.getINVOICE_ORG());
                             groupItem.setINVOICE_TYPE(fapiaoModel.getINVOICE_TYPE());
                             groupItem.setINVOICE_TITLE(fapiaoModel.getINVOICE_TITLE());
                             groupItem.setINVOICE_CONTENT(fapiaoModel.getINVOICE_CONTENT());
@@ -993,7 +961,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
                                 // 建议通过商户后台查询支付结果
                                 ToastUtil.show(ActivityGoodsSubmit.this, getResources().getString(R.string.pay_fail));
                             }
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             Log.e(AppConfig.ERR_TAG, "payresult:" + e.getMessage());
                         }
                     } else {
@@ -1003,7 +971,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
                     }
 
                     if (!StringUtils.isEmpty(result)) {
-                        UnionResult unionResult = GsonUtils.Json2Bean(result, UnionResult.class);
+                        PayUtil.UnionResult unionResult = GsonUtils.Json2Bean(result, PayUtil.UnionResult.class);
                         unionResult.setORDER_TRADE_ID(payModel.getORDER_TRADE_ID());
                         unionResult.setTradeOrder(jsonUnionOrder);
                         String strUnionResult = GsonUtils.Bean2Json(unionResult);
@@ -1038,10 +1006,10 @@ public class ActivityGoodsSubmit extends BaseActivity {
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                        ToastUtil.show(ActivityGoodsSubmit.this, getResources().getString(R.string.pay_success));
+                        ToastUtil.show(ActivityGoodsSubmit.this, ActivityGoodsSubmit.this.getResources().getString(R.string.pay_success));
                         Log.e(AppConfig.ERR_TAG, "alipay result....:" + resultInfo);
                         if (!StringUtils.isEmpty(resultInfo)) {
-                            AliResult aliResult = GsonUtils.Json2Bean(resultInfo, AliResult.class);
+                            PayUtil.AliResult aliResult = GsonUtils.Json2Bean(resultInfo, PayUtil.AliResult.class);
                             aliResult.setORDER_TRADE_ID(payModel.getORDER_TRADE_ID());
 
                             String json = GsonUtils.Bean2Json(aliResult);
@@ -1063,6 +1031,8 @@ public class ActivityGoodsSubmit extends BaseActivity {
             }
 
         }
+
+
     };
 
     BizDataAsyncTask<String> payResultTask;
@@ -1154,180 +1124,6 @@ public class ActivityGoodsSubmit extends BaseActivity {
         return it;
     }
 
-    //银联支付回执
-    public class UnionResult {
-        private String sign;
-        private String data;
-        private String tradeOrder;
-        private String ORDER_TRADE_ID;
-
-        public String getSign() {
-            return sign;
-        }
-
-        public void setSign(String sign) {
-            this.sign = sign;
-        }
-
-        public String getData() {
-            return data;
-        }
-
-        public void setData(String data) {
-            this.data = data;
-        }
-
-        public String getORDER_TRADE_ID() {
-            return ORDER_TRADE_ID;
-        }
-
-        public void setORDER_TRADE_ID(String ORDER_TRADE_ID) {
-            this.ORDER_TRADE_ID = ORDER_TRADE_ID;
-        }
-
-        public String getTradeOrder() {
-            return tradeOrder;
-        }
-
-        public void setTradeOrder(String tradeOrder) {
-            this.tradeOrder = tradeOrder;
-        }
-    }
-
-
-    //支付宝支付回执
-    public class AliResult {
-        private alipay_trade alipay_trade_app_pay_response;
-        private String sign;
-        private String ORDER_TRADE_ID;
-        private String sign_type;
-
-        public alipay_trade getAlipay_trade_app_pay_response() {
-            return alipay_trade_app_pay_response;
-        }
-
-        public void setAlipay_trade_app_pay_response(alipay_trade alipay_trade_app_pay_response) {
-            this.alipay_trade_app_pay_response = alipay_trade_app_pay_response;
-        }
-
-        public String getSign() {
-            return sign;
-        }
-
-        public void setSign(String sign) {
-            this.sign = sign;
-        }
-
-        public String getORDER_TRADE_ID() {
-            return ORDER_TRADE_ID;
-        }
-
-        public void setORDER_TRADE_ID(String ORDER_TRADE_ID) {
-            this.ORDER_TRADE_ID = ORDER_TRADE_ID;
-        }
-
-        public String getSign_type() {
-            return sign_type;
-        }
-
-        public void setSign_type(String sign_type) {
-            this.sign_type = sign_type;
-        }
-
-        private class alipay_trade {
-            private String code;
-            private String msg;
-            private String app_id;
-            private String auth_app_id;
-            private String charset;
-            private String timestamp;
-            private String total_amount;
-            private String trade_no;
-            private String seller_id;
-            private String out_trade_no;
-
-            public String getCode() {
-                return code;
-            }
-
-            public void setCode(String code) {
-                this.code = code;
-            }
-
-            public String getMsg() {
-                return msg;
-            }
-
-            public void setMsg(String msg) {
-                this.msg = msg;
-            }
-
-            public String getApp_id() {
-                return app_id;
-            }
-
-            public void setApp_id(String app_id) {
-                this.app_id = app_id;
-            }
-
-            public String getAuth_app_id() {
-                return auth_app_id;
-            }
-
-            public void setAuth_app_id(String auth_app_id) {
-                this.auth_app_id = auth_app_id;
-            }
-
-            public String getCharset() {
-                return charset;
-            }
-
-            public void setCharset(String charset) {
-                this.charset = charset;
-            }
-
-            public String getTimestamp() {
-                return timestamp;
-            }
-
-            public void setTimestamp(String timestamp) {
-                this.timestamp = timestamp;
-            }
-
-            public String getTotal_amount() {
-                return total_amount;
-            }
-
-            public void setTotal_amount(String total_amount) {
-                this.total_amount = total_amount;
-            }
-
-            public String getOut_trade_no() {
-                return out_trade_no;
-            }
-
-            public void setOut_trade_no(String out_trade_no) {
-                this.out_trade_no = out_trade_no;
-            }
-
-            public String getSeller_id() {
-                return seller_id;
-            }
-
-            public void setSeller_id(String seller_id) {
-                this.seller_id = seller_id;
-            }
-
-            public String getTrade_no() {
-                return trade_no;
-            }
-
-            public void setTrade_no(String trade_no) {
-                this.trade_no = trade_no;
-            }
-        }
-
-    }
 
 }
 

@@ -10,6 +10,7 @@
     <string name="order">订单管理</string>
     <string name="fahuo">发货</string>
     <string name="songda">送达</string>
+    <string name="jushou">拒收</string>
     <string name="order_del">删除订单</string>
     <string name="order_details">订单详情</string>
     <string name="tuichu">退出登录</string>
@@ -55,4 +56,25 @@
     <string name="submit">提交</string>
     <string name="tongyi">同意</string>
     <string name="jujue">拒绝</string>
+    <string name="title_size">规格</string>
+    <string name="title_cat">分类</string>
+    <string name="title_factory">厂家</string>
+    <string name="title_code">条码</string>
+    <string name="order_detail_group_discount">店铺优惠</string>
+    <string name="money_renminbi">￥%s</string>
+    <string name="order_detail_group_costmoney">商品小计：￥%1$s  邮费：￥%2$s</string>
+    <string name="order_detail_group_payamount">实付款：￥%s</string>
+    <string name="order_detail_group_invoice">发票信息：%1$s %1$s</string>
+    <string name="order_detail_group_remark">备注：%s</string>
+    <string name="order_detail_user_info_name">姓名：%s    </string>
+    <string name="order_detail_user_info_mobile">拨打电话：%s </string>
+    <string name="order_detail_user_addr">地址：%s </string>
+    <string name="order_detail_group_distance">距离：%s km</string>
+    <string name="order_detail_return_reason">退货原因：%s </string>
+    <string name="order_detail_return_money">退款金额：￥%s </string>
+    <string name="order_detail_return_remark">描述：%s </string>
+    <string name="orderlist_orderid">订单编号：%s</string>
+    <string name="orderlist_orderstat_unknow">未知</string>
+    <string name="orderlist_num">订单数量\n%d</string>
+    <string name="orderlist_costmoney">订单金额\n￥%s</string>
 </resources>

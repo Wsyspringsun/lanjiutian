@@ -2,16 +2,19 @@ package com.wyw.ljtmgr.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.wyw.ljtmgr.R;
 import com.wyw.ljtmgr.biz.SimpleCommonCallback;
 import com.wyw.ljtmgr.biz.UserBiz;
+import com.wyw.ljtmgr.config.AppConfig;
 import com.wyw.ljtmgr.config.MyApplication;
 import com.wyw.ljtmgr.config.SingleCurrentUser;
 import com.wyw.ljtmgr.model.LoginModel;
 import com.wyw.ljtmgr.model.ServerResponse;
+import com.wyw.ljtmgr.model.ShopInfo;
 import com.wyw.ljtmgr.weidget.LazyLoadFragment;
 
 import org.xutils.view.annotation.ContentView;
@@ -27,7 +30,7 @@ import utils.CommonUtil;
 public class FragmentShop extends LazyLoadFragment {
     private static final String ARG_TITLE = "ARG_TITLE";
     @ViewInject(R.id.fragment_shop_tv_shopname)
-    private TextView shop;
+    private TextView tvShop;
 
     public static FragmentShop newInstance(String title) {
         FragmentShop frag = new FragmentShop();
@@ -48,15 +51,16 @@ public class FragmentShop extends LazyLoadFragment {
 
         LoginModel loginer = MyApplication.getCurrentLoginer();
         if (loginer == null) return;
-        shop.setText(loginer.getOidGroupId());
+        tvShop.setText(loginer.getOidGroupId());
         loadGroup();
     }
 
     public void loadGroup() {
-        UserBiz.loadGroupInfo(new SimpleCommonCallback<ServerResponse>(getActivity()) {
+        UserBiz.loadGroupInfo(new SimpleCommonCallback<ShopInfo>(getActivity()) {
 
             @Override
-            protected void handleResult(ServerResponse result) {
+            protected void handleResult(ShopInfo result) {
+                tvShop.setText(result.getGroupName());
             }
         });
     }

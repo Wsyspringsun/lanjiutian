@@ -1,39 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/basebackground"
-    android:orientation="vertical">
-
-    <TextView
-        style="@style/font_ww_16"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="设置"
-        android:textAlignment="center"
-        android:textSize="16dp" />
-
-    <LinearLayout
-        android:id="@+id/fragment_setting_index_items"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <include layout="@layout/textview_title" />
-
-        <include layout="@layout/textview_title" />
-
-    </LinearLayout>
-
+    android:background="@color/basebackground">
 
     <Button
         android:id="@+id/fragment_setting_index_btnlogout"
         style="@style/font_ww_16"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="32dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@color/base_bar"
         android:text="退出登录"
-        android:textColor="@color/font_3"
+        android:textColor="@color/white"
         android:textSize="16dp" />
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/basebackground"
+        android:orientation="vertical">
 
+        <TextView
+            style="@style/font_ww_16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding"
+            android:paddingTop="@dimen/padding"
+            android:text="设置"
+            android:textAlignment="center"
+            android:textSize="16dp" />
+
+        <LinearLayout
+            android:id="@+id/fragment_setting_index_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/textview_title" />
+
+            <include layout="@layout/textview_title" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

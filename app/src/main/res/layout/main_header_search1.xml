@@ -42,9 +42,11 @@
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:lines="1"
+                android:hint="输入关键字"
                 android:paddingLeft="@dimen/x15"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/font_0"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="13sp" />
 
             <ImageView

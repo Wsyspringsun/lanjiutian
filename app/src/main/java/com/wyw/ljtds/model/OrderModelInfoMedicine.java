@@ -12,10 +12,7 @@ public class OrderModelInfoMedicine extends OrderGroupDto {
     private String ADDRESS; //商铺地址
     private BigDecimal POINT_MONEY;
     private BigDecimal PAY_AMOUNT;
-    //使用邮费抵用券标识
-    private String STATUS;
     private String USER_ADDRESS_ID;
-    private String USER_ADDRESS_LOCATION;
     private Long COMPLETE_DATE;
     private Long CREATE_DATE;
     private String ORG_ADDRESS;
@@ -115,19 +112,4 @@ public class OrderModelInfoMedicine extends OrderGroupDto {
         this.POINT_MONEY = POINT_MONEY;
     }
 
-    public String getSTATUS() {
-        return STATUS;
-    }
-
-    public void setSTATUS(String STATUS) {
-        this.STATUS = STATUS;
-    }
-
-    public String getUSER_ADDRESS_LOCATION() {
-        return USER_ADDRESS_LOCATION;
-    }
-
-    public void setUSER_ADDRESS_LOCATION(String USER_ADDRESS_LOCATION) {
-        this.USER_ADDRESS_LOCATION = USER_ADDRESS_LOCATION;
-    }
 }

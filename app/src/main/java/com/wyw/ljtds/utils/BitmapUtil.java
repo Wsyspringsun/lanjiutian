@@ -27,7 +27,7 @@ public class BitmapUtil {
      * 创建bitmap，在MainActivity onCreate()中调用
      */
     public static void init() {
-        bmArrowPoint = BitmapDescriptorFactory.fromResource(R.drawable.ic_location_on);
+        bmArrowPoint = BitmapDescriptorFactory.fromResource(R.drawable.ic_guiji);
         bmStart = BitmapDescriptorFactory.fromResource(R.drawable.icon_st);
         bmEnd = BitmapDescriptorFactory.fromResource(R.drawable.icon_en);
         bmGeo = BitmapDescriptorFactory.fromResource(R.drawable.ic_location_my);

@@ -165,7 +165,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:padding="@dimen/x5"
-                    android:text="不用积分"
+                    android:text="不使用"
                     android:textColor="@color/select_btn_order_text"
                     android:textSize="14sp" />
 
@@ -215,7 +215,7 @@
                 android:background="@drawable/pay_choice_text_background"
                 android:gravity="center"
                 android:paddingTop="@dimen/x5"
-                android:text="积分邮费及兑换说明"
+                android:text="@string/discount_point_info"
                 android:textColor="@color/font_black2"
                 android:textSize="14sp" />
 

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basebackground"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/padding"
+        android:paddingLeft="@dimen/padding2"
+        android:paddingRight="@dimen/padding2"
+        android:paddingTop="@dimen/padding">
+
+        <TextView
+            style="@style/base_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="left"
+            android:paddingBottom="@dimen/padding"
+            android:paddingTop="@dimen/padding"
+            android:text="@string/order_detail_group_discount" />
+
+        <TextView
+            android:id="@+id/fragment_orderdetail_tv_groupdiscount"
+            style="@style/base_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:paddingBottom="@dimen/padding"
+            android:paddingTop="@dimen/padding"
+            android:text="@string/money_renminbi" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/padding"
+        android:paddingLeft="@dimen/padding2"
+        android:paddingRight="@dimen/padding2"
+        android:paddingTop="@dimen/padding">
+
+        <TextView
+            android:id="@+id/fragment_orderdetail_tv_costmoney"
+            style="@style/base_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="left"
+            android:paddingBottom="@dimen/padding"
+            android:paddingTop="@dimen/padding"
+            android:text="@string/order_detail_group_costmoney" />
+
+        <TextView
+            android:id="@+id/fragment_orderdetail_tv_payamount"
+            style="@style/base_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:paddingBottom="@dimen/padding"
+            android:paddingTop="@dimen/padding"
+            android:text="@string/order_detail_group_payamount" />
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/padding"
+        android:paddingLeft="@dimen/padding2"
+        android:paddingRight="@dimen/padding2"
+        android:paddingTop="@dimen/padding">
+
+        <TextView
+            android:id="@+id/fragment_orderdetail_tv_invoice"
+            style="@style/base_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding"
+            android:paddingTop="@dimen/padding"
+            android:text="@string/order_detail_group_invoice" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/padding"
+        android:paddingLeft="@dimen/padding2"
+        android:paddingRight="@dimen/padding2"
+        android:paddingTop="@dimen/padding">
+
+        <TextView
+            android:id="@+id/fragment_orderdetail_tv_remark"
+            style="@style/base_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding"
+            android:paddingTop="@dimen/padding"
+            android:text="@string/order_detail_group_remark" />
+
+    </FrameLayout>
+
+</LinearLayout>

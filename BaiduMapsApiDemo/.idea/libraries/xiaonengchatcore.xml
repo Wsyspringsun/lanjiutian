@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="xiaonengchatcore">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../xiaonengChatUI/libs/xiaonengchatcore.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

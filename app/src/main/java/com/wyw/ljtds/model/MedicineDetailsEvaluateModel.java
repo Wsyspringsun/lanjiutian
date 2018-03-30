@@ -11,7 +11,7 @@ public class MedicineDetailsEvaluateModel extends BaseModel {
     private String IMG_PATH3;
     private String IMG_PATH4;
     private String IMG_PATH5;
-    private long INS_DATE;
+    private String INS_DATE;
     private String EVALUATE_GRADE;
     private String USER_ICON_FILE_ID;
     private String MOBILE;
@@ -32,11 +32,11 @@ public class MedicineDetailsEvaluateModel extends BaseModel {
         this.EVALUATE_GRADE = EVALUATE_GRADE;
     }
 
-    public long getINS_DATE() {
+    public String getINS_DATE() {
         return INS_DATE;
     }
 
-    public void setINS_DATE(long INS_DATE) {
+    public void setINS_DATE(String INS_DATE) {
         this.INS_DATE = INS_DATE;
     }
 

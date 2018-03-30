@@ -27,6 +27,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.adapter.goodsinfo.NetworkImageHolderView;
@@ -277,8 +278,9 @@ public class LifeShopFragment extends BaseFragment {
             ivItem.setLayoutParams(lp);*/
 
 
-            Log.e(AppConfig.ERR_TAG, "o.getIMG_PATH():" + o.getIMG_PATH());
-            Picasso.with(getActivity()).load(Uri.parse(o.getIMG_PATH())).into(ivItem);
+//            Log.e(AppConfig.ERR_TAG, "o.getIMG_PATH():" + o.getIMG_PATH());
+
+            Picasso.with(getActivity()).load(Uri.parse(o.getIMG_PATH())).resizeDimen(R.dimen.x100, R.dimen.x150).memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(ivItem);
 //            ivItem.setImageURI();
 //            ViewGroup.LayoutParams lp = ivItem.getLayoutParams();
 //

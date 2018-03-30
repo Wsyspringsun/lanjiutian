@@ -80,6 +80,7 @@
     <application
         android:name=".config.MyApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -271,6 +272,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.address.AddressActivity"
+            android:label="收货地址"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"></activity>
         <activity
@@ -479,6 +481,33 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
+            android:name="cn.xiaoneng.video.VideoPreviewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar"></activity>
+        <activity
+            android:name="cn.xiaoneng.video.RecordVideoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar"></activity>
+        <activity
+            android:name="cn.xiaoneng.video.XNVideoPlayer"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar"></activity>
+
+        <service android:name="cn.xiaoneng.xpush.pushxiaoneng.XPushIMService" />
+        <receiver android:name="cn.xiaoneng.xpush.XPushReceiver">
+            <intent-filter android:priority="1000">
+                <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <action android:name="cn.jpush.android.intent.CONNECTIVITY_CHANGE" />
+                <action android:name="cn.jpush.android.intent.USER_PRESENT" />
+                <action android:name="cn.jpush.android.intent.BOOT_COMPLETED" />
+                <action android:name="cn.jpush.android.intent.STATE_CHANGE" />
+                <action android:name="cn.xiaoneng.xpush.service" />
+            </intent-filter>
+        </receiver>
+        <!-- 小能所需 end -->
+
+
+        <activity
             android:name=".ui.user.help.WebShowActivity"
             android:label="@string/title_activity_web_show" />
         <activity
@@ -510,16 +539,14 @@
         </activity>
         <activity
             android:name=".ui.user.order.ReturnGoodsOrderListActivity"
-            android:label="@string/title_activity_test"></activity>
+            android:label="@string/title_return"></activity>
 
         <activity
             android:name=".ui.goods.ShopActivity"
-            android:label="@string/title_activity_test">
-        </activity>
+            android:label="@string/title_activity_test"></activity>
         <activity
             android:name=".ui.goods.LifeShopActivity"
-            android:label="@string/title_activity_test">
-        </activity>
+            android:label="@string/title_activity_test"></activity>
 
 
         <activity
@@ -544,9 +571,11 @@
 
         <activity
             android:name=".ui.user.order.ActivityEvaluateEdit"
-            android:label="@string/edit_evaluate">
+            android:label="@string/edit_evaluate"></activity>
 
-        </activity>
+        <activity
+            android:name=".ui.user.order.ReturnGoodsOrderInfoActivity"
+            android:label="@string/edit_evaluate"></activity>
 
 
         <!--jiguang========================极光推送需要的组建 begin======================== -->
@@ -669,6 +698,11 @@
             </intent-filter>
         </receiver>
         <!--jiguang =======================极光推送需要的组建   end=================== -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTop" />
 
         <activity
             android:name=".wxapi.WXPayEntryActivity"
@@ -682,6 +716,7 @@
                 &lt;!&ndash;<data android:scheme="sdksample" />&ndash;&gt;
             </intent-filter>-->
         </activity>
+
         <receiver
             android:name=".receivers.AppRegister"
             android:permission="com.tencent.mm.plugin.permission.SEND">
@@ -689,6 +724,8 @@
                 <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP" />
             </intent-filter>
         </receiver>
+
+
     </application>
 
 </manifest>

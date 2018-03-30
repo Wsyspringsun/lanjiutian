@@ -1,8 +1,13 @@
 package com.wyw.ljtmgr.utils;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.baidu.mapapi.model.LatLng;
@@ -15,6 +20,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
@@ -185,6 +193,30 @@ public class CommonUtil {
                 }
                 Log.e(AppConfig.TAG_ERR, " > " + content);
             }
+        }
+    }
+
+    private static final int REQUEST_CODE_PERMISSION_CALL_PHONE = 1;
+    @AfterPermissionGranted(REQUEST_CODE_PERMISSION_CALL_PHONE)
+    public static void call(final Context context, final String phone) {
+        if (EasyPermissions.hasPermissions(context, Manifest.permission.CALL_PHONE)) {
+            Log.e(AppConfig.TAG_ERR, "是否有权限" + EasyPermissions.hasPermissions(context, Manifest.permission.CALL_PHONE) + "");
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("是否拨打电话：" + phone);
+            builder.setNegativeButton("取消", null);
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:" + phone));
+                    //开启系统拨号器
+                    context.startActivity(intent);
+                }
+            });
+            builder.create().show();
+        } else {
+            EasyPermissions.requestPermissions(context , "需要以下权限:拨打电话。", REQUEST_CODE_PERMISSION_CALL_PHONE, Manifest.permission.CALL_PHONE);
         }
     }
 }

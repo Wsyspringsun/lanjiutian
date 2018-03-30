@@ -43,6 +43,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/ksoap2-android-assembly-3.6.1-jar-with-dependencies.jar')
+    compile files('libs/BaiduNaviSDK_3.3.1.jar')
     //6.0权限
     compile project(':easypermissions')
     //图片加载
@@ -72,7 +73,12 @@ dependencies {
         transitive = true
     }
     compile 'cat.ereza:customactivityoncrash:1.5.0'
+//    依赖了RestHttp加载网络图片
+    compile 'cn.alien95:resthttp:1.0.5'
+//    Android九宫格显示多图或item
+    compile 'cn.lemon:multiview:1.0.1'
     compile project(':appbase')
+
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

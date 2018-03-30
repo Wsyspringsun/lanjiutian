@@ -165,7 +165,7 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
         ItemTypeInfo typeInfo = getItemTypeInfo(position);
         //数据在数据列表中实际索引
         int dataPos = position - typeInfo.itemStartPos;
-//        Log.e(AppConfig.ERR_TAG, "onBindViewHolder:" + position);
+//        Log.e(AppConfig.ERR_TAG, "onBindViewHolder:" + position + "------dataPos:" + dataPos);
         if (holder instanceof TuiJianHolder) {
             HomePageModel1.RecommendComms tuijianComm = data.getRecommendComms().get(dataPos);
             bindTuiJianData((TuiJianHolder) holder, tuijianComm);
@@ -258,12 +258,10 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                webView.setVisibility(View.GONE);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                webView.setVisibility(View.VISIBLE);
                 super.onPageFinished(view, url);
             }
 
@@ -282,7 +280,7 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
                 context.startActivity(it);
             }
         }, "andObj");
-        webView.setWebChromeClient(new WebChromeClient() {
+        /*webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 if (newProgress >= 100) {
@@ -296,7 +294,7 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
                 if (!StringUtils.isEmpty(title) && title.toLowerCase().contains("error")) {
                 }
             }
-        });
+        });*/
     }
 
     /*

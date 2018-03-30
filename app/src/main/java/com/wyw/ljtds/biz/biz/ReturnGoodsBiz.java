@@ -59,4 +59,18 @@ public class ReturnGoodsBiz extends BaseBiz {
         JsonElement element = ksoap.request();
         return element.getAsString();
     }
+
+    public static GoodsHandingModel readById(String orderId) throws BizFailure, ZYException{
+        SoapProcessor ksoap = new SoapProcessor("Service", "returnGoodsHanding", true);
+
+        ksoap.setProperty("op", "readById", SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("data", orderId, SoapProcessor.PropertyType.TYPE_STRING);
+        JsonElement element = ksoap.request();
+
+        Gson gson = new GsonBuilder().create();
+        TypeToken<GoodsHandingModel> tt = new TypeToken<GoodsHandingModel>() {
+        };
+        GoodsHandingModel ls = gson.fromJson(element, tt.getType());
+        return ls;
+    }
 }

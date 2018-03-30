@@ -7,6 +7,7 @@ package com.wyw.ljtds.model;
 public class Ticket {
     private String TOTAL_AMOUNT;
     private String TOTAL_CNT;
+    private String TERM;
     private String RED_PACKET_LOG_ID;
     private String RED_PACKET_TEMPLET_ID;
     private String RED_PACKET_ID;
@@ -157,5 +158,13 @@ public class Ticket {
 
     public void setSTART_DATE(String START_DATE) {
         this.START_DATE = START_DATE;
+    }
+
+    public String getTERM() {
+        return TERM;
+    }
+
+    public void setTERM(String TERM) {
+        this.TERM = TERM;
     }
 }

@@ -69,6 +69,7 @@ public class TicketFragment extends BaseFragment {
                 startActivity(it);
                 break;
             case R.id.sel_ticket_mianyouquan:
+                //抵用邮费
                 it = new Intent(getActivity(),YouHuiQuanActivity.class);
                 startActivity(it);
                 break;

@@ -65,10 +65,21 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:paddingBottom="@dimen/x5"
             android:paddingTop="@dimen/x5">
+
+            <TextView
+                android:id="@+id/tv_returngoodsorder_tv_showdetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/background_text_button"
+                android:padding="@dimen/x3"
+                android:text="@string/title_view_detail"
+                android:textSize="@dimen/font_5" />
 
             <TextView
                 android:id="@+id/tv_returngoodsorder_returnmoney"
@@ -79,7 +90,8 @@
                 android:gravity="right|bottom"
                 android:text="￥退款金额"
                 android:textColor="@color/base_bar"
-                android:textSize="@dimen/font_5" />
+                android:textSize="@dimen/font_5"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_returngoodsorder_show"
@@ -92,7 +104,8 @@
                 android:gravity="left|bottom"
                 android:text="未知\n未知\n未知"
                 android:textColor="@color/font_black2"
-                android:textSize="@dimen/font_5" />
+                android:textSize="@dimen/font_5"
+                android:visibility="gone" />
 
         </RelativeLayout>
 

@@ -4,7 +4,8 @@ package com.wyw.ljtds.model;
  * Created by wsy on 18-1-25.
  */
 
-public class MyLocation {
+public class MyLocation  {
+    private String ADDRESS_ID;
     double latitude;
     double Longitude;
     String addrStr;
@@ -39,5 +40,13 @@ public class MyLocation {
         location.setLongitude(longitude);
         location.setAddrStr(addrStr);
         return location;
+    }
+
+    public String getADDRESS_ID() {
+        return ADDRESS_ID;
+    }
+
+    public void setADDRESS_ID(String ADDRESS_ID) {
+        this.ADDRESS_ID = ADDRESS_ID;
     }
 }

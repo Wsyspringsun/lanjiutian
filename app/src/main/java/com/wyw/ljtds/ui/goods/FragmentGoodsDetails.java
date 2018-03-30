@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -34,6 +37,14 @@ public class FragmentGoodsDetails extends BaseFragment {
 //        Bundle args = new Bundle();
 //        fragment.setArguments(args);
         return fragment;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = super.onCreateView(inflater, container, savedInstanceState);
+        Log.e(AppConfig.ERR_TAG, "FragmentGoodsDetails  onCreateView ........");
+        return v;
     }
 
     @Override

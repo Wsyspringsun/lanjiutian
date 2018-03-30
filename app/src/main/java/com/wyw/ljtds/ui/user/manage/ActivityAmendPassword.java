@@ -86,10 +86,11 @@ public class ActivityAmendPassword extends BaseActivity {
             @Override
             protected void onExecuteSucceeded(Boolean aBoolean) {
                 if (aBoolean) {
-                    finish();
                     AppManager.destoryActivity("111");
                     AppManager.destoryActivity("222");
+                    ToastUtil.show(ActivityAmendPassword.this, "修改密码成功!");
                     startActivity(new Intent(ActivityAmendPassword.this, ActivityLogin.class));
+                    finish();
                 }
             }
 

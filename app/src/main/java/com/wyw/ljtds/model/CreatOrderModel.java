@@ -8,7 +8,6 @@ import java.util.List;
  */
 
 public class CreatOrderModel extends OrderTradeDto implements Serializable {
-    private String ADDRESS_ID;
     private String INVOICE_FLG = "0";
     private String INVOICE_TYPE;
     private String INVOICE_ID;
@@ -74,14 +73,6 @@ public class CreatOrderModel extends OrderTradeDto implements Serializable {
 
     public void setDISTRIBUTION_MODE(String DISTRIBUTION_MODE) {
         this.DISTRIBUTION_MODE = DISTRIBUTION_MODE;
-    }
-
-    public String getADDRESS_ID() {
-        return ADDRESS_ID;
-    }
-
-    public void setADDRESS_ID(String ADDRESS_ID) {
-        this.ADDRESS_ID = ADDRESS_ID;
     }
 
     public String getINVOICE_ORG() {

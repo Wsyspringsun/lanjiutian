@@ -5,8 +5,10 @@
     android:layout_margin="@dimen/margin"
     android:layout_marginBottom="1dp"
     android:background="@color/white"
+    android:paddingBottom="@dimen/padding"
     android:paddingLeft="@dimen/padding2"
-    android:paddingRight="@dimen/padding2">
+    android:paddingRight="@dimen/padding2"
+    android:paddingTop="@dimen/padding">
 
     <TextView
         android:id="@+id/textview_title"
@@ -27,7 +29,7 @@
         android:layout_toRightOf="@id/textview_title"
         android:paddingBottom="@dimen/padding"
         android:paddingTop="@dimen/padding"
-        android:textAlignment="textEnd"
-        android:text="xxx" />
+        android:text="xxx"
+        android:textAlignment="textEnd" />
 
 </RelativeLayout>

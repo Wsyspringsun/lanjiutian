@@ -89,17 +89,18 @@ public class ActivityScan extends BaseActivity implements QRCodeView.Delegate, E
 
         requestCodeQRCodePermissions();
 
-        requestCodeQRCodePermissions();
-
         mQRCodeView.setDelegate(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        startScan();
+    }
+
+    private void startScan() {
         mQRCodeView.startCamera();
 //        mQRCodeView.startCamera(Camera.CameraInfo.CAMERA_FACING_FRONT);
-
         mQRCodeView.showScanRect();
         mQRCodeView.startSpot();
     }
@@ -129,9 +130,9 @@ public class ActivityScan extends BaseActivity implements QRCodeView.Delegate, E
     //</editor-fold>
     public void onScanQRCodeSuccess(final String result) {
         Utils.log("scan result:" + result);
-        Intent i = ActivityMedicinesInfo.getIntent(ActivityScan.this, result, "x");
-        startActivity(i);
-        /*goodsTask = new BizDataAsyncTask<String>() {
+//        Intent i = ActivityMedicinesInfo.getIntent(ActivityScan.this, result, "x");
+//        startActivity(i);
+        goodsTask = new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
                 String id = GoodsBiz.getGoodsIdByBarcode(result);
@@ -151,7 +152,7 @@ public class ActivityScan extends BaseActivity implements QRCodeView.Delegate, E
             protected void OnExecuteFailed() {
             }
         };
-        goodsTask.execute();*/
+        goodsTask.execute();
 
         vibrate();
 //        mQRCodeView.startCamera();
@@ -203,7 +204,7 @@ public class ActivityScan extends BaseActivity implements QRCodeView.Delegate, E
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-
+        startScan();
     }
 
     @Override

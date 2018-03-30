@@ -47,6 +47,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.facebook.drawee.gestures.GestureDetector;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.gxz.PagerSlidingTabStrip;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
@@ -104,10 +105,12 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
     View.OnClickListener itemClickListener;
     List<MyCallback> itemCallbacks = new ArrayList<>();
 
+    @ViewInject(R.id.fragment_goods_info_sumqty)
+    private TextView tvSumqty;
     @ViewInject(R.id.fab_up_slide)
     private FloatingActionButton fab_up_slide;
     @ViewInject(R.id.fragment_medicine_info_container)
-    private PageContainer container;
+    private PageContainer pageContainer;
     @ViewInject(R.id.vp_item_goods_img)
     public ConvenientBanner cbGoodImages;
     @ViewInject(R.id.fragment_medicine_info_flag_otc)
@@ -124,8 +127,6 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
     private TextView tv_goods_config;
     @ViewInject(R.id.v_tab_cursor)
     private View v_tab_cursor;
-    @ViewInject(R.id.flag_otc)
-    private ImageView flag_otc;
     //    @ViewInject(R.id.ll_recommend)
 //    public LinearLayout ll_recommend;
     @ViewInject(R.id.fragment_medicine_info_number_button)
@@ -167,12 +168,12 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
         switch (v.getId()) {
             case R.id.ll_pull_up:
                 //上拉查看图文详情
-                container.scrollToBottom();
+                pageContainer.scrollToBottom();
                 break;
 
             case R.id.fab_up_slide:
                 //点击滑动到顶部
-                container.backToTop();
+                pageContainer.backToTop();
                 break;
 
             case R.id.ll_goods_detail:
@@ -205,23 +206,15 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
         itemCallbacks.add(callback);
     }
 
-    /**
-     * 送至地点更改
-     */
-    private void onDataChanged() {
-
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
     // 开始自动翻页
     @Override
     public void onResume() {
         super.onResume();
+
+        Log.e(AppConfig.ERR_TAG, "FragmentMedcinesInfo onResume this.medicineModel:" + this.medicineModel);
+        if (this.medicineModel != null) {
+            bindData2View(this.medicineModel);
+        }
         //开始自动翻页
         cbGoodImages.startTurning(3000);
     }
@@ -237,11 +230,14 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
     }
 
+    @Nullable
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = super.onCreateView(inflater, container, savedInstanceState);
 
         //商品详情页面
         fragmentGoodsDetails = new FragmentGoodsDetails();
@@ -255,7 +251,7 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
         //默认显示商品详情tab
         fragmentManager.beginTransaction().replace(R.id.fl_content, nowFragment).commitAllowingStateLoss();
         //pagecoontainer listen toTop or toBottom
-        container.setOnPageChanged(new PageBehavior.OnPageChanged() {
+        pageContainer.setOnPageChanged(new PageBehavior.OnPageChanged() {
 
             @Override
             public void toTop() {
@@ -318,8 +314,11 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
 
 
         //初始化送至
-        String addrText = SingleCurrentUser.location.getAddrStr();
-        tvAddress.setText("送至:" + addrText);
+        if (SingleCurrentUser.location != null) {
+            String addrText = SingleCurrentUser.location.getAddrStr();
+            tvAddress.setText("送至:" + addrText);
+        }
+        return v;
     }
 
     private void setHejiVal(int num) {
@@ -350,73 +349,13 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
                     public void UpdateUI(Context context, int position, String data) {
                         String imgSrc = data;
                         if (!StringUtils.isEmpty(imgSrc)) {
-                            Picasso.with(context).load(Uri.parse(imgSrc)).into(iv);
+                            Picasso.with(context).load(Uri.parse(data)).fit().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(iv);
                         }
                     }
                 };
             }
         }, Arrays.asList(images));
     }
-
-
-//    public void updeta(MedicineDetailsModel medicineDetailsModel) {
-//        model = medicineDetailsModel;
-//        //处方和非处方
-//        if (model.getPRESCRIPTION_FLG() != null && model.getPRESCRIPTION_FLG().equals("1")) {
-//            flag_otc.setImageDrawable(getResources().getDrawable(R.mipmap.chufang));
-////            tvExtraMsg.setText("此为处方药,收货时需提供处方单\r\n" + getString(R.string.postage_msg));
-//        } else {
-//            flag_otc.setImageDrawable(getResources().getDrawable(R.mipmap.feichufang));
-//        }
-//
-//
-////        tv_goods_info_evaluate_cnt.setText("(" + model.getEVALUATE_CNT() + ")");
-//
-//        tv_goods_title.setText(StringUtils.deletaFirst(model.getWARENAME()) + " " + model.getWARESPEC());
-//        goods_changjia.setText(getResources().getString(R.string.changjia) + model.getPRODUCER());
-//        tv_new_price.setText(model.getSALEPRICE() + "");
-//        if (!StringUtils.isEmpty(model.getFLG_DETAIL())) {
-//            tv_new_price.setText(model.getSALEPRICE() + "\t\t" + model.getFLG_DETAIL());
-//        }
-//        if (!StringUtils.isEmpty(model.getTREATMENT())) {
-//            goods_shuoming.setVisibility(View.VISIBLE);
-//            goods_shuoming.setText(model.getTREATMENT());
-//        } else {
-//            goods_shuoming.setVisibility(View.GONE);
-//        }
-//
-//
-//        b1 = model.getSALEPRICE();
-//        //是否收藏
-//        if (model.getFavorited().equals("1")) {
-//            shoucang_img.setImageDrawable(getResources().getDrawable(R.mipmap.icon_shoucang_xuanzhong));
-//        } else {
-//            shoucang_img.setImageDrawable(getResources().getDrawable(R.mipmap.icon_shoucang_weixuan));
-//        }
-////        DbManager dbManager = x.getDb( SqlUtils.getDaoConfig() );
-////        List<SqlFavoritesModel> sqlFavoritesModels = new ArrayList<>();
-////        try {
-////            sqlFavoritesModels = dbManager.findAll( SqlFavoritesModel.class );
-////        } catch (DbException e) {
-////            e.printStackTrace();
-////        }
-////
-////        if (sqlFavoritesModels != null && !sqlFavoritesModels.isEmpty()) {
-////            for (int i = 0; i < sqlFavoritesModels.size(); i++) {
-//////                Log.e( "*******",sqlFavoritesModels.get( i ).getId()+"; "+sqlFavoritesModels.get( i ).getId().equals( model.getWAREID() ) );
-////                if (sqlFavoritesModels.get( i ).getId().equals( model.getWAREID() )) {
-////                    shoucang_img.setImageDrawable( getResources().getDrawable( R.mipmap.icon_shoucang_xuanzhong ) );
-////                    isCollect = true;
-////                    return;
-////                } else {
-////                    shoucang_img.setImageDrawable( getResources().getDrawable( R.mipmap.icon_shoucang_weixuan ) );
-////                    isCollect = false;
-////                }
-////            }
-////        }
-//
-//
-//    }
 
 
     /**
@@ -460,8 +399,14 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
 
 
     public void bindData2View(MedicineDetailsModel model) {
+        if (!isAdded()) return;
         if (model == null) return;
         this.medicineModel = model;
+        if (model.getSUMQTY() != null) {
+            tvSumqty.setText("(本店数量：" + model.getSUMQTY() + ")");
+        }
+//        tvAddress.setText("送至:" + model.getUSER_ADDRESS());
+
         if (MedicineDetailsModel.PRESCRIPTION_FLG_OTC.equals(medicineModel.getPRESCRIPTION_FLG())) {
             imgChuFang.setImageDrawable(ActivityCompat.getDrawable(getActivity(), R.mipmap.chufang));
         } else {
@@ -484,6 +429,7 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
                 postage = model.getPOSTAGE(),
                 prodAdd = "\n\n生产企业: " + model.getPRODUCER();
 //                detailFlg = model.getFLG_DETAIL()"[买而送一]",
+//        Log.e(AppConfig.ERR_TAG, "treatment:" + treatment);
         StringBuilder sb = new StringBuilder().append(detailFlg).append(brand).append(wareName).append(size).append(postage).append(price).append(prodAdd).append(treatment);
         int priceStart = sb.indexOf(price), priceEnd = priceStart + price.length();
         int prodaddStart = sb.indexOf(prodAdd), prodaddEnd = prodaddStart + prodAdd.length();
@@ -515,8 +461,8 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
         String shopname = model.getLOGISTICS_COMPANY(),
                 distanceText = model.getDISTANCE_TEXT(),
                 durationText = model.getDURATION_TEXT(),
-                qisong = "￥" + model.getQISONG() + "起送",
-                baoyou = model.getBAOYOU() + "包邮",
+                qisong = "" + model.getQISONG() + "元起送",
+                baoyou = model.getBAOYOU() + "元包邮",
                 busFlg = model.getBUSAVLID_FLGText();
         tvBusFlg.setText(busFlg);
 
@@ -572,65 +518,6 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
         Toast.makeText(getContext(), "Bottom", Toast.LENGTH_SHORT).show();
     }
 
-//    private void addDb() {
-//
-//        DbManager dbManager = x.getDb( SqlUtils.getDaoConfig() );
-//
-//        SqlFavoritesModel sqlFavoritesModel = new SqlFavoritesModel();
-//        sqlFavoritesModel.setId( model.getWAREID() );
-//        sqlFavoritesModel.setMoney( model.getSALEPRICE() + "" );
-//        if (model.getIMAGES().length == 0 || model.getIMAGES() == null) {//没有商品图
-//            sqlFavoritesModel.setImage( "" );
-//        } else {
-//            sqlFavoritesModel.setImage( model.getIMAGES()[0] );
-//        }
-//        sqlFavoritesModel.setName( model.getWARENAME() );
-//        sqlFavoritesModel.setGroup( model.getGROUPID() );
-//
-//        try {
-//            dbManager.save( sqlFavoritesModel );//添加数据
-//        } catch (DbException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-
-    /**
-     * 图片轮播适配器
-     */
-    public class NetworkImageHolderView implements Holder<String> {
-        private View rootview;
-        private SimpleDraweeView imageView;
-        private ArrayList<String> imgs;
-
-        public NetworkImageHolderView(ArrayList<String> imgs) {
-            this.imgs = imgs;
-        }
-
-        @Override
-        public View createView(Context context) {
-            rootview = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.goods_item_head_img1, null);
-            imageView = (SimpleDraweeView) rootview.findViewById(R.id.sdv_item_head_img);
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent it = new Intent(getActivity(), ActivityGoodsImages.class);
-                    it.putStringArrayListExtra("imgs", imgs);
-                    startActivity(it);
-                }
-            });
-            return rootview;
-        }
-
-        @Override
-        public void UpdateUI(Context context, int position, final String data) {
-//        if (!StringUtils.isEmpty( data )){
-            imageView.setImageURI(Uri.parse(data));
-
-//        }
-
-        }
-    }
 
     //推荐商品
     public static class RecommendGoodsBean {
@@ -742,10 +629,6 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
         return itemClickListener;
     }
 
-    public void setItemClickListener(View.OnClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -771,6 +654,4 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
         }
     }
 
-    private void initParams() {
-    }
 }

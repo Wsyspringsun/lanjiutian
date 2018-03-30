@@ -1,54 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_shopinfo_nsv_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/activity_shopinfo_nsv_main"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:background="@color/white">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="@dimen/x50">
 
-            <FrameLayout
+            <ImageView
+                android:id="@+id/activity_lifeshop_img_banner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:src="@drawable/life_shop" />
 
-                <ImageView
-                    android:id="@+id/activity_lifeshop_img_banner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/life_shop" />
+        </FrameLayout>
 
-            </FrameLayout>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/activity_lifeshop_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x32"
+            android:layout_alignParentBottom="true"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@android:color/holo_orange_dark"
+            app:tabIndicatorHeight="2dp"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@android:color/holo_orange_dark"
+            app:theme="@style/LjtTabLayout" />
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/activity_lifeshop_tabs"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x32"
-                android:layout_alignParentBottom="true"
-                app:tabGravity="fill"
-                app:tabIndicatorColor="@android:color/holo_orange_dark"
-                app:tabIndicatorHeight="2dp"
-                app:tabMode="fixed"
-                app:tabSelectedTextColor="@android:color/holo_orange_dark"
-                app:theme="@style/LjtTabLayout">
-            </android.support.design.widget.TabLayout>
+        <com.wyw.ljtds.widget.goodsinfo.NoScrollViewPager
+            android:id="@+id/fragment_lifeshop_shopimg_vp_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:nestedScrollingEnabled="false" />
 
-            <com.wyw.ljtds.widget.goodsinfo.NoScrollViewPager
-                android:id="@+id/fragment_shopimg_vp_main"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
-
-</RelativeLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

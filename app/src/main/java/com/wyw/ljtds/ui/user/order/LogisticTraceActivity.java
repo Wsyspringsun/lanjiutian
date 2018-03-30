@@ -9,6 +9,7 @@ import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,17 +17,21 @@ import android.widget.TextView;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.baidu.platform.comapi.location.CoordinateType;
+import com.baidu.trace.api.entity.LocRequest;
 import com.baidu.trace.api.entity.OnEntityListener;
 import com.baidu.trace.api.track.DistanceRequest;
 import com.baidu.trace.api.track.HistoryTrackResponse;
 import com.baidu.trace.api.track.LatestPoint;
+import com.baidu.trace.api.track.LatestPointRequest;
 import com.baidu.trace.api.track.LatestPointResponse;
 import com.baidu.trace.api.track.OnTrackListener;
 import com.baidu.trace.api.track.SupplementMode;
@@ -41,6 +46,8 @@ import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.model.CurrentLocation;
+import com.wyw.ljtds.model.ProductInfo;
+import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.receivers.TrackReceiver;
 import com.wyw.ljtds.ui.base.BikingRouteOverlay;
 import com.wyw.ljtds.ui.base.WalkingRouteOverlay;
@@ -48,10 +55,14 @@ import com.wyw.ljtds.utils.BitmapUtil;
 import com.wyw.ljtds.utils.CommonUtil;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.MapUtil;
+import com.wyw.ljtds.utils.NetUtil;
 import com.wyw.ljtds.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.wyw.ljtds.model.CurrentLocation.latitude;
+import static com.wyw.ljtds.model.CurrentLocation.longitude;
 
 /**
  * Created by wsy on 17-12-21.
@@ -59,10 +70,18 @@ import java.util.List;
 
 public class LogisticTraceActivity extends AppCompatActivity {
     private static final String TAG_ENTITYNAME = "com.wyw.ljtds.ui.user.order.LogisticTraceActivity.TAG_ENTITYNAME";
+    private static final String TAG_LAT = "com.wyw.ljtds.ui.user.order.LogisticTraceActivity.TAG_LAT";
+    private static final String TAG_LNG = "com.wyw.ljtds.ui.user.order.LogisticTraceActivity.TAG_LNG";
+    private String txtDistance = "距离您:--米";
     private MapView mMapView;
-    private BaiduMap mBaiduMap;
+    public BaiduMap baiduMap = null;
+
+//    private BaiduMap mBaiduMap;
     //    private RoutePlanSearch mSearch;
-    BitmapDescriptor bitmap;
+//    BitmapDescriptor bitmap;
+
+    BitmapDescriptor pic = BitmapDescriptorFactory.fromResource(R.drawable.ic_guiji);
+//    BitmapDescriptor pic = BitmapDescriptorFactory.fromResource(R.drawable.ic_logistic_curior);
 
     private boolean isRealTimeRunning = true;
     private RealTimeHandler realTimeHandler = new RealTimeHandler();
@@ -135,60 +154,44 @@ public class LogisticTraceActivity extends AppCompatActivity {
                 return;
             }
             CurrentLocation.locTime = point.getLocTime();
-            CurrentLocation.latitude = currentLatLng.latitude;
-            CurrentLocation.longitude = currentLatLng.longitude;
+            latitude = currentLatLng.latitude;
+            longitude = currentLatLng.longitude;
+            updateDistance(currentLatLng);
+            Log.e(AppConfig.ERR_TAG, "onHistoryTrackCallback updateok:" + GsonUtils.Bean2Json(response));
 
-            double distance = DistanceUtil.getDistance(currentLatLng, targetPoint);
-            tvDistance.setText("距离您:" + (int)distance + "米");
 
-            if (null != mapUtil) {
-                mapUtil.updateStatus(currentLatLng, true);
-            }
         }
     };
+
+    private void resetPos() {
+        //        BDLocation location = SingleCurrentUser.location;
+        LatLng ll = new LatLng(SingleCurrentUser.defaultLat, SingleCurrentUser.defaultLng);
+//        MapUtil.targetMap2LatLng(mBaiduMap, ll);
+        updateDistance(ll);
+        Log.e(AppConfig.ERR_TAG, "resetPos updateok");
+    }
+
+    private void updateDistance(LatLng currentLatLng) {
+        double distance = DistanceUtil.getDistance(currentLatLng, targetPoint);
+        txtDistance = "距离您:" + (int) distance + "米";
+//            TextView tvDistance = new TextView(getApplicationContext());
+        TextView tvDistance = (TextView) LayoutInflater.from(LogisticTraceActivity.this).inflate(R.layout.fragment_logistic_trace_distance, null);
+        tvDistance.setText(txtDistance);
+
+        mapUtil.updateStatus(currentLatLng, false);
+        MarkerOptions overlayOptions = new MarkerOptions().icon(pic).position(currentLatLng).title(txtDistance);
+        baiduMap.clear();
+        baiduMap.addOverlay(overlayOptions);
+//创建InfoWindow , 传入 view， 地理坐标， y 轴偏移量
+        InfoWindow mInfoWindow = new InfoWindow(tvDistance, currentLatLng, -1 * getResources().getDimensionPixelSize(R.dimen.x32));
+//显示InfoWindow
+        baiduMap.showInfoWindow(mInfoWindow);
+    }
 
     private boolean useDefaultIcon = true;
     //    private TrackReceiver trackReceiver = null;
     private PowerManager.WakeLock wakeLock = null;
 
-    //鹰眼服务
-    private OnTraceListener traceListener = new OnTraceListener() {
-        @Override
-        public void onBindServiceCallback(int errorNo, String message) {
-            Log.e(AppConfig.ERR_TAG, "onBindServiceCallback:" + errorNo + ":" + message);
-        }
-
-        @Override
-        public void onStartTraceCallback(int errorNo, String message) {
-            Log.e(AppConfig.ERR_TAG, "onStartTraceCallback:" + errorNo + ":" + message);
-        }
-
-        @Override
-        public void onStopTraceCallback(int errorNo, String message) {
-            Log.e(AppConfig.ERR_TAG, "onStopTraceCallback:" + errorNo + ":" + message);
-        }
-
-        @Override
-        public void onStartGatherCallback(int errorNo, String message) {
-            Log.e(AppConfig.ERR_TAG, "onStartGatherCallback:" + errorNo + ":" + message);
-        }
-
-        @Override
-        public void onStopGatherCallback(int errorNo, String message) {
-            Log.e(AppConfig.ERR_TAG, "onStopGatherCallback:" + errorNo + ":" + message);
-        }
-
-        @Override
-        public void onPushCallback(byte messageType, PushMessage pushMessage) {
-            Log.e(AppConfig.ERR_TAG, "onPushCallback:" + pushMessage);
-        }
-
-        @Override
-        public void onInitBOSCallback(int errorNo, String message) {
-            Log.e(AppConfig.ERR_TAG, "onInitBOSCallback:" + errorNo + ":" + message);
-        }
-    };
-    private int tag = 1;
     private RealTimeLocRunnable realTimeLocRunnable;
     private OnEntityListener entityListener = new OnEntityListener() {
 
@@ -204,54 +207,81 @@ public class LogisticTraceActivity extends AppCompatActivity {
                 return;
             }
             CurrentLocation.locTime = CommonUtil.toTimeStamp(location.getTime());
-            CurrentLocation.latitude = currentLatLng.latitude;
-            CurrentLocation.longitude = currentLatLng.longitude;
+            latitude = currentLatLng.latitude;
+            longitude = currentLatLng.longitude;
 
             if (null != mapUtil) {
-                mapUtil.updateStatus(currentLatLng, true);
+                updateDistance(currentLatLng);
             }
         }
 
     };
     private MapUtil mapUtil;
     private String entityName;
-    private TextView tvDistance;
     private ImageView imgCancel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        targetPoint = new LatLng(35.504755f, 112.839483f);
+        Double lat = getIntent().getDoubleExtra(TAG_LAT, 0);
+        Double lng = getIntent().getDoubleExtra(TAG_LNG, 0);
+        if (lat <= 0 || lng <= 0) {
+            ToastUtil.show(this, "目标定位错误");
+            finish();
+            return;
+        }
+
+        targetPoint = new LatLng(lat, lng);
 
         setContentView(R.layout.activity_logistic_trace);
         initMapView();
         myApp = (MyApplication) getApplication();
+
     }
 
+
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
+        mapUtil.setCenter();
+
+//        resetPos();
+        isRealTimeRunning = true;
+
         //        1 创建骑行线路规划检索实例；
 //        mSearch = RoutePlanSearch.newInstance();
 //        2 创建骑行线路规划检索监听者；
 //        3 设置骑行线路规划检索监听者；
 //        mSearch.setOnGetRoutePlanResultListener(listener);
-//        this.entityName = getIntent().getStringExtra(TAG_ENTITYNAME);
-        this.entityName = "861007030662863";
+        this.entityName = getIntent().getStringExtra(TAG_ENTITYNAME);
+//        this.entityName = "861007030662863";
 //        Log.e(AppConfig.ERR_TAG, "entityName:" + this.entityName);
         ToastUtil.show(LogisticTraceActivity.this, "开始查看轨迹");
-        realTimeLocRunnable = new RealTimeLocRunnable(20);
+        realTimeLocRunnable = new RealTimeLocRunnable(2);
         realTimeHandler.post(realTimeLocRunnable);
+
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isRealTimeRunning = false;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 
     private void initMapView() {
         BitmapUtil.init();
-        bitmap = BitmapDescriptorFactory.fromResource(R.drawable.icon_st);
+//        bitmap = BitmapDescriptorFactory.fromResource(R.drawable.ic_logistic_curior);
         // 地图初始化
         mMapView = (MapView) findViewById(R.id.activity_logistic_trace_mapview);
-        tvDistance = (TextView) findViewById(R.id.activity_logistic_trace_distance);
+        baiduMap = mMapView.getMap();
+
+//        tvDistance = (TextView) findViewById(R.id.activity_logistic_trace_distance);
         imgCancel = (ImageView) findViewById(R.id.activity_logistic_trace_img_cancel);
         imgCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,16 +289,12 @@ public class LogisticTraceActivity extends AppCompatActivity {
                 finish();
             }
         });
-        mBaiduMap = mMapView.getMap();
+//        mBaiduMap = mMapView.getMap();
 
         mapUtil = MapUtil.getInstance();
         mapUtil.init(mMapView);
-        mapUtil.setCenter(myApp);
-
-//        BDLocation location = SingleCurrentUser.location;
-        LatLng ll = new LatLng(35.489899f, 112.864964f);
-//        MapUtil.targetMap2LatLng(mBaiduMap, ll);
-        mapUtil.updateStatus(ll, false);
+        mapUtil.setCenter();
+//        resetPos();
 
     }
 
@@ -315,7 +341,7 @@ public class LogisticTraceActivity extends AppCompatActivity {
         }
     }*/
 
-    private void drawLines(HistoryTrackResponse response) {
+    /*private void drawLines(HistoryTrackResponse response) {
         //构建MarkerOption，用于在地图上添加Marker
         List<TrackPoint> trackPoints = response.getTrackPoints();
         if (trackPoints != null && trackPoints.size() > 1) {
@@ -332,7 +358,7 @@ public class LogisticTraceActivity extends AppCompatActivity {
         }
 
 
-    }
+    }*/
 
 
 /*    private void drawTrace(LatLng startLatlng, LatLng endLatlng) {
@@ -349,14 +375,13 @@ public class LogisticTraceActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 //        mSearch.destroy();
-//        myApp.mTraceClient.stopTrace(myApp.mTrace, traceListener);
     }
 
     public void setUseDefaultIcon(boolean useDefaultIcon) {
         this.useDefaultIcon = useDefaultIcon;
     }
 
-    private class MyBikingRouteOverlay extends BikingRouteOverlay {
+    /*private class MyBikingRouteOverlay extends BikingRouteOverlay {
         public MyBikingRouteOverlay(BaiduMap baiduMap) {
             super(baiduMap);
         }
@@ -378,9 +403,9 @@ public class LogisticTraceActivity extends AppCompatActivity {
         }
 
 
-    }
+    }*/
 
-    private class MyWalkingRouteOverlay extends WalkingRouteOverlay {
+    /*private class MyWalkingRouteOverlay extends WalkingRouteOverlay {
 
         public MyWalkingRouteOverlay(BaiduMap baiduMap) {
             super(baiduMap);
@@ -401,14 +426,14 @@ public class LogisticTraceActivity extends AppCompatActivity {
             }
             return null;
         }
-    }
+    }*/
 
     /**
      * 获取实时轨迹
      */
     class RealTimeLocRunnable implements Runnable {
 
-        private int interval = 10;
+        private int interval = 1;
 
         public RealTimeLocRunnable(int interval) {
             this.interval = interval;
@@ -417,9 +442,28 @@ public class LogisticTraceActivity extends AppCompatActivity {
         @Override
         public void run() {
             if (isRealTimeRunning) {
-                myApp.getCurrentLocation(entityListener, mTrackListener, entityName);
+                getEntityTrace(entityListener, mTrackListener);
                 realTimeHandler.postDelayed(this, interval * 1000);
             }
+        }
+    }
+
+    /**
+     * 获取当前位置
+     */
+    public void getEntityTrace(OnEntityListener entityListener, OnTrackListener trackListener) {
+        // 网络连接正常，开启服务及采集，则查询纠偏后实时位置；否则进行实时定位
+        if (NetUtil.isNetworkAvailable(getApplicationContext())) {
+            LatestPointRequest request = new LatestPointRequest(AppConfig.TAG_TRACE, AppConfig.SERVICEID, entityName);
+            ProcessOption processOption = new ProcessOption();
+            processOption.setNeedDenoise(true);
+            processOption.setRadiusThreshold(100);
+            request.setProcessOption(processOption);
+            myApp.mTraceClient.queryLatestPoint(request, trackListener);
+        } else {
+            Log.e(AppConfig.ERR_TAG, "queryRealTimeLoc.........");
+            LocRequest locRequest = new LocRequest(AppConfig.SERVICEID);
+            myApp.mTraceClient.queryRealTimeLoc(locRequest, entityListener);
         }
     }
 
@@ -431,9 +475,11 @@ public class LogisticTraceActivity extends AppCompatActivity {
 
     }
 
-    public static Intent getIntent(Context context, String entityName) {
+    public static Intent getIntent(Context context, String entityName, double lat, double lng) {
         Intent it = new Intent(context, LogisticTraceActivity.class);
         it.putExtra(TAG_ENTITYNAME, entityName);
+        it.putExtra(TAG_LAT, lat);
+        it.putExtra(TAG_LNG, lng);
         return it;
     }
 

@@ -30,554 +30,601 @@
         app:rippleColor="@color/transparent" />
 -->
 
-    <com.wyw.ljtds.widget.MyScrollView
-        android:id="@+id/sv"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/fragment_find_sr"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@color/white">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <com.wyw.ljtds.widget.MyScrollView
+            android:id="@+id/sv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/white">
 
-            <com.bigkoo.convenientbanner.ConvenientBanner
-                android:id="@+id/banner"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x150"
-                app:canLoop="true">
-
-            </com.bigkoo.convenientbanner.ConvenientBanner>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/x6"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <com.bigkoo.convenientbanner.ConvenientBanner
+                    android:id="@+id/banner"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x60"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_height="@dimen/x150"
+                    app:canLoop="true">
 
-                    <RelativeLayout
-                        android:id="@+id/button1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_find_zhaoyao" />
-
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/find_button1"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/button2"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_find_nanxing" />
-
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/find_button2"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/button3"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_find_nvxing" />
-
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/find_button3"
-                            android:textColor="@color/font_black2" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/button4"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/find_button4"
-                            android:textColor="@color/font_black2" />
-
-                        <ImageView
-                            android:id="@+id/imageView"
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_find_manxingbing" />
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/x10"
-                android:orientation="vertical">
+                </com.bigkoo.convenientbanner.ConvenientBanner>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x60"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/x6"
+                    android:orientation="vertical">
 
-                    <RelativeLayout
-                        android:id="@+id/button5"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x60"
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_find_yingyangbaojian" />
+                        <LinearLayout
+                            android:id="@+id/button1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/find_button5"
-                            android:textColor="@color/font_black2" />
+                            <ImageView
+                                android:layout_width="@dimen/x32"
+                                android:layout_height="@dimen/x32"
+                                android:layout_centerHorizontal="true"
+                                android:scaleType="fitCenter"
+                                android:src="@mipmap/icon_find_zhaoyao" />
 
-                    </RelativeLayout>
+                            <TextView
+                                style="@style/font_ww_14"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/find_button1"
+                                android:textColor="@color/font_black2" />
 
-                    <RelativeLayout
-                        android:id="@+id/button6"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
+                        </LinearLayout>
 
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_find_yiliaoqixie" />
+                        <LinearLayout
+                            android:id="@+id/button2"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/find_button6"
-                            android:textColor="@color/font_black2" />
+                            <ImageView
+                                android:layout_width="@dimen/x32"
+                                android:layout_height="@dimen/x32"
+                                android:layout_centerHorizontal="true"
+                                android:scaleType="fitCenter"
+                                android:src="@mipmap/icon_find_nanxing" />
 
-                    </RelativeLayout>
+                            <TextView
+                                style="@style/font_ww_14"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/find_button2"
+                                android:textColor="@color/font_black2" />
 
-                    <RelativeLayout
-                        android:id="@+id/button7"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
+                        </LinearLayout>
 
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_find_chenren" />
+                        <LinearLayout
+                            android:id="@+id/button3"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/find_button7"
-                            android:textColor="@color/font_black2" />
+                            <ImageView
+                                android:layout_width="@dimen/x32"
+                                android:layout_height="@dimen/x32"
+                                android:layout_centerHorizontal="true"
+                                android:scaleType="fitCenter"
+                                android:src="@mipmap/icon_find_nvxing" />
 
-                    </RelativeLayout>
+                            <TextView
+                                style="@style/font_ww_14"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/find_button3"
+                                android:textColor="@color/font_black2" />
 
-                    <RelativeLayout
-                        android:id="@+id/btn_kefu"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
+                        </LinearLayout>
 
-                        <ImageView
-                            android:layout_width="@dimen/x40"
-                            android:layout_height="@dimen/x40"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/icon_find_yishengzixun" />
+                        <LinearLayout
+                            android:id="@+id/button4"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                        <TextView
-                            style="@style/font_ww_14"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/find_button8"
-                            android:textColor="@color/font_black2" />
+                            <ImageView
+                                android:id="@+id/imageView"
+                                android:layout_width="@dimen/x32"
+                                android:layout_height="@dimen/x32"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:scaleType="fitCenter"
+                                android:src="@mipmap/icon_find_manxingbing" />
 
-                    </RelativeLayout>
+                            <TextView
+                                style="@style/font_ww_14"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/find_button4"
+                                android:textColor="@color/font_black2" />
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x1"
-                android:layout_marginTop="@dimen/x8"
-                android:background="@color/gray1" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/vertical_margin_mid"
-                android:paddingTop="@dimen/padding1">
-
-                <ImageView
-                    android:id="@+id/fragment_find_img_toutiao"
-                    android:layout_width="@dimen/x32"
-                    android:layout_height="@dimen/x32"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="@dimen/vertical_margin"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_toutiao" />
-
-                <com.sunfusheng.marqueeview.MarqueeView
-                    android:id="@+id/marqueeView"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x35"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/x10"
-                    android:layout_marginRight="@dimen/x2"
-                    android:layout_toRightOf="@id/fragment_find_img_toutiao"
-                    app:mvAnimDuration="1000"
-                    app:mvInterval="3000"
-                    app:mvSingleLine="false"
-                    app:mvTextColor="@color/font_black2"
-                    app:mvTextSize="@dimen/font_5" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-            </RelativeLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x60"
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
-            <!--节日活动-->
-            <!--<RelativeLayout-->
-            <!--android:visibility="gone"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content">-->
+                        <LinearLayout
+                            android:id="@+id/button5"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-            <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:id="@+id/fragment_find_rv_huodong"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content" />-->
+                            <ImageView
+                                android:layout_width="@dimen/x32"
+                                android:layout_height="@dimen/x32"
+                                android:layout_centerHorizontal="true"
+                                android:scaleType="fitCenter"
+                                android:src="@mipmap/icon_find_yingyangbaojian" />
 
-            <!--</RelativeLayout>-->
+                            <TextView
+                                style="@style/font_ww_14"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/find_button5"
+                                android:textColor="@color/font_black2" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/button6"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/x32"
+                                android:layout_height="@dimen/x32"
+                                android:layout_centerHorizontal="true"
+                                android:scaleType="fitCenter"
+                                android:src="@mipmap/icon_find_yiliaoqixie" />
+
+                            <TextView
+                                style="@style/font_ww_14"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/find_button6"
+                                android:textColor="@color/font_black2" />
+
+                        </LinearLayout>
+
+                        <!--<RelativeLayout
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:layout_width="@dimen/x32"
+                                android:layout_height="@dimen/x32"
+                                android:layout_centerHorizontal="true"
+                                android:scaleType="fitCenter"
+                                android:src="@mipmap/icon_find_chenren" />
+
+                            <TextView
+                                style="@style/font_ww_14"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/find_button7"
+                                android:textColor="@color/font_black2" />
+
+                        </RelativeLayout>-->
+                        <LinearLayout
+                            android:id="@+id/button7"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/x32"
+                                android:layout_height="@dimen/x32"
+                                android:layout_centerHorizontal="true"
+                                android:scaleType="fitCenter"
+                                android:src="@mipmap/icon_find_chenren" />
+
+                            <TextView
+                                style="@style/font_ww_14"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/find_button7"
+                                android:textColor="@color/font_black2" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/btn_kefu"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/x32"
+                                android:layout_height="@dimen/x32"
+                                android:layout_centerHorizontal="true"
+                                android:scaleType="fitCenter"
+                                android:src="@mipmap/icon_find_yishengzixun" />
+
+                            <TextView
+                                style="@style/font_ww_14"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/find_button8"
+                                android:textColor="@color/font_black2" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
 
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x1"
-                android:background="@color/gray1" />
+                </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/vertical_margin_mid"
-                android:paddingBottom="@dimen/padding1"
-                android:paddingTop="@dimen/padding1">
-
-                <ImageView
-                    android:layout_width="@dimen/x44"
-                    android:layout_height="@dimen/x14"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:src="@drawable/ic_qianghaohuo" />
-
-                <TextView
-                    android:id="@+id/tv_jt_djs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/x5"
-                    android:text="@string/gengduo"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/font_5" />
-
-            </RelativeLayout>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/fragment_find_ryv_qianggou"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:overScrollMode="never" />
-
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/sdv_head_img1"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x140"
-                android:layout_marginTop="@dimen/x10"
-                fresco:fadeDuration="400"
-                fresco:failureImage="@mipmap/zhanweitu_lunbo"
-                fresco:failureImageScaleType="centerInside"
-                fresco:placeholderImage="@mipmap/zhanweitu_lunbo"></com.facebook.drawee.view.SimpleDraweeView>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x2"
-                android:background="@color/gray1" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x80"
-                android:orientation="horizontal">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x1"
+                    android:background="@color/gray1" />
 
                 <RelativeLayout
-                    android:id="@+id/sel_yigan"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="@dimen/x10">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/icon_qf_yigan" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="@dimen/x3"
-                    android:layout_height="match_parent"
-                    android:background="@color/basebackground" />
-
-                <RelativeLayout
-                    android:id="@+id/sel_yangwei"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="@dimen/x10">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerVertical="true"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/icon_qf_yangwei" />
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x3"
-                android:background="@color/basebackground" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x80"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/sel_fengshi"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/x5"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/icon_qf_fengshi" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="@dimen/x3"
-                    android:layout_height="match_parent"
-                    android:background="@color/basebackground" />
-
-                <LinearLayout
-                    android:id="@+id/sel_yiyu"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/x5"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/icon_qf_yiyu" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="@dimen/x3"
-                    android:layout_height="match_parent"
-                    android:background="@color/basebackground" />
-
-                <LinearLayout
-                    android:id="@+id/sel_tuofa"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/x5"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/icon_qf_tuofa" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="@dimen/x3"
-                    android:layout_height="match_parent"
-                    android:background="@color/basebackground" />
-
-                <LinearLayout
-                    android:id="@+id/sel_xiaochuan"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/x5"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/icon_qf_xiaochuan" />
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x3"
-                android:background="@color/basebackground" />
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/vertical_margin"
-                android:layout_marginTop="@dimen/vertical_margin"
-                android:background="@color/white"
-                android:paddingLeft="@dimen/x10"
-                android:paddingRight="@dimen/x10">
-
-                <ImageView
-                    android:id="@+id/fragment_find_img_jingxuan"
-                    android:layout_width="@dimen/x16"
-                    android:layout_height="@dimen/x16"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:src="@drawable/ic_jingxuan" />
-
-                <TextView
-                    style="@style/font_ww_14"
-                    android:layout_alignParentBottom="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/vertical_margin_mid"
-                    android:layout_toRightOf="@id/fragment_find_img_jingxuan"
-                    android:text="为您精选"
-                    android:textColor="@color/font_black2" />
+                    android:paddingTop="@dimen/padding1">
 
-            </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/fragment_find_img_toutiao"
+                        android:layout_width="@dimen/x32"
+                        android:layout_height="@dimen/x32"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="@dimen/vertical_margin"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_toutiao" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/fragment_find_ryv_recommand"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                    <com.sunfusheng.marqueeview.MarqueeView
+                        android:id="@+id/marqueeView"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x35"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/x10"
+                        android:layout_marginRight="@dimen/x2"
+                        android:layout_toRightOf="@id/fragment_find_img_toutiao"
+                        app:mvAnimDuration="1000"
+                        app:mvInterval="3000"
+                        app:mvSingleLine="false"
+                        app:mvTextColor="@color/font_black2"
+                        app:mvTextSize="@dimen/font_5" />
 
-            </android.support.v7.widget.RecyclerView>
+                </RelativeLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/reclcyer1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/x8"
-                android:layout_marginTop="@dimen/x3">
+                <!--节日活动-->
+                <!--<RelativeLayout-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content">-->
 
-            </android.support.v7.widget.RecyclerView>
+                <!--<android.support.v7.widget.RecyclerView-->
+                <!--android:id="@+id/fragment_find_rv_huodong"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content" />-->
 
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/sdv_head_img2"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x140"
-                android:layout_marginTop="@dimen/x10"
-                fresco:fadeDuration="400"
-                fresco:failureImage="@mipmap/zhanweitu_lunbo"
-                fresco:failureImageScaleType="centerInside"
-                fresco:placeholderImage="@mipmap/zhanweitu_lunbo" />
-
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/sdv_head_img3"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x140"
-                android:layout_marginTop="@dimen/x2"
-                fresco:fadeDuration="400"
-                fresco:failureImage="@mipmap/zhanweitu_lunbo"
-                fresco:failureImageScaleType="centerInside"
-                fresco:placeholderImage="@mipmap/zhanweitu_lunbo" />
+                <!--</RelativeLayout>-->
 
 
-        </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x1"
+                    android:background="@color/gray1" />
 
-    </com.wyw.ljtds.widget.MyScrollView>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/vertical_margin_mid"
+                    android:paddingBottom="@dimen/padding1"
+                    android:paddingTop="@dimen/padding1">
+
+                    <ImageView
+                        android:layout_width="@dimen/x44"
+                        android:layout_height="@dimen/x14"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:src="@drawable/ic_qianghaohuo" />
+
+                    <TextView
+                        android:id="@+id/tv_jt_djs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/x5"
+                        android:text="@string/gengduo"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/font_5" />
+
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragment_find_ryv_qianggou"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never" />
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/sdv_head_img1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x140"
+                    android:layout_marginTop="@dimen/x10"
+                    fresco:fadeDuration="400"
+                    fresco:failureImage="@mipmap/zhanweitu_lunbo"
+                    fresco:failureImageScaleType="centerInside"
+                    fresco:placeholderImage="@mipmap/zhanweitu_lunbo"></com.facebook.drawee.view.SimpleDraweeView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x2"
+                    android:background="@color/gray1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x80"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/sel_yigan"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/x10">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitCenter"
+                            android:src="@mipmap/icon_qf_yigan" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="@dimen/x3"
+                        android:layout_height="match_parent"
+                        android:background="@color/basebackground" />
+
+                    <RelativeLayout
+                        android:id="@+id/sel_yangwei"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/x10">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:scaleType="fitCenter"
+                            android:src="@mipmap/icon_qf_yangwei" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x3"
+                    android:background="@color/basebackground" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x80"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/sel_fengshi"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/x5"
+                            android:scaleType="fitCenter"
+                            android:src="@mipmap/icon_qf_fengshi" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="@dimen/x3"
+                        android:layout_height="match_parent"
+                        android:background="@color/basebackground" />
+
+                    <LinearLayout
+                        android:id="@+id/sel_yiyu"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/x5"
+                            android:scaleType="fitCenter"
+                            android:src="@mipmap/icon_qf_yiyu" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="@dimen/x3"
+                        android:layout_height="match_parent"
+                        android:background="@color/basebackground" />
+
+                    <LinearLayout
+                        android:id="@+id/sel_tuofa"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/x5"
+                            android:scaleType="fitCenter"
+                            android:src="@mipmap/icon_qf_tuofa" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="@dimen/x3"
+                        android:layout_height="match_parent"
+                        android:background="@color/basebackground" />
+
+                    <LinearLayout
+                        android:id="@+id/sel_xiaochuan"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/x5"
+                            android:scaleType="fitCenter"
+                            android:src="@mipmap/icon_qf_xiaochuan" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x3"
+                    android:background="@color/basebackground" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/vertical_margin"
+                    android:layout_marginTop="@dimen/vertical_margin"
+                    android:background="@color/white"
+                    android:paddingLeft="@dimen/x10"
+                    android:paddingRight="@dimen/x10">
+
+                    <ImageView
+                        android:id="@+id/fragment_find_img_jingxuan"
+                        android:layout_width="@dimen/x16"
+                        android:layout_height="@dimen/x16"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:src="@drawable/ic_jingxuan" />
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="@dimen/vertical_margin_mid"
+                        android:layout_toRightOf="@id/fragment_find_img_jingxuan"
+                        android:text="为您精选"
+                        android:textColor="@color/font_black2" />
+
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragment_find_ryv_recommand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/reclcyer1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/x8"
+                    android:layout_marginTop="@dimen/x3">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/sdv_head_img2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x140"
+                    android:layout_marginTop="@dimen/x10"
+                    fresco:fadeDuration="400"
+                    fresco:failureImage="@mipmap/zhanweitu_lunbo"
+                    fresco:failureImageScaleType="centerInside"
+                    fresco:placeholderImage="@mipmap/zhanweitu_lunbo" />
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/sdv_head_img3"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x140"
+                    android:layout_marginTop="@dimen/x2"
+                    fresco:fadeDuration="400"
+                    fresco:failureImage="@mipmap/zhanweitu_lunbo"
+                    fresco:failureImageScaleType="centerInside"
+                    fresco:placeholderImage="@mipmap/zhanweitu_lunbo" />
+
+
+            </LinearLayout>
+
+        </com.wyw.ljtds.widget.MyScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <!--android:fitsSystemWindows="true"表示不占用系统栏的位置-->
     <LinearLayout

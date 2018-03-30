@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -92,7 +93,8 @@ public class FragmentFind extends BaseFragment {
     private static final int REQUEST_SEL_LOCATION = 2;
     private static final String DIALOG_SEL_ADDR = "DIALOG_SEL_ADDR";
 
-
+    @ViewInject(R.id.fragment_find_sr)
+    SwipeRefreshLayout srf;
     @ViewInject(R.id.main_header_location)
     TextView tvLocation;
     @ViewInject(R.id.ll_message)
@@ -253,7 +255,7 @@ public class FragmentFind extends BaseFragment {
                 startActivity(it);
                 break;
             case R.id.btn_kefu:
-                activity.openChat("首页咨询", "", AppConfig.CHAT_XN_LJT_SETTINGID2, AppConfig.CHAT_XN_LJT_TITLE, false, "");
+                activity.openChat("首页咨询", "", AppConfig.CHAT_XN_LJT_SETTINGID1, AppConfig.CHAT_XN_LJT_TITLE1, false, "");
                 break;
             case R.id.tv_jt_djs:
                 //活动 --- 更多
@@ -310,6 +312,13 @@ public class FragmentFind extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        srf.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getHome();
+                srf.setRefreshing(false);
+            }
+        });
         //confirm addr
         SelDefaultAddressFragment frag = SelDefaultAddressFragment.newInstance();
         frag.setTargetFragment(this, REQUEST_SEL_LOCATION);
@@ -492,6 +501,7 @@ public class FragmentFind extends BaseFragment {
                                 String sLoc = addr.getADDRESS_LOCATION();
                                 StringBuilder err = new StringBuilder();
                                 MyLocation loc = AddressModel.parseLocation(err, sLoc);
+                                loc.setADDRESS_ID(addr.getADDRESS_ID()+"");
                                 if (err.length() > 0) {
                                     ToastUtil.show(getActivity(), err.toString());
                                     return;
@@ -506,6 +516,7 @@ public class FragmentFind extends BaseFragment {
                     break;
                 case REQUEST_SEL_LOCATION:
                     if (data == null) {
+                        //选择其他地址
                         Intent it = AddressSelActivity.getIntent(getActivity(), true);
                         startActivityForResult(it, REQUEST_CHANGE_LOCATION);
                     }
@@ -803,7 +814,7 @@ public class FragmentFind extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     dialogConsult.dismiss();
-                    activity.openChat("首页咨询", "", AppConfig.CHAT_XN_LJT_SETTINGID2, AppConfig.CHAT_XN_LJT_TITLE, false, "");
+                    activity.openChat("首页咨询", "", AppConfig.CHAT_XN_LJT_SETTINGID1, AppConfig.CHAT_XN_LJT_TITLE1, false, "");
                 }
             });
             View itemTel = layout.findViewById(R.id.fragment_consult_ll_tel);
@@ -847,7 +858,7 @@ public class FragmentFind extends BaseFragment {
 
 
     public void setLocation() {
-        if (SingleCurrentUser.location != null) {
+        if (SingleCurrentUser.location != null && !SingleCurrentUser.location.getAddrStr().equals(tvLocation.getText())) {
             tvLocation.setText(SingleCurrentUser.location.getAddrStr());
 
             getHome();

@@ -31,20 +31,20 @@
 
             <CheckedTextView
                 android:layout_width="0dp"
-                android:layout_height="@dimen/x44"
+                android:layout_height="@dimen/x40"
                 android:layout_weight="1"
                 android:background="@drawable/radio_button_evaluate_hao"
                 android:checked="true" />
 
             <CheckedTextView
                 android:layout_width="0dp"
-                android:layout_height="@dimen/x44"
+                android:layout_height="@dimen/x40"
                 android:layout_weight="1"
                 android:background="@drawable/radio_button_evaluate_zhong" />
 
             <CheckedTextView
                 android:layout_width="0dp"
-                android:layout_height="@dimen/x44"
+                android:layout_height="@dimen/x40"
                 android:layout_weight="1"
                 android:background="@drawable/radio_button_evaluate_cha" />
 
@@ -64,8 +64,9 @@
         android:layout_margin="10dp"
         android:background="@null"
         android:gravity="left"
-        android:hint="宝贝满足您的期望吗？说说它的优点和美中不足的地方吧"
+        android:hint="宝贝满足您的期望吗？说说它的优点和美中不足的地方吧,最多100字符"
         android:lines="3"
+        android:maxLength="100"
         android:maxLines="5"
         android:textColor="@color/font_black2"
         android:textSize="14sp" />
@@ -94,11 +95,14 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/x8"
-        android:background="@color/basebackground" />
+        android:background="@color/gray1" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/vertical_margin_mid"
+        android:layout_marginRight="@dimen/vertical_margin_mid"
+        android:layout_marginTop="@dimen/vertical_margin_mid">
 
         <TextView
             android:layout_width="wrap_content"

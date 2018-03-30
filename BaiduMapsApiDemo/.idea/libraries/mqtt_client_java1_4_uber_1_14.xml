@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="mqtt-client-java1.4-uber-1.14">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../xiaonengChatUI/libs/mqtt-client-java1.4-uber-1.14.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

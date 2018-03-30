@@ -33,7 +33,11 @@ import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.LogisticsModel;
+import com.wyw.ljtds.model.MyLocation;
+import com.wyw.ljtds.model.OrderCommDto;
+import com.wyw.ljtds.model.OrderTrade;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.utils.DateUtils;
 import com.wyw.ljtds.utils.GsonUtils;
@@ -73,7 +77,7 @@ public class ActivityLogistics extends BaseActivity {
     private RelativeLayout logisticInfo;
 
 
-    private List<LogisticsModel.Goods> list;
+    private List<OrderCommDto> list;
     List<LogisticsData> logisticsDataList;
     private MyAdapter adapter;
     private String phones = "";
@@ -81,6 +85,7 @@ public class ActivityLogistics extends BaseActivity {
 
     private static final String PATTERN_PHONE = "((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}";
     private static final String SCHEME_TEL = "tel:";
+    private LogisticsModel logiModel;
 
 
     @Event(value = {R.id.header_return})
@@ -135,6 +140,7 @@ public class ActivityLogistics extends BaseActivity {
             protected void onExecuteSucceeded(final LogisticsModel logisticsModel) {
                 closeLoding();
                 if (logisticsModel == null) return;
+                logiModel = logisticsModel;
                 if (!StringUtils.isEmpty(logisticsModel.getCOURIER())) {
                     logisticInfo.setVisibility(View.VISIBLE);
                     TextView tvCurior = (TextView) logisticInfo.findViewById(R.id.activity_logistic_tv_curior);
@@ -156,8 +162,13 @@ public class ActivityLogistics extends BaseActivity {
 //                    finish();
                     return;
                 }
+                LinearLayout traceRegion = (LinearLayout) findViewById(R.id.activity_logistic_trace);
+                if (traceRegion != null)
+                    traceRegion.setVisibility(View.GONE);
                 if ("C".equals(logisticsModel.getORDER().getSTATUS())) {
                     style.setText("物流状态：已发货");
+                    if (traceRegion != null)
+                        traceRegion.setVisibility(View.VISIBLE);
                 } else if ("D".equals(logisticsModel.getORDER().getSTATUS()) || "S".equals(logisticsModel.getORDER().getSTATUS())) {
                     style.setText("物流状态：已送达");
                 }
@@ -206,13 +217,13 @@ public class ActivityLogistics extends BaseActivity {
     }
 
     //商品adapter
-    private class MyAdapter extends BaseQuickAdapter<LogisticsModel.Goods> {
+    private class MyAdapter extends BaseQuickAdapter<OrderCommDto> {
         public MyAdapter() {
             super(R.layout.item_order_submit_goods, list);
         }
 
         @Override
-        protected void convert(BaseViewHolder baseViewHolder, LogisticsModel.Goods goods) {
+        protected void convert(BaseViewHolder baseViewHolder, OrderCommDto goods) {
             if (StringUtils.isEmpty(goods.getCOMMODITY_COLOR())) {
                 baseViewHolder.setText(R.id.item_order_submit_goods_size, " 规格：" + goods.getCOMMODITY_SIZE());
             } else {
@@ -301,7 +312,17 @@ public class ActivityLogistics extends BaseActivity {
                     startActivity(intent);
                     break;
                 case R.id.activity_logistic_trace:
-                    startActivity(LogisticTraceActivity.getIntent(ActivityLogistics.this, mobile));
+                    if (logiModel == null) return;
+                    String stat = logiModel.getORDER().getGROUP_STATUS();
+                    if (!OrderTrade.SHIPPED.equals(stat)) {
+                    }
+                    StringBuilder err = new StringBuilder();
+                    MyLocation loc = AddressModel.parseLocation(err, logiModel.getORDER().getUSER_ADDRESS_LOCATION());
+                    if (err.length() > 0) {
+                        ToastUtil.show(ActivityLogistics.this, "目标地址格式错误");
+                        return;
+                    }
+                    startActivity(LogisticTraceActivity.getIntent(ActivityLogistics.this, mobile, loc.getLatitude(), loc.getLongitude()));
                     break;
             }
         }

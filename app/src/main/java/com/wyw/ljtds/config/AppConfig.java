@@ -13,9 +13,19 @@ public class AppConfig {
     public static final String ERR_EXCEPTION = "www.ljt.com.exeption";
     public static final String GROUP_LJT = "sxljt";
     public static final String GROUP_LIFE = "ljtlife";
+
+    /**
+     * 百度服务
+     */
+    public static final long SERVICEID = 158684;//鹰眼轨迹
+
+    // 轨迹（专有参数）
+    public static String CHAT_XN_SELLERID = "lj_1001";// 商户id,平台版企业(B2B2C企业)使用此参数，B2C企业此参数传""
     //客服
-    public static String CHAT_XN_LJT_TITLE = "蓝九天药师";// 客服组默认名称
-    public static String CHAT_XN_LJT_SETTINGID2 = "lj_1000_1495596285901";
+    public static String CHAT_XN_LJT_TITLE2 = "蓝九天药师";// 客服组默认名称
+    public static String CHAT_XN_LJT_SETTINGID2 = "lj_1000_1495596285901";//蓝九天药师
+    public static String CHAT_XN_LJT_TITLE1 = "蓝九天客服";// 客服组默认名称
+    public static String CHAT_XN_LJT_SETTINGID1 = "lj_1000_1493167191869";//客服
     public static final String ADDRESS_LOCATION_SEP = "\\|";
     public static final String LJG_TEL = "0356-5681888";
     public static final int DEFAULT_INDEX_FRAGMENT = 2;
@@ -23,7 +33,7 @@ public class AppConfig {
     public static final int OUT_TIME = 22000;
     public static final int TAG_TRACE = 1;
     //是否测试环境
-    private static int TAG_DOMAIN = 2;
+    private static int TAG_DOMAIN = 3;
     public static String WEB_APP_URL = "";
     public static String WEB_DOMAIN = "";
     public static String WS_BASE_URL = "";
@@ -46,7 +56,7 @@ public class AppConfig {
                 WS_BASE_HTML_URL = WEB_DOMAIN + "/e-commerce_platform_WebService" + "/html/";
                 WS_BASE_JSP_URL = WEB_DOMAIN + "/e-commerce_platform_WebService" + "/jsp/";
                 APP_UPDATE_URL = WEB_DOMAIN + "/e-commerce_platform_WebService/version.json";
-                WEB_APP_URL = "http://cs.lanjiutian.com/mobile";
+                WEB_APP_URL = "http://192.168.2.101:8080/e-commerce_mobile";
                 IMAGE_PATH_LJT = "http://cs.lanjiutian.com/upload/images";
                 IMAGE_PATH_LJT_ECOMERCE = "http://cs.lanjiutian.com";
                 break;
@@ -63,8 +73,9 @@ public class AppConfig {
                 break;
             case 3:
                 WEB_APP_URL = "http://www.lanjiutian.com/mobile";
-                WEB_DOMAIN = "http://app.lanjiutian.com";
+                WEB_DOMAIN = "http://www.lanjiutian.com";
                 WS_BASE_URL = WEB_DOMAIN + "/WebService" + "/services/";
+                APP_UPDATE_URL = WEB_DOMAIN + "/WebService/version.json";
                 WS_BASE_HTML_URL = WEB_DOMAIN + "/WebService" + "/html/";
                 WS_BASE_JSP_URL = WEB_DOMAIN + "/WebService" + "/jsp/";
                 IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";

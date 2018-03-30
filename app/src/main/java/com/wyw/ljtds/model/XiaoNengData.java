@@ -7,6 +7,7 @@ package com.wyw.ljtds.model;
 public class XiaoNengData {
     private String settingid1 = "";
     private String groupId = "";// 店铺 id
+    private String groupName = "";// 店铺 名称
     private String sellerid = "";// 商户id,平台版企业(B2B2C企业)使用此参数，B2C企业此参数传""
 
     public String getSettingid1() {
@@ -31,5 +32,13 @@ public class XiaoNengData {
 
     public void setSellerid(String sellerid) {
         this.sellerid = sellerid;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 }

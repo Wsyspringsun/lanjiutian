@@ -12,7 +12,7 @@ public class OrderCommDto {
     private String COMMODITY_ID;
     private String COMMODITY_NAME = "";
     private String ORDER_GROUP_ID;
-    private String COMMODITY_COLOR;
+    private String COMMODITY_COLOR = "";
     private String COMMODITY_SIZE = "";
     private Integer EXCHANGE_QUANLITY;
     private String LOGISTICS_COMPANY_ID; //店铺编号

@@ -12,7 +12,7 @@
     android:paddingRight="@dimen/x10"
     android:paddingTop="@dimen/x5">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <!--<com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/item_goods_grid_sdv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,7 +20,14 @@
         fresco:fadeDuration="200"
         fresco:failureImage="@mipmap/zhanweitu"
         fresco:failureImageScaleType="fitCenter"
-        fresco:placeholderImage="@mipmap/zhanweitu" />
+        fresco:placeholderImage="@mipmap/zhanweitu" />-->
+    <ImageView
+        android:id="@+id/item_goods_grid_sdv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@mipmap/zhanweitu" />
 
     <TextView
         android:id="@+id/goods_title"
@@ -29,6 +36,7 @@
         android:layout_marginTop="@dimen/x8"
         android:ellipsize="end"
         android:maxLines="1"
+        android:text="名称"
         android:textColor="@color/font_black2"
         android:textSize="14sp" />
 
@@ -36,6 +44,7 @@
         android:id="@+id/money"
         style="@style/font_ww_14"
         android:layout_marginTop="@dimen/x8"
+        android:text="@string/money_renminbi"
         android:textColor="@color/base_bar" />
 
 </LinearLayout>

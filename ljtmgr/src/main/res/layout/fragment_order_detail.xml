@@ -55,17 +55,30 @@
         android:textSize="@dimen/font_5" />
 
     <Button
+        android:id="@+id/fragment_order_detail_btn_jushou"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/margin"
+        android:background="@drawable/button_selector"
+        android:text="@string/jushou"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_5" />
+
+
+    <Button
         android:id="@+id/fragment_order_detail_btn_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="@dimen/margin"
         android:background="@drawable/button_selector"
-        android:text="@string/app_name"
+        android:text="拦件"
         android:textColor="@color/white"
         android:textSize="@dimen/font_5" />
 
 
+    <!--同意退货-->
     <Button
         android:id="@+id/fragment_order_detail_btn_shouhoutongyi"
         android:layout_width="match_parent"
@@ -77,6 +90,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/font_5" />
 
+    <!--拒绝退货-->
     <Button
         android:id="@+id/fragment_order_detail_btn_shouhoujujue"
         android:layout_width="match_parent"

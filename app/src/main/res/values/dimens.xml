@@ -24,10 +24,12 @@
     <dimen name="normal_padding">6dp</dimen>
     <dimen name="normal_padding_lg">12dp</dimen>
 
-    <dimen name="font_1">26dp</dimen>
+    <dimen name="padding0">1dp</dimen>
     <dimen name="padding1">5dp</dimen>
     <dimen name="padding2">9dp</dimen>
     <dimen name="padding3">18dp</dimen>
+
+    <dimen name="font_1">26dp</dimen>
     <dimen name="font_2">20dp</dimen>
     <dimen name="font_3">17dp</dimen>
     <dimen name="font_4">14dp</dimen>

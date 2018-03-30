@@ -44,7 +44,7 @@
         android:label="@string/app_name" >
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="ew9htx7xPqwp903MPA2ZmIbnk4OtXv4g" />
+            android:value="2XYbByw1AwMiGGGQS34mydDGajZOCDRY" />
 
         <activity
             android:name="baidumapsdk.demo.BMapApiDemoMain"

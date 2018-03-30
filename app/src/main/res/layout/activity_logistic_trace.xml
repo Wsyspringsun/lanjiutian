@@ -56,31 +56,6 @@
             android:background="@color/white"
             android:clickable="true" />
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/x100"
-            android:elevation="@dimen/x6">
-
-            <TextView
-                android:id="@+id/activity_logistic_trace_distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/textview_border_bottomarrow"
-                android:text="距离您--米"
-                android:textAlignment="center" />
-
-            <ImageView
-                android:layout_width="@dimen/x40"
-                android:layout_height="@dimen/x40"
-                android:layout_below="@id/activity_logistic_trace_distance"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="@dimen/vertical_margin"
-                android:src="@drawable/ic_logistic_curior" />
-
-        </RelativeLayout>
-
         <ImageView
             android:id="@+id/activity_logistic_trace_img_cancel"
             android:layout_width="@dimen/x40"

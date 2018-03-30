@@ -3,12 +3,15 @@ package com.wyw.ljtds.ui.user.address;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.IntegerRes;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
@@ -16,7 +19,7 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
+
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
@@ -40,6 +43,7 @@ import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.ToolbarManager;
 
 import java.util.List;
+
 
 /**
  * Created by Administrator on 2017/3/9 0009.
@@ -67,10 +71,13 @@ public class AddressMapActivity extends Activity {
     OnCheckedChangeListener radioButtonListener;
     boolean isFirstLoc = true; // 是否首次定位
     private boolean isSmooth;
-
+    private ImageView ivCenterPoint;
     private Button btnConfirm;
     private ImageButton btnLocation;
     private TextView tvAddress;
+    private Point centerPoint;
+
+    int[] iCenter = new int[2];
     private BDLocationListener locationListner = new BDLocationListener() {
         @Override
         public void onReceiveLocation(BDLocation location) {
@@ -107,6 +114,7 @@ public class AddressMapActivity extends Activity {
                         break;
                 }
             }
+
         });
         //location
         btnLocation = (ImageButton) findViewById(R.id.activity_address_map_btn_location);
@@ -117,12 +125,28 @@ public class AddressMapActivity extends Activity {
                 targetMyLocation();
             }
         });
+
+
+        ivCenterPoint = (ImageView) findViewById(R.id.activity_address_map_centerpoint);
+        ivCenterPoint.getLocationInWindow(iCenter);
+        centerPoint = new Point(iCenter[0], iCenter[1]);
         tvAddress = (TextView) findViewById(R.id.activity_address_map_tv_mylocation);
+        tvAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = AddressSearchActivity.getIntent(AddressMapActivity.this);
+                startActivityForResult(it, REQUEST_SEARCH_ADDRESS);
+            }
+        });
         btnConfirm = (Button) findViewById(R.id.activity_address_map_btn_confirm);
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent data = new Intent();
+                if (getString(R.string.searchposition).equals(tvAddress.getText())) {
+                    return;
+                }
+
 
                 if (poi == null) {
                     ToastUtil.show(AddressMapActivity.this, "没有选择地址");
@@ -200,9 +224,13 @@ public class AddressMapActivity extends Activity {
 //                Log.e(AppConfig.ERR_TAG, "onActivityResult  ...REQUEST_SEARCH_ADDRESS");
                 String searchRltJson = data.getStringExtra(AddressSearchActivity.TAG_SELECT_ADDR);
                 PoiInfo searchRlt = GsonUtils.Json2Bean(searchRltJson, PoiInfo.class);
-
                 //移动地图中心
-                targetMap2Center(searchRlt.location);
+
+                LatLng srl = searchRlt.location;
+                LatLng ll = new LatLng(srl.latitude,
+                        srl.longitude);
+                targetMap2Center(ll);
+                tvAddress.setText(searchRlt.name + "\n" + searchRlt.address);
 
                 break;
         }
@@ -213,13 +241,19 @@ public class AddressMapActivity extends Activity {
      *
      * @param location
      */
-    private void targetMap2Center(LatLng lat) {
-//        Log.e(AppConfig.ERR_TAG, "onActivityResult  ...REQUEST_SEARCH_ADDRESS targetMap2Center");
+    private void targetMap2Center(LatLng latlng) {
+
+//        mBaiduMap.clear();
         MapStatus.Builder builder = new MapStatus.Builder();
-        builder.target(lat).zoom(AppConfig.MAP_ZOOM);
-        mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+        builder.target(latlng).zoom(AppConfig.MAP_ZOOM);
+//        builder.targetScreen(centerPoint);
+        mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
         //更改文本显示地址
-        updateTvAddress(lat);
+        /*new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+            }
+        }, 500);*/
     }
 
     /**
@@ -228,6 +262,8 @@ public class AddressMapActivity extends Activity {
      * @param point
      */
     public void updateTvAddress(LatLng point) {
+//        LatLng point = mBaiduMap.getMapStatus().target;
+        Log.e(AppConfig.ERR_TAG, "updateTvAddress ---" + GsonUtils.Bean2Json(point));
         geoCoder.reverseGeoCode(new ReverseGeoCodeOption()
                 .location(point));
     }
@@ -279,6 +315,7 @@ public class AddressMapActivity extends Activity {
                 myLocation.getLongitude());
 
         targetMap2Center(ll);
+        updateTvAddress(ll);
 
     }
 

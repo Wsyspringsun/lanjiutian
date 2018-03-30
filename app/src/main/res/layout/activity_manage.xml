@@ -40,17 +40,12 @@
                 android:singleLine="true"
                 android:textColor="@color/gray" />
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <ImageView
                 android:id="@+id/sdv_item_head_img"
                 android:layout_width="@dimen/x45"
                 android:layout_height="@dimen/x45"
-                fresco:fadeDuration="200"
-                fresco:failureImage="@mipmap/icon_moren_tou"
-                fresco:failureImageScaleType="centerInside"
-                fresco:placeholderImage="@mipmap/icon_moren_tou"
-                fresco:roundAsCircle="true"
-                fresco:roundingBorderColor="@color/gray1"
-                fresco:roundingBorderWidth="1dp" />
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_moren_tou" />
 
             <ImageView
                 android:id="@+id/touxiang_jt"
@@ -144,6 +139,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/activity_manage_rl_qrcode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/x1"

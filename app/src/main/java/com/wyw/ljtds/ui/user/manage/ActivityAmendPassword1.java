@@ -135,8 +135,9 @@ public class ActivityAmendPassword1 extends BaseActivity {
             @Override
             protected void onExecuteSucceeded(Boolean s) {
                 if (s){
-                    finish();
+                    ToastUtil.show(ActivityAmendPassword1.this, "修改密码成功!");
                     startActivity( new Intent( ActivityAmendPassword1.this, ActivityLogin.class ) );
+                    finish();
                 }
             }
 

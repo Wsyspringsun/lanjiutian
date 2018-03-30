@@ -4,9 +4,9 @@
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="@dimen/x100"
     android:layout_height="match_parent"
-    android:padding="@dimen/x3"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/x3">
 
     <android.support.v7.widget.CardView
         android:layout_width="@dimen/x90"
@@ -14,16 +14,19 @@
         app:cardCornerRadius="8sp"
         app:cardElevation="@dimen/x2"
         app:cardPreventCornerOverlap="true"
-        app:contentPadding="@dimen/x6">
+        app:contentPadding="@dimen/padding1">
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/head_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:adjustViewBounds="true"
             fresco:failureImage="@mipmap/zhanweitu"
             fresco:failureImageScaleType="centerInside"
             fresco:placeholderImage="@mipmap/zhanweitu" />
+
     </android.support.v7.widget.CardView>
+
 
     <TextView
         android:id="@+id/name"
@@ -31,9 +34,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/x5"
         android:ellipsize="end"
-        android:maxLines="2"
+        android:maxLines="1"
         android:textColor="@color/font_black2"
-        android:textSize="13sp" />
+        android:textSize="12dp" />
 
     <TextView
         android:id="@+id/money"

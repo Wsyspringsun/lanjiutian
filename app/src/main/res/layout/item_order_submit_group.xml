@@ -52,7 +52,7 @@
             android:id="@+id/textview_title"
             style="@style/textview_title"
             android:layout_alignParentLeft="true"
-            android:text="@string/app_name"
+            android:text="优惠"
             android:textColor="@color/font_1"
             android:textSize="@dimen/font_5" />
 

@@ -19,7 +19,6 @@
         android:layout_marginTop="@dimen/x10"
         android:textColor="@color/font_black2"
         android:layout_marginLeft="@dimen/x12"
-        android:layout_toRightOf="@+id/msg_type_img"
         style="@style/font_ww_14"
         android:id="@+id/msg_title"/>
 
