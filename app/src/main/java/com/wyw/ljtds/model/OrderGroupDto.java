@@ -12,6 +12,7 @@ import java.util.List;
 public class OrderGroupDto {
     private String COIN_FLG; //1:使用 0:没有使用
     private Integer COST_POINT = 0;
+    private Double SHARE_MONEY = 0d;
     private String ORDER_GROUP_ID;
     private String ORDER_TRADE_ID;
     private String OID_GROUP_ID;
@@ -24,7 +25,7 @@ public class OrderGroupDto {
     private Integer PREFERENTIAL_NUM; //优惠券数量
     private String USER_POINT;  //积分数量
     private String PREFERENTIAL_ID;
-    private Integer ELECTRONIC_MONEY;
+    private Integer ELECTRONIC_MONEY = 0;
     private Integer ELECTRONIC_USEABLE_MONEY; //电子币数量
     private String COUPON_MONEY;
     private String COUPON_USEABLE_MONEY;
@@ -444,5 +445,13 @@ public class OrderGroupDto {
 
     public void setGROUP_PAY_AMOUNT(BigDecimal GROUP_PAY_AMOUNT) {
         this.GROUP_PAY_AMOUNT = GROUP_PAY_AMOUNT;
+    }
+
+    public Double getSHARE_MONEY() {
+        return SHARE_MONEY;
+    }
+
+    public void setSHARE_MONEY(Double SHARE_MONEY) {
+        this.SHARE_MONEY = SHARE_MONEY;
     }
 }

@@ -152,14 +152,26 @@ public class ActivityCollect extends BaseActivity {
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
                 if (index == 0) {
                     FavoriteModel dataItem = adapter.getItem(i);
-                    Intent it;
-                    if (dataItem.getGoodsFlg().equals("0")) {
+                    Intent it ;
+                    if (TAG_MY_SHOUCANG.equals(tagMy)) {
+                        //收藏
+                        if (dataItem.getGoodsFlg().equals("0")) {
 //                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
-                        it = ActivityMedicinesInfo.getIntent(ActivityCollect.this, dataItem.getCommodityId(),dataItem.getOidGroupId() );
-                    } else {
-                        it = ActivityLifeGoodsInfo.getIntent(ActivityCollect.this, dataItem.getCommodityId());
+                            it = ActivityLifeGoodsInfo.getIntent(ActivityCollect.this, dataItem.getCommodityId());
+                        } else {
+                            it = ActivityMedicinesInfo.getIntent(ActivityCollect.this, dataItem.getCommodityId(), dataItem.getOidGroupId());
+                        }
+                        startActivity(it);
+                    } else if (TAG_MY_ZUJI.equals(tagMy)) {
+                        //足迹
+                        if (dataItem.getGoodsFlg().equals("1")) {
+//                            it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter.getItem(i).getCommodityId());
+                            it = ActivityLifeGoodsInfo.getIntent(ActivityCollect.this, dataItem.getCommodityId());
+                        } else {
+                            it = ActivityMedicinesInfo.getIntent(ActivityCollect.this, dataItem.getCommodityId(), dataItem.getOidGroupId());
+                        }
+                        startActivity(it);
                     }
-                    startActivity(it);
 
                     /*if (TAG_MY_ZUJI.equals(tagMy)) {
 

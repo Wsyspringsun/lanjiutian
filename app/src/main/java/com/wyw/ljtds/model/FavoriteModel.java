@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 public class FavoriteModel extends BaseModel {
     private String commodityId;
-    private String goodsFlg;
+    private String goodsFlg;  //0生活馆  1 医药
     private BigDecimal costMoney;
     private String imgPath;
     private String title;

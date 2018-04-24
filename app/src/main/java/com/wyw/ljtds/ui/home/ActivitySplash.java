@@ -63,7 +63,7 @@ public class ActivitySplash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(UserBiz.isLogined()){
+        if (UserBiz.isLogined()) {
             MyApplication.initLoginer();
         }
 

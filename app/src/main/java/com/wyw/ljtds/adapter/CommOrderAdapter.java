@@ -25,9 +25,9 @@ public class CommOrderAdapter extends BaseQuickAdapter<OrderCommDto> {
     protected void convert(BaseViewHolder baseViewHolder, OrderCommDto goods) {
         if (AppConfig.GROUP_LJT.equals(goods.getINS_USER_ID())) {
             //医药
-            baseViewHolder.setText(R.id.item_order_submit_goods_size, "产地：" + goods.getCOMMODITY_COLOR() + " ;" + mContext.getString(R.string.title_cat) + "：" + goods.getCOMMODITY_SIZE());
+            baseViewHolder.setText(R.id.item_order_submit_goods_size, "产地：" + goods.getCOMMODITY_COLOR() + " ;" + mContext.getString(R.string.title_cat_val, goods.getCOMMODITY_SIZE()));
         } else {
-            baseViewHolder.setText(R.id.item_order_submit_goods_size, mContext.getString(R.string.title_cat) + " ;" + mContext.getString(R.string.title_size) + "：" + goods.getCOMMODITY_SIZE());
+            baseViewHolder.setText(R.id.item_order_submit_goods_size, mContext.getString(R.string.title_cat_val, goods.getCOMMODITY_COLOR()) + " ;" + mContext.getString(R.string.title_size_val, goods.getCOMMODITY_SIZE()));
         }
 
         baseViewHolder.setText(R.id.item_order_submit_goods_title, StringUtils.deletaFirst(goods.getCOMMODITY_NAME()))

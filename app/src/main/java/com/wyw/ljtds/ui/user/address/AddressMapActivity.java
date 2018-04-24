@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IntegerRes;
@@ -36,6 +37,7 @@ import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.model.AreaModel;
+import com.wyw.ljtds.model.MyLocation;
 import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.service.LocationService;
 import com.wyw.ljtds.utils.GsonUtils;
@@ -43,6 +45,8 @@ import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.ToolbarManager;
 
 import java.util.List;
+
+import pub.devrel.easypermissions.EasyPermissions;
 
 
 /**
@@ -58,13 +62,14 @@ public class AddressMapActivity extends Activity {
     public static final String TAG_FROM = "com.wyw.ljtds.ui.user.address.AddressMapActivity.TAG_FROM";
     public static final String TAG_FROM_MAIN = "1";
     public static final String TAG_FROM_ADDR = "2";
+    private static final int REQUEST_PERMS_LOCATION = 0;
 
     private int mCurrentDirection = 0;
     private LocationMode mCurrentMode;
     private MyLocationData locData;
     MapView mMapView;
     BaiduMap mBaiduMap;
-    private BDLocation myLocation;
+    private MyLocation myLocation; //location到的地址
     private GeoCoder geoCoder;
 
     // UI相关
@@ -82,7 +87,8 @@ public class AddressMapActivity extends Activity {
         @Override
         public void onReceiveLocation(BDLocation location) {
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-                myLocation = location;
+                SingleCurrentUser.bdLocation = location;
+                myLocation = MyLocation.newInstance(location.getLatitude(), location.getLongitude(), location.getAddrStr());
                 targetMyLocation();
                 ((MyApplication) AddressMapActivity.this.getApplication()).locationService.unregisterListener(locationListner); //注销掉监听
             }
@@ -121,8 +127,24 @@ public class AddressMapActivity extends Activity {
         btnLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (myLocation != null) {
+                    targetMyLocation();
+                    return;
+                }
+                //check permission
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    String[] perms = {android.Manifest.permission.ACCESS_FINE_LOCATION};
+                    if (!EasyPermissions.hasPermissions(AddressMapActivity.this, perms)) {
+                        EasyPermissions.requestPermissions(this, getString(R.string.perm_loc), REQUEST_PERMS_LOCATION, perms);
+                    } else {
+                        regLocListener();
+                    }
+                } else {
+                    //location
+                    regLocListener();
+                }
+
                 //back to location
-                targetMyLocation();
             }
         });
 
@@ -201,7 +223,20 @@ public class AddressMapActivity extends Activity {
                 }
             }
         });
+
+        if (SingleCurrentUser.bdLocation != null) {
+            myLocation = MyLocation.newInstance(SingleCurrentUser.bdLocation.getLatitude(), SingleCurrentUser.bdLocation.getLongitude(), SingleCurrentUser.bdLocation.getAddrStr());
+        } else {
+            myLocation = MyLocation.newInstance(SingleCurrentUser.defaultLat, SingleCurrentUser.defaultLng, SingleCurrentUser.defaultAddrStr);
+        }
+        targetMyLocation();
+
+
+    }
+
+    private void regLocListener() {
         ((MyApplication) AddressMapActivity.this.getApplication()).locationService.registerListener(locationListner);
+        ((MyApplication) AddressMapActivity.this.getApplication()).locationService.start();
     }
 
     /**
@@ -303,12 +338,12 @@ public class AddressMapActivity extends Activity {
     }
 
     private void targetMyLocation() {
-        if (SingleCurrentUser.location == null) return;
+        if (myLocation == null) return;
         locData = new MyLocationData.Builder()
-                .accuracy(myLocation.getRadius())
+//                .accuracy(myLocation.getRadius())
                 // 此处设置开发者获取到的方向信息，顺时针0-360
-                .direction(mCurrentDirection).latitude(SingleCurrentUser.location.getLatitude())
-                .longitude(SingleCurrentUser.location.getLongitude()).build();
+                .direction(mCurrentDirection).latitude(myLocation.getLatitude())
+                .longitude(myLocation.getLongitude()).build();
 
         mBaiduMap.setMyLocationData(locData);
         LatLng ll = new LatLng(myLocation.getLatitude(),

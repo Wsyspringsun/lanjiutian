@@ -25,6 +25,7 @@ import com.wyw.ljtds.model.UserDataModel;
 import com.wyw.ljtds.model.UserModel;
 import com.wyw.ljtds.model.WalletModel;
 import com.wyw.ljtds.model.Ticket;
+import com.wyw.ljtds.ui.user.ActivityLoginOfValidCode;
 import com.wyw.ljtds.ui.user.wallet.ChojiangRecActivity;
 import com.wyw.ljtds.ui.user.wallet.DianZiBiListFragment;
 import com.wyw.ljtds.utils.StringUtils;
@@ -33,12 +34,24 @@ import com.wyw.ljtds.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.xiaoneng.uiapi.Ntalker;
+
 /**
  * Created by Administrator on 2016/12/20 0020.
+ * 处理用户登录注册等相关业务操作
  */
-
 public class UserBiz extends BaseBiz {
+
+    public static final String VERIFICATION_CODE_REG = "0";//注册用户的验证码
+    public static final String VERIFICATION_CODE_FINDPWD = "1";//找回密码的验证码
+    public static final String VERIFICATION_CODE_LOGINBYVALID = "3";//找回密码的验证码
     private static boolean logined;
+
+    private Context context;
+
+    public UserBiz(Context context) {
+        this.context = context;
+    }
 
     /**
      * 注册方法
@@ -53,7 +66,7 @@ public class UserBiz extends BaseBiz {
      * @throws ZYException
      */
     public static String register(String phoneNum, String verifyCode
-            , String password, String invitor, String terminalType) throws BizFailure, ZYException {
+            , String password, String invitor) throws BizFailure, ZYException {
 
         SoapProcessor ksoap2 = new SoapProcessor("Service", "regist",
                 false);
@@ -62,8 +75,18 @@ public class UserBiz extends BaseBiz {
         ksoap2.setProperty("verifyCode", verifyCode, PropertyType.TYPE_STRING);
         ksoap2.setProperty("passWord", password, PropertyType.TYPE_STRING);
         ksoap2.setProperty("introducer", invitor, PropertyType.TYPE_STRING);
-        ksoap2.setProperty("terminalType", terminalType, PropertyType.TYPE_STRING);
+        ksoap2.setProperty("terminalType", AppConfig.TERMINALTYPE, PropertyType.TYPE_STRING);
 
+        return ksoap2.request().getAsString();
+    }
+
+    /**
+     * @return 1 显示赠送电子币 0 不显示赠送电子币
+     * @throws BizFailure
+     * @throws ZYException
+     */
+    public static String getLog() throws BizFailure, ZYException {
+        SoapProcessor ksoap2 = new SoapProcessor("Service", "getLog", false);
         return ksoap2.request().getAsString();
     }
 
@@ -78,13 +101,13 @@ public class UserBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static String login(String userName, String password, String terminalType) throws BizFailure, ZYException {
+    public String login(String userName, String password) throws BizFailure, ZYException {
 
         SoapProcessor ksoap = new SoapProcessor("Service", "login", false);
 
         ksoap.setProperty("userName", userName, PropertyType.TYPE_STRING);
         ksoap.setProperty("passWord", password, PropertyType.TYPE_STRING);
-        ksoap.setProperty("terminalType", terminalType, PropertyType.TYPE_STRING);
+        ksoap.setProperty("terminalType", AppConfig.TERMINALTYPE, PropertyType.TYPE_STRING);
         return ksoap.request().getAsString();
     }
 
@@ -291,7 +314,7 @@ public class UserBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static int deleteUserAddress(String addressId) throws BizFailure, ZYException {
+    public int deleteUserAddress(String addressId) throws BizFailure, ZYException {
 
         SoapProcessor ksoap = new SoapProcessor("Service", "deleteUserAddress", false);
 
@@ -302,7 +325,7 @@ public class UserBiz extends BaseBiz {
     }
 
 
-    public static int changeDefaultAddress(String addressId) throws BizFailure, ZYException {
+    public int changeDefaultAddress(String addressId) throws BizFailure, ZYException {
 
         SoapProcessor ksoap = new SoapProcessor("Service", "changeDefaultAddress", true);
 
@@ -319,7 +342,7 @@ public class UserBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static List<AddressModel> selectUserAddress() throws BizFailure, ZYException {
+    public List<AddressModel> selectUserAddress() throws BizFailure, ZYException {
         SoapProcessor ksoap2 = new SoapProcessor("Service", "selectUserAddress", true);
 
         JsonElement element = ksoap2.request();
@@ -663,7 +686,7 @@ public class UserBiz extends BaseBiz {
 
     public static boolean isLogined() {
         String token = PreferenceCache.getToken();
-        Utils.log("" + !StringUtils.isEmpty(token));
+        Utils.log("isLogined:" + token);
         return !StringUtils.isEmpty(token);
     }
 
@@ -677,5 +700,79 @@ public class UserBiz extends BaseBiz {
         };
         List<ChoJiangRec> fs = gson.fromJson(element, tt.getType());
         return fs;
+    }
+
+
+    /**
+     * 微信登录
+     *
+     * @param code
+     * @return
+     * @throws BizFailure
+     * @throws ZYException
+     */
+    public static String loginWx(String code) throws BizFailure, ZYException {
+        String method = "loginWx";
+        SoapProcessor sp = new SoapProcessor("Service", method, false);
+        sp.setProperty("code", code, PropertyType.TYPE_STRING);
+        sp.setProperty("terminalType", AppConfig.TERMINALTYPE, PropertyType.TYPE_STRING);
+        return sp.requestStr();
+    }
+
+    /**
+     * 登录成功后的操作
+     *
+     * @param token
+     */
+    /*public void loginSuccess(String token) {
+        PreferenceCache.putToken(token); // 持久化缓存token
+        PreferenceCache.putAutoLogin(true);// 记录是否自动登录
+        *//*PreferenceCache.putUsername(ed_phone.getText().toString().trim());
+        if (PreferenceCache.isAutoLogin()) {
+            PreferenceCache.putPhoneNum(ed_phone.getText().toString().trim());
+        }
+        Ntalker.getBaseInstance().login(((MyApplication) getApplication()).entityName, ed_phone.getText().toString(), 0);*//*
+
+    }*/
+
+    /**
+     * wechat and telephone
+     *
+     * @param wxId
+     * @param nickName
+     * @param tel
+     * @param validCode
+     * @param terminalType
+     * @return
+     */
+    public String registWX(String wxId, String nickName, String tel, String validCode) throws BizFailure, ZYException {
+        String method = "registWX";
+        SoapProcessor sp = new SoapProcessor("Service", method, false);
+        sp.setProperty("wxId", wxId, PropertyType.TYPE_STRING);
+        sp.setProperty("nickName", nickName, PropertyType.TYPE_STRING);
+        sp.setProperty("tel", tel, PropertyType.TYPE_STRING);
+        sp.setProperty("validCode", validCode, PropertyType.TYPE_STRING);
+        sp.setProperty("terminalType", AppConfig.TERMINALTYPE, PropertyType.TYPE_STRING);
+        return sp.requestStr();
+    }
+
+    public String getUserInfo(String token) throws BizFailure, ZYException {
+        String method = "getUserInfo";
+        SoapProcessor sp = new SoapProcessor("Service", method, false);
+        sp.setProperty("token", token, PropertyType.TYPE_STRING);
+        return sp.requestStr();
+    }
+
+    public String loginCode(String tel, String validCode) throws BizFailure, ZYException {
+        String method = "loginCode";
+        SoapProcessor sp = new SoapProcessor("Service", method, false);
+        sp.setProperty("tel", tel, PropertyType.TYPE_STRING);
+        sp.setProperty("validCode", validCode, PropertyType.TYPE_STRING);
+        sp.setProperty("terminalType", AppConfig.TERMINALTYPE, PropertyType.TYPE_STRING);
+        return sp.request().getAsString();
+    }
+
+    public static UserBiz getInstance(Context context) {
+        return new UserBiz(context);
     }
 }

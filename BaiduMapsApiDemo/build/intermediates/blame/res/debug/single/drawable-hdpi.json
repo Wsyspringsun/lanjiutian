@@ -60,12 +60,12 @@
         "source": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/res/drawable-hdpi/icon_markh.png"
     },
     {
-        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/drawable-hdpi/icon_markb.png",
-        "source": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/res/drawable-hdpi/icon_markb.png"
-    },
-    {
         "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/drawable-hdpi/popup.png",
         "source": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/res/drawable-hdpi/popup.png"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/drawable-hdpi/icon_markb.png",
+        "source": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/res/drawable-hdpi/icon_markb.png"
     },
     {
         "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/drawable-hdpi/next_.png",

@@ -234,7 +234,9 @@ public class LifeShopFragment extends BaseFragment {
             }
         }
 
-        bindData2View(goodsNearest);
+//        bindData2View(goodsNearest);
+        bindData2View(goodsActivity);
+
     }
 
     @Override
@@ -265,44 +267,8 @@ public class LifeShopFragment extends BaseFragment {
 
             ImageView ivItem = baseViewHolder.getView(R.id.item_shopimg_iv_shopimgitem);
 
-/*
-            int screenWidth = ((MyApplication) (getActivity().getApplication())).screenWidth;
-//            int wWidth = wm.getDefaultDisplay().getWidth();
-            ViewGroup.LayoutParams lp = ivItem.getLayoutParams();
-            lp.width = screenWidth;
-            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//            lp.height = lp.width *  2;
 
-            ivItem.setMaxWidth(screenWidth);
-            ivItem.setMaxHeight(screenWidth * 2); //这里其实可以根据需求而定，我这里测试为最大宽度的5倍
-            ivItem.setLayoutParams(lp);*/
-
-
-//            Log.e(AppConfig.ERR_TAG, "o.getIMG_PATH():" + o.getIMG_PATH());
-
-            Picasso.with(getActivity()).load(Uri.parse(o.getIMG_PATH())).resizeDimen(R.dimen.x100, R.dimen.x150).memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(ivItem);
-//            ivItem.setImageURI();
-//            ViewGroup.LayoutParams lp = ivItem.getLayoutParams();
-//
-//            lp.height = R.dimen.x20;
-//            int idx = this.getData().indexOf(o);
-//            int i = idx % 4;
-//            switch (i) {jjjjjjjjj
-//                case 0:
-//                    lp.width = R.dimen.x30;
-//                    break;
-//                case 1:
-//                    lp.width = R.dimen.x20;
-//                    break;
-//                case 2:
-//                    lp.width = R.dimen.x20;
-//                    break;
-//                case 3:
-//                    lp.width = R.dimen.x30;
-//                    break;
-//            }
-//
-//            ivItem.setLayoutParams(lp);
+            Picasso.with(getActivity()).load(Uri.parse(o.getIMG_PATH())).resizeDimen(R.dimen.x100, R.dimen.x32).memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(ivItem);
         }
     }
 }

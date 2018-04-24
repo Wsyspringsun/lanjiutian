@@ -40,11 +40,13 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.AppManager;
+import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.Business;
 import com.wyw.ljtds.model.CreatOrderModel;
 import com.wyw.ljtds.model.GoodSubmitModel1;
 import com.wyw.ljtds.model.MyLocation;
+import com.wyw.ljtds.model.OrderCommDto;
 import com.wyw.ljtds.model.OrderGroupDto;
 import com.wyw.ljtds.model.OrderTrade;
 import com.wyw.ljtds.model.OrderTradeDto;
@@ -53,6 +55,7 @@ import com.wyw.ljtds.ui.user.address.ActivityAddress;
 import com.wyw.ljtds.ui.user.address.ActivityAddressEdit;
 import com.wyw.ljtds.ui.user.address.AddressActivity;
 import com.wyw.ljtds.ui.user.order.ActivityOrder;
+import com.wyw.ljtds.ui.user.order.WXShare4OrderDialogFragment;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.PayUtil;
 import com.wyw.ljtds.utils.StringUtils;
@@ -61,6 +64,7 @@ import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.MyCallback;
 import com.wyw.ljtds.widget.PayDialog;
 import com.wyw.ljtds.widget.dialog.DiscountDialog;
+import com.wyw.ljtds.wxapi.WXEntryActivity;
 
 import org.json.JSONObject;
 import org.xutils.view.annotation.ContentView;
@@ -84,12 +88,18 @@ import static com.wyw.ljtds.utils.PayUtil.ALI_PAY;
 @ContentView(R.layout.activity_order_submit)
 public class ActivityGoodsSubmit extends BaseActivity {
     public static final String TAG_INFO_SOURCE = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmit.TAG_INFO_SOURCE";
-    private static final int REQUEST_SETTING = 0;
-    private static final int REQUEST_FAPIAO = 1;
-    private static final int REQUEST_SELECT_ADDRESS = 2;
-    private static final int REQUEST_ADD_ADDRESS = 3;
+    private static final int REQUEST_SETTING = 0; //设置支付方式
+    private static final int REQUEST_FAPIAO = 1; //设置发票
+    private static final int REQUEST_SELECT_ADDRESS = 2; //选择配送地址
+    private static final int REQUEST_ADD_ADDRESS = 3; //添加配送地址
+    private static final int REQUEST_WXSHARE = 4; //显示微信分享
+
     private static final String TAG_SELLERID = "com.wyw.ljtds.ui.goods.tag_sellerid";
     private static final String TAG_ORDER_DATA = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmit.TAG_ORDER_DATA";
+    private static final String DIALOG_WXSHARE = "DIALOG_WXSHARE";
+
+    boolean hasShow = false;
+
     private String flgInfoSrc = "";
     private String PAYMTD_C = "C";
 
@@ -136,6 +146,18 @@ public class ActivityGoodsSubmit extends BaseActivity {
     private TextView tvZhifuTitle;
     private TextView tvZhifuMore;
     private TextView tvZhifuContent;
+    private UserBiz bizUser;
+    /**
+     * 微信分享使用的数据
+     */
+    private String wxTitle;
+    private String wxDesc;
+    private String wxImgUrl;
+    private String wxUrl;
+
+    /**
+     * 微信分享使用的数据 end
+     */
 
 
     @Event(value = {R.id.header_return, R.id.submit})
@@ -241,6 +263,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        bizUser = UserBiz.getInstance(this);
         //注册广播接收器
         /*addrReciver = new BroadcastReceiver() {
             @Override
@@ -267,7 +290,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent it = AddressActivity.getIntent(ActivityGoodsSubmit.this, true);
-                startActivityForResult(it, REQUEST_SELECT_ADDRESS);
+                ActivityGoodsSubmit.this.startActivityForResult(it, REQUEST_SELECT_ADDRESS);
             }
         }));
         adapter.addFooterView(getFooterView(new View.OnClickListener() {
@@ -276,12 +299,11 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 Intent it;
                 switch (view.getId()) {
                     case R.id.item_order_submit_bottom_invoice:
-                        Log.e(AppConfig.ERR_TAG, "item_order_submit_bottom_invoice.......");
                         it = ActivityGoodsSubmitBill.getIntent(ActivityGoodsSubmit.this, adapter.getData().get(0));
                         startActivityForResult(it, REQUEST_FAPIAO);
                         break;
                     case R.id.item_order_submit_bottom_paymethod:
-                        it = ActivityGoodsSubmitChoice.getIntent(ActivityGoodsSubmit.this, cOrderModel.getDISTRIBUTION_MODE(), cOrderModel.getPAYMENT_METHOD());
+                        it = ActivityGoodsSubmitChoice.getIntent(ActivityGoodsSubmit.this, cOrderModel.getDISTRIBUTION_MODE(), cOrderModel.getPAYMENT_METHOD(), cOrderModel.getINS_USER_ID());
                         startActivityForResult(it, REQUEST_SETTING);
                         break;
                     default:
@@ -313,6 +335,16 @@ public class ActivityGoodsSubmit extends BaseActivity {
 //        flgInfoSrc = it.getStringExtra(TAG_INFO_SOURCE);
 
         String data = it.getStringExtra(TAG_ORDER_DATA);
+        String wxShareRlt = PreferenceCache.getWXShareResult();
+        if (!StringUtils.isEmpty(wxShareRlt)) {
+            PreferenceCache.putWXShareResult("");
+            if (WXEntryActivity.SHARE_RESULT_OK.equals(wxShareRlt)) {
+                OrderTradeDto orderOfData = GsonUtils.Json2Bean(data, OrderTradeDto.class);
+                orderOfData.setSHARE_FLG(OrderTradeDto.SHARE_FLG_OK);
+                data = GsonUtils.Bean2Json(orderOfData);
+            }
+        }
+
 //        String data = "{\"DETAILS\":[{\"DETAILS\":[{\"COMMODITY_COLOR\":\"百合康\",\"COMMODITY_ID\":\"005578\",\"COMMODITY_NAME\":\"\",\"COMMODITY_SIZE\":\"0.6克*60粒\",\"EXCHANGE_QUANLITY\":1}],\"LOGISTICS_COMPANY\":\"市区新市西街店\",\"LOGISTICS_COMPANY_ID\":\"002\"},{\"DETAILS\":[{\"COMMODITY_COLOR\":\"\",\"COMMODITY_ID\":\"000100\",\"COMMODITY_NAME\":\"\",\"COMMODITY_SIZE\":\"0.3g*24片*3盒\",\"EXCHANGE_QUANLITY\":1}],\"LOGISTICS_COMPANY\":\"市区观巷店\",\"LOGISTICS_COMPANY_ID\":\"040\"}],\"INS_USER_ID\":\"sxljt\",\"LAT\":\"35.489784\",\"LNG\":\"112.865275\",\"ORDER_SOURCE\":\"0\"}";
         Log.e(AppConfig.ERR_TAG, "orderData:" + data);
         if (!StringUtils.isEmpty(data))
@@ -322,7 +354,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e(AppConfig.ERR_TAG, "isResult:" + isResult);
+        Utils.log("isResult:" + isResult);
         if (!isResult) {
             loadData();
         }
@@ -386,7 +418,6 @@ public class ActivityGoodsSubmit extends BaseActivity {
         View view = getLayoutInflater().inflate(R.layout.item_order_submit_address, (ViewGroup) recyclerView.getParent(), false);
         tvAddrInfo = (TextView) view.findViewById(R.id.item_order_submit_address_info);
         view.setOnClickListener(listener);
-
         return view;
     }
 
@@ -600,10 +631,65 @@ public class ActivityGoodsSubmit extends BaseActivity {
             tvAddrInfo.setText("请选择地址");
         }
 
-        money_all.setText("合计: ￥" + cOrderModel.getPAY_AMOUNT() + "(含运费￥" + cOrderModel.getPOSTAGE_ALL() + ")");
+        money_all.setText("合计: ￥" + Utils.formatFee(cOrderModel.getPAY_AMOUNT()) + "(含运费￥" + Utils.formatFee(cOrderModel.getPOSTAGE_ALL()) + ")");
+
+        // discount some money  if you share this info
+        if (needShowShareDialog()) {
+            showShareDialog();
+        }
 
         adapter.setNewData(cOrderModel.getDETAILS());
         adapter.notifyDataSetChanged();
+    }
+
+
+    private void showShareDialog() {
+        WXShare4OrderDialogFragment frag = WXShare4OrderDialogFragment.newInstance();
+        frag.setMyCallback(new MyCallback() {
+            @Override
+            public void callback(Object... params) {
+                hasShow = true;
+                if (params == null || params.length <= 0) return;
+                boolean rlt = (boolean) params[0];
+                if (rlt) {
+                    openWXShareSelDialog();
+                }
+            }
+        });
+        frag.show(this.getSupportFragmentManager(), DIALOG_WXSHARE);
+    }
+
+    private void openWXShareSelDialog() {
+        Utils.log("wxUrl:" + wxUrl);
+        Utils.wechatShare(this, wxTitle, wxDesc, wxImgUrl, wxUrl);
+    }
+
+    private boolean needShowShareDialog() {
+        boolean isNeed = true;
+        //是否有80 标识 的商品
+        boolean hasFlg = false;
+        if (cOrderModel == null) return false;
+        for (OrderGroupDto groupItem : cOrderModel.getDETAILS()) {
+            if (hasFlg) break;
+            if (groupItem == null) return false;
+            List<OrderCommDto> goodsList = groupItem.getDETAILS();
+            if (goodsList == null) return false;
+            for (OrderCommDto goods : goodsList) {
+                if (hasFlg) break;
+                if (OrderCommDto.SHARE_FLG_YES.equals(goods.getSHARE_FLG())) {
+                    wxTitle = goods.getSHARE_TITLE();
+                    wxDesc = goods.getSHARE_DESCRIPTION();
+                    wxImgUrl = goods.getIMG_PATH();
+                    wxUrl = AppConfig.WEB_APP_URL + "/lifeDetail.html?commodityId=" + goods.getCOMMODITY_ID();
+
+                    hasFlg = true;
+                    break;
+                }
+            }
+        }
+        isNeed = !hasShow && hasFlg;
+        Utils.log("hasShow:" + hasShow + ",hasFlg:" + hasFlg);
+        return isNeed;
     }
 
     /*private void updFooter() {
@@ -735,8 +821,14 @@ public class ActivityGoodsSubmit extends BaseActivity {
             RelativeLayout vDiscount = baseViewHolder.getView(R.id.item_order_submit_group_discount);
             vDiscount.setOnClickListener(groupListener);
             initTextViewTItle(vDiscount, "店铺优惠");
-            if (group.getCOST_POINT() > 0 || "1".equals(group.getPOSTAGE_FLG()) || "1".equals(group.getPREFERENTIAL_FLG()) || "1".equals(group.getCOIN_FLG())) {
-                setTextViewContent(vDiscount, "已优惠");
+            double discountAll = group.getCOST_POINT() + group.getELECTRONIC_MONEY() + group.getSHARE_MONEY();
+            if ("1".equals(group.getPOSTAGE_FLG()) || "1".equals(group.getPREFERENTIAL_FLG()) || discountAll > 0) {
+                String youhui = "已优惠";
+//                group.getCOST_POINT() > 0 ||  "1".equals(group.getPREFERENTIAL_FLG()) || "1".equals(group.getCOIN_FLG())
+                if (discountAll > 0) {
+                    youhui += " " + Utils.formatFee(discountAll + "") + "元";
+                }
+                setTextViewContent(vDiscount, youhui);
             }
 
             baseViewHolder.setText(R.id.item_order_submit_group_tv_cost, "共" + group.getGROUP_EXCHANGE_QUANLITY() + "件商品  小计:￥" + group.getGROUP_MONEY_ALL())
@@ -817,18 +909,21 @@ public class ActivityGoodsSubmit extends BaseActivity {
         }.execute();
     }
 
+
     //更改数据  刷新页面
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e(AppConfig.ERR_TAG, "onActivityResult..:" + requestCode + "/" + resultCode);
+        super.onActivityResult(requestCode, resultCode, data);
         isResult = true;
+        Utils.log("onActivityResult..");
+//        Utils.log( "onActivityResult..:" + requestCode + "/" + resultCode);
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_ADD_ADDRESS:
                     new BizDataAsyncTask<List<AddressModel>>() {
                         @Override
                         protected List<AddressModel> doExecute() throws ZYException, BizFailure {
-                            return UserBiz.selectUserAddress();
+                            return bizUser.selectUserAddress();
                         }
 
                         @Override
@@ -854,10 +949,12 @@ public class ActivityGoodsSubmit extends BaseActivity {
                     break;
                 case REQUEST_SELECT_ADDRESS:
                     String cmd = data.getStringExtra(AddressActivity.TAG_CMD);
+                    Utils.log("cmd:" + cmd);
                     if (AddressActivity.CMD_CREATE.equals(cmd)) {
                         startActivityForResult(ActivityAddressEdit.getIntent(this, null), REQUEST_ADD_ADDRESS);
                     } else {
                         Parcelable addr = data.getParcelableExtra(ActivityAddress.TAG_SELECTED_ADDRESS);
+                        Utils.log("cmd:CMD_CREATE" + addr);
                         if (addr != null) {
                             AddressModel addrM = (AddressModel) addr;
                             int addrId = addrM.getADDRESS_ID();
@@ -886,7 +983,9 @@ public class ActivityGoodsSubmit extends BaseActivity {
                     showOrder(GsonUtils.Bean2Json(cOrderModel), "changeOrder");
 //                    bindData2View();
                     break;
-
+                case REQUEST_WXSHARE:
+                    Utils.log("REQUEST_WXSHARE");
+                    break;
             }
         } else if (resultCode == AppConfig.IntentExtraKey.RESULT_OK) {
             switch (requestCode) {
@@ -933,6 +1032,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
             }
         } else {
             if (requestCode == 10) {
+                //支付宝支付回调
                 Log.e(AppConfig.ERR_TAG, "requestCode.......10");
                 String pay_result = data.getExtras().getString("pay_result");
                 if (pay_result.equalsIgnoreCase("success")) {

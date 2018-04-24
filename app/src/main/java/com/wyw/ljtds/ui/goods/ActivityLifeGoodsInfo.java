@@ -27,6 +27,7 @@ import com.wyw.ljtds.model.ShoppingCartAddModel;
 import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.model.XiaoNengData;
 import com.wyw.ljtds.ui.base.BaseActivity;
+import com.wyw.ljtds.ui.user.ActivityLoginOfValidCode;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
@@ -63,7 +64,8 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
         switch (v.getId()) {
             case R.id.activity_goods_info_tv_goumai:
                 if (!UserBiz.isLogined()) {
-                    ToastUtil.show(this, "请先登录");
+//                    ToastUtil.show(this, "请先登录");
+                    startActivity(ActivityLoginOfValidCode.getIntent(this));
                     return;
                 }
 
@@ -219,7 +221,11 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
                 if (commodityModel != null) {
 //                    openChat(commodityModel.getTitle(), "", AppConfig.CHAT_XN_LJT_SETTINGID2, AppConfig.CHAT_XN_LJT_TITLE, true, medicineModel.getWAREID());
                     XiaoNengData xnd = commodityModel.getXiaonengData();
-                    openChat(commodityModel.getTitle(), "", xnd.getSettingid1(), commodityModel.getGroupName(), true, commodityModel.getCommodityId());
+                    if (xnd != null) {
+                        openChat(commodityModel.getTitle(), "", xnd.getSettingid1(), commodityModel.getGroupName(), true, commodityModel.getCommodityId());
+                    } else {
+                        ToastUtil.show(ActivityLifeGoodsInfo.this, getString(R.string.xn_kefu_leave));
+                    }
                 }
                 break;
             case R.id.fragment_consult_ll_tel:
@@ -267,8 +273,9 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
                             if (commodityModel.getColorList() != null && commodityModel.getColorList().size() > 0 && commodityModel.getColorList().get(0).getSizeList() != null && commodityModel.getColorList().get(0).getSizeList().size() > 0) {
                                 price = commodityModel.getColorList().get(0).getSizeList().get(0).getMarketPrice() + "";
                             }
-                            String description = commodityModel.getTitle() + "  " + price;
-                            wechatShare(commodityModel.getTitle(), description, AppConfig.IMAGE_PATH_LJT + commodityModel.getImgPath(), AppConfig.WEB_APP_URL + "/lifeDetail.html?commodityId=" + commodityModel.getCommodityId());
+//                            String description = commodityModel.getTitle() + "  " + price;
+                            String description = commodityModel.getShareDesc();
+                            wechatShare(commodityModel.getShareTitle(), description, AppConfig.IMAGE_PATH_LJT + commodityModel.getImgPath(), AppConfig.WEB_APP_URL + "/lifeDetail.html?commodityId=" + commodityModel.getCommodityId());
                         }
                     });
                     break;
@@ -321,9 +328,6 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
         if (xnd != null) {
 //            sellerid = xnd.getSellerid();
 //            settingid1 = xnd.getSettingid1();
-        } else {
-//            Log.e(AppConfig.ERR_EXCEPTION, "XiaoNengData is null");
-
             String startPageUrl = AppConfig.WEB_APP_URL + "/lifeDetail.html?commodityId=" + commodityModel.getCommodityId();
             Ntalker.getBaseInstance().startAction_goodsDetail(commodityModel.getTitle(), startPageUrl, xnd.getSellerid(), "");
         }

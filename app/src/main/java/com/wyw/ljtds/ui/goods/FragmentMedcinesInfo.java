@@ -68,6 +68,7 @@ import com.wyw.ljtds.model.ShoppingCartAddModel;
 import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.ui.user.address.ActivityAddress;
+import com.wyw.ljtds.ui.user.address.ActivityAddressEdit;
 import com.wyw.ljtds.ui.user.address.AddressActivity;
 import com.wyw.ljtds.utils.DateUtils;
 import com.wyw.ljtds.utils.GsonUtils;
@@ -101,9 +102,14 @@ import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
 
 @ContentView(R.layout.fragment_medicine_info)
 public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.OnPageChanged {
+
+    private UserBiz bizUser;
+
     private static final int REQUEST_CHANGE_ADDR = 1;
+    private static final int REQUEST_ADD_ADDRESS = 2;
     View.OnClickListener itemClickListener;
-    List<MyCallback> itemCallbacks = new ArrayList<>();
+    //送至地址变更监听
+    List<MyCallback> sendToAddrChangeListeners = new ArrayList<>();
 
     @ViewInject(R.id.fragment_goods_info_sumqty)
     private TextView tvSumqty;
@@ -202,8 +208,13 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
         }
     }
 
-    public void addItemCallback(MyCallback callback) {
-        itemCallbacks.add(callback);
+    /**
+     * 添加送至地址更改监听器
+     *
+     * @param callback
+     */
+    public void addSendToAddrChangeListeners(MyCallback callback) {
+        sendToAddrChangeListeners.add(callback);
     }
 
     // 开始自动翻页
@@ -234,11 +245,16 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
 
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        bizUser = UserBiz.getInstance(getActivity());
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
-
         //商品详情页面
         fragmentGoodsDetails = new FragmentGoodsDetails();
         fragmentList.add(fragmentGoodsDetails);
@@ -407,11 +423,7 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
         }
 //        tvAddress.setText("送至:" + model.getUSER_ADDRESS());
 
-        if (MedicineDetailsModel.PRESCRIPTION_FLG_OTC.equals(medicineModel.getPRESCRIPTION_FLG())) {
-            imgChuFang.setImageDrawable(ActivityCompat.getDrawable(getActivity(), R.mipmap.chufang));
-        } else {
-            imgChuFang.setImageDrawable(ActivityCompat.getDrawable(getActivity(), R.mipmap.feichufang));
-        }
+
         fragmentGoodsDetails.bindData2View(model.getHTML_PATH());
         fragmentGoodsParameter.bindData2View(model);
 
@@ -431,6 +443,13 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
 //                detailFlg = model.getFLG_DETAIL()"[买而送一]",
 //        Log.e(AppConfig.ERR_TAG, "treatment:" + treatment);
         StringBuilder sb = new StringBuilder().append(detailFlg).append(brand).append(wareName).append(size).append(postage).append(price).append(prodAdd).append(treatment);
+        if (MedicineDetailsModel.PRESCRIPTION_FLG_RX.equals(medicineModel.getPRESCRIPTION_FLG())) {
+            imgChuFang.setImageDrawable(ActivityCompat.getDrawable(getActivity(), R.mipmap.chufang));
+            sb.append("\n" + getString(R.string.warning_chufang));
+        } else {
+            imgChuFang.setImageDrawable(ActivityCompat.getDrawable(getActivity(), R.mipmap.feichufang));
+        }
+
         int priceStart = sb.indexOf(price), priceEnd = priceStart + price.length();
         int prodaddStart = sb.indexOf(prodAdd), prodaddEnd = prodaddStart + prodAdd.length();
         int treatmentStart = sb.indexOf(treatment), treatmentEnd = treatmentStart + treatment.length();
@@ -636,18 +655,55 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
             return;
         switch (requestCode) {
             case REQUEST_CHANGE_ADDR:
-                Parcelable paddr = data.getParcelableExtra(ActivityAddress.TAG_SELECTED_ADDRESS);
-                if (paddr != null) {
-                    AddressModel addr = (AddressModel) paddr;
-                    StringBuilder err = new StringBuilder();
-                    MyLocation addrLoc = AddressModel.parseLocation(err, addr.getADDRESS_LOCATION());
-                    String addrText = addrLoc.getAddrStr();
-                    tvAddress.setText("送至:" + addrText);
+                String cmd = data.getStringExtra(AddressActivity.TAG_CMD);
+                if (AddressActivity.CMD_CREATE.equals(cmd)) {
+                    startActivityForResult(ActivityAddressEdit.getIntent(getActivity(), null), REQUEST_ADD_ADDRESS);
+                } else {
+                    Parcelable paddr = data.getParcelableExtra(ActivityAddress.TAG_SELECTED_ADDRESS);
+                    if (paddr != null) {
+                        AddressModel addr = (AddressModel) paddr;
+                        StringBuilder err = new StringBuilder();
+                        MyLocation addrLoc = AddressModel.parseLocation(err, addr.getADDRESS_LOCATION());
+                        String addrText = addrLoc.getAddrStr();
+                        tvAddress.setText("送至:" + addrText);
 
-                    for (MyCallback cb : itemCallbacks) {
-                        cb.callback(addr.getADDRESS_ID(), "" + addrLoc.getLatitude(), "" + addrLoc.getLongitude());
+                        for (MyCallback cb : sendToAddrChangeListeners) {
+                            cb.callback(addr.getADDRESS_ID(), "" + addrLoc.getLatitude(), "" + addrLoc.getLongitude());
+                        }
                     }
                 }
+
+                break;
+            case REQUEST_ADD_ADDRESS:
+                new BizDataAsyncTask<List<AddressModel>>() {
+                    @Override
+                    protected List<AddressModel> doExecute() throws ZYException, BizFailure {
+                        return bizUser.selectUserAddress();
+                    }
+
+                    @Override
+                    protected void onExecuteSucceeded(List<AddressModel> addressModels) {
+                        closeLoding();
+                        if (addressModels == null) return;
+                        if (addressModels.size() <= 0) return;
+                        AddressModel addr = addressModels.get(0);
+                        int addrId = addr.getADDRESS_ID();
+
+                        StringBuilder err = new StringBuilder();
+                        MyLocation addrLoc = AddressModel.parseLocation(err, addr.getADDRESS_LOCATION());
+                        String addrText = addrLoc.getAddrStr();
+                        tvAddress.setText("送至:" + addrText);
+
+                        for (MyCallback cb : sendToAddrChangeListeners) {
+                            cb.callback(addr.getADDRESS_ID(), "" + addrLoc.getLatitude(), "" + addrLoc.getLongitude());
+                        }
+                    }
+
+                    @Override
+                    protected void OnExecuteFailed() {
+                        closeLoding();
+                    }
+                }.execute();
                 break;
             default:
                 break;

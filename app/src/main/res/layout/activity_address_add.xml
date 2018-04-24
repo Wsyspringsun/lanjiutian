@@ -1,125 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/basebackground">
+    android:background="@color/basebackground"
+    android:orientation="vertical">
 
-    <include layout="@layout/main_header_return"/>
+    <include layout="@layout/main_header_return" />
 
     <LinearLayout
-        android:layout_marginTop="@dimen/x10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/white">
+        android:layout_marginTop="@dimen/x10"
+        android:background="@color/white"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:padding="@dimen/x10"
-            android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/x10">
 
             <TextView
-                android:textSize="14sp"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:layout_height="wrap_content"
                 android:text="@string/shouhuo_name"
-                android:textColor="@color/font_black2"/>
+                android:textColor="@color/font_black2"
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/name"
-                android:maxLines="1"
-                android:textSize="14sp"
-                android:textColor="@color/font_black2"
-                android:background="@null"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"/>
+                android:layout_weight="4"
+                android:background="@null"
+                android:maxLines="1"
+                android:textColor="@color/font_black2"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:background="@color/basebackground"/>
+            android:background="@color/basebackground" />
 
         <LinearLayout
-            android:padding="@dimen/x10"
-            android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/x10">
 
             <TextView
-                android:textSize="14sp"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:layout_height="wrap_content"
                 android:text="@string/shouhuo_phone"
-                android:textColor="@color/font_black2"/>
+                android:textColor="@color/font_black2"
+                android:textSize="14sp" />
 
             <EditText
-                android:inputType="phone"
                 android:id="@+id/phone"
-                android:maxLines="1"
-                android:textSize="14sp"
-                android:textColor="@color/font_black2"
-                android:background="@null"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"/>
+                android:layout_weight="4"
+                android:background="@null"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:textColor="@color/font_black2"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:background="@color/basebackground"/>
+            android:background="@color/basebackground" />
 
         <RelativeLayout
             android:id="@+id/select_shengshi"
-            android:padding="@dimen/x10"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="@dimen/x10">
 
             <TextView
                 android:id="@+id/diqu"
-                android:layout_centerVertical="true"
-                android:textSize="14sp"
                 android:layout_width="wrap_content"
-                android:gravity="center_vertical"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center_vertical"
                 android:text="@string/shouhuo_address"
-                android:textColor="@color/font_black2"/>
+                android:textColor="@color/font_black2"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/shengshi"
-                android:layout_toRightOf="@+id/diqu"
-                android:layout_marginLeft="@dimen/x20"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/jiantou1"
-                android:layout_marginRight="@dimen/x6"
-                android:textSize="14sp"
                 android:layout_width="wrap_content"
-                android:gravity="right"
                 android:layout_height="wrap_content"
-                android:textColor="@color/gray"/>
+                android:layout_alignTop="@id/diqu"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_toLeftOf="@+id/jiantou1"
+                android:layout_toRightOf="@+id/diqu"
+                android:ellipsize="end"
+                android:gravity="left"
+                android:hint="地区简介\n地区描述"
+                android:maxLines="2"
+                android:textColor="@color/gray"
+                android:textSize="14sp" />
 
             <ImageView
-                android:layout_centerVertical="true"
                 android:id="@+id/jiantou1"
                 android:layout_width="@dimen/x16"
                 android:layout_height="@dimen/x15"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/jiantou_you_hui"
-                android:layout_alignParentRight="true"/>
+                android:src="@mipmap/jiantou_you_hui" />
 
 
         </RelativeLayout>
@@ -127,7 +128,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:background="@color/basebackground"/>
+            android:background="@color/basebackground" />
 
         <!--RelativeLayout
             android:padding="@dimen/x10"
@@ -173,70 +174,70 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:background="@color/basebackground"/>
+            android:background="@color/basebackground" />
 
         <EditText
             android:id="@+id/xiangxi"
-            android:textSize="14sp"
-            android:textColor="@color/font_black2"
-            android:hint="@string/shouhuo_xiangxi"
-            android:gravity="top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/x10"
             android:background="@null"
+            android:gravity="top"
+            android:hint="@string/shouhuo_xiangxi"
             android:lineSpacingExtra="@dimen/x4"
+            android:lines="4"
             android:maxLines="8"
-            android:lines="4"/>
+            android:padding="@dimen/x10"
+            android:textColor="@color/font_black2"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
     <RelativeLayout
-        android:visibility="gone"
-        android:paddingRight="@dimen/x8"
-        android:paddingLeft="@dimen/x10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/x10"
         android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:paddingLeft="@dimen/x10"
+        android:paddingRight="@dimen/x8"
+        android:visibility="gone">
 
         <TextView
-            android:layout_centerVertical="true"
             style="@style/font_ww_14"
+            android:layout_centerVertical="true"
             android:text="@string/address_moren"
-            android:textColor="@color/font_black2"/>
+            android:textColor="@color/font_black2" />
 
         <CheckBox
-            android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/x5"
-            android:layout_marginBottom="@dimen/x5"
+            style="@style/MyCheckBox"
             android:layout_width="@dimen/x20"
             android:layout_height="@dimen/x20"
-            style="@style/MyCheckBox"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="@dimen/x5"
+            android:layout_marginTop="@dimen/x5" />
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:visibility="gone"
         android:id="@+id/shanchu"
-        android:paddingRight="@dimen/x8"
-        android:paddingLeft="@dimen/x10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/x10"
         android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:paddingLeft="@dimen/x10"
+        android:paddingRight="@dimen/x8"
+        android:visibility="gone">
 
         <TextView
-            android:gravity="center_vertical"
-            android:textSize="14sp"
-            android:layout_marginTop="@dimen/x5"
-            android:layout_marginBottom="@dimen/x5"
-            android:layout_centerVertical="true"
             android:layout_width="match_parent"
             android:layout_height="@dimen/x20"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="@dimen/x5"
+            android:layout_marginTop="@dimen/x5"
+            android:gravity="center_vertical"
             android:text="@string/shouhuo_shanchu"
-            android:textColor="@color/font_black2"/>
+            android:textColor="@color/font_black2"
+            android:textSize="14sp" />
 
     </RelativeLayout>
 

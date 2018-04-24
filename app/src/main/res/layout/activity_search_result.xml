@@ -26,6 +26,7 @@
             android:layout_weight="1"
             android:background="@drawable/background_search_edit"
             android:gravity="center_vertical"
+            android:hint="@string/addr_tip_search_loc"
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:lines="1"

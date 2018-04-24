@@ -73,6 +73,8 @@ public class ActivityAddressEdit extends BaseActivity {
     private AddressModel addrModel;
     private boolean creatNew = true;
 
+    UserBiz bizUser;
+
     @Event(value = {R.id.select_shengshi, R.id.header_return, R.id.header_edit, R.id.shanchu})
     private void onClick(View view) {
         Intent it;
@@ -113,7 +115,6 @@ public class ActivityAddressEdit extends BaseActivity {
     }
 
     /**
-     *
      * @param ctx
      * @param addrModel 编辑状态要有 ,新增是传null
      * @return
@@ -133,6 +134,9 @@ public class ActivityAddressEdit extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        bizUser = UserBiz.getInstance(this);
+
         addrModel = new AddressModel();
         title.setText("新增收货地址");
         edit.setText("保存");
@@ -217,7 +221,7 @@ public class ActivityAddressEdit extends BaseActivity {
         deleteTask = new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                return UserBiz.deleteUserAddress(address_id);
+                return bizUser.deleteUserAddress(address_id);
             }
 
             @Override
@@ -245,7 +249,7 @@ public class ActivityAddressEdit extends BaseActivity {
             shengshi.setText(addr);
 
             addrModel.setLOCATION(addr);
-            addrModel.setADDRESS_LOCATION(addr + lat);
+            addrModel.setADDRESS_LOCATION(addr + lat + "|" + addr);
         }
     }
 

@@ -35,6 +35,7 @@ import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.base.BaseActivityFragment;
 import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.ui.goods.ActivityGoodsInfo;
+import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.ui.user.wallet.ChojiangRecActivity;
 import com.wyw.ljtds.utils.GsonUtils;
@@ -236,10 +237,15 @@ public class HuoDongFragment extends BaseFragment implements ToolbarManager.Icon
                 Intent it = null;
                 if ("1".equals(isMedcine)) {
                     //生活馆产品
-//                    it = ActivityGoodsInfo.getIntent(getActivity(), commId);
+                    it = ActivityLifeGoodsInfo.getIntent(getActivity(), commId);
                 } else if ("2".equals(isMedcine)) {
                     //医药馆产品
-//                    it = ActivityMedicinesInfo.getIntent(getActivity(), commId);
+                    String logId = map.get("logistId") + "";
+                    if(StringUtils.isEmpty(logId)){
+                        it = ActivityMedicinesInfo.getIntent(getActivity(), commId, "001");
+                    }else{
+                        it = ActivityMedicinesInfo.getIntent(getActivity(), commId, logId);
+                    }
                 }
                 startActivity(it);
                 break;

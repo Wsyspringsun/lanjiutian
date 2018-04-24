@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -59,11 +60,14 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
 @ContentView(R.layout.activity_main)//setcontextview
-public class MainActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
+public class MainActivity extends BaseActivity  {
+    protected static final int REQUEST_PERMS_LOCATION = 0;//请求Location权限
+
     public static final String TAG_POSITION = "TAG_POSITION";
 
     private static final String CHECK_OP_NO_THROW = "checkOpNoThrow";
@@ -112,6 +116,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         @Override
         public void onReceiveLocation(BDLocation location) {
             closeLoding();
+            Log.e(AppConfig.ERR_TAG, "BDLocationListener  onReceiveLocation");
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
                 //update location to addr
                 MyLocation loc = MyLocation.newInstance(location.getLatitude(), location.getLongitude(), location.getAddrStr());
@@ -128,6 +133,8 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     private List<AddressModel> addrlist;
     private Bundle savedInstanceState;
     private FragmentTransaction fragmentTransaction;
+
+    private UserBiz bizUser;
 
     @Event(value = {R.id.home, R.id.category, R.id.find, R.id.shopping_cart, R.id.user})
     private void setlect(View v) {
@@ -161,6 +168,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     }
 
     public void initAddr(MyLocation loc) {
+        Log.e(AppConfig.ERR_TAG, "initAddr");
         SingleCurrentUser.updateLocation(loc);
         if (fragmentHome != null && fragmentHome.isAdded()) {
             fragmentHome.setLocation();
@@ -174,6 +182,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        bizUser = UserBiz.getInstance(this);
         callback();
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (savedInstanceState == null) {
@@ -192,9 +201,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         } else {
             AppConfig.currSel = savedInstanceState.getInt(TAG_POSITION);
         }
-
-
-        setLoding(this, false);
 
 
         final IWXAPI api = WXAPIFactory.createWXAPI(this, null);
@@ -216,7 +222,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
         //need notify
 
-        ((MyApplication) getApplication()).locationService.start();// 定位SDK
 
         //other page point a fragment index
         if (AppConfig.currSel != -1) {
@@ -224,12 +229,18 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         }
 
         if (SingleCurrentUser.location == null) {
+//            loadDefaultLocation();
             if (UserBiz.isLogined()) {
+                loadLoginerInfo();
                 loadUserAddr();
             } else {
-                ((MyApplication) this.getApplication()).locationService.registerListener(locationListner); //注销掉监听
+                loadUserLocation();
             }
         }
+    }
+
+    private void loadLoginerInfo() {
+
     }
 
     /**
@@ -404,6 +415,10 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         }
     }
 
+    private void loadDefaultLocation() {
+        MyLocation loc = MyLocation.newInstance(SingleCurrentUser.defaultLat, SingleCurrentUser.defaultLng, SingleCurrentUser.defaultAddrStr);
+        initAddr(loc);
+    }
 
     /**
      * 更新版本
@@ -529,7 +544,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         new BizDataAsyncTask<List<AddressModel>>() {
             @Override
             protected List<AddressModel> doExecute() throws ZYException, BizFailure {
-                return UserBiz.selectUserAddress();
+                return bizUser.selectUserAddress();
             }
 
             @Override
@@ -537,7 +552,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                 addrlist = addressModels;
                 if (addrlist == null || addrlist.size() <= 0) {
                     //用户没有地址,使用location
-                    ((MyApplication) MainActivity.this.getApplication()).locationService.registerListener(locationListner); //注销掉监听
+                    loadUserLocation();
                 } else {
                     //设置默认地址
                     AddressModel model = addrlist.get(0);
@@ -551,8 +566,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                     StringBuilder err = new StringBuilder();
                     MyLocation loc = AddressModel.parseLocation(err, addr);
                     if (err.length() > 0) {
-                        Utils.log(err.toString());
-                        ((MyApplication) MainActivity.this.getApplication()).locationService.registerListener(locationListner); //注销掉监听
+                        loadUserLocation();
                     } else {
                         //upd addr
                         loc.setADDRESS_ID(model.getADDRESS_ID() + "");
@@ -569,5 +583,34 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         }.execute();
 
     }
+
+    private void loadUserLocation() {
+        //request location permission
+        Log.e(AppConfig.ERR_TAG, "loadUserLocation");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String[] perms = {android.Manifest.permission.ACCESS_FINE_LOCATION};
+            if (!EasyPermissions.hasPermissions(this, perms)) {
+                //没有权限，进行权限申请
+                loadDefaultLocation();
+            } else {
+                //有权限，直接使用
+                regLocListener();
+            }
+        } else {
+            regLocListener();
+        }
+
+    }
+
+    /**
+     * 注册位置监听
+     */
+    private void regLocListener() {
+        setLoding(this, false);
+        ((MyApplication) MainActivity.this.getApplication()).locationService.registerListener(locationListner); //注销掉监听
+        ((MyApplication) getApplication()).locationService.start();// 定位SDK
+
+    }
+
 
 }

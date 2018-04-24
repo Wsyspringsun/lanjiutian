@@ -8,8 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.style.RelativeSizeSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,14 +26,13 @@ import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.user.ActivityLogin;
-import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.ToastUtil;
+import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,6 +55,8 @@ public class AddressActivity extends BaseActivity {
     private View noData;
     private List<AddressModel> list;
     private AddressAdapter adapter;
+
+    UserBiz bizUser;
 
     private void initIconBtnStat() {
         LinearLayout btnBack = (LinearLayout) findViewById(R.id.back);
@@ -100,6 +99,7 @@ public class AddressActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        bizUser = UserBiz.getInstance(this);
         initIconBtnStat();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动 recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -120,24 +120,12 @@ public class AddressActivity extends BaseActivity {
         getAddress();
     }
 
-    //    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult( requestCode, resultCode, data );
-//        if (resultCode==AppConfig.IntentExtraKey.RESULT_OK){
-//            if (requestCode==1){
-//                setLoding(this, false);
-//                getAddress();
-//            }
-//        }
-//    }
-
-
     private void getAddress() {
         setLoding(this, false);
         new BizDataAsyncTask<List<AddressModel>>() {
             @Override
             protected List<AddressModel> doExecute() throws ZYException, BizFailure {
-                return UserBiz.selectUserAddress();
+                return bizUser.selectUserAddress();
             }
 
             @Override
@@ -165,7 +153,7 @@ public class AddressActivity extends BaseActivity {
         new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                return UserBiz.deleteUserAddress(str);
+                return bizUser.deleteUserAddress(str);
             }
 
             @Override
@@ -192,7 +180,7 @@ public class AddressActivity extends BaseActivity {
         new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                return UserBiz.changeDefaultAddress(addrId);
+                return bizUser.changeDefaultAddress(addrId);
             }
 
             @Override
@@ -262,14 +250,13 @@ public class AddressActivity extends BaseActivity {
                     Boolean isSel = AddressActivity.this.getIntent().getBooleanExtra(TAG_SELECTED_ADDRESS, false);
                     if (!isSel)
                         return;
-                    Log.e(AppConfig.ERR_TAG, "Click..................");
+                    Utils.log( "Click..................");
                     it = new Intent();
                     it.putExtra(TAG_SELECTED_ADDRESS, data);
                     AddressActivity.this.setResult(Activity.RESULT_OK, it);
                     finish();
                     break;
                 case R.id.bianji:
-                    Log.e(AppConfig.ERR_TAG, "....edit addrModel" + GsonUtils.Bean2Json(data));
                     it = ActivityAddressEdit.getIntent(AddressActivity.this, data);
                     startActivity(it);
                     break;

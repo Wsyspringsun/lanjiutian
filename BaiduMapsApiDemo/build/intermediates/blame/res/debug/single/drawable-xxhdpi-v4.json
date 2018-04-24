@@ -44,12 +44,12 @@
         "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/drawable-xxhdpi-v4/abc_textfield_activated_mtrl_alpha.9.png"
     },
     {
-        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/drawable-xxhdpi-v4/abc_btn_check_to_on_mtrl_000.png",
-        "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/drawable-xxhdpi-v4/abc_btn_check_to_on_mtrl_000.png"
-    },
-    {
         "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/drawable-xxhdpi-v4/abc_popup_background_mtrl_mult.9.png",
         "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/drawable-xxhdpi-v4/abc_popup_background_mtrl_mult.9.png"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/drawable-xxhdpi-v4/abc_btn_check_to_on_mtrl_000.png",
+        "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/drawable-xxhdpi-v4/abc_btn_check_to_on_mtrl_000.png"
     },
     {
         "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/drawable-xxhdpi-v4/abc_ic_star_half_black_36dp.png",

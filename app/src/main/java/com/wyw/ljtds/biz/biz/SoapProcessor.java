@@ -180,9 +180,10 @@ public class SoapProcessor {
         return parseResponse(result);
     }
 
-    private static final String RESPONSE_STATUS = "status";
-    private static final String RESPONSE_MESSAGE = "message";
-    private static final String RESPONSE_RESULT = "result";
+    public static final String RESPONSE_STATUS = "status";
+    public static final String RESPONSE_MESSAGE = "message";
+    public static final String RESPONSE_RESULT = "result";
+    public static final String RESPONSE_STATUSCODE = "statusCode";
 
     private JsonElement parseResponse(String response) throws ZYException,
             BizFailure {
@@ -198,7 +199,6 @@ public class SoapProcessor {
             }
 
             resultElement = jsonObject.get(RESPONSE_RESULT);
-
             return resultElement;
         } catch (Exception e) {
             if (e instanceof BizFailure) {

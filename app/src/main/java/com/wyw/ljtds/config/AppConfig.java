@@ -8,6 +8,7 @@ import java.io.File;
  * Created by Administrator on 2016-10-05.
  */
 public class AppConfig {
+    public static final String TERMINALTYPE = "0";
     public static final float MAP_ZOOM = 18.0f;//地图 缩放比例尺
     public static final String ERR_TAG = "err";
     public static final String ERR_EXCEPTION = "www.ljt.com.exeption";
@@ -32,6 +33,7 @@ public class AppConfig {
     public static final String WEIXIN_APP_ID = "wxc245fe43d076d9d3";//微信appid
     public static final int OUT_TIME = 22000;
     public static final int TAG_TRACE = 1;
+    public static final int PHONE_VALIDCODE_TEIMER = 60;//短信验证码重发间隔时间  单位：秒
     //是否测试环境
     private static int TAG_DOMAIN = 3;
     public static String WEB_APP_URL = "";
@@ -47,18 +49,20 @@ public class AppConfig {
     public static int MAx_UPLOAD_IMG_CNT = 5;
 
     public static String IMAGE_PATH_LJT_ECOMERCE;
+    public static int THUMB_SIZE = 90;//微信分享要求的图片压缩
 
     static {
         switch (TAG_DOMAIN) {
             case 1:
-                WEB_DOMAIN = "http://192.168.2.102:8080";
+                WEB_DOMAIN = "http://192.168.2.101:8080";
                 WS_BASE_URL = WEB_DOMAIN + "/e-commerce_platform_WebService" + "/services/";
                 WS_BASE_HTML_URL = WEB_DOMAIN + "/e-commerce_platform_WebService" + "/html/";
                 WS_BASE_JSP_URL = WEB_DOMAIN + "/e-commerce_platform_WebService" + "/jsp/";
                 APP_UPDATE_URL = WEB_DOMAIN + "/e-commerce_platform_WebService/version.json";
                 WEB_APP_URL = "http://192.168.2.101:8080/e-commerce_mobile";
-                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/upload/images";
-                IMAGE_PATH_LJT_ECOMERCE = "http://cs.lanjiutian.com";
+//                IMAGE_PATH_LJT = "http://192.168.3.88/upload/images";
+                IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";
+                IMAGE_PATH_LJT_ECOMERCE = "http://www.lanjiutian.com";
                 break;
             case 2:
                 WEB_APP_URL = "http://cs.lanjiutian.com/mobile";
@@ -68,7 +72,7 @@ public class AppConfig {
                 WS_BASE_JSP_URL = WEB_DOMAIN + "/WebService" + "/jsp/";
                 APP_UPDATE_URL = WEB_DOMAIN + "/WebService/version.json";
                 IMAGE_PATH_LJT = "http://cs.lanjiutian.com/upload/images";
-                IMAGE_PATH_LJT_ECOMERCE = "http://cs.lanjiutian.com";
+                IMAGE_PATH_LJT_ECOMERCE = "http://www.lanjiutian.com";
 //                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/ecommerce/images";
                 break;
             case 3:

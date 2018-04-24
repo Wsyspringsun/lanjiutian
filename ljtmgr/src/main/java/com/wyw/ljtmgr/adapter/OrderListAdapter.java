@@ -2,6 +2,7 @@ package com.wyw.ljtmgr.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -14,11 +15,13 @@ import com.wyw.ljtmgr.config.AppConfig;
 import com.wyw.ljtmgr.model.OrderInfoModel;
 import com.wyw.ljtmgr.model.OrderStatus;
 import com.wyw.ljtmgr.ui.OrderDetailActivity;
+import com.wyw.ljtmgr.ui.OrderIndexFragment;
 
 import utils.CommonUtil;
 
 public class OrderListAdapter extends DataListAdapter<OrderInfoModel, RecyclerView.ViewHolder> {
     private final Activity context;
+    private String curId = "";
     private String mstat;
 
     public String getMstat() {
@@ -58,7 +61,20 @@ public class OrderListAdapter extends DataListAdapter<OrderInfoModel, RecyclerVi
             h.tvPrice.setText(context.getString(R.string.orderlist_costmoney, CommonUtil.formatFee("" + data.getGroupPayAmount())));
             h.tvOrderId.setText(context.getString(R.string.orderlist_orderid, data.getOrderGroupId()));
             h.tvOrderStat.setText(OrderStatus.getStatus(data.getGroupStatus()));
+
             h.data = data;
+            String orderid = "";
+            if (OrderInfoModel.CLASSIFY_RETURN.equals(data.getClassify())) {
+                orderid = data.getReturnGoodsHandingId();
+            } else {
+                orderid = data.getOrderGroupId();
+            }
+            if (orderid.equals(curId)) {
+                ((OrderViewHolder) holder).itemView.setBackground(ActivityCompat.getDrawable(context,R.drawable.bg_orderitem_seled));
+            } else {
+                ((OrderViewHolder) holder).itemView.setBackground(ActivityCompat.getDrawable(context,R.color.white));
+            }
+
         }
 
 
@@ -129,6 +145,7 @@ public class OrderListAdapter extends DataListAdapter<OrderInfoModel, RecyclerVi
             } else {
                 orderid = data.getOrderGroupId();
             }
+            curId = orderid;
             Intent it = OrderDetailActivity.getIntent(context, data.getClassify(), orderid);
             context.startActivity(it);
         }

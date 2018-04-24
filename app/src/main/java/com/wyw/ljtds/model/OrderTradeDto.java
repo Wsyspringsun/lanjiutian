@@ -7,7 +7,8 @@ import java.util.List;
  * 整个交易 order
  */
 public class OrderTradeDto {
-
+    public static final String SHARE_FLG_OK = "1";//分享成功标识 ,提供服务使用
+    private String SHARE_FLG ;  //是否分享成功
     private String COIN_FLG; //是否使用电子币
     private String COST_POINT; //使用积分数量
     private String DISTRIBUTION_DATE_END; //派送时间截止
@@ -223,5 +224,13 @@ public class OrderTradeDto {
 
     public void setADDRESS_ID(String ADDRESS_ID) {
         this.ADDRESS_ID = ADDRESS_ID;
+    }
+
+    public String getSHARE_FLG() {
+        return SHARE_FLG;
+    }
+
+    public void setSHARE_FLG(String SHARE_FLG) {
+        this.SHARE_FLG = SHARE_FLG;
     }
 }

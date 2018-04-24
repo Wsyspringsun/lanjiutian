@@ -4,6 +4,7 @@ package com.wyw.ljtds.ui.goods;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -14,8 +15,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,9 +56,11 @@ public class LifeShopActivity extends BaseActivity {
     @ViewInject(R.id.fragment_lifeshop_shopimg_vp_main)
     ViewPager vpMain;
     String[] tabTitles = {"店铺首页", "全部宝贝", "新品上架"};
+    int[] tabImgs = {R.drawable.ic_shouye, R.drawable.ic_quanbu,R.drawable.ic_shangxin };
     private String shopId;
     @ViewInject(R.id.activity_lifeshop_img_banner)
     ImageView shopImg;
+    private LifeShopFragmentPagerAdapter fpAdapter;
 
     public static Intent getIntent(Context ctx, String shopId) {
         Intent it = new Intent(ctx, LifeShopActivity.class);
@@ -80,48 +85,42 @@ public class LifeShopActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //透明导航栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }*/
         super.onCreate(savedInstanceState);
 
         shopId = getIntent().getStringExtra(TAG_SHOP_ID);
         for (int i = 0; i < tabTitles.length; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(tabTitles[i]));
         }
-        vpMain.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return tabTitles[position];
-            }
-
-            @Override
-            public Fragment getItem(int position) {
-                return LifeShopFragment.newInstance(shopId, position);
-                /*switch (position) {
-                    case 0:
-                    case 1:
-                        return frag2;
-                    case 2:
-                        return frag3;
-                    default:
-                        return null;
-                }*/
-            }
-
-            @Override
-            public int getCount() {
-                return tabTitles.length;
-            }
-        });
-
+        fpAdapter = new LifeShopFragmentPagerAdapter(getSupportFragmentManager());
+        vpMain.setAdapter(fpAdapter);
         tabLayout.setupWithViewPager(vpMain);
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+                tab.setCustomView(fpAdapter.getTabView(i));
+                if (tab.getCustomView() != null) {
+                    View tabView = (View) tab.getCustomView().getParent();
+                    tabView.setTag(i);
+//                    tabView.setOnClickListener(mTabOnClickListener);
+                }
+            }
+        }
 
-        loadData();
+
+        vpMain.setCurrentItem(0);
+
     }
 
-
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
+        loadData();
     }
 
     public void loadData() {
@@ -151,7 +150,45 @@ public class LifeShopActivity extends BaseActivity {
         ShopImg itemShop = shopImgs.get(0);
 //        tvShopName.setText(itemShop.getSHOP_NAME());
 //        sdvShopLogo.setImageURI(Uri.parse(itemShop.getIMAGE_PATH1()));
-        Utils.log("itemShop.getIMAGE_PATH1():" + itemShop.getIMAGE_PATH1());
         Picasso.with(this).load(Uri.parse(itemShop.getIMAGE_PATH1())).into(shopImg);
+    }
+
+    class LifeShopFragmentPagerAdapter extends FragmentPagerAdapter {
+
+        public LifeShopFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+
+        public View getTabView(int position) {
+            View view = LayoutInflater.from(LifeShopActivity.this).inflate(R.layout.item_lifeshop_tab, null);
+            TextView tv = (TextView) view.findViewById(R.id.item_lifeshop_tab_tv);
+            tv.setText(tabTitles[position]);
+            ImageView img = (ImageView) view.findViewById(R.id.item_lifeshop_tab_img);
+            img.setImageResource(tabImgs[position]);
+            return view;
+        }
+
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return LifeShopFragment.newInstance(shopId, position);
+                case 1:
+                    return LifeShopAllGoodsFragment.newInstance(shopId);
+                default:
+                    return LifeShopFragment.newInstance(shopId, position);
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
     }
 }

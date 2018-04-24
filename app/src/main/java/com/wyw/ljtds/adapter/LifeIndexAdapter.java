@@ -39,9 +39,11 @@ import com.wyw.ljtds.model.IConCatInfo;
 import com.wyw.ljtds.ui.goods.ActivityGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityGoodsList;
 import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
+import com.wyw.ljtds.ui.goods.LifeShopActivity;
 import com.wyw.ljtds.ui.goods.ShopActivity;
 import com.wyw.ljtds.ui.home.ActivityHomeWeb;
 import com.wyw.ljtds.ui.home.HuoDongActivity;
+import com.wyw.ljtds.ui.user.order.ReturnGoodsOrderListActivity;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.Utils;
 
@@ -69,10 +71,12 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
 
     List<ItemTypeInfo> itemTypeList;
 
+
     public LifeIndexAdapter(Context mContext, HomePageModel1 homePageModel) {
         inflater = LayoutInflater.from(mContext);
         this.context = mContext;
         this.data = homePageModel;
+
 
         ItemTypeInfo bannerView = new ItemTypeInfo(BANNER, 1);
         ItemTypeInfo catIconsView = new ItemTypeInfo(ICONCAT, data.getIconImg().size());
@@ -142,12 +146,8 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
                 return new NewsMarqueeHolder(itemNews);
 
             case WEBACTIVITY:
-                WebView wvActivity = new WebView(context);
-                String url = AppConfig.WS_BASE_HTML_URL + "huodongindex.html?dt=" + System.currentTimeMillis();
-                Log.e(AppConfig.ERR_TAG, "url:" + url);
-                wvActivity.loadUrl(url);
-                initWebView(wvActivity);
-                return new SimpleViewHolder(wvActivity);
+                View itemHuodong = inflater.inflate(R.layout.fragment_webview_huodongindex, parent, false);
+                return new HuodongHolder(itemHuodong);
             case RECOMMAND:
                 View itemTuijian = inflater.inflate(R.layout.item_home_hot, parent, false);
                 return new TuiJianHolder(itemTuijian);
@@ -208,7 +208,7 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
             holder.tvNumber.setText("" + recComm.getCommodityList().size() + "\n单品");
         }
 //        holder.imgCat.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + recComm.getImgPath()));
-        Utils.log("recComm:" + AppConfig.IMAGE_PATH_LJT_ECOMERCE + recComm.getImgPath());
+//        Utils.log("recComm:" + AppConfig.IMAGE_PATH_LJT_ECOMERCE + recComm.getImgPath());
         Picasso.with(context).load(Uri.parse(AppConfig.IMAGE_PATH_LJT_ECOMERCE + recComm.getImgPath())).into(holder.imgCat);
 
         holder.bindCommList(recComm.getCommodityList());
@@ -344,38 +344,42 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
                     public void onItemClick(int position) {
                         Map<String, String> mItem = bannerImgList.get(position);
                         String flg = mItem.get("flg");
-                        String headId = mItem.get("headId");
-                        //详情：X,列表 L 店铺 D 电子币 DZ 抽奖 CJ 满赠 MZ 特价 TJ 秒杀 MS
-                        Intent it = null;
-                        switch (flg) {
-                            case "X":
-//                                it = ActivityGoodsInfo.getIntent(context, headId);
-                                break;
-                            case "L":
-                                break;
-                            case "D":
-                                it = ShopActivity.getIntent(context, headId);
-                                break;
-                            case "DZ":
-                                it = HuoDongActivity.getIntent(context, "5");
-                                break;
-                            case "CJ":
-                                it = HuoDongActivity.getIntent(context, "1");
-                                break;
-                            case "MZ":
-                                it = HuoDongActivity.getIntent(context, "2");
-                                break;
-                            case "TJ":
-                                it = HuoDongActivity.getIntent(context, "3");
-                                break;
-                            case "MS":
-                                it = HuoDongActivity.getIntent(context, "4");
-                                break;
-                            default:
-                                break;
+                        if (!StringUtils.isEmpty(flg)) {
+                            String headId = mItem.get("headId");
+                            //详情：X,列表 L 店铺 D 电子币 DZ 抽奖 CJ 满赠 MZ 特价 TJ 秒杀 MS
+                            Intent it = null;
+                            switch (flg) {
+                                case "X":
+                                    it = ActivityLifeGoodsInfo.getIntent(context, headId);
+                                    break;
+                                case "L":
+                                    it = ActivityGoodsList.getIntent(context, headId);
+                                    break;
+                                case "D":
+                                    it = LifeShopActivity.getIntent(context, headId);
+                                    break;
+                                case "DZ":
+                                    it = HuoDongActivity.getIntent(context, "5");
+                                    break;
+                                case "CJ":
+                                    it = HuoDongActivity.getIntent(context, "1");
+                                    break;
+                                case "MZ":
+                                    it = HuoDongActivity.getIntent(context, "2");
+                                    break;
+                                case "TJ":
+                                    it = HuoDongActivity.getIntent(context, "3");
+                                    break;
+                                case "MS":
+                                    it = HuoDongActivity.getIntent(context, "4");
+                                    break;
+                                default:
+                                    break;
+                            }
+                            if (it != null)
+                                context.startActivity(it);
                         }
-                        if (it != null)
-                            context.startActivity(it);
+
                     }
                 });
                 //开始自动翻页
@@ -399,7 +403,7 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View v) {
-            Intent it = ActivityGoodsList.getStartMeIntent(context, data.getCommodityTypeId());
+            Intent it = ActivityGoodsList.getIntent(context, data.getCommodityTypeId());
             context.startActivity(it);
         }
     }
@@ -431,7 +435,7 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
                 public void onClick(View view) {
                     if (data == null) return;
                     String typeId = data.getCommodityTypeId();
-                    Intent it = ActivityGoodsList.getStartMeIntent(context, typeId);
+                    Intent it = ActivityGoodsList.getIntent(context, typeId);
                     context.startActivity(it);
                 }
             });
@@ -541,6 +545,19 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
 
         public void setItemType(int itemType) {
             this.itemType = itemType;
+        }
+    }
+
+    class HuodongHolder extends RecyclerView.ViewHolder {
+        WebView wvActivity;
+
+        public HuodongHolder(View itemView) {
+            super(itemView);
+            wvActivity = (WebView) itemView.findViewById(R.id.fragment_webview_huodongIndex_wv);
+            initWebView(wvActivity);
+            //设置活动区的 WebView
+            String url = AppConfig.WS_BASE_HTML_URL + "huodongindex.html?dt=" + System.currentTimeMillis();
+            wvActivity.loadUrl(url);
         }
     }
 

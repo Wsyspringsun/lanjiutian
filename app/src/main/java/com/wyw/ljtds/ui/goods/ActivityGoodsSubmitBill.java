@@ -117,66 +117,6 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
                 orderModel.setINVOICE_FLG("1");
 
                 orderModel.setINVOICE_CONTENT("0");
-                View view = LayoutInflater.from(ActivityGoodsSubmitBill.this).inflate(R.layout.dialog_pay_bill_select, null);
-                /* 发票明细选择
-                final BottomDialog dialog = new BottomDialog(ActivityGoodsSubmitBill.this, view).setCancelable(false).show();
-                final RadioGroup dialogRgFapiao = (RadioGroup) view.findViewById(R.id.dialog_pay_bill_select_fapiao_rg);
-                RadioButton rb1 = (RadioButton) view.findViewById(R.id.fapiao_rb1);
-                RadioButton rb2 = (RadioButton) view.findViewById(R.id.fapiao_rb2);
-                RadioButton rb3 = (RadioButton) view.findViewById(R.id.fapiao_rb3);
-                RadioButton rb4 = (RadioButton) view.findViewById(R.id.fapiao_rb4);
-                RadioButton rb5 = (RadioButton) view.findViewById(R.id.fapiao_rb5);
-
-                ImageView quxiao = (ImageView) view.findViewById(R.id.quxiao);
-                quxiao.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dissmiss();
-                    }
-                });
-
-
-                CompoundButton.OnCheckedChangeListener fapiaoRbListener = new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        if (b) {
-                            dialogRgFapiao.clearCheck();
-                            dialogRgFapiao.check(compoundButton.getId());
-                            switch (compoundButton.getId()) {
-                                case R.id.fapiao_rb1:
-                                    orderModel.setINVOICE_CONTENT("0");
-                                    break;
-                                case R.id.fapiao_rb2:
-                                    orderModel.setINVOICE_CONTENT("1");
-                                    break;
-                                case R.id.fapiao_rb3:
-                                    orderModel.setINVOICE_CONTENT("2");
-                                    break;
-                                case R.id.fapiao_rb4:
-                                    orderModel.setINVOICE_CONTENT("3");
-                                    break;
-                                case R.id.fapiao_rb5:
-                                    orderModel.setINVOICE_CONTENT("4");
-                                    break;
-
-                            }
-                        }
-                    }
-                };
-                rb1.setOnCheckedChangeListener(fapiaoRbListener);
-                rb2.setOnCheckedChangeListener(fapiaoRbListener);
-                rb3.setOnCheckedChangeListener(fapiaoRbListener);
-                rb4.setOnCheckedChangeListener(fapiaoRbListener);
-                rb5.setOnCheckedChangeListener(fapiaoRbListener);
-                //确认按钮
-                Button button = (Button) view.findViewById(R.id.queding);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dissmiss();
-                        rbFapiaoYes.setText(Business.mapFapiaoCatText.get(orderModel.getINVOICE_CONTENT()));
-                    }
-                });*/
                 llXiangQing.setVisibility(View.VISIBLE);
                 break;
         }

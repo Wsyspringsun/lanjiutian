@@ -112,8 +112,8 @@ public abstract class BizDataAsyncTask<Result> extends
     }
 
     protected void onExecuteException(ZYException exception) {
-        Toast.makeText(MyApplication.getAppContext(), R.string.msg_opreation_timeout,
-                Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MyApplication.getAppContext(), R.string.msg_opreation_timeout, Toast.LENGTH_SHORT).show();
+        Utils.log(exception.getMessage());
         OnExecuteFailed();
     }
 

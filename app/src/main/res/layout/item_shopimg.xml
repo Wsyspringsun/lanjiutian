@@ -13,16 +13,7 @@
         android:adjustViewBounds="true"
         android:gravity="center"
         android:scaleType="fitCenter"
-        android:src="@drawable/ss" />
-    <!--    <com.facebook.drawee.view.SimpleDraweeView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            fresco:actualImageScaleType="fitXY"
-            fresco:fadeDuration="200"
-            fresco:failureImage="@mipmap/zhanweitu"
-            fresco:failureImageScaleType="fitCenter"
-            fresco:placeholderImage="@mipmap/zhanweitu" />-->
+        android:src="@drawable/lifeshop_activity" />
 
 </LinearLayout>
 

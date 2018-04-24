@@ -9,6 +9,33 @@
         <item name="windowNoTitle">true</item>
         <item name="homeAsUpIndicator">@drawable/ic_nav_previous</item>
         <item name="windowActionBar">false</item>
+        <item name="overlapAnchor">false</item>
+        <!--toolbar内的控件（自定义的或者系统预置的如标题）距离NavigationIcon和屏幕左边的距离，类似marginStart-->
+    </style>
+
+    <!--浅色主题-->
+    <style name="AppThemeDark" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="overlapAnchor">false</item>  <!--设置不覆盖锚点-->
+    </style>
+
+    <!--通知栏适配app工具栏颜色的主题-->
+    <style name="ImageTranslucentTheme" parent="AppTheme">
+        <!--在Android 4.4之前的版本上运行，直接跟随系统主题-->
+    </style>
+
+    <!--
+    设置工具栏样式
+    <item name="toolbarNavigationButtonStyle">@style/mToolbarNavigationButtonStyle</item>
+    <style name="mToolbarNavigationButtonStyle" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="android:minWidth">0dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    -->
+    <style name="mToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">@dimen/font_4</item>
+        <item name="textColor">@color/font_1</item>
     </style>
 
     <style name="Login" parent="Base.Theme.AppCompat.Light">
@@ -17,7 +44,6 @@
         <item name="colorPrimaryDark">@color/gray1</item>
         <item name="colorAccent">@color/base_bar</item>
         <item name="windowNoTitle">true</item>
-
     </style>
 
     <style name="ThemeSplash" parent="Theme.AppCompat.Light.NoActionBar">
@@ -38,6 +64,10 @@
         <item name="android:paddingTop">@dimen/x3</item>
         <item name="android:paddingBottom">@dimen/x5</item>
     </style>
+
+    <!--<style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">-->
+    <!--<item name="android:textSize">10dp</item>-->
+    <!--</style>-->
 
     <!--微信-->
     <!-- Navigation Header -->

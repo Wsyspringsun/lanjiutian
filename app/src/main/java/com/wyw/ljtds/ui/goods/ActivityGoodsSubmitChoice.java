@@ -41,6 +41,7 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
     public static final String TAG_IIME_END = "TAG_IIME_END";
     private static final String TAG_DISTRIBUTIONMODE = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmitChoice.TAG_DISTRIBUTIONMODE";
     private static final String TAG_PAYMENTMETHOD = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmitChoice.TAG_PAYMENTMETHOD";
+    private static final String TAG_INS_USER_ID = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmitChoice.TAG_INS_USER_ID";
     @ViewInject(R.id.header_title)
     private TextView title;
     @ViewInject(R.id.time1)
@@ -51,6 +52,8 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
     RadioGroup rgZhifu;
     @ViewInject(R.id.dialog_pay_choice_peisong)
     RadioGroup rgPeisong;
+    @ViewInject(R.id.zhifu_rb1)
+    RadioButton rbZhifu1;
 
     private ArrayAdapter adapter1;
 
@@ -125,6 +128,14 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
             rgPeisong.check(R.id.dialog_pay_choice_peisong_gain);
         }
 
+        //禁止医药行业在线支付
+        String insUserId = getIntent().getStringExtra(TAG_INS_USER_ID);
+        if (AppConfig.GROUP_LJT.equals(insUserId)) {
+            rbZhifu1.setVisibility(View.GONE);
+        } else {
+            rbZhifu1.setVisibility(View.VISIBLE);
+        }
+
         if (OrderTrade.PAYMTD_ONLINE.equals(payMtd)) {
             rgZhifu.check(R.id.zhifu_rb1);
         } else if (OrderTrade.PAYMTD_MONEY.equals(payMtd)) {
@@ -147,10 +158,11 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
     }
 
 
-    public static Intent getIntent(Context context, String distributionMode, String paymentMethod) {
+    public static Intent getIntent(Context context, String distributionMode, String paymentMethod, String insUserId) {
         Intent it = new Intent(context, ActivityGoodsSubmitChoice.class);
         it.putExtra(TAG_DISTRIBUTIONMODE, distributionMode);
         it.putExtra(TAG_PAYMENTMETHOD, paymentMethod);
+        it.putExtra(TAG_INS_USER_ID, insUserId);
         return it;
     }
 }

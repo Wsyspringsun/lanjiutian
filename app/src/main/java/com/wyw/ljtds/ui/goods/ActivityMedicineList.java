@@ -127,11 +127,7 @@ public class ActivityMedicineList extends BaseActivity {
                 startActivity(new Intent(this, ActivityScan.class));
                 break;
             case R.id.edHeader:
-                it = new Intent(this, ActivitySearch.class);
-                it.putExtra("from", 0);
-                it.putExtra(ActivitySearch.TAG_INIT_KEYWORD, search.getText().toString());
-                finish();
-                startActivity(it);
+                startActivity(ActivitySearch.getIntent(this,0,search.getText().toString()));
                 break;
 
             case R.id.xiaoxi:
@@ -191,6 +187,7 @@ public class ActivityMedicineList extends BaseActivity {
      */
     public static Intent getIntent(Context context, String type, String topFlg, String classId, String keyword) {
         Intent it = new Intent(context, ActivityMedicineList.class);
+//        it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         it.putExtra(TAG_PARAM_TYPE, type);
         it.putExtra(TAG_PARAM_CLASSID, classId);
         it.putExtra(TAG_PARAM_KEYWORD, keyword);

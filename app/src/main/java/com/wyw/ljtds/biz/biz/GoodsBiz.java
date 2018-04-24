@@ -11,6 +11,7 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.CommodityDetailsModel;
+import com.wyw.ljtds.model.CommodityListModel;
 import com.wyw.ljtds.model.CreatOrderModel;
 import com.wyw.ljtds.model.KeyValue;
 import com.wyw.ljtds.model.LogisticsModel;
@@ -398,6 +399,15 @@ public class GoodsBiz extends BaseBiz {
         return fs;
     }
 
+    /**
+     * '
+     * 获取生活馆商品商铺页面数据
+     *
+     * @param shopid 商铺 id
+     * @return
+     * @throws BizFailure
+     * @throws ZYException
+     */
     public static List<ShopImg> readShopPage(String shopid) throws BizFailure, ZYException {
         SoapProcessor ksoap = new SoapProcessor("Service", "getShopPage", false);
         ksoap.setProperty("oidAdminUserId", shopid, SoapProcessor.PropertyType.TYPE_STRING);
@@ -406,6 +416,21 @@ public class GoodsBiz extends BaseBiz {
         TypeToken<List<ShopImg>> tt = new TypeToken<List<ShopImg>>() {
         };
         List<ShopImg> fs = gson.fromJson(element, tt.getType());
+        return fs;
+    }
+
+    public static List<CommodityListModel> getShopCommodities(String storeId, String keyword, String startIdx) throws BizFailure, ZYException {
+        SoapProcessor ksoap = new SoapProcessor("Service", "getShopCommoditys", false);
+        ksoap.setProperty("storeId", storeId, SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("keyword", keyword, SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("startIdx", startIdx, SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("pageSize", AppConfig.DEFAULT_PAGE_COUNT, SoapProcessor.PropertyType.TYPE_STRING);
+
+        JsonElement element = ksoap.request();
+        Gson gson = new GsonBuilder().create();
+        TypeToken<List<CommodityListModel>> tt = new TypeToken<List<CommodityListModel>>() {
+        };
+        List<CommodityListModel> fs = gson.fromJson(element, tt.getType());
         return fs;
     }
 

@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.TextView;
@@ -20,9 +21,15 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.weixin.uikit.MMAlert;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.SoapProcessor;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.ui.user.order.LogisticTraceActivity;
 
 import junit.framework.Assert;
@@ -58,6 +65,10 @@ import java.util.regex.Pattern;
  */
 
 public class Utils {
+    private static final int MMAlertSelect1 = 0; //选择分享的渠道
+    private static final int MMAlertSelect2 = 1;
+    private static final int MMAlertSelect3 = 2;
+
     private static String REG_PATTERN_PHONE = "\\d{7}|0\\d{10}|13\\d{9}|14\\d{9}|15\\d{9}|17\\d{9}|18\\d{9}";
     private static final String TAG = "SDK_Sample.Util";
     private static final int MAX_DECODE_PICTURE_SIZE = 1920 * 1440;
@@ -222,7 +233,7 @@ public class Utils {
     public static String formatFee(String val) {
         if (StringUtils.isEmpty(val))
             return "";
-        DecimalFormat df = new DecimalFormat("0.#");
+        DecimalFormat df = new DecimalFormat("0.##");
         BigDecimal bVal = new BigDecimal(val);
         return df.format(bVal);
     }
@@ -527,7 +538,7 @@ public class Utils {
         try {
             imei = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
         } catch (Exception e) {
-            imei = "wsyTrace";
+            imei = System.currentTimeMillis() + "";
         }
         return imei;
     }
@@ -648,8 +659,82 @@ public class Utils {
                 (ip >> 24 & 0xFF);
     }
 
-    public static PayUtil getPayUtilInstance(Activity context,Map data) {
-        PayUtil instance = new PayUtil(context,data);
+    public static PayUtil getPayUtilInstance(Activity context, Map data) {
+        PayUtil instance = new PayUtil(context, data);
         return instance;
+    }
+
+    public static void wechatShare(final Context context, final String title, final String description, final String imgUrl, final String url) {
+        final IWXAPI wxApi = ((MyApplication) ((Activity) context).getApplication()).wxApi;
+        Utils.log("wechatShare:" + title + "-" + description + "-" + imgUrl + "-" + url);
+        MMAlert.showAlert(context, "分享", context.getResources().getStringArray(R.array.send_webpage_item),
+                null, new MMAlert.OnAlertSelectId() {
+                    @Override
+                    public void onClick(int whichButton) {
+                        Utils.log("whichButton:" + whichButton + ";imgUrl:" + imgUrl);
+                        WXMediaMessage msg = null;
+                        SendMessageToWX.Req req = null;
+
+                        WXWebpageObject webpage = new WXWebpageObject();
+                        webpage.webpageUrl = url;
+                        msg = new WXMediaMessage(webpage);
+                        msg.title = title;
+                        msg.description = description;
+                        //默认图片
+                        Bitmap bmpDefault = BitmapFactory.decodeResource(context.getResources(), R.drawable.send_music_thumb);
+                        Bitmap.CompressFormat cprsFormatDefault = Bitmap.CompressFormat.PNG;
+                        msg.thumbData = Utils.bmpToByteArray(cprsFormatDefault, bmpDefault, true);
+
+                        if (!StringUtils.isEmpty(imgUrl)) {
+                            Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.send_music_thumb);
+                            Bitmap.CompressFormat cprsFormat = Bitmap.CompressFormat.PNG;
+                            int fixIdx = imgUrl.lastIndexOf('.');
+                            if (fixIdx > 0) {
+                                String fix = imgUrl.substring(fixIdx);
+                                Utils.log("fix:" + fix);
+                                if ("jpg".equals(fix.toLowerCase())) {
+                                    cprsFormat = Bitmap.CompressFormat.JPEG;
+                                }
+                                try {
+                                    bmp = BitmapFactory.decodeStream(new URL(imgUrl).openStream());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+
+                            if (bmp != null && !bmp.isRecycled()) {
+                                Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, AppConfig.THUMB_SIZE, AppConfig.THUMB_SIZE, true);
+                                Utils.log("thumbBmp:" + thumbBmp.getByteCount());
+                                msg.thumbData = Utils.bmpToByteArray(cprsFormat, thumbBmp, true);
+                                bmp.recycle();
+                            }
+                        }
+
+
+                        req = new SendMessageToWX.Req();
+                        req.transaction = buildTransaction("webpage");
+                        req.message = msg;
+
+                        switch (whichButton) {
+                            case MMAlertSelect1:
+                                req.scene = SendMessageToWX.Req.WXSceneSession;
+                                break;
+                            case MMAlertSelect2:
+                                req.scene = SendMessageToWX.Req.WXSceneTimeline;
+                                break;
+                            case MMAlertSelect3:
+                                req.scene = SendMessageToWX.Req.WXSceneFavorite;
+                                break;
+                        }
+
+                        wxApi.sendReq(req);
+                    }
+                });
+    }
+
+    private static String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 }

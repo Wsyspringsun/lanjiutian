@@ -15,8 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wyw.ljtds.config.AppConfig;
-import com.wyw.ljtds.ui.user.FragmentUser;
-import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.dialog.LoadingDialogUtils;
 
 import org.xutils.x;

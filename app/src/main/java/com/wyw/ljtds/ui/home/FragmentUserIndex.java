@@ -1,22 +1,13 @@
 package com.wyw.ljtds.ui.home;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
 import com.wyw.ljtds.R;
-import com.wyw.ljtds.adapter.LifeIndexAdapter;
 import com.wyw.ljtds.adapter.UserIndexAdapter;
 import com.wyw.ljtds.biz.biz.HomeBiz;
 import com.wyw.ljtds.biz.biz.UserBiz;
@@ -24,27 +15,16 @@ import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
-import com.wyw.ljtds.config.MyApplication;
-import com.wyw.ljtds.model.AddressModel;
-import com.wyw.ljtds.model.HomePageModel1;
 import com.wyw.ljtds.model.IconText;
-import com.wyw.ljtds.model.MyLocation;
 import com.wyw.ljtds.model.RecommendModel;
-import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.model.UserDataModel;
 import com.wyw.ljtds.model.UserIndexModel;
 import com.wyw.ljtds.model.UserModel;
 import com.wyw.ljtds.ui.base.BaseFragment;
-import com.wyw.ljtds.ui.category.ActivityScan;
-import com.wyw.ljtds.ui.goods.ActivityGoodsList;
-import com.wyw.ljtds.ui.user.ActivityLogin;
-import com.wyw.ljtds.ui.user.ActivityMessage;
-import com.wyw.ljtds.ui.user.address.AddressSelActivity;
-import com.wyw.ljtds.utils.ToastUtil;
+import com.wyw.ljtds.ui.user.ActivityLoginOfValidCode;
 import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
-import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
@@ -146,7 +126,7 @@ public class FragmentUserIndex extends BaseFragment {
             model.setUserOrderNumberModel(null);
             adapter = new UserIndexAdapter(getActivity(), model);
             rylvIndexMain.setAdapter(adapter);
-            startActivity(ActivityLogin.getIntent(getActivity()));
+            startActivity(ActivityLoginOfValidCode.getIntent(getActivity()));
             return;
         }
         getUser();

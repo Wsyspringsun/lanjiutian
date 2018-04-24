@@ -77,27 +77,27 @@
         android:layout_height="1px"
         android:alpha="0.4"
         android:background="#dddddd" />
-<!--
-    <LinearLayout
-        android:id="@+id/ll_empty_comment"
-        android:layout_width="match_parent"
-        android:layout_height="123dp"
-        android:background="#ffffff"
-        android:gravity="center"
-        android:visibility="visible">
+    <!--
+        <LinearLayout
+            android:id="@+id/ll_empty_comment"
+            android:layout_width="match_parent"
+            android:layout_height="123dp"
+            android:background="#ffffff"
+            android:gravity="center"
+            android:visibility="visible">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="暂无评论"
-            android:textColor="#888888"
-            android:textSize="13dp" />
-    </LinearLayout>
-    -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="暂无评论"
+                android:textColor="#888888"
+                android:textSize="13dp" />
+        </LinearLayout>
+        -->
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_goods_evaluate_data"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fragment_goods_evaluate_data">
+        android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
 

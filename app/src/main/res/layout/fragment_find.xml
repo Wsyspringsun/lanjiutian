@@ -401,15 +401,12 @@
                     android:layout_height="match_parent"
                     android:overScrollMode="never" />
 
-                <com.facebook.drawee.view.SimpleDraweeView
+                <ImageView
                     android:id="@+id/sdv_head_img1"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x140"
-                    android:layout_marginTop="@dimen/x10"
-                    fresco:fadeDuration="400"
-                    fresco:failureImage="@mipmap/zhanweitu_lunbo"
-                    fresco:failureImageScaleType="centerInside"
-                    fresco:placeholderImage="@mipmap/zhanweitu_lunbo"></com.facebook.drawee.view.SimpleDraweeView>
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/img_fzhanwei_1125x420" />
 
                 <View
                     android:layout_width="match_parent"

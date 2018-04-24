@@ -3,12 +3,14 @@ package com.wyw.ljtds.ui.user.address;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.test.SingleLaunchActivityTestCase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.UserBiz;
@@ -41,14 +44,17 @@ import org.xutils.view.annotation.ViewInject;
 
 import java.util.List;
 
+import pub.devrel.easypermissions.EasyPermissions;
+
 /**
  * Created by Administrator on 2017/1/6 0006.
  */
 
 @ContentView(R.layout.activity_address_change)
-public class AddressSelActivity extends BaseActivity {
+public class AddressSelActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
     public static final String TAG_SELECTED_ADDRESS = "com.wyw.ljtds.ui.user.address.AddressSelActivity.tag_selected_address";
     private static final int REQUEST_SEARCH_ADDRESS = 1;
+    private static final int REQUEST_PERMS_LOCATION = 0;
 
     @ViewInject(R.id.activity_address_change_rv_addrlist)
     private RecyclerView recyclerView;
@@ -68,18 +74,41 @@ public class AddressSelActivity extends BaseActivity {
     private AddressAdapter adapter;
     private MyLocation locationItem;
 
-    @Event(value = {R.id.activity_address_change_tv_location, R.id.activity_address_change_img_location, R.id.activity_address_change_tv_tianjia, R.id.activity_address_change_rl_location, R.id.header_return})
+    UserBiz bizUser;
+
+    private BDLocationListener locationListner = new BDLocationListener() {
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+                closeLoding();
+                //update location to addr
+                SingleCurrentUser.bdLocation = location;
+                MyLocation loc = MyLocation.newInstance(location.getLatitude(), location.getLongitude(), location.getAddrStr());
+                updateLocationItem(loc);
+                ((MyApplication) getApplication()).locationService.unregisterListener(locationListner); //注销掉监听
+            } else {
+                ToastUtil.show(AddressSelActivity.this, AddressSelActivity.this.getString(R.string.err_location));
+            }
+        }
+    };
+
+    @Event(value = {R.id.activity_address_change_tv_location, R.id.activity_address_change_ll_location, R.id.activity_address_change_img_location, R.id.activity_address_change_tv_tianjia, R.id.activity_address_change_rl_location, R.id.header_return})
     private void onClick(View view) {
         Intent it;
         switch (view.getId()) {
+            case R.id.activity_address_change_ll_location:
             case R.id.activity_address_change_tv_location:
             case R.id.activity_address_change_img_location:
-                //location
-                if (SingleCurrentUser.bdLocation != null) {
-                    BDLocation location = SingleCurrentUser.bdLocation;
-                    updateLocationItem(MyLocation.newInstance(location.getLatitude(), location.getLongitude(), location.getAddrStr()));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    String[] perms = {android.Manifest.permission.ACCESS_FINE_LOCATION};
+                    if (!EasyPermissions.hasPermissions(this, perms)) {
+                        EasyPermissions.requestPermissions(this, getString(R.string.perm_loc), REQUEST_PERMS_LOCATION, perms);
+                    } else {
+                        regLocListener();
+                    }
                 } else {
-                    ToastUtil.show(AddressSelActivity.this, AddressSelActivity.this.getString(R.string.err_location));
+                    //location
+                    regLocListener();
                 }
                 break;
             case R.id.activity_address_change_rl_location:
@@ -100,7 +129,8 @@ public class AddressSelActivity extends BaseActivity {
 
     private void updateLocationItem(MyLocation loc) {
         locationItem = loc;
-        tvCurrentLoc.setText(locationItem.getAddrStr());
+        if (locationItem != null)
+            tvCurrentLoc.setText(locationItem.getAddrStr());
     }
 
     public static Intent getIntent(Context ctx, Boolean isSel) {
@@ -112,6 +142,8 @@ public class AddressSelActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        bizUser = UserBiz.getInstance(this);
 
         ToolbarManager.initialToolbar(this, new ToolbarManager.IconBtnManager() {
             @Override
@@ -133,7 +165,7 @@ public class AddressSelActivity extends BaseActivity {
             }
         });
 
-        MyLocation location = MyLocation.newInstance(SingleCurrentUser.bdLocation.getLatitude(), SingleCurrentUser.bdLocation.getLongitude(), SingleCurrentUser.bdLocation.getAddrStr());
+        MyLocation location = SingleCurrentUser.location;
         updateLocationItem(location);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动 recyclerView.setLayoutManager(linearLayoutManager);
@@ -175,7 +207,7 @@ public class AddressSelActivity extends BaseActivity {
         new BizDataAsyncTask<List<AddressModel>>() {
             @Override
             protected List<AddressModel> doExecute() throws ZYException, BizFailure {
-                return UserBiz.selectUserAddress();
+                return bizUser.selectUserAddress();
             }
 
             @Override
@@ -195,6 +227,16 @@ public class AddressSelActivity extends BaseActivity {
     private void bindData2View() {
         adapter = new AddressAdapter(list);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        regLocListener();
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        ToastUtil.show(this, getString(R.string.perm_loc));
     }
 
     class AddressHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -266,6 +308,12 @@ public class AddressSelActivity extends BaseActivity {
             if (data == null) return 0;
             return data.size();
         }
+    }
+
+    private void regLocListener() {
+        setLoding(this, false);
+        ((MyApplication) getApplication()).locationService.registerListener(locationListner); //注销掉监听
+        ((MyApplication) getApplication()).locationService.start();// 定位SDK
     }
 
 }

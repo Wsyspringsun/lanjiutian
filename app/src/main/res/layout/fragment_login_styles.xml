@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="@dimen/vertical_margin_lg"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:text="@string/login_styles"
+        android:textSize="@dimen/font_5" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/x75"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:divider="@drawable/divider_horrizon"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/padding1"
+        android:paddingTop="@dimen/padding1"
+        android:showDividers="middle">
+
+        <RelativeLayout
+            android:id="@+id/fragment_login_styles_wechat"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/fragment_login_styles_tv_wechat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="@string/login_style_wechat"
+                android:textSize="@dimen/font_6" />
+
+            <ImageView
+                android:id="@+id/fragment_login_styles_img_wechat"
+                android:layout_width="@dimen/x40"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/fragment_login_styles_tv_wechat"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_weixin" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/fragment_login_styles_username"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/fragment_login_styles_tv_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="@string/login_style_username"
+                android:textSize="@dimen/font_6" />
+
+            <ImageView
+                android:id="@+id/fragment_login_styles_img_username"
+                android:layout_width="@dimen/x40"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/fragment_login_styles_tv_username"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_zhanghao" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/fragment_login_styles_yanzheng"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/fragment_login_styles_tv_yanzheng"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="@string/login_style_validcode"
+                android:textSize="@dimen/font_6" />
+
+            <ImageView
+                android:id="@+id/fragment_login_styles_img_yanzheng"
+                android:layout_width="@dimen/x40"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/fragment_login_styles_tv_yanzheng"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_yanzheng" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
+

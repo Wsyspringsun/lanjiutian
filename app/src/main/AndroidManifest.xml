@@ -145,12 +145,33 @@
 
         </activity>
 
+        <!--帐号登录-->
         <activity
             android:name=".ui.user.ActivityLogin"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Login"
             android:windowSoftInputMode="stateVisible|adjustPan" />
+        <!--验证码登录-->
+        <activity
+            android:name=".ui.user.ActivityLoginOfValidCode"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/Login"
+            android:windowSoftInputMode="stateVisible|adjustPan">
+        </activity>
+
+
+        <!--绑定手机号-->
+        <activity
+            android:name=".ui.user.ActivityLoginBindPhone"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageTranslucentTheme"
+            android:windowSoftInputMode="stateVisible|adjustPan">
+
+        </activity>
+
 
         <!-- 首页 -->
         <activity
@@ -273,12 +294,10 @@
         <activity
             android:name=".ui.user.address.AddressActivity"
             android:label="收货地址"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.user.address.AddressSelActivity"
             android:label="选择地址"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait">
 
         </activity>

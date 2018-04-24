@@ -60,10 +60,8 @@ public class EasyPermissions {
     /**
      * Check if the calling context has a set of permissions.
      *
-     * @param context
-     *         the calling context.
-     * @param perms
-     *         one ore more permissions, such as {@code android.Manifest.permission.CAMERA}.
+     * @param context the calling context.
+     * @param perms   one ore more permissions, such as {@code android.Manifest.permission.CAMERA}.
      * @return true if all permissions are already granted, false if at least one permission is not yet granted.
      */
     public static boolean hasPermissions(@NonNull Context context, @NonNull String... perms) {
@@ -87,17 +85,13 @@ public class EasyPermissions {
     /**
      * Request a set of permissions, showing rationale if the system requests it.
      *
-     * @param object
-     *         Activity or Fragment requesting permissions. Should implement
-     *         {@link android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback}
-     *         or {@code android.support.v13.app.FragmentCompat.OnRequestPermissionsResultCallback}
-     * @param rationale
-     *         a message explaining why the application needs this set of permissions, will be displayed if the user rejects the request the first
-     *         time.
-     * @param requestCode
-     *         request code to track this request, must be < 256.
-     * @param perms
-     *         a set of permissions to be requested.
+     * @param object      Activity or Fragment requesting permissions. Should implement
+     *                    {@link android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback}
+     *                    or {@code android.support.v13.app.FragmentCompat.OnRequestPermissionsResultCallback}
+     * @param rationale   a message explaining why the application needs this set of permissions, will be displayed if the user rejects the request the first
+     *                    time.
+     * @param requestCode request code to track this request, must be < 256.
+     * @param perms       a set of permissions to be requested.
      */
     public static void requestPermissions(@NonNull final Object object, @NonNull String rationale,
                                           final int requestCode, @NonNull final String... perms) {
@@ -110,21 +104,15 @@ public class EasyPermissions {
     /**
      * Request a set of permissions, showing rationale if the system requests it.
      *
-     * @param object
-     *         Activity or Fragment requesting permissions. Should implement
-     *         {@link android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback}
-     *         or {@code android.support.v13.app.FragmentCompat.OnRequestPermissionsResultCallback}
-     * @param rationale
-     *         a message explaining why the application needs this set of permissions, will be displayed if the user rejects the request the first
-     *         time.
-     * @param positiveButton
-     *         custom text for positive button
-     * @param negativeButton
-     *         custom text for negative button
-     * @param requestCode
-     *         request code to track this request, must be < 256.
-     * @param perms
-     *         a set of permissions to be requested.
+     * @param object         Activity or Fragment requesting permissions. Should implement
+     *                       {@link android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback}
+     *                       or {@code android.support.v13.app.FragmentCompat.OnRequestPermissionsResultCallback}
+     * @param rationale      a message explaining why the application needs this set of permissions, will be displayed if the user rejects the request the first
+     *                       time.
+     * @param positiveButton custom text for positive button
+     * @param negativeButton custom text for negative button
+     * @param requestCode    request code to track this request, must be < 256.
+     * @param perms          a set of permissions to be requested.
      */
     @SuppressLint("NewApi")
     public static void requestPermissions(@NonNull final Object object, @NonNull String rationale,
@@ -228,10 +216,8 @@ public class EasyPermissions {
     /**
      * Check if at least one permission in the list of denied permissions has been permanently denied (user clicked "Never ask again").
      *
-     * @param object
-     *         Activity or Fragment requesting permissions.
-     * @param deniedPermissions
-     *         list of denied permissions, usually from {@link PermissionCallbacks#onPermissionsDenied(int, List)}
+     * @param object            Activity or Fragment requesting permissions.
+     * @param deniedPermissions list of denied permissions, usually from {@link PermissionCallbacks#onPermissionsDenied(int, List)}
      * @return {@code true} if at least one permission in the list was permanently denied.
      */
     public static boolean somePermissionPermanentlyDenied(@NonNull Object object,
@@ -249,10 +235,8 @@ public class EasyPermissions {
     /**
      * Check if a permission has been permanently denied (user clicked "Never ask again").
      *
-     * @param object
-     *         Activity or Fragment requesting permissions.
-     * @param deniedPermission
-     *         denied permission.
+     * @param object           Activity or Fragment requesting permissions.
+     * @param deniedPermission denied permission.
      * @return {@code true} if the permissions has been permanently denied.
      */
     public static boolean permissionPermanentlyDenied(@NonNull Object object,
@@ -268,14 +252,10 @@ public class EasyPermissions {
      * If any permissions were granted or denied, the {@code object} will receive the appropriate callbacks through {@link PermissionCallbacks} and
      * methods annotated with {@link AfterPermissionGranted} will be run if appropriate.
      *
-     * @param requestCode
-     *         requestCode argument to permission result callback.
-     * @param permissions
-     *         permissions argument to permission result callback.
-     * @param grantResults
-     *         grantResults argument to permission result callback.
-     * @param receivers
-     *         an array of objects that have a method annotated with {@link AfterPermissionGranted} or implement {@link PermissionCallbacks}.
+     * @param requestCode  requestCode argument to permission result callback.
+     * @param permissions  permissions argument to permission result callback.
+     * @param grantResults grantResults argument to permission result callback.
+     * @param receivers    an array of objects that have a method annotated with {@link AfterPermissionGranted} or implement {@link PermissionCallbacks}.
      */
     public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                                   @NonNull int[] grantResults,

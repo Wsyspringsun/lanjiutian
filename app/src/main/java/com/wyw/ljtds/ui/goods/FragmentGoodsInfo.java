@@ -52,6 +52,7 @@ import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.SqlUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
+import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.MyCallback;
 import com.wyw.ljtds.widget.RecycleViewDivider;
 import com.wyw.ljtds.widget.commodity.CheckInchModel;
@@ -191,73 +192,6 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
                     }
                 });
 
-                /*final CheckInchPopWindow popWindow = new CheckInchPopWindow(getActivity(), model);
-                if (checkInchModel != null) {
-//                    popWindow.setSelect(checkInchModel);
-                }
-                popWindow.setOnItemClickListener(new CheckInchPopWindow.OnItemClickListener() {
-                    @Override
-                    public void onClickAdd2Car(CheckInchModel result) {
-                        ShoppingCartAddModel shoppingCartAddModel = new ShoppingCartAddModel();
-                        shoppingCartAddModel.setCOMMODITY_ID(model.getCommodityId());
-                        shoppingCartAddModel.setCOMMODITY_SIZE(checkInchModel.getSize());
-                        shoppingCartAddModel.setCOMMODITY_COLOR(checkInchModel.getCololr());
-                        shoppingCartAddModel.setEXCHANGE_QUANLITY(checkInchModel.getNum() + "");
-                        shoppingCartAddModel.setCOMMODITY_COLOR_ID(checkInchModel.getColor_id());
-                        shoppingCartAddModel.setCOMMODITY_SIZE_ID(checkInchModel.getSize_id());
-                        shoppingCartAddModel.setINS_USER_ID(model.getOidGroupId());
-                        String str = GsonUtils.Bean2Json(shoppingCartAddModel);
-                        addCart(str);
-                        popWindow.dissmiss();
-                    }
-
-                    @Override
-                    public void onClickBuyNow(CheckInchModel result) {
-                        checkInchModel = result;
-                        Intent it = new Intent(getActivity(), ActivityGoodsSubmit.class);
-
-                        GoodSubmitModel1 goodSubmitModel = new GoodSubmitModel1();
-                        GoodSubmitModel2 goodSubmitModel2 = new GoodSubmitModel2();
-                        List<GoodSubmitModel3> goodList = new ArrayList<>();
-                        List<GoodSubmitModel2> groupList = new ArrayList<>();
-                        GoodSubmitModel3 goods = new GoodSubmitModel3();
-                        goods.setEXCHANGE_QUANLITY(checkInchModel.getNum());
-                        goods.setCOMMODITY_COLOR(checkInchModel.getCololr());
-                        goods.setCOMMODITY_SIZE(checkInchModel.getSize());
-                        goods.setCOMMODITY_COLOR_ID(checkInchModel.getColor_id());
-                        goods.setCOMMODITY_SIZE_ID(checkInchModel.getSize_id());
-                        goods.setCOMMODITY_ID(model.getCommodityId());
-                        goods.setCOMMODITY_NAME(model.getTitle());
-                        goodList.add(goods);
-
-                        goodSubmitModel2.setDETAILS(goodList);
-                        goodSubmitModel2.setOID_GROUP_ID(model.getOidGroupId());
-                        goodSubmitModel2.setOID_GROUP_NAME(model.getGroupName());
-
-                        groupList.add(goodSubmitModel2);
-                        goodSubmitModel.setDETAILS(groupList);
-
-                        it.putExtra("data", GsonUtils.Bean2Json(goodSubmitModel));
-                        popWindow.dissmiss();
-                        activity.startActivity(it);
-                    }
-                });
-                popWindow.setOnSelectedCompleteListener(new CheckInchPopWindow.OnSelectedCompleteLinstener() {
-                    @Override
-                    public void onComplete(CheckInchModel result) {
-                        checkInchModel = result;
-                        tv_goods_title.setText(model.getTitle());
-                        tv_new_price.setText(checkInchModel.getNew_money() + "");
-                        tv_old_price.setText(checkInchModel.getOld_money() + "");
-                        tv_current_goods.setText("已选择：" + "\"" + checkInchModel.getCololr() + "\"  \"" + checkInchModel.getSize() + "\"");
-
-                        setLoopView(checkInchModel.getImage());
-
-
-                    }
-                });
-                popWindow.showAsDropDown(v);*/
-
                 break;
 
             case R.id.vp_item_goods_img:
@@ -356,6 +290,8 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
         tabTextList.add(tv_goods_detail);
         tabTextList.add(tv_goods_config);
 
+        //添加删除线
+//        tv_new_price.getPaint().setStrokeWidth(3.0f);
 
     }
 
@@ -467,9 +403,13 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
 
         CommodityDetailsModel.SizeList firstDetail = model.getColorList().get(0).getSizeList().get(0);
         tv_goods_title.setText(model.getTitle());
-        tv_new_price.setText(firstDetail.getCostMoney() + "");
-        if (!StringUtils.isEmpty(firstDetail.getFlgDetail())) {
-//            tv_new_price.setText(firstDetail.getCostMoney() + "\t\t" + firstDetail.getFlgDetail());
+        if (CommodityDetailsModel.CUXIAOFLG_YES.equals(model.getCuxiaoFlg())) {
+            tv_new_price.setText(getString(R.string.money_renminbi, Utils.formatFee(model.getPromprice())));
+            tv_old_price.setText(getString(R.string.money_renminbi, Utils.formatFee("" + model.getYuanJia())));
+            tv_old_price.setVisibility(View.VISIBLE);
+        } else {
+            tv_new_price.setText(getString(R.string.money_renminbi, Utils.formatFee("" + model.getCostMoney())));
+            tv_old_price.setVisibility(View.GONE);
         }
 //        tv_old_price.setText(model.getColorList().get(0).getSizeList().get(0).getMarketPrice() + "");
 
@@ -618,7 +558,8 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
         public void UpdateUI(Context context, int position, final String data) {
 //        if (!StringUtils.isEmpty( data )){
 //            imageView.setImageURI(Uri.parse(data));
-            Picasso.with(context).load(Uri.parse(data)).fit().memoryPolicy(NO_CACHE, NO_STORE).into(imageView);
+            Log.e(AppConfig.ERR_TAG, "lifegoods data:" + data);
+            Picasso.with(context).load(Uri.parse(data)).memoryPolicy(NO_CACHE, NO_STORE).into(imageView);
 //        }
 
         }

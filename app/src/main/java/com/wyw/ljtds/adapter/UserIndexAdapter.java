@@ -57,6 +57,7 @@ import com.wyw.ljtds.ui.home.ActivityHomeWeb;
 import com.wyw.ljtds.ui.home.HuoDongActivity;
 import com.wyw.ljtds.ui.user.ActivityCollect;
 import com.wyw.ljtds.ui.user.ActivityLogin;
+import com.wyw.ljtds.ui.user.ActivityLoginOfValidCode;
 import com.wyw.ljtds.ui.user.ActivityMessage;
 import com.wyw.ljtds.ui.user.ActivityWallet;
 import com.wyw.ljtds.ui.user.manage.ActivityManage;
@@ -391,7 +392,7 @@ public class UserIndexAdapter extends RecyclerView.Adapter {
 
             if (!UserBiz.isLogined()) {
                 //去登录
-                ActivityLogin.goLogin(context);
+                context.startActivity(ActivityLoginOfValidCode.getIntent(context));
                 return;
             }
 

@@ -171,7 +171,6 @@ public abstract class ActivityGoodsInfo extends BaseActivity {
         initIconBtnStat();
 
 
-
         //设置图标
 //        int i = 0, j = 2;//i:起始 j:字数
 //        Utils.setIconText(this, tvShop, "\ue623\n店铺");
@@ -201,6 +200,8 @@ public abstract class ActivityGoodsInfo extends BaseActivity {
     }
 
     protected void wechatShare(final String title, final String description, final String imgUrl, final String url) {
+        Utils.log("wechatShare:" + title + "-" + description + "-" + imgUrl + "-" + url);
+
         MMAlert.showAlert(ActivityGoodsInfo.this, "分享", ActivityGoodsInfo.this.getResources().getStringArray(R.array.send_webpage_item),
                 null, new MMAlert.OnAlertSelectId() {
                     @Override
@@ -214,10 +215,14 @@ public abstract class ActivityGoodsInfo extends BaseActivity {
                         msg = new WXMediaMessage(webpage);
                         msg.title = title;
                         msg.description = description;
-                        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.send_music_thumb);
-                        Bitmap.CompressFormat cprsFormat = Bitmap.CompressFormat.PNG;
-                        msg.thumbData = Utils.bmpToByteArray(cprsFormat, bmp, true);
+                        //默认图片
+                        Bitmap bmpDefault = BitmapFactory.decodeResource(getResources(), R.drawable.send_music_thumb);
+                        Bitmap.CompressFormat cprsFormatDefault = Bitmap.CompressFormat.PNG;
+                        msg.thumbData = Utils.bmpToByteArray(cprsFormatDefault, bmpDefault, true);
+
                         if (!StringUtils.isEmpty(imgUrl)) {
+                            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.send_music_thumb);
+                            Bitmap.CompressFormat cprsFormat = Bitmap.CompressFormat.PNG;
                             int fixIdx = imgUrl.lastIndexOf('.');
                             if (fixIdx > 0) {
                                 String fix = imgUrl.substring(fixIdx);
@@ -233,15 +238,15 @@ public abstract class ActivityGoodsInfo extends BaseActivity {
                                     ex.printStackTrace();
                                 }
                             }
+
+                            if (bmp != null && !bmp.isRecycled()) {
+                                Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
+                                Utils.log("thumbBmp:" + thumbBmp.getByteCount());
+                                msg.thumbData = Utils.bmpToByteArray(cprsFormat, thumbBmp, true);
+                                bmp.recycle();
+                            }
                         }
 
-                        if (bmp != null) {
-                            Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
-                            Utils.log("thumbBmp:" + thumbBmp.getByteCount());
-                            msg.thumbData = Utils.bmpToByteArray(cprsFormat, thumbBmp, true);
-                            bmp.recycle();
-                        } else {
-                        }
 
                         req = new SendMessageToWX.Req();
                         req.transaction = buildTransaction("webpage");

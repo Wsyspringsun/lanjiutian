@@ -55,8 +55,6 @@ public class ShopActivity extends BaseActivity {
     ViewPager vpMain;
     //    @ViewInject(R.id.activity_shopinfo_nsv_main)
 //    NestedScrollView scrollMain;
-    @ViewInject(R.id.fragment_shopimg_tab_main)
-    PagerSlidingTabStrip tabMain;
     @ViewInject(R.id.fragment_shopimg_tab_main_top)
     TabLayout tabMainTop;
 
@@ -166,91 +164,10 @@ public class ShopActivity extends BaseActivity {
                 return false;
             }
         });
-        /*scrollMain.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                int[] tabLoc = new int[2];
-                int[] tabTopLoc = new int[2];
-                tabMain.getLocationInWindow(tabLoc);
-                tabMainTop.getLocationInWindow(tabTopLoc);
-                if (tabLoc[1] <= tabTopLoc[1]) {
-                    tabMainTop.setVisibility(View.VISIBLE);
-                    llHeader.setBackgroundColor(ActivityCompat.getColor(ShopActivity.this, R.color.white));
-                    imgPrevious.setImageDrawable(ActivityCompat.getDrawable(ShopActivity.this, R.drawable.ic_houtui));
-                    imgCatlist.setImageDrawable(ActivityCompat.getDrawable(ShopActivity.this, R.drawable.ic_fenlei));
-                    edSearch.setTextColor(ActivityCompat.getColor(ShopActivity.this, R.color.gray));
-//                    bottomView.setBackgroundColor(ActivityCompat.getColor(ShopActivity.this, R.color.gray));
-                    imgSou.setImageDrawable(ActivityCompat.getDrawable(ShopActivity.this, R.drawable.ic_action_search_black));
-                } else {
-                    tabMainTop.setVisibility(View.GONE);
-                    llHeader.setBackgroundColor(ActivityCompat.getColor(ShopActivity.this, R.color.transparent));
-                    imgPrevious.setImageDrawable(ActivityCompat.getDrawable(ShopActivity.this, R.drawable.ic_houtui_bai));
-                    imgCatlist.setImageDrawable(ActivityCompat.getDrawable(ShopActivity.this, R.drawable.ic_fenlei_bai));
-                    edSearch.setTextColor(ActivityCompat.getColor(ShopActivity.this, R.color.white));
-//                    bottomView.setBackgroundColor(ActivityCompat.getColor(ShopActivity.this, R.color.white));
-                    imgSou.setImageDrawable(ActivityCompat.getDrawable(ShopActivity.this, R.drawable.ic_sousuo_white));
-                }
-            }
-        });*/
         final String[] tabTitles = {"全店推荐", "全部宝贝", "店铺详情"};
         Fragment[] fragmentList = new Fragment[]{ShopAllGoodsFragment.newInstance(shopId, TYPE_HOT), ShopGoodsFragment.newInstance(shopId, TYPE_SHOP), ShopFragment.newInstance(shopId, "")};
         vpMain.setAdapter(new MyFrPagerAdapter(getSupportFragmentManager(), Arrays.asList(tabTitles), Arrays.asList(fragmentList)));
-        /*vpMain.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return tabTitles[position];
-            }
-
-            @Override
-            public Fragment getItem(int position) {
-//                return new ShopFragment();
-                Fragment frag = null;
-                switch (position) {
-                    case 0:
-                        frag = ShopAllGoodsFragment.newInstance(shopId, TYPE_HOT);
-                        break;
-                    case 1:
-                        frag = ShopGoodsFragment.newInstance(shopId, TYPE_SHOP);
-                        break;
-                    default:
-                        frag = ShopFragment.newInstance(shopId, "");
-                        break;
-                }
-
-                return frag;
-            }
-
-            @Override
-            public int getCount() {
-                return tabTitles.length;
-            }
-        });*/
-        //解决fragment高度问题
-        /*vpMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-//                        ((AutoCompileViewPager) vpMain).resetHeight(position);
-                        vpMain
-                    }
-                }, 1000);
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });*/
         tabMainTop.setupWithViewPager(vpMain);
-        tabMain.setViewPager(vpMain);
         vpMain.setCurrentItem(0);
 
     }

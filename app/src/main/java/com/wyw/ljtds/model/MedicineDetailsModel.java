@@ -10,7 +10,9 @@ import java.util.List;
  */
 
 public class MedicineDetailsModel extends MedicineListModel {
-    public static final String PRESCRIPTION_FLG_OTC = "1";
+    public static final String PRESCRIPTION_FLG_RX = "1"; //非处方
+    private String SHARE_TITLE;  //分享主题
+    private String SHARE_DESCRIPTION; //分享描述
     //商品折扣
     private int COMMODITY_DISCOUNT;
     private Integer SUMQTY;
@@ -294,5 +296,21 @@ public class MedicineDetailsModel extends MedicineListModel {
 
     public void setSUMQTY(Integer SUMQTY) {
         this.SUMQTY = SUMQTY;
+    }
+
+    public String getSHARE_TITLE() {
+        return SHARE_TITLE;
+    }
+
+    public void setSHARE_TITLE(String SHARE_TITLE) {
+        this.SHARE_TITLE = SHARE_TITLE;
+    }
+
+    public String getSHARE_DESCRIPTION() {
+        return SHARE_DESCRIPTION;
+    }
+
+    public void setSHARE_DESCRIPTION(String SHARE_DESCRIPTION) {
+        this.SHARE_DESCRIPTION = SHARE_DESCRIPTION;
     }
 }

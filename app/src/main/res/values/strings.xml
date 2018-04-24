@@ -79,6 +79,9 @@
     <string name="pay_choice4">支付宝支付</string>
     <string name="pay_choice5">银联支付</string>
     <string name="pay_wechat">微信支付</string>
+    <string name="login_style_wechat">微信登录</string>
+    <string name="login_style_username">帐号登录</string>
+    <string name="login_style_validcode">验证码登录</string>
     <string name="fapiao">发票信息</string>
     <string name="fapiao_xuanze">发票选择</string>
     <string name="fapiao_leixing">发票类型</string>
@@ -191,6 +194,8 @@
     <string name="next">下一步</string>
     <string name="regist">注册</string>
     <string name="yanzhengma1">验证码</string>
+    <string name="yanzhengma_huoqu">获取验证码</string>
+    <string name="yanzhengma_huoqu_timer">%d秒</string>
     <string name="yanzhengma2">请输入验证码</string>
     <string name="yanzhengma3">重新获取</string>
     <string name="yanzhengma4">验证码已发送至</string>
@@ -199,7 +204,9 @@
     <string name="zhanghao">账号</string>
     <string name="mima">密码</string>
     <string name="mima1">请输入密码</string>
-    <string name="login">登陆</string>
+    <string name="login">登录</string>
+    <string name="login_bindphone_title">账户安全验证</string>
+    <string name="login_bindphone">验证</string>
     <string name="no_login">去登录</string>
     <string name="sousuo1">搜索</string>
     <string name="all">全部</string>
@@ -326,8 +333,22 @@
     <string name="title_view_detail">查看详情</string>
     <string name="money_renminbi">￥%s</string>
     <string name="discount_point_info">医药馆商品10元起送，1公里内免费派送，5公里内满38元包邮，详情见《帮助中心--物流配送--配送说明》。  医药馆消费1元赠送1积分，100积分可抵1元，每笔订单最多可用200积分。</string>
-    <string name="title_cat">类别</string>
-    <string name="title_size">规格</string>
+    <string name="tv_title_cat">类别</string>
+    <string name="tv_title_size">规格</string>
+    <string name="title_cat_val">类别：%s</string>
+    <string name="title_size_val">规格：%s</string>
     <string name="real_name_protocal">实名认证后，您的账户将能得到更完整的保护，支付更安全</string>
     <string name="medicine_info_busvalid_no">该店休息中,暂时无法为您服务</string>
+    <string name="addr_tip_search_loc">小区，写字楼，学校等</string>
+    <string name="perm_location">为获取您的当前位置,需要开启您的定位权限</string>
+    <string name="perm_loc">为获取您的当前位置,需要开启您的定位权限</string>
+    <string name="login_styles">或试试以下方式</string>
+    <string name="msg_crash">抱歉，系统竟然出错了,请联系客服</string>
+    <string name="warning_chufang" >该药为处方药，依据国家法规，处方药需凭处方单进药店购买</string>
+
+    <!--订单 ??-->
+    <string name="order_title_sharewx">温馨提示</string>
+    <string name="order_content_sharewx">分享到微信可以立减1至3元</string>
+    <string name="order_btn_sharewx_yes">分享</string>
+    <string name="order_btn_sharewx_no">不用了</string>
 </resources>

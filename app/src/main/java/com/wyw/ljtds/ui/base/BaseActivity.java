@@ -12,32 +12,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 
-import com.wyw.ljtds.MainActivity;
-import com.wyw.ljtds.R;
+import com.wyw.ljtds.biz.biz.UserBiz;
+import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.AppManager;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.MessageLib;
 import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
-import com.wyw.ljtds.ui.user.ActivityLogin;
-import com.wyw.ljtds.ui.user.address.ActivityAddress;
-import com.wyw.ljtds.ui.user.address.ActivityAddressEdit;
-import com.wyw.ljtds.utils.NetUtil;
+import com.wyw.ljtds.ui.user.ActivityLoginOfValidCode;
 import com.wyw.ljtds.utils.StringUtils;
-import com.wyw.ljtds.utils.Utils;
-import com.wyw.ljtds.widget.LoginDialog;
 import com.wyw.ljtds.widget.dialog.LoadingDialogUtils;
 
 import org.xutils.x;
@@ -54,20 +43,17 @@ import cn.xiaoneng.uiapi.OnMsgUrlClickListener;
 import cn.xiaoneng.uiapi.XNClickGoodsListener;
 import cn.xiaoneng.uiapi.XNSDKListener;
 import cn.xiaoneng.utils.CoreData;
-import pub.devrel.easypermissions.AppSettingsDialog;
-import pub.devrel.easypermissions.EasyPermissions;
 
 
 /**
  * Created by Administrator on 2016/12/8 0008.
  */
 
-public class BaseActivity extends AppCompatActivity implements XNSDKListener, EasyPermissions.PermissionCallbacks {
+public class BaseActivity extends AppCompatActivity implements XNSDKListener {
     BroadcastReceiver receiver;
 
     private final String HTML_MEDICINE = "medicineDetail.html";
     private final String HTML_LIFE = "lifeDetail.html";
-    protected static final int REQUEST_CODE_PERMS = 100;
 
     protected boolean canShowLogin = true;
     protected boolean canShowAddress = true;
@@ -92,43 +78,15 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 适配android M，检查权限
-        List<String> permissions = new ArrayList<>();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isNeedRequestPermissions(permissions)) {
-
-            String[] perms = new String[permissions.size()];
-            permissions.toArray(perms);
-            if (!EasyPermissions.hasPermissions(this, perms)) {
-                EasyPermissions.requestPermissions(this, "需要以下权限:", REQUEST_CODE_PERMS, perms);
-            }
-            /*if (!isNotificationEnabled(this)) {
-                // 6.0以上系统才可以判断权限
-                // 进入设置系统应用权限界面
-                final AlertDialog alert = new AlertDialog.Builder(this).create();
-                alert.setTitle(R.string.alert_tishi);
-                alert.setMessage(getResources().getString(R.string.confirm_order_submit));
-                alert.setButton(DialogInterface.BUTTON_POSITIVE, "开启通知", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent = new Intent(Settings.ACTION_SETTINGS);
-                        startActivity(intent);
-                    }
-                });
-            }*/
-        }
-
-
+        x.view().inject(this);//xutils初始化视图
         //聊窗链接点击事件的监听
         Ntalker.getExtendInstance().message().setOnMsgUrlClickListener(new OnMsgUrlClickListener() {
             @Override
             public void onClickUrlorEmailorNumber(int contentType, String s) {
-                Log.e(AppConfig.ERR_TAG, "contentType:" + contentType + "----data:" + s);
                 if (contentType == 1) {
                     // 网址;
                     Uri uri = Uri.parse(s);
 
-                    Log.e(AppConfig.ERR_TAG, "uri.getPath():" + uri.getPath());
-                    Log.e(AppConfig.ERR_TAG, "uri.getLastPathSegment():" + uri.getLastPathSegment());
                     String seg = uri.getLastPathSegment();
                     String commodityId = uri.getQueryParameter("commodityId");
                     if (!StringUtils.isEmpty(commodityId)) {
@@ -145,14 +103,12 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
         Ntalker.getExtendInstance().message().onClickShowGoods(new XNClickGoodsListener() {
             @Override
             public void onClickShowGoods(int appgoodsinfo_type, int clientgoodsinfo_type, String goods_id, String goods_name, String goods_price, String goods_image, String goods_url, String goods_showurl) {
-                Log.e(AppConfig.ERR_TAG, "appgoodsinfo_type:" + appgoodsinfo_type + "----goods_id:" + goods_id);
                 Ntalker.getExtendInstance().chatHeadBar().setFinishButtonFunctions();
             }
         });
 //        Utils.log(this.getClass().getName() + "................");
 
         AppManager.getAppManager().addActivity(this);//activity管理
-        x.view().inject(this);//xutils初始化视图
         Ntalker.getInstance().setSDKListener(this);// 小能监听接口
 
         //注册广播接收器
@@ -161,12 +117,11 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
                 if (AppConfig.AppAction.ACTION_TOKEN_EXPIRE.equals(action)) {// token过期
-                    context.startActivity(ActivityLogin.getIntent(context));
+                    context.startActivity(ActivityLoginOfValidCode.getIntent(context));
                 } else if (action.equals(AppConfig.AppAction.ACTION_RESETMAIN)) {
                 }
             }
         };
-
 
     }
 
@@ -192,7 +147,6 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
     @Override
     protected void onStart() {
         super.onStart();
-//        Log.e(AppConfig.ERR_TAG, "onStart:" + this.getClass().getName());
     }
 
     @Override
@@ -277,44 +231,44 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA};
 
-        if (EasyPermissions.hasPermissions(this, perms)) {
-            ChatParamsBody chatparams = new ChatParamsBody();
+        /*if (EasyPermissions.hasPermissions(this, perms)) {
 
-
-            // 咨询发起页（专有参数）
-            chatparams.startPageTitle = startPageTitle;// 咨询发起页标题(必填)
-            chatparams.startPageUrl = startPageUrl;//咨询发起页URL，必须以"http://"开头 （必填）
-
-            //**** 域名匹配,企业特殊需求********
-//				chatparams.matchstr = "www.lanjiutian.com";
-
-            // erp参数
-            chatparams.erpParam = "";
-
-            chatparams.clickurltoshow_type = CoreData.CLICK_TO_APP_COMPONENT;
-
-            if (showGood) {
-                // 商品展示（专有参数）
-                chatparams.itemparams.appgoodsinfo_type = CoreData.SHOW_GOODS_BY_ID;//sdk显示商品信息模式. 建议使用id模式
-                chatparams.itemparams.clientgoodsinfo_type = CoreData.SHOW_GOODS_BY_ID;//客服是否显示商品信息
-                chatparams.itemparams.clicktoshow_type = CoreData.CLICK_TO_APP_COMPONENT;// 点击SDK商品详情,
-
-                chatparams.itemparams.itemparam = "";
-                chatparams.itemparams.goods_id = goods_id;//SHOW_GOODS_BY_ID方式的 商品id
-            }
-
-            //判断是否登陆   是否为游客模式
-            if (!StringUtils.isEmpty(PreferenceCache.getToken())) {
-                Ntalker.getBaseInstance().login(PreferenceCache.getPhoneNum(), PreferenceCache.getPhoneNum(), 0);
-            } else {
-                Ntalker.getBaseInstance().logout();
-            }
-
-            Ntalker.getBaseInstance().startChat(getApplicationContext(), settingid, groupName, chatparams);
-            MessageLib.getInstance(getApplicationContext()).saveXnGroup(settingid,groupName);
         } else {
             EasyPermissions.requestPermissions(this, "需要以下权限:", REQUEST_CODE_PERMISSION_XIAONENG, perms);
+        }*/
+
+        ChatParamsBody chatparams = new ChatParamsBody();
+        // 咨询发起页（专有参数）
+        chatparams.startPageTitle = startPageTitle;// 咨询发起页标题(必填)
+        chatparams.startPageUrl = startPageUrl;//咨询发起页URL，必须以"http://"开头 （必填）
+
+        //**** 域名匹配,企业特殊需求********
+//				chatparams.matchstr = "www.lanjiutian.com";
+
+        // erp参数
+        chatparams.erpParam = "";
+
+        chatparams.clickurltoshow_type = CoreData.CLICK_TO_APP_COMPONENT;
+
+        if (showGood) {
+            // 商品展示（专有参数）
+            chatparams.itemparams.appgoodsinfo_type = CoreData.SHOW_GOODS_BY_ID;//sdk显示商品信息模式. 建议使用id模式
+            chatparams.itemparams.clientgoodsinfo_type = CoreData.SHOW_GOODS_BY_ID;//客服是否显示商品信息
+            chatparams.itemparams.clicktoshow_type = CoreData.CLICK_TO_APP_COMPONENT;// 点击SDK商品详情,
+
+            chatparams.itemparams.itemparam = "";
+            chatparams.itemparams.goods_id = goods_id;//SHOW_GOODS_BY_ID方式的 商品id
         }
+
+        //判断是否登陆   是否为游客模式
+        if (!StringUtils.isEmpty(PreferenceCache.getToken())) {
+            Ntalker.getBaseInstance().login(PreferenceCache.getPhoneNum(), PreferenceCache.getPhoneNum(), 0);
+        } else {
+            Ntalker.getBaseInstance().logout();
+        }
+
+        Ntalker.getBaseInstance().startChat(getApplicationContext(), settingid, groupName, chatparams);
+        MessageLib.getInstance(getApplicationContext()).saveXnGroup(settingid, groupName);
 
     }
 
@@ -364,35 +318,10 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
 
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100) {
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms) {
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms) {
-        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            new AppSettingsDialog.Builder(this, "需要开启此权限")
-                    .setTitle(getString(R.string.alert_tishi))
-                    .setPositiveButton("设置")
-                    .setNegativeButton("取消", null)
-                    .setRequestCode(REQUEST_CODE_PERMS)
-                    .build()
-                    .show();
-        }
     }
 
     private boolean isNeedRequestPermissions(List<String> permissions) {
@@ -413,6 +342,5 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener, Ea
             permissionsList.add(permission);
         }
     }
-
 
 }

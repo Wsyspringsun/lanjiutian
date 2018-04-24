@@ -17,6 +17,9 @@
     <dimen name="PreferenceItemHeight">42dp</dimen>
     <dimen name="ConversationItemHeight">58dp</dimen>
     <dimen name="LargeAvatarSize">56dp</dimen>
+
+    <dimen name="toolbar_height">50dp</dimen>
+
     <dimen name="vertical_margin">3dp</dimen>
     <dimen name="vertical_margin_mid">6dp</dimen>
     <dimen name="vertical_margin_lg">12dp</dimen>
@@ -32,8 +35,8 @@
     <dimen name="font_1">26dp</dimen>
     <dimen name="font_2">20dp</dimen>
     <dimen name="font_3">17dp</dimen>
-    <dimen name="font_4">14dp</dimen>
-    <dimen name="font_5">12dp</dimen>
+    <dimen name="font_4">15sp</dimen>
+    <dimen name="font_5">12sp</dimen>
     <dimen name="font_6">11dp</dimen>
     <dimen name="font_7">9dp</dimen>
 </resources>

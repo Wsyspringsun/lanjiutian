@@ -15,14 +15,18 @@
         android:padding="@dimen/x10">
 
         <TextView
-            android:id="@+id/shoujihao"
-            style="@style/font_ww_12" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/vertical_margin"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:text="验证码：" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/x35"
             android:layout_gravity="center_vertical"
             android:orientation="horizontal">
+
 
             <EditText
                 android:id="@+id/code"
@@ -47,11 +51,19 @@
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/vertical_margin"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:text="密码：" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/x35"
             android:layout_gravity="center_vertical"
             android:orientation="horizontal">
+
 
             <EditText
                 android:id="@+id/mima"
@@ -69,11 +81,19 @@
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/vertical_margin"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:text="推荐人：" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/x35"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
 
             <EditText
                 android:id="@+id/activity_regist1_tuijianren_mobile"

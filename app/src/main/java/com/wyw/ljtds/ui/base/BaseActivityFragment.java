@@ -25,14 +25,6 @@ public abstract class BaseActivityFragment extends BaseActivity {
     protected abstract Fragment createFragment();
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-
-
-    }
-
-
-    @Override
     protected void onResume() {
         super.onResume();
         FragmentManager fm = getSupportFragmentManager();

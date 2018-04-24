@@ -26,6 +26,7 @@ import com.wyw.ljtds.model.OrderTradeDto;
 import com.wyw.ljtds.model.ShoppingCartAddModel;
 import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.ui.user.ActivityLogin;
+import com.wyw.ljtds.ui.user.ActivityLoginOfValidCode;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
@@ -98,7 +99,7 @@ public class ActivityMedicinesInfo extends ActivityGoodsInfo {
             case R.id.activity_goods_info_tv_goumai:
                 if (medicineModel == null) return;
                 if (!UserBiz.isLogined()) {
-                    startActivity(ActivityLogin.getIntent(this));
+                    startActivity(ActivityLoginOfValidCode.getIntent(this));
                     return;
                 }
                 if (!BUSAVLID_FLG_YES.equals(medicineModel.getBUSAVLID_FLG())) {
@@ -107,7 +108,7 @@ public class ActivityMedicinesInfo extends ActivityGoodsInfo {
                     return;
                 }
 
-                if (medicineModel.getPRESCRIPTION_FLG().equals("1")) {
+                if (MedicineDetailsModel.PRESCRIPTION_FLG_RX.equals(medicineModel.getPRESCRIPTION_FLG())) {
                     //处方
                     String startPageUrl = AppConfig.WEB_APP_URL + "/medicineDetail.html?commodityId=" + medicineModel.getWAREID();
                     openChat(medicineModel.getWARENAME(), startPageUrl, AppConfig.CHAT_XN_LJT_SETTINGID2, AppConfig.CHAT_XN_LJT_TITLE2, true, medicineModel.getWAREID());
@@ -277,7 +278,7 @@ public class ActivityMedicinesInfo extends ActivityGoodsInfo {
         logisticId = it.getStringExtra(LOGISTIC_ID);
 
 
-        fragmentGoodsInfo.addItemCallback(new MyCallback() {
+        fragmentGoodsInfo.addSendToAddrChangeListeners(new MyCallback() {
             @Override
             public void callback(Object... params) {
                 addrId = "" + params[0];
@@ -465,8 +466,9 @@ public class ActivityMedicinesInfo extends ActivityGoodsInfo {
                         public void onClick(View v) {
 //                            Utils.log("getIMG_PATH:" + medicineModel.getIMG_PATH());
                             if (medicineModel == null) return;
-                            String description = medicineModel.getWARENAME() + "  " + medicineModel.getSALEPRICE();
-                            wechatShare(medicineModel.getWARENAME(), description, medicineModel.getIMG_PATH(), AppConfig.WEB_APP_URL + "/medicineDetail.html?commodityId=" + medicineModel.getWAREID());
+//                            String description = medicineModel.getWARENAME() + medicineModel.getSALEPRICE() + "";
+                            String description = medicineModel.getSHARE_DESCRIPTION();
+                            wechatShare(medicineModel.getSHARE_TITLE(), description, medicineModel.getIMG_PATH(), AppConfig.WEB_APP_URL + "/medicineDetail.html?commodityId=" + medicineModel.getWAREID());
                         }
                     });
                     break;

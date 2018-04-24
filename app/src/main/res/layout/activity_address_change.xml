@@ -27,19 +27,28 @@
             android:layout_alignParentLeft="true"
             android:text="当前地址xxx" />
 
-        <TextView
-            android:id="@+id/activity_address_change_tv_location"
+        <LinearLayout
+            android:id="@+id/activity_address_change_ll_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="重新定位" />
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/activity_address_change_img_location"
-            android:layout_width="@dimen/x14"
-            android:layout_height="@dimen/x14"
-            android:layout_toLeftOf="@id/activity_address_change_tv_location"
-            android:src="@drawable/ic_location_my" />
+            <ImageView
+                android:id="@+id/activity_address_change_img_location"
+                android:layout_width="@dimen/x14"
+                android:layout_height="@dimen/x14"
+                android:src="@drawable/ic_location_my" />
+
+            <TextView
+                android:id="@+id/activity_address_change_tv_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="重新定位" />
+
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 

@@ -94,7 +94,7 @@ public class ActivityGoodsList extends BaseActivity {
     private String classId = "";//分类的typeid
     private String orderby = "";
 
-    public static Intent getStartMeIntent(Context ctx, String typeId) {
+    public static Intent getIntent(Context ctx, String typeId) {
         Intent it = new Intent(ctx, ActivityGoodsList.class);
         it.putExtra(TAG_TYPE_ID, typeId);
         return it;
@@ -109,11 +109,7 @@ public class ActivityGoodsList extends BaseActivity {
                 break;
 
             case R.id.edHeader:
-                it = new Intent(this, ActivitySearch.class);
-                it.putExtra("from", 1);
-                it.putExtra(ActivitySearch.TAG_INIT_KEYWORD, search.getText().toString());
-                finish();
-                startActivity(it);
+                startActivity(ActivitySearch.getIntent(this, 1, search.getText().toString()));
                 break;
 
             case R.id.xiaoxi:
@@ -332,4 +328,5 @@ public class ActivityGoodsList extends BaseActivity {
             tvLocation.setText(SingleCurrentUser.location.getAddrStr());
         }
     }
+
 }

@@ -29,6 +29,7 @@ import com.wyw.ljtds.ui.base.ActivityWebView;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
+import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -47,8 +48,6 @@ public class ActivityRegist1 extends BaseActivity {
     private TextView title;
     @ViewInject(R.id.header_return_text)
     private TextView return_tv;
-    @ViewInject(R.id.shoujihao)
-    private TextView phone_num;
     @ViewInject(R.id.fasong)
     private Button button;
     @ViewInject(R.id.code)
@@ -62,7 +61,7 @@ public class ActivityRegist1 extends BaseActivity {
 
     private Timer timer;
     private TimerTask timerTask;
-    private int count = 60;//60秒
+    private int count = AppConfig.PHONE_VALIDCODE_TEIMER;//60秒
     private String phone = "";
 
     @Event(value = {R.id.next, R.id.header_return, R.id.fasong, R.id.zhuce_text})
@@ -114,7 +113,6 @@ public class ActivityRegist1 extends BaseActivity {
         return_tv.setText("账号登陆");
 
         phone = getIntent().getStringExtra(AppConfig.IntentExtraKey.PHONE_NUMBER);
-        phone_num.setText(getResources().getString(R.string.yanzhengma4) + phone);
 
         getCode(phone);
         runTimerTask();
@@ -145,7 +143,7 @@ public class ActivityRegist1 extends BaseActivity {
 
             @Override
             protected String doExecute() throws ZYException, BizFailure {
-                return UserBiz.register(phone, code.getText().toString().trim(), password.getText().toString().trim(), "", "0");
+                return UserBiz.register(phone, code.getText().toString().trim(), password.getText().toString().trim(), "");
             }
 
             @Override
@@ -160,9 +158,7 @@ public class ActivityRegist1 extends BaseActivity {
                 if (PreferenceCache.isAutoLogin()) {
                     PreferenceCache.putPhoneNum(phone);
                 }
-
-                //显示赠送优惠券的
-                showSentTicket();
+                isShowSentTicket();
             }
 
             @Override
@@ -172,6 +168,37 @@ public class ActivityRegist1 extends BaseActivity {
         };
         registTask.execute();
 
+    }
+
+    private void isShowSentTicket() {
+        setLoding(this, false);
+        new BizDataAsyncTask<String>() {
+
+            @Override
+            protected String doExecute() throws ZYException, BizFailure {
+                return UserBiz.getLog();
+            }
+
+            @Override
+            protected void onExecuteSucceeded(String result) {
+                Utils.log("getLog:" + result);
+                closeLoding();
+                if ("1".equals(result)) {
+                    //显示赠送优惠券的
+                    showSentTicket();
+                } else {
+                    Intent it = new Intent(ActivityRegist1.this, MainActivity.class);
+                    AppConfig.currSel = 4;
+                    it.putExtra(AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel);
+                    startActivity(it);
+                }
+            }
+
+            @Override
+            protected void OnExecuteFailed() {
+                closeLoding();
+            }
+        }.execute();
     }
 
     private void showSentTicket() {
@@ -220,7 +247,7 @@ public class ActivityRegist1 extends BaseActivity {
         codeTask = new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
-                return UserBiz.VerificationCode(phone, "0");
+                return UserBiz.VerificationCode(phone, UserBiz.VERIFICATION_CODE_REG);
             }
 
             @Override

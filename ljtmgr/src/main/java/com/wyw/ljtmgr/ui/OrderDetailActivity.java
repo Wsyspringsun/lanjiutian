@@ -26,14 +26,13 @@ public class OrderDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         initView();
 
 
     }
 
     private void initView() {
-        initToolbar();
+//        initToolbar();
     }
 
     @Override

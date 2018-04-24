@@ -14,21 +14,21 @@
         android:src="@mipmap/jiantou_zuo_bai" />
 
     <TextView
-        android:paddingLeft="@dimen/x15"
-        android:layout_toLeftOf="@+id/xiaoxi"
-        android:layout_toRightOf="@+id/back"
-        android:layout_centerInParent="true"
-        android:background="@drawable/background_search_edit"
         android:id="@+id/edHeader"
-        android:layout_marginLeft="@dimen/x13"
-        android:layout_marginRight="@dimen/x13"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x25"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/x13"
+        android:layout_marginRight="@dimen/x13"
+        android:layout_toLeftOf="@+id/xiaoxi"
+        android:layout_toRightOf="@+id/back"
+        android:background="@drawable/background_search_edit"
         android:gravity="center_vertical"
-        android:textSize="10sp"
-        android:text="@string/sousuo"
+        android:lines="1"
+        android:paddingLeft="@dimen/x15"
+        android:hint="@string/sousuo"
         android:textColor="@color/black"
-        android:lines="1"/>
+        android:textSize="10sp" />
 
     <ImageView
         android:id="@+id/xiaoxi"

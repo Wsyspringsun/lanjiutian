@@ -204,12 +204,12 @@
         "source": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/res/layout/activity_radarlist.xml"
     },
     {
-        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/layout/abc_action_menu_layout.xml",
-        "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/layout/abc_action_menu_layout.xml"
-    },
-    {
         "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/layout/abc_action_mode_bar.xml",
         "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/layout/abc_action_mode_bar.xml"
+    },
+    {
+        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/layout/abc_action_menu_layout.xml",
+        "source": "/home/wsy/.android/build-cache/371cec54c1cff2da5f25409e53e08a2a15e79f5b/output/res/layout/abc_action_menu_layout.xml"
     },
     {
         "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/layout/design_layout_snackbar.xml",

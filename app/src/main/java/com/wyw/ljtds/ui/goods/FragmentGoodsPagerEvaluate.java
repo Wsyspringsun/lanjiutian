@@ -1,11 +1,14 @@
 package com.wyw.ljtds.ui.goods;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPreviewActivity;
@@ -45,7 +49,7 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
     private RecyclerView rylvData;
 
     private boolean end = false;
-    private MyAdapter adapter;
+    private EvaluateAdapter adapter;
     private List<MedicineDetailsEvaluateModel> list_eva;
     private View noData;
 
@@ -64,6 +68,7 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+
         refreshData();
     }
 
@@ -76,6 +81,7 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
     }
 
     private void refreshData() {
+        adapter = null;
         pageIdx = 0;
         end = false;
         geteva();
@@ -120,23 +126,19 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
 
     private void bindData2View() {
         if (adapter == null) {
-            adapter = new MyAdapter();
+            adapter = new EvaluateAdapter(getActivity(), list_eva);
             rylvData.setAdapter(adapter);
         }
         if (list_eva == null) {
             end = true;
         }
-        if (end) {
-            adapter.addFooterView(getFooterView());
-        } else {
-            adapter.removeAllFooterView();
-        }
         if (pageIdx <= 0) {
-            adapter.setNewData(list_eva);
+            adapter.setEvaList(list_eva);
         } else {
-            adapter.addData(list_eva);
+            adapter.getEvaList().addAll(list_eva);
         }
         adapter.notifyDataSetChanged();
+        Log.e(AppConfig.ERR_TAG, "pageIdx:" + pageIdx + ",end:" + end + ",adapter:" + adapter);
     }
 
     /*public void bindData2View(final CommodityDetailsModel model) {
@@ -181,47 +183,23 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
         return view;
     }
 
-    private class MyAdapter extends BaseQuickAdapter<MedicineDetailsEvaluateModel> {
 
-        public MyAdapter() {
-            super(R.layout.item_goods_evaluate, list_eva);
-        }
+    private class EvaluateViewHolder extends RecyclerView.ViewHolder {
+        private TextView tvTime;
+        private TextView tvName;
+        private TextView tvContent;
+        SimpleDraweeView userImg;
+        BGANinePhotoLayout mCurrentClickNpl;
 
+        public EvaluateViewHolder(View itemView) {
+            super(itemView);
 
-        @Override
-        protected void convert(BaseViewHolder baseViewHolder, MedicineDetailsEvaluateModel models) {
-            String str = models.getMOBILE();
-            baseViewHolder.setText(R.id.time, models.getINS_DATE())
-                    .setText(R.id.name, str.substring(0, str.length() - (str.substring(3)).length()) + "****" + str.substring(7))
-                    .setText(R.id.context, models.getEVALUATE_CONTGENT());
+            mCurrentClickNpl = (BGANinePhotoLayout) itemView.findViewById(R.id.item_moment_photos);
+            tvTime = (TextView) itemView.findViewById(R.id.time);
+            tvName = (TextView) itemView.findViewById(R.id.name);
+            tvContent = (TextView) itemView.findViewById(R.id.context);
+            userImg = (SimpleDraweeView) itemView.findViewById(R.id.user_img);
 
-            SimpleDraweeView user_img = baseViewHolder.getView(R.id.user_img);
-            if (StringUtils.isEmpty(models.getUSER_ICON_FILE_ID())) {
-                user_img.setImageURI(Uri.parse(""));
-            } else {
-                Utils.log(AppConfig.IMAGE_PATH_LJT + models.getUSER_ICON_FILE_ID());
-                user_img.setImageURI(Uri.parse(models.getUSER_ICON_FILE_ID()));
-            }
-
-
-            ArrayList arrayList = new ArrayList();
-            if (!StringUtils.isEmpty(models.getIMG_PATH1())) {
-                arrayList.add(AppConfig.IMAGE_PATH_LJT + models.getIMG_PATH1());
-            }
-            if (!StringUtils.isEmpty(models.getIMG_PATH2())) {
-                arrayList.add(AppConfig.IMAGE_PATH_LJT + models.getIMG_PATH2());
-            }
-            if (!StringUtils.isEmpty(models.getIMG_PATH3())) {
-                arrayList.add(AppConfig.IMAGE_PATH_LJT + models.getIMG_PATH3());
-            }
-            if (!StringUtils.isEmpty(models.getIMG_PATH4())) {
-                arrayList.add(AppConfig.IMAGE_PATH_LJT + models.getIMG_PATH4());
-            }
-            if (!StringUtils.isEmpty(models.getIMG_PATH5())) {
-                arrayList.add(AppConfig.IMAGE_PATH_LJT + models.getIMG_PATH5());
-            }
-            final BGANinePhotoLayout mCurrentClickNpl = baseViewHolder.getView(R.id.item_moment_photos);
-            mCurrentClickNpl.setData(arrayList);
             mCurrentClickNpl.setDelegate(new BGANinePhotoLayout.Delegate() {
                 @Override
                 public void onClickNinePhotoItem(BGANinePhotoLayout ninePhotoLayout, View view, int position, String model, List<String> models) {
@@ -235,6 +213,67 @@ public class FragmentGoodsPagerEvaluate extends BaseFragment {
                 }
             });
 
+
         }
     }
+
+    private class EvaluateAdapter extends RecyclerView.Adapter<EvaluateViewHolder> {
+        private Context context;
+        private List<MedicineDetailsEvaluateModel> evaList;
+
+        public List<MedicineDetailsEvaluateModel> getEvaList() {
+            return evaList;
+        }
+
+        public void setEvaList(List<MedicineDetailsEvaluateModel> evaList) {
+            this.evaList = evaList;
+        }
+
+        public EvaluateAdapter(Context context, List<MedicineDetailsEvaluateModel> evaList) {
+            this.context = context;
+            this.evaList = evaList;
+        }
+
+        @Override
+        public EvaluateViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View viewitem = LayoutInflater.from(context).inflate(R.layout.item_goods_evaluate, parent, false);
+            return new EvaluateViewHolder(viewitem);
+        }
+
+        @Override
+        public void onBindViewHolder(EvaluateViewHolder holder, int position) {
+            MedicineDetailsEvaluateModel models = evaList.get(position);
+            holder.tvTime.setText(models.getINS_DATE());
+            String str = models.getMOBILE();
+            holder.tvName.setText(str.substring(0, str.length() - (str.substring(3)).length()) + "****" + str.substring(7));
+            holder.tvContent.setText(models.getEVALUATE_CONTGENT());
+            holder.userImg.setImageURI(Uri.parse(models.getUSER_ICON_FILE_ID()));
+            String[] imgStrs = models.getIMG();
+            ArrayList<String> ls = new ArrayList<>(Arrays.asList(imgStrs));
+            holder.mCurrentClickNpl.setData(ls);
+
+        }
+
+        @Override
+        public int getItemCount() {
+            if (evaList == null)
+                return 0;
+            return evaList.size();
+        }
+    }
+
+    /*private class MyAdapter extends BaseQuickAdapter<MedicineDetailsEvaluateModel> {
+
+        public MyAdapter() {
+            super(R.layout.item_goods_evaluate, list_eva);
+        }
+
+
+        @Override
+        protected void convert(BaseViewHolder baseViewHolder, MedicineDetailsEvaluateModel models) {
+            String str = models.getMOBILE();
+            Log.e(AppConfig.ERR_TAG, "str:" + str);
+
+        }
+    }*/
 }

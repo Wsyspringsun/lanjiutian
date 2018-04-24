@@ -6,6 +6,7 @@ package com.wyw.ljtds.model;
 
 public class MedicineDetailsEvaluateModel extends BaseModel {
     private String EVALUATE_CONTGENT;
+    private String[] IMG;
     private String IMG_PATH1;
     private String IMG_PATH2;
     private String IMG_PATH3;
@@ -94,5 +95,13 @@ public class MedicineDetailsEvaluateModel extends BaseModel {
 
     public void setMOBILE(String MOBILE) {
         this.MOBILE = MOBILE;
+    }
+
+    public String[] getIMG() {
+        return IMG;
+    }
+
+    public void setIMG(String[] IMG) {
+        this.IMG = IMG;
     }
 }

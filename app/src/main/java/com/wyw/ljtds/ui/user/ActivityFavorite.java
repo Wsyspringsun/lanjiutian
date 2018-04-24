@@ -65,48 +65,48 @@ public class ActivityFavorite extends BaseActivity {
     //无数据时的界面
     private View noData;
 
-    @Event(value = {R.id.header_edit, R.id.header_return,R.id.shanchu})
+    @Event(value = {R.id.header_edit, R.id.header_return, R.id.shanchu})
     private void onClick(View view) {
         switch (view.getId()) {
             case R.id.header_edit:
                 if (index == 0) {
-                    jianTou.setVisibility( View.GONE );
-                    title.setText( "编辑" );
-                    header_image.setVisibility( View.GONE );
-                    header_edit.setText( "完成" );
+                    jianTou.setVisibility(View.GONE);
+                    title.setText("编辑");
+                    header_image.setVisibility(View.GONE);
+                    header_edit.setText("完成");
                     RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) header_edit.getLayoutParams();
-                    params.addRule( RelativeLayout.ALIGN_PARENT_RIGHT, 1 );//0为true,1为维false
-                    header_edit.setLayoutParams( params );
-                    footer.setVisibility( View.VISIBLE );
+                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);//0为true,1为维false
+                    header_edit.setLayoutParams(params);
+                    footer.setVisibility(View.VISIBLE);
                     index = 1;
                 } else {
-                    jianTou.setVisibility( View.VISIBLE );
-                    title.setText( R.string.user_shoucang );
-                    header_image.setVisibility( View.VISIBLE );
-                    header_edit.setText( R.string.bianji );
+                    jianTou.setVisibility(View.VISIBLE);
+                    title.setText(R.string.user_shoucang);
+                    header_image.setVisibility(View.VISIBLE);
+                    header_edit.setText(R.string.bianji);
                     RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) header_edit.getLayoutParams();
-                    params.addRule( RelativeLayout.ALIGN_PARENT_RIGHT, 0 );
-                    params.addRule( RelativeLayout.LEFT_OF, R.id.header_image_right );//相当于xml中的to_left_of
-                    header_edit.setLayoutParams( params );
-                    footer.setVisibility( View.GONE );
+                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+                    params.addRule(RelativeLayout.LEFT_OF, R.id.header_image_right);//相当于xml中的to_left_of
+                    header_edit.setLayoutParams(params);
+                    footer.setVisibility(View.GONE);
                     index = 0;
                 }
                 adapter.notifyDataSetChanged();
                 break;
 
             case R.id.header_return:
-                AppManager.getAppManager().finishActivity( );
+                AppManager.getAppManager().finishActivity();
                 break;
 
             case R.id.shanchu:
-                if(date!=null&&!date.isEmpty()){
-                    for (int i=0;i<date.size();i++){
-                        SqlUtils.delete( date.get( i ));
+                if (date != null && !date.isEmpty()) {
+                    for (int i = 0; i < date.size(); i++) {
+                        SqlUtils.delete(date.get(i));
                     }
 
                 }
                 finish();
-                startActivity( new Intent( ActivityFavorite.this,ActivityFavorite.class ) );
+                startActivity(new Intent(ActivityFavorite.this, ActivityFavorite.class));
                 break;
         }
     }
@@ -114,86 +114,86 @@ public class ActivityFavorite extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
 
         noData = getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
 
-        recyclerView.setLayoutManager( new LinearLayoutManager( this ) );
-        recyclerView.setItemAnimator( new DefaultItemAnimator() );
-        recyclerView.addItemDecoration( new RecycleViewDivider( this,LinearLayoutManager.VERTICAL, 5,getResources().getColor( R.color.gray1 ) ) );
-        recyclerView.addOnItemTouchListener( new OnItemClickListener() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new RecycleViewDivider(this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.gray1)));
+        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                if (index==0){
-                    if (adapter.getItem( i ).getGroup().equals( "sxljt" )){
-                        Intent it=new Intent( ActivityFavorite.this,ActivityMedicinesInfo.class );
+                if (index == 0) {
+                    if (adapter.getItem(i).getGroup().equals("sxljt")) {
+                        Intent it = new Intent(ActivityFavorite.this, ActivityMedicinesInfo.class);
 //                        it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID,adapter.getItem( i ).getId() );
-                        startActivity( it );
-                    }else {
-                        Intent it=new Intent( ActivityFavorite.this,ActivityGoodsInfo.class );
+                        startActivity(it);
+                    } else {
+                        Intent it = new Intent(ActivityFavorite.this, ActivityGoodsInfo.class);
 //                        it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID,adapter.getItem( i ).getId() );
-                        startActivity( it );
+                        startActivity(it);
                     }
 
                 }
             }
-        } );
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        DbManager dbManager = x.getDb( SqlUtils.getDaoConfig() );
-        list= new ArrayList<>(  );
+        DbManager dbManager = x.getDb(SqlUtils.getDaoConfig());
+        list = new ArrayList<>();
         try {
-            list = dbManager.findAll( SqlFavoritesModel.class );
+            list = dbManager.findAll(SqlFavoritesModel.class);
         } catch (DbException e) {
             e.printStackTrace();
         }
 
         adapter = new MyAdapter(list);
-        adapter.openLoadAnimation( BaseQuickAdapter.ALPHAIN );
-        recyclerView.setAdapter( adapter );
+        adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+        recyclerView.setAdapter(adapter);
 
-        if (list==null||list.isEmpty()){
-            adapter.setEmptyView( noData );
+        if (list == null || list.isEmpty()) {
+            adapter.setEmptyView(noData);
         }
     }
 
 
     private class MyAdapter extends BaseQuickAdapter<SqlFavoritesModel> {
         public MyAdapter(List<SqlFavoritesModel> lists) {
-            super( R.layout.item_user_collect, lists );
+            super(R.layout.item_user_collect, lists);
         }
 
         @Override
         protected void convert(final BaseViewHolder baseViewHolder, final SqlFavoritesModel messageModel) {
-            final Intent it=new Intent( ActivityFavorite.this,ActivityMedicinesInfo.class );
+            final Intent it = new Intent(ActivityFavorite.this, ActivityMedicinesInfo.class);
 //            it.putExtra( AppConfig.IntentExtraKey.MEDICINE_INFO_ID,messageModel.getId() );
-            if (index==0){
-                date=null;
-                baseViewHolder.setVisible( R.id.check,false );
-            }else {
-                baseViewHolder.setVisible( R.id.check,true );
-                date=new ArrayList(  );
+            if (index == 0) {
+                date = null;
+                baseViewHolder.setVisible(R.id.check, false);
+            } else {
+                baseViewHolder.setVisible(R.id.check, true);
+                date = new ArrayList();
             }
 
             //加载图片
-            SimpleDraweeView imageView=baseViewHolder.getView( R.id.goods_img );
-            imageView.setImageURI( Uri.parse(messageModel.getImage()) );
+            SimpleDraweeView imageView = baseViewHolder.getView(R.id.goods_img);
+            imageView.setImageURI(Uri.parse(messageModel.getImage()));
 
-            baseViewHolder.setText( R.id.goods_title,messageModel.getName())
-                    .setText( R.id.money,"￥"+messageModel.getMoney() )
-                    .setOnCheckedChangeListener( R.id.check, new CompoundButton.OnCheckedChangeListener() {
+            baseViewHolder.setText(R.id.goods_title, messageModel.getName())
+                    .setText(R.id.money, "￥" + messageModel.getMoney())
+                    .setOnCheckedChangeListener(R.id.check, new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            Log.e("----",baseViewHolder.getPosition()+";"+b+"");
-                            if (b){
-                                date.add(adapter.getData().get( baseViewHolder.getPosition() ).getId());
+                            Log.e("----", baseViewHolder.getPosition() + ";" + b + "");
+                            if (b) {
+                                date.add(adapter.getData().get(baseViewHolder.getPosition()).getId());
                             }
                         }
-                    } );
+                    });
         }
     }
 }

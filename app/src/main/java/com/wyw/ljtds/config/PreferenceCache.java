@@ -13,6 +13,7 @@ import android.content.SharedPreferences.Editor;
 public class PreferenceCache {
 
     public static final String PF_TOKEN = "token"; // token
+    public static final String PF_WXSHARE_RESULT = "PF_WXSHARE_RESULT"; // 微信分享结果
     public static final String PF_NEAREST_KEYWORDS = "pf_nearest_keywords"; // token
     public static final String PF_NEAREST_KEYWORDS_MEDICINE = "pf_nearest_keywords_medicine"; // token
     public static final String PF_GUIDE_PAGE = "guide_page";//引导页
@@ -163,7 +164,21 @@ public class PreferenceCache {
         editor.commit();
     }
 
-    public static int getAddressId() {
-        return getSharedPreferences().getInt(PF_ADDRESS_ID, 0);
+    /**
+     * 保存微信分享结果
+     *
+     * @param rlt
+     */
+    public static void putWXShareResult(String rlt) {
+        SharedPreferences pref = getSharedPreferences();
+
+        Editor editor = pref.edit();
+        editor.putString(PF_WXSHARE_RESULT, rlt);
+        editor.commit();
     }
+
+    public static String getWXShareResult() {
+        return getSharedPreferences().getString(PF_WXSHARE_RESULT, "");
+    }
+
 }

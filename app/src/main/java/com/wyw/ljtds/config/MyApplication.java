@@ -13,12 +13,6 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.trace.LBSTraceClient;
-import com.baidu.trace.Trace;
-import com.baidu.trace.api.entity.LocRequest;
-import com.baidu.trace.api.entity.OnEntityListener;
-import com.baidu.trace.api.track.LatestPointRequest;
-import com.baidu.trace.api.track.OnTrackListener;
-import com.baidu.trace.model.ProcessOption;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -32,35 +26,29 @@ import com.wyw.ljtds.model.MessageLib;
 import com.wyw.ljtds.model.MyLocation;
 import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.service.LocationService;
-import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.ui.user.ActivityMessage;
-import com.wyw.ljtds.utils.CommonUtil;
-import com.wyw.ljtds.utils.GsonUtils;
-import com.wyw.ljtds.utils.NetUtil;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.x;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 import cn.jpush.android.api.JPushInterface;
-import cn.xiaoneng.activity.ChatActivity;
 import cn.xiaoneng.uiapi.Ntalker;
-import cn.xiaoneng.uiapi.OnChatmsgListener;
-import cn.xiaoneng.uiapi.OnMsgUrlClickListener;
 import cn.xiaoneng.uiapi.OnUnreadmsgListener;
-import cn.xiaoneng.uiapi.XNClickGoodsListener;
 import cn.xiaoneng.xpush.XPush;
 
 /**
  * Created by Administrator on 2016/12/8 0008.
+ * MultiDexApplication 防止 4.4 出现 bug
  */
 
+
 public class MyApplication extends Application {
+    private static UserBiz bizUser;
 
     public interface LocationedInterface {
         public void afterLocation(BDLocation location);
@@ -83,8 +71,19 @@ public class MyApplication extends Application {
     //    public Trace mTrace;
     public boolean isServerOk;//valid is server can connect
 
+    /**
+     * 解决Android4.x 启动就死的问题
+     *
+     * @param base
+     */
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        android.support.multidex.MultiDex.install(this);
+    }
+
     // Location listener
-    private BDLocationListener locationListner = new BDLocationListener() {
+    /*private BDLocationListener locationListner = new BDLocationListener() {
         @Override
         public void onReceiveLocation(BDLocation location) {
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
@@ -95,15 +94,16 @@ public class MyApplication extends Application {
 //                locationService.unregisterListener(locationListner);
             }
         }
-    };
+    };*/
 
     @Override
     public void onCreate() {
         super.onCreate();
+        bizUser = UserBiz.getInstance(this.getApplicationContext());
 
         //设备标识
-        entityName = "861007030662863";
-//        entityName = Utils.getImei(this);
+//        entityName = "861007030662863";
+        entityName = Utils.getImei(this);
         mAppContext = getApplicationContext();
         initView();
         //xytils3
@@ -187,14 +187,12 @@ public class MyApplication extends Application {
 //        mTrace = new Trace(serviceId, entityName);
 
         //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
-        locationService.registerListener(locationListner);
         LocationClientOption locOpt = locationService.getDefaultLocationClientOption();
         locationService.setLocationOption(locOpt);
 
     }
 
     public void onDestory() {
-        locationService.unregisterListener(locationListner); //注销掉监听
         locationService.stop(); //停止定位服务
     }
 
@@ -242,7 +240,7 @@ public class MyApplication extends Application {
             @Override
             protected List<AddressModel> doExecute() throws ZYException, BizFailure {
                 Log.e(AppConfig.ERR_TAG, "initLoginer  doExecute......");
-                return UserBiz.selectUserAddress();
+                return bizUser.selectUserAddress();
             }
 
             @Override

@@ -13,6 +13,8 @@ public class ShoppingCartMedicineModel extends OrderCommDto {
     private String GROUPID;
     private String GROUPNAME;
     private String PRESCRIPTION_FLG;
+    private String CUXIAO_FLG;
+    private String PROMPRICE;
 
     public String getWARETYPE() {
         return WARETYPE;
@@ -52,5 +54,21 @@ public class ShoppingCartMedicineModel extends OrderCommDto {
 
     public void setWARENAME(String WARENAME) {
         this.WARENAME = WARENAME;
+    }
+
+    public String getCUXIAO_FLG() {
+        return CUXIAO_FLG;
+    }
+
+    public void setCUXIAO_FLG(String CUXIAO_FLG) {
+        this.CUXIAO_FLG = CUXIAO_FLG;
+    }
+
+    public String getPROMPRICE() {
+        return PROMPRICE;
+    }
+
+    public void setPROMPRICE(String PROMPRICE) {
+        this.PROMPRICE = PROMPRICE;
     }
 }

@@ -2,37 +2,53 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/x35"
-    android:layout_centerVertical="true"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingLeft="@dimen/x11"
-    android:paddingRight="@dimen/x11">
-
-    <ImageView
-        android:layout_width="@dimen/x20"
-        android:layout_height="@dimen/x20"
-        android:layout_gravity="center"
-        android:scaleType="fitXY"
-        android:src="@mipmap/icon_guangbo" />
-
-    <com.sunfusheng.marqueeview.MarqueeView
-        android:id="@+id/item_marquee_news_tv_content"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/x35"
-        android:layout_marginLeft="@dimen/x10"
-        android:layout_marginRight="@dimen/x5"
-        android:layout_weight="1"
-        app:mvAnimDuration="1000"
-        app:mvInterval="3000"
-        app:mvSingleLine="true"
-        app:mvTextColor="@color/font_black2"
-        app:mvTextSize="14sp" />
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/gray" />
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x3"
+        android:layout_marginTop="@dimen/x1"
+        android:background="@color/gray1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x35"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/x11"
+        android:paddingRight="@dimen/x11">
+
+        <ImageView
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_guangbo" />
+
+        <com.sunfusheng.marqueeview.MarqueeView
+            android:id="@+id/item_marquee_news_tv_content"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/x35"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginRight="@dimen/x5"
+            android:layout_weight="1"
+            android:background="@color/white"
+            app:mvAnimDuration="1000"
+            app:mvInterval="3000"
+            app:mvSingleLine="true"
+            app:mvTextColor="@color/font_black2"
+            app:mvTextSize="14sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray" />
+
+    </LinearLayout>
+
 
 </LinearLayout>
 

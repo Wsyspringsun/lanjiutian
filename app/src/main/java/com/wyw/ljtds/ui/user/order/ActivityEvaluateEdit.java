@@ -70,7 +70,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 
 @ContentView(R.layout.activity_evaluate_edit)
-public class ActivityEvaluateEdit extends BaseActivity implements EasyPermissions.PermissionCallbacks {
+public class ActivityEvaluateEdit extends BaseActivity {
     public static final String TAG_GROUP_ORDER_ID = "com.wyw.ljtds.ui.user.order.BaseActivity.tag_group_order_id";
 
     @ViewInject(R.id.activity_evaluate_edit_goods)
@@ -375,6 +375,7 @@ public class ActivityEvaluateEdit extends BaseActivity implements EasyPermission
         if (photoSelectedCallback != null)
             photoSelectedCallback.setPhoto(requestCode, data);
     }
+
 
 }
 

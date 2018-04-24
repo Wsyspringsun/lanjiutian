@@ -28,6 +28,7 @@ import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.ui.user.manage.ActivityAmendPassword1;
 import com.wyw.ljtds.utils.InputMethodUtils;
+import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -50,7 +51,9 @@ public class ActivityLogin extends BaseActivity {
     @ViewInject(R.id.ed_pass)
     private EditText ed_pass;
 
-    @Event(value = {R.id.activity_login_third_wechat, R.id.guanbi, R.id.zhuce, R.id.next, R.id.chongzhi})
+    UserBiz userBiz;
+
+    @Event(value = {R.id.fragment_login_styles_wechat, R.id.fragment_login_styles_yanzheng, R.id.guanbi, R.id.zhuce, R.id.next, R.id.chongzhi})
     private void onclick(View view) {
         Intent it;
         switch (view.getId()) {
@@ -79,13 +82,18 @@ public class ActivityLogin extends BaseActivity {
                 finish();
                 startActivity(new Intent(this, ActivityAmendPassword1.class));
                 break;
-            case R.id.activity_login_third_wechat:
+            case R.id.fragment_login_styles_yanzheng:
+                startActivity(ActivityLoginOfValidCode.getIntent(this));
+                finish();
+                break;
+            case R.id.fragment_login_styles_wechat:
                 // send oauth request
                 IWXAPI wxApi = ((MyApplication) getApplication()).wxApi;
                 SendAuth.Req req = new SendAuth.Req();
                 req.scope = "snsapi_userinfo";
                 req.state = System.currentTimeMillis() + "";
                 wxApi.sendReq(req);
+                finish();
                 break;
         }
     }
@@ -93,6 +101,11 @@ public class ActivityLogin extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        userBiz = new UserBiz(this);
+
+        //隐藏自己的登录方式---帐号密码登录
+        findViewById(R.id.fragment_login_styles_username).setVisibility(View.GONE);
 
         ed_phone.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         ed_pass.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -118,12 +131,25 @@ public class ActivityLogin extends BaseActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (UserBiz.isLogined()) {
+            finish();
+        }
+    }
 
     BizDataAsyncTask<String> loginTask;
 
     private void doLogin() {
         setLoding(this, false);
         loginTask = new BizDataAsyncTask<String>() {
+            @Override
+            protected String doExecute() throws ZYException, BizFailure {
+                return userBiz.login(ed_phone.getText().toString().trim(),
+                        ed_pass.getText().toString().trim());
+            }
 
             @Override
             protected void onExecuteSucceeded(String result) {
@@ -131,24 +157,11 @@ public class ActivityLogin extends BaseActivity {
                 PreferenceCache.putToken(result); // 持久化缓存token
                 PreferenceCache.putAutoLogin(true);// 记录是否自动登录
                 PreferenceCache.putUsername(ed_phone.getText().toString().trim());
-
                 if (PreferenceCache.isAutoLogin()) {
                     PreferenceCache.putPhoneNum(ed_phone.getText().toString().trim());
                 }
-
                 Ntalker.getBaseInstance().login(((MyApplication) getApplication()).entityName, ed_phone.getText().toString(), 0);
-
-                ActivityLogin.this.finish();
-//                AppManager.destoryActivity("submit");//处理订单页未登录状态
-
-
-            }
-
-            @Override
-            protected String doExecute() throws ZYException, BizFailure {
-
-                return UserBiz.login(ed_phone.getText().toString().trim(),
-                        ed_pass.getText().toString().trim(), "0");
+                finish();
             }
 
             @Override
@@ -174,10 +187,6 @@ public class ActivityLogin extends BaseActivity {
     }
 
 
-    public static void goLogin(Context context) {
-        Intent it = new Intent(context, ActivityLogin.class);
-        context.startActivity(it);
-    }
 
     public static Intent getIntent(Context context) {
         Intent it = new Intent(context, ActivityLogin.class);

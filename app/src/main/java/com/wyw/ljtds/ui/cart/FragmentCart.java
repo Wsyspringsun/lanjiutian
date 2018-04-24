@@ -40,6 +40,8 @@ import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.model.CommodityDetailsModel;
+import com.wyw.ljtds.model.GoodsModel;
 import com.wyw.ljtds.model.OrderCommDto;
 import com.wyw.ljtds.model.OrderGroupDto;
 import com.wyw.ljtds.model.OrderTradeDto;
@@ -100,7 +102,6 @@ public class FragmentCart extends BaseFragment {
     @ViewInject(R.id.fragment_user_logined)
     LinearLayout layoutlogin;
     @ViewInject(R.id.fragment_cart_srf)
-    private SwipeRefreshLayout srf;
 
     private int totalCount = 0;// 购买的商品总数量
     //无数据时的界面
@@ -267,18 +268,11 @@ public class FragmentCart extends BaseFragment {
         } else {
             rlCartHeader.setVisibility(View.VISIBLE);
         }
-        srf.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                showCart();
-                srf.setRefreshing(false);
-            }
-        });
         //添加登录事件
         layoutNologin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityLogin.goLogin(getActivity());
+                startActivity(ActivityLogin.getIntent(getActivity()));
             }
         });
         llm = new LinearLayoutManager(getActivity());
@@ -596,9 +590,14 @@ public class FragmentCart extends BaseFragment {
                 String name = StringUtils.deletaFirst(goods.getWARENAME()) + "\n\n",
                         price = "￥" + Utils.formatFee(goods.getCOST_MONEY());
 
+                if (CommodityDetailsModel.CUXIAOFLG_YES.equals(goods.getCUXIAO_FLG())) {
+                    price = "￥" + Utils.formatFee(goods.getPROMPRICE());
+                    goods.setCOST_MONEY(goods.getPROMPRICE());
+                }
+
                 String spec = "规格：" + goods.getCOMMODITY_SIZE() + "\n";
                 if (!AppConfig.GROUP_LJT.equals(goods.getINS_USER_ID())) {
-                    spec = getString(R.string.title_cat) + "：" + goods.getCOMMODITY_COLOR() + "," + spec;
+                    spec = getString(R.string.title_cat_val, goods.getCOMMODITY_COLOR()) + "," + spec;
                 }
 
                 StringBuilder sb = new StringBuilder().append(name).append(spec).append(price);

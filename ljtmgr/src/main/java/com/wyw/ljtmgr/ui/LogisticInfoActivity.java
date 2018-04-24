@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -29,7 +30,7 @@ public class LogisticInfoActivity extends BaseActivity {
     @ViewInject(R.id.activity_logistic_info_scan)
     ImageView imgScan;
     @ViewInject(R.id.activity_logistic_btn_submit)
-    ImageView btnSubmit;
+    Button btnSubmit;
 
     View.OnClickListener clickListner = new View.OnClickListener() {
         @Override

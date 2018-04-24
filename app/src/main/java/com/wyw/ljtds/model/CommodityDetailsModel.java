@@ -8,6 +8,11 @@ import java.util.List;
  */
 
 public class CommodityDetailsModel extends GoodsModel {
+    public static final String CUXIAOFLG_NO = "0";
+    public static final String CUXIAOFLG_YES = "1";
+    //是否促销 0 未促销 1 促销
+    private String cuxiaoFlg;
+
     private XiaoNengData xiaonengData;
     //商品id
     private String commodityId;
@@ -27,6 +32,9 @@ public class CommodityDetailsModel extends GoodsModel {
     private int EVALUATE_CNT;
     //品牌
     private String commodityBrand;
+    private String yuanJia;//原价
+    private String promprice;//促销价
+    private BigDecimal costMoney; //实际价格
     //商品概述
     private String desc;
     //商品详情html
@@ -45,6 +53,8 @@ public class CommodityDetailsModel extends GoodsModel {
     private String commodityParameter;
     //0没有收藏 1 是收藏
     private String favorited;
+    private String shareTitle;//分享主题
+    private String shareDesc;//分享描述
     //评论
     private List<MedicineDetailsEvaluateModel> evaluateList;
 
@@ -204,8 +214,52 @@ public class CommodityDetailsModel extends GoodsModel {
         return imgPath;
     }
 
-    public void setImgPath(String imgPath) {
-        this.imgPath = imgPath;
+    public String getCuxiaoFlg() {
+        return cuxiaoFlg;
+    }
+
+    public void setCuxiaoFlg(String cuxiaoFlg) {
+        this.cuxiaoFlg = cuxiaoFlg;
+    }
+
+    public String getPromprice() {
+        return promprice;
+    }
+
+    public void setPromprice(String promprice) {
+        this.promprice = promprice;
+    }
+
+    public String getYuanJia() {
+        return yuanJia;
+    }
+
+    public void setYuanJia(String yuanJia) {
+        this.yuanJia = yuanJia;
+    }
+
+    public BigDecimal getCostMoney() {
+        return costMoney;
+    }
+
+    public void setCostMoney(BigDecimal costMoney) {
+        this.costMoney = costMoney;
+    }
+
+    public String getShareDesc() {
+        return shareDesc;
+    }
+
+    public void setShareDesc(String shareDesc) {
+        this.shareDesc = shareDesc;
+    }
+
+    public String getShareTitle() {
+        return shareTitle;
+    }
+
+    public void setShareTitle(String shareTitle) {
+        this.shareTitle = shareTitle;
     }
 
     public class ColorList {
@@ -407,5 +461,7 @@ public class CommodityDetailsModel extends GoodsModel {
         public void setFlgDetail(String flgDetail) {
             this.flgDetail = flgDetail;
         }
+
+
     }
 }

@@ -35,12 +35,13 @@ public class OrderStatus {
     public static final String REFUNDED = "13";//已退款
 
     public static final String REJECTEDGOODS = "15";//客户拒收
+    public static final String DELEGATE_SEND = "17";//客户拒收
 
     public static final String COMPLETED = "S";//已完成
     //委托第三方物流
-    public static final int DELEGATE = 0 ;
+    public static final int DELEGATE = 0;
     //蓝九天物流
-    public static final int LJT = 1 ;
+    public static final int LJT = 1;
 
     public static String getStatus(String status) {
         String cStatus = "";
@@ -89,6 +90,9 @@ public class OrderStatus {
                 break;
             case REJECTEDGOODS:
                 cStatus = "客户拒收";
+                break;
+            case DELEGATE_SEND:
+                cStatus = "第三方派送中";
                 break;
             case COMPLETED:
                 cStatus = "已完成";

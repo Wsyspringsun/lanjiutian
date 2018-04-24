@@ -15,6 +15,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -39,6 +40,7 @@ import com.wyw.ljtds.ui.goods.ActivityGoodsList;
 import com.wyw.ljtds.ui.user.ActivityMessage;
 import com.wyw.ljtds.ui.user.address.AddressSelActivity;
 import com.wyw.ljtds.utils.ToastUtil;
+import com.wyw.ljtds.widget.MyScrollView;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -56,7 +58,7 @@ public class FragmentLifeIndex extends BaseFragment {
 
     @ViewInject(R.id.fragment_life_sr)
     SwipeRefreshLayout srf;
-    @ViewInject(R.id.fragment_life_sv)
+    @ViewInject(R.id.fragment_life_index_sv)
     NestedScrollView sv;
     @ViewInject(R.id.fragment_life_index_main)
     RecyclerView rylvIndexMain;
@@ -139,7 +141,33 @@ public class FragmentLifeIndex extends BaseFragment {
         return fragment;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    /**
+     * chuli huadong jianbian
+     *
+     * @param scrollX
+     * @param scrollY
+     * @param oldScrollX
+     * @param oldScrollY
+     */
+    private void handleScroll(int scrollY) {
+        int ivHeight = (int) getResources().getDimension(R.dimen.x150);
+        if (scrollY <= 0) {
+            llLifeHeader.setBackgroundColor(Color.TRANSPARENT);
+        } else if (scrollY < ivHeight) {
+            float scale = (float) scrollY / (float) ivHeight;
+            float alpha = 255 * scale;
+            // TODO: 2016/9/3 注释里面的方法也可以实现
+            //先设置一个背景，然后在让背景乘以透明度
+            //                    header.setBackgroundColor(getResources().getColor(R.color.base_bar));
+            llLifeHeader.setBackgroundColor(getResources().getColor(R.color.base_bar));
+            llLifeHeader.getBackground().setAlpha((int) alpha);
+
+        } else if (scrollY >= ivHeight) {
+            llLifeHeader.setBackgroundColor(getResources().getColor(R.color.base_bar));
+        }
+        //                Log.e(AppConfig.ERR_TAG, "ivHeight:" + ivHeight + "int scrollX:" + scrollX + "int scrollY:" + scrollY + "int oldScrollX:" + oldScrollX + "int oldScrollY:" + oldScrollY);
+    }
+
     private void initView() {
         srf.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -163,29 +191,23 @@ public class FragmentLifeIndex extends BaseFragment {
         GridLayoutManager layoutManger = new GridLayoutManager(getActivity(), 12);
         rylvIndexMain.setLayoutManager(layoutManger);
         rylvIndexMain.setItemAnimator(new DefaultItemAnimator());
-        sv.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            sv.setOnScrollChangeListener(new View.OnScrollChangeListener() {
 
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-                int ivHeight = (int) getResources().getDimension(R.dimen.x150);
-                if (scrollY <= 0) {
-                    llLifeHeader.setBackgroundColor(Color.TRANSPARENT);
-                } else if (scrollY < ivHeight) {
-                    float scale = (float) scrollY / (float) ivHeight;
-                    float alpha = 255 * scale;
-                    // TODO: 2016/9/3 注释里面的方法也可以实现
-                    //先设置一个背景，然后在让背景乘以透明度
-//                    header.setBackgroundColor(getResources().getColor(R.color.base_bar));
-                    llLifeHeader.setBackgroundColor(getResources().getColor(R.color.base_bar));
-                    llLifeHeader.getBackground().setAlpha((int) alpha);
-
-                } else if (scrollY >= ivHeight) {
-                    llLifeHeader.setBackgroundColor(getResources().getColor(R.color.base_bar));
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    handleScroll(scrollY);
                 }
-//                Log.e(AppConfig.ERR_TAG, "ivHeight:" + ivHeight + "int scrollX:" + scrollX + "int scrollY:" + scrollY + "int oldScrollX:" + oldScrollX + "int oldScrollY:" + oldScrollY);
-            }
-        });
+            });
+        } else {
+            sv.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+                @Override
+                public void onScrollChanged() {
+                    handleScroll(sv.getScrollY());
+                }
+            });
+        }
+
 
         /*rylvIndexMain.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

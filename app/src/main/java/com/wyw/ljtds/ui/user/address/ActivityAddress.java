@@ -61,6 +61,7 @@ public class ActivityAddress extends BaseActivity {
     private View noData;
     private List<AddressModel> list = new ArrayList<>();
     private AddressAdapter adapter;
+    private UserBiz bizUser;
 
     @Event(value = {R.id.activity_address_list_tv_tianjia, R.id.header_return})
     private void onClick(View view) {
@@ -87,6 +88,9 @@ public class ActivityAddress extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        bizUser = UserBiz.getInstance(this);
+
         title.setText(R.string.address_guanli);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);//设置方向滑动 recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -119,7 +123,7 @@ public class ActivityAddress extends BaseActivity {
         new BizDataAsyncTask<List<AddressModel>>() {
             @Override
             protected List<AddressModel> doExecute() throws ZYException, BizFailure {
-                return UserBiz.selectUserAddress();
+                return bizUser.selectUserAddress();
             }
 
             @Override
@@ -147,7 +151,7 @@ public class ActivityAddress extends BaseActivity {
         new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                return UserBiz.deleteUserAddress(str);
+                return bizUser.deleteUserAddress(str);
             }
 
             @Override
@@ -172,7 +176,7 @@ public class ActivityAddress extends BaseActivity {
         new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                return UserBiz.changeDefaultAddress(addrId);
+                return bizUser.changeDefaultAddress(addrId);
             }
 
             @Override

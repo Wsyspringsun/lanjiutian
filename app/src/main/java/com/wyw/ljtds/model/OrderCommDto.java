@@ -7,6 +7,8 @@ import com.wyw.ljtds.utils.Utils;
  */
 
 public class OrderCommDto {
+    public static final String SHARE_FLG_YES = "1";
+
     private String COMMODITY_ORDER_ID;
     private String OID_USER_ID;
     private String COMMODITY_ID;
@@ -24,12 +26,16 @@ public class OrderCommDto {
     private String ORDER_SOURCE;
     private String ORDER_STATUS;
     private String DEL_FLG;
+    private String TOP_FLG;
+    private String SHARE_FLG;
     private String INS_USER_ID;
     private String UPD_USER_ID;
     private String INS_DATE;
     private String UPD_DATE;
     private String IMG_PATH;
     private String IS_RETURNGOODS; //1:可以退  0 不可退
+    private String SHARE_TITLE;  //分享主题
+    private String SHARE_DESCRIPTION; //分享描述
 
     public String getCOMMODITY_ORDER_ID() {
         return COMMODITY_ORDER_ID;
@@ -213,5 +219,37 @@ public class OrderCommDto {
 
     public void setIS_RETURNGOODS(String IS_RETURNGOODS) {
         this.IS_RETURNGOODS = IS_RETURNGOODS;
+    }
+
+    public String getTOP_FLG() {
+        return TOP_FLG;
+    }
+
+    public void setTOP_FLG(String TOP_FLG) {
+        this.TOP_FLG = TOP_FLG;
+    }
+
+    public String getSHARE_TITLE() {
+        return SHARE_TITLE;
+    }
+
+    public void setSHARE_TITLE(String SHARE_TITLE) {
+        this.SHARE_TITLE = SHARE_TITLE;
+    }
+
+    public String getSHARE_DESCRIPTION() {
+        return SHARE_DESCRIPTION;
+    }
+
+    public void setSHARE_DESCRIPTION(String SHARE_DESCRIPTION) {
+        this.SHARE_DESCRIPTION = SHARE_DESCRIPTION;
+    }
+
+    public String getSHARE_FLG() {
+        return SHARE_FLG;
+    }
+
+    public void setSHARE_FLG(String SHARE_FLG) {
+        this.SHARE_FLG = SHARE_FLG;
     }
 }

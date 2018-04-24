@@ -1,5 +1,6 @@
 package com.wyw.ljtds.ui.home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -196,6 +197,20 @@ public class ActivitySearch extends BaseActivity {
         super.onDestroy();
         //持久化查询记录
         KeywordsStore.doStore();
+    }
+
+    /**
+     * @param context
+     * @param src activity来源
+     * @param initKeyword 初始的关键字
+     * @return
+     */
+    public static Intent getIntent(Context context, int src, String initKeyword) {
+        Intent it = new Intent(context, ActivitySearch.class);
+//        it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        it.putExtra("from", src);
+        it.putExtra(TAG_INIT_KEYWORD, initKeyword);
+        return it;
     }
 
 
