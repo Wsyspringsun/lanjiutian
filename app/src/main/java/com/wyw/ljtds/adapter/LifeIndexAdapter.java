@@ -422,11 +422,7 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
 
             linearLayoutManager = new LinearLayoutManager(context);//必须有
             linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);//设置方向滑动
-//            baseViewHolder.setText()
-//                    .setAlpha(R.id.hot_ll_wai, 150)
-//                    .setAlpha(R.id.hot_ll_nei, 110)
-//                    .setOnClickListener(R.id.hot_ll_wai, )
-//                    .setOnClickListener(R.id.sdv_item_head_img, );
+
             tvNumber = (TextView) view.findViewById(R.id.number);
 //            imgCat = (SimpleDraweeView) view.findViewById(R.id.sdv_item_head_img);
             imgCat = (ImageView) view.findViewById(R.id.sdv_item_head_img);
@@ -446,9 +442,7 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
 
                     DefaultItemAnimator());
             //点击数量图标 显示商品列表
-            tvNumber.setOnClickListener(new View.OnClickListener()
-
-            {
+            tvNumber.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (rylvCommList.getVisibility() == View.VISIBLE) {

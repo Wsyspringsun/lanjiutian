@@ -48,7 +48,6 @@ import java.util.List;
  */
 @ContentView(R.layout.activity_lifeshop)
 public class LifeShopActivity extends BaseActivity {
-
     private static final String TAG_SHOP_ID = "com.wyw.ljtds.ui.goods.tag_shop_id";
 
     @ViewInject(R.id.activity_lifeshop_tabs)
@@ -56,7 +55,7 @@ public class LifeShopActivity extends BaseActivity {
     @ViewInject(R.id.fragment_lifeshop_shopimg_vp_main)
     ViewPager vpMain;
     String[] tabTitles = {"店铺首页", "全部宝贝", "新品上架"};
-    int[] tabImgs = {R.drawable.ic_shouye, R.drawable.ic_quanbu,R.drawable.ic_shangxin };
+    int[] tabImgs = {R.drawable.ic_shouye, R.drawable.ic_quanbu, R.drawable.ic_shangxin};
     private String shopId;
     @ViewInject(R.id.activity_lifeshop_img_banner)
     ImageView shopImg;
@@ -97,8 +96,13 @@ public class LifeShopActivity extends BaseActivity {
         for (int i = 0; i < tabTitles.length; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(tabTitles[i]));
         }
-        fpAdapter = new LifeShopFragmentPagerAdapter(getSupportFragmentManager());
+        List<Fragment> fragments = new ArrayList<>();
+        fragments.add(LifeShopAllGoodsFragment.newInstance(shopId, "0"));
+        fragments.add(LifeShopAllGoodsFragment.newInstance(shopId, ""));
+        fragments.add(LifeShopAllGoodsFragment.newInstance(shopId, "1"));
+        fpAdapter = new LifeShopFragmentPagerAdapter(getSupportFragmentManager(), fragments);
         vpMain.setAdapter(fpAdapter);
+        vpMain.setOffscreenPageLimit(tabTitles.length);
         tabLayout.setupWithViewPager(vpMain);
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
@@ -154,9 +158,11 @@ public class LifeShopActivity extends BaseActivity {
     }
 
     class LifeShopFragmentPagerAdapter extends FragmentPagerAdapter {
+        List<Fragment> fragments;
 
-        public LifeShopFragmentPagerAdapter(FragmentManager fm) {
+        public LifeShopFragmentPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
             super(fm);
+            this.fragments = fragments;
         }
 
         @Override
@@ -176,14 +182,7 @@ public class LifeShopActivity extends BaseActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return LifeShopFragment.newInstance(shopId, position);
-                case 1:
-                    return LifeShopAllGoodsFragment.newInstance(shopId);
-                default:
-                    return LifeShopFragment.newInstance(shopId, position);
-            }
+            return fragments.get(position % 3);
         }
 
         @Override

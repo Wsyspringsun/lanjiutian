@@ -265,19 +265,13 @@ public class ActivityGoodsSubmit extends BaseActivity {
 
         bizUser = UserBiz.getInstance(this);
         //注册广播接收器
-        /*addrReciver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                handleAddressExpire(intent);
-            }
-        };*/
-
         AppManager.addDestoryActivity(this, "submit");
 
         initView();
 
         sellerid = getIntent().getStringExtra(TAG_SELLERID);
 
+        initDataFromServer();
     }
 
     private void initView() {
@@ -330,25 +324,28 @@ public class ActivityGoodsSubmit extends BaseActivity {
         super.onDestroy();
     }
 
-    private void loadData() {
+    private void initDataFromServer() {
         Intent it = getIntent();
 //        flgInfoSrc = it.getStringExtra(TAG_INFO_SOURCE);
 
         String data = it.getStringExtra(TAG_ORDER_DATA);
-        String wxShareRlt = PreferenceCache.getWXShareResult();
-        if (!StringUtils.isEmpty(wxShareRlt)) {
-            PreferenceCache.putWXShareResult("");
-            if (WXEntryActivity.SHARE_RESULT_OK.equals(wxShareRlt)) {
-                OrderTradeDto orderOfData = GsonUtils.Json2Bean(data, OrderTradeDto.class);
-                orderOfData.setSHARE_FLG(OrderTradeDto.SHARE_FLG_OK);
-                data = GsonUtils.Bean2Json(orderOfData);
-            }
-        }
-
 //        String data = "{\"DETAILS\":[{\"DETAILS\":[{\"COMMODITY_COLOR\":\"百合康\",\"COMMODITY_ID\":\"005578\",\"COMMODITY_NAME\":\"\",\"COMMODITY_SIZE\":\"0.6克*60粒\",\"EXCHANGE_QUANLITY\":1}],\"LOGISTICS_COMPANY\":\"市区新市西街店\",\"LOGISTICS_COMPANY_ID\":\"002\"},{\"DETAILS\":[{\"COMMODITY_COLOR\":\"\",\"COMMODITY_ID\":\"000100\",\"COMMODITY_NAME\":\"\",\"COMMODITY_SIZE\":\"0.3g*24片*3盒\",\"EXCHANGE_QUANLITY\":1}],\"LOGISTICS_COMPANY\":\"市区观巷店\",\"LOGISTICS_COMPANY_ID\":\"040\"}],\"INS_USER_ID\":\"sxljt\",\"LAT\":\"35.489784\",\"LNG\":\"112.865275\",\"ORDER_SOURCE\":\"0\"}";
-        Log.e(AppConfig.ERR_TAG, "orderData:" + data);
         if (!StringUtils.isEmpty(data))
             showOrder(data, "showOrder");
+    }
+
+    private void refreshData() {
+        if (cOrderModel == null) return;
+        //判断是否进行了微信分享
+        String wxShareRlt = PreferenceCache.getWXShareResult();
+        if (!StringUtils.isEmpty(wxShareRlt)) {
+            //清除微信分享标识，防止重复使用
+            PreferenceCache.putWXShareResult("");
+            if (WXEntryActivity.SHARE_RESULT_OK.equals(wxShareRlt)) {
+                cOrderModel.setSHARE_FLG(OrderTradeDto.SHARE_FLG_OK);
+            }
+        }
+        showOrder(GsonUtils.Bean2Json(cOrderModel), "changeOrder");
     }
 
     @Override
@@ -356,7 +353,7 @@ public class ActivityGoodsSubmit extends BaseActivity {
         super.onStart();
         Utils.log("isResult:" + isResult);
         if (!isResult) {
-            loadData();
+            refreshData();
         }
         isResult = false;
 
@@ -665,7 +662,6 @@ public class ActivityGoodsSubmit extends BaseActivity {
     }
 
     private boolean needShowShareDialog() {
-        boolean isNeed = true;
         //是否有80 标识 的商品
         boolean hasFlg = false;
         if (cOrderModel == null) return false;
@@ -687,9 +683,8 @@ public class ActivityGoodsSubmit extends BaseActivity {
                 }
             }
         }
-        isNeed = !hasShow && hasFlg;
         Utils.log("hasShow:" + hasShow + ",hasFlg:" + hasFlg);
-        return isNeed;
+        return !hasShow && hasFlg;
     }
 
     /*private void updFooter() {

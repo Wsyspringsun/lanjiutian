@@ -35,7 +35,7 @@ public class AppConfig {
     public static final int TAG_TRACE = 1;
     public static final int PHONE_VALIDCODE_TEIMER = 60;//短信验证码重发间隔时间  单位：秒
     //是否测试环境
-    private static int TAG_DOMAIN = 3;
+    private static int TAG_DOMAIN = 2;
     public static String WEB_APP_URL = "";
     public static String WEB_DOMAIN = "";
     public static String WS_BASE_URL = "";
@@ -65,13 +65,13 @@ public class AppConfig {
                 IMAGE_PATH_LJT_ECOMERCE = "http://www.lanjiutian.com";
                 break;
             case 2:
-                WEB_APP_URL = "http://cs.lanjiutian.com/mobile";
-                WEB_DOMAIN = "http://cs.lanjiutian.com";
+                WEB_APP_URL = "http://192.168.3.88/mobile";
+                WEB_DOMAIN = "http://192.168.3.88";
                 WS_BASE_URL = WEB_DOMAIN + "/WebService" + "/services/";
                 WS_BASE_HTML_URL = WEB_DOMAIN + "/WebService" + "/html/";
                 WS_BASE_JSP_URL = WEB_DOMAIN + "/WebService" + "/jsp/";
                 APP_UPDATE_URL = WEB_DOMAIN + "/WebService/version.json";
-                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/upload/images";
+                IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";
                 IMAGE_PATH_LJT_ECOMERCE = "http://www.lanjiutian.com";
 //                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/ecommerce/images";
                 break;

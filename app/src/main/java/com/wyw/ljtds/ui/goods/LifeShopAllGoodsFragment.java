@@ -1,7 +1,9 @@
 package com.wyw.ljtds.ui.goods;
 
 import android.content.Intent;
+
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -46,6 +48,8 @@ import java.util.List;
 @ContentView(R.layout.fragment_life_shop)
 public class LifeShopAllGoodsFragment extends BaseFragment {
     private static final java.lang.String ARG_SHOPID = "com.wyw.ljtds.ui.goods.LifeShopAllGoodsFragment.ARG_SHOPID";
+    private static final java.lang.String ARG_TYPE = "com.wyw.ljtds.ui.goods.LifeShopAllGoodsFragment.ARG_TYPE";
+
     @ViewInject(R.id.fragment_lifeshop_ry_data)
     RecyclerView ryData;
     private View noData;
@@ -58,14 +62,16 @@ public class LifeShopAllGoodsFragment extends BaseFragment {
     private List<CommodityListModel> commodities;
     private CommodityAdapter adapter;
     private GridLayoutManager glm;
+    private String type;
 
     public LifeShopAllGoodsFragment() {
     }
 
-    public static LifeShopAllGoodsFragment newInstance(String shopid) {
+    public static LifeShopAllGoodsFragment newInstance(String shopid, String type) {
         LifeShopAllGoodsFragment fragment = new LifeShopAllGoodsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_SHOPID, shopid);
+        args.putString(ARG_TYPE, type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -107,6 +113,7 @@ public class LifeShopAllGoodsFragment extends BaseFragment {
         });
 
         storeId = getArguments().getString(ARG_SHOPID);
+        type = getArguments().getString(ARG_TYPE);
         keyword = "";
         startIdx = 0;
 
@@ -122,6 +129,9 @@ public class LifeShopAllGoodsFragment extends BaseFragment {
         }
         if (startIdx == 0) {
             adapter.setNewData(commodities);
+            if (commodities == null || commodities.size() <= 0) {
+                adapter.setEmptyView(LayoutInflater.from(getActivity()).inflate(R.layout.main_empty_view, null));
+            }
         } else {
             adapter.addData(commodities);
         }
@@ -135,7 +145,7 @@ public class LifeShopAllGoodsFragment extends BaseFragment {
 
             @Override
             protected List<CommodityListModel> doExecute() throws ZYException, BizFailure {
-                return GoodsBiz.getShopCommodities(storeId, keyword, startIdx + "");
+                return GoodsBiz.getShopCommodities(type, storeId, keyword, startIdx + "");
             }
 
             @Override

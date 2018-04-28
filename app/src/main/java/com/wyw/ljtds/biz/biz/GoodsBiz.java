@@ -419,8 +419,20 @@ public class GoodsBiz extends BaseBiz {
         return fs;
     }
 
-    public static List<CommodityListModel> getShopCommodities(String storeId, String keyword, String startIdx) throws BizFailure, ZYException {
+    /**
+     * 获取商铺的商品
+     *
+     * @param typeFlg  0: 1: 新品  “”全部
+     * @param storeId 商铺id
+     * @param keyword
+     * @param startIdx
+     * @return
+     * @throws BizFailure
+     * @throws ZYException
+     */
+    public static List<CommodityListModel> getShopCommodities(String typeFlg, String storeId, String keyword, String startIdx) throws BizFailure, ZYException {
         SoapProcessor ksoap = new SoapProcessor("Service", "getShopCommoditys", false);
+        ksoap.setProperty("typeFlg", typeFlg, SoapProcessor.PropertyType.TYPE_STRING);
         ksoap.setProperty("storeId", storeId, SoapProcessor.PropertyType.TYPE_STRING);
         ksoap.setProperty("keyword", keyword, SoapProcessor.PropertyType.TYPE_STRING);
         ksoap.setProperty("startIdx", startIdx, SoapProcessor.PropertyType.TYPE_STRING);
