@@ -6,48 +6,50 @@
 
     <LinearLayout
         android:id="@+id/header_return"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/x10"
         android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:orientation="horizontal">
-        
+
         <ImageView
             android:layout_width="@dimen/x16"
             android:layout_height="@dimen/x16"
             android:scaleType="fitXY"
-            android:src="@mipmap/jiantou_zuo_bai"/>
-        
+            android:src="@mipmap/jiantou_zuo_bai" />
+
         <TextView
             android:id="@+id/header_return_text"
-            android:layout_marginLeft="@dimen/x4"
             style="@style/font_ww_16"
+            android:layout_marginLeft="@dimen/x4"
             android:textColor="@color/white" />
 
     </LinearLayout>
 
     <TextView
+        android:id="@+id/header_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        style="@style/font_ww_16"
         android:textColor="@color/white"
-        android:id="@+id/header_title"/>
+        android:textSize="16dp" />
 
     <TextView
-        android:textColor="@color/white"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/x10"
+        android:id="@+id/header_edit"
         style="@style/font_ww_16"
-        android:id="@+id/header_edit"/>
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/x10"
+        android:textColor="@color/white" />
 
     <ImageView
         android:id="@+id/header_image_right"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/x10"
         android:layout_width="@dimen/x18"
         android:layout_height="@dimen/x18"
-        android:scaleType="fitCenter"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/x10"
+        android:scaleType="fitCenter" />
 
 </RelativeLayout>

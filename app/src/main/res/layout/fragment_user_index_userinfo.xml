@@ -62,7 +62,8 @@
             <TextView
                 android:id="@+id/fragment_user_index_userinfo_ll_infoname"
                 style="@style/font_ww_16"
-                android:text=""
+                android:layout_marginBottom="@dimen/x20"
+                android:text="xxxxxxx"
                 android:textColor="@color/white" />
 
             <TextView
@@ -74,6 +75,7 @@
                 android:paddingLeft="@dimen/x5"
                 android:paddingRight="@dimen/x5"
                 android:paddingTop="@dimen/x3"
+                android:visibility="gone"
                 android:text=""
                 android:textColor="@color/base_bar" />
 

@@ -39,11 +39,6 @@ public class YouHuiQuanActivity extends BaseActivityFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-    }
-
-    @Override
     protected Fragment createFragment() {
         return YouHuiQuanFragment.newInstance();
     }

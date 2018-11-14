@@ -35,6 +35,7 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.MyApplication;
+import com.wyw.ljtds.model.GoodsModel;
 import com.wyw.ljtds.model.MedicineListModel;
 import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.ui.base.BaseActivity;
@@ -50,6 +51,7 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -63,6 +65,7 @@ public class ActivityMedicineList extends BaseActivity {
     public static final String TAG_LIST_FROM = "com.wyw.ljtds.ui.goods.ActivityMedicineList.tag_list_from";
     public static final String TAG_PARAM_CLASSID = "com.wyw.ljtds.ui.goods.ActivityMedicineList.TAG_PARAM_CLASSID";
     public static final String TAG_PARAM_TYPE = "com.wyw.ljtds.ui.goods.ActivityMedicineList.TAG_PARAM_TYPE";
+    public static final String TAG_PARAM_TOPFLG = "com.wyw.ljtds.ui.goods.ActivityMedicineList.TAG_PARAM_TOPFLG";
     public static final String TAG_PARAM_KEYWORD = "com.wyw.ljtds.ui.goods.ActivityMedicineList.TAG_PARAM_KEYWORD";
 
 
@@ -79,8 +82,6 @@ public class ActivityMedicineList extends BaseActivity {
     private LinearLayout llMessage;
     @ViewInject(R.id.edHeader)
     private TextView search;
-    @ViewInject(R.id.xiaoxi)
-    private ImageView image;
     @ViewInject(R.id.paixu1_tv)
     private TextView paixu1_tv;
     @ViewInject(R.id.paixu1_iv)
@@ -115,8 +116,9 @@ public class ActivityMedicineList extends BaseActivity {
     private String orderby = "";
     private int pageIndex = 1;
     private String topFlg = "";
+    private CategoryBiz categoryBiz;
 
-    @Event(value = {R.id.back, R.id.zxing, R.id.edHeader, R.id.xiaoxi, R.id.paixu1, R.id.paixu2, R.id.paixu3, R.id.paixu4})
+    @Event(value = {R.id.back, R.id.zxing, R.id.edHeader, R.id.paixu1, R.id.paixu2, R.id.paixu3, R.id.paixu4})
     private void onclick(View view) {
         Intent it;
         switch (view.getId()) {
@@ -127,12 +129,7 @@ public class ActivityMedicineList extends BaseActivity {
                 startActivity(new Intent(this, ActivityScan.class));
                 break;
             case R.id.edHeader:
-                startActivity(ActivitySearch.getIntent(this,0,search.getText().toString()));
-                break;
-
-            case R.id.xiaoxi:
-                it = new Intent(this, ActivityMessage.class);
-                startActivity(it);
+                startActivity(ActivitySearch.getIntent(this, 0, search.getText().toString()));
                 break;
 
             case R.id.paixu1:
@@ -189,6 +186,7 @@ public class ActivityMedicineList extends BaseActivity {
         Intent it = new Intent(context, ActivityMedicineList.class);
 //        it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         it.putExtra(TAG_PARAM_TYPE, type);
+        it.putExtra(TAG_PARAM_TOPFLG, topFlg);
         it.putExtra(TAG_PARAM_CLASSID, classId);
         it.putExtra(TAG_PARAM_KEYWORD, keyword);
         return it;
@@ -203,6 +201,7 @@ public class ActivityMedicineList extends BaseActivity {
             lng = "" + SingleCurrentUser.location.getLongitude();
         }
         mtdtype = it.getStringExtra(TAG_PARAM_TYPE);
+        topFlg = it.getStringExtra(TAG_PARAM_TOPFLG);
         classId = it.getStringExtra(TAG_PARAM_CLASSID);
         keyword = it.getStringExtra(TAG_PARAM_KEYWORD);
         if (!StringUtils.isEmpty(keyword)) {
@@ -214,6 +213,8 @@ public class ActivityMedicineList extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        categoryBiz = CategoryBiz.getInstance(this);
 
         back.setVisibility(View.VISIBLE);
         llMessage.setVisibility(View.GONE);
@@ -229,9 +230,8 @@ public class ActivityMedicineList extends BaseActivity {
                 srf.setRefreshing(false);
             }
         });
+
         recyclerView.setLayoutManager(glm);
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        recyclerView.addItemDecoration(new SpaceItemDecoration(10));
         recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
@@ -279,14 +279,11 @@ public class ActivityMedicineList extends BaseActivity {
         new BizDataAsyncTask<List<MedicineListModel>>(this) {
             @Override
             protected List<MedicineListModel> doExecute() throws ZYException, BizFailure {
-//                String lat = "" + SingleCurrentUser.defaultLat, lng = "" + SingleCurrentUser.defaultLng;
-                Utils.log("getMedicineList:" + mtdtype + "-" + topFlg + "-" + classId + "-" + orderby + "-" + keyword + "-" + pageIndex + "" + "-" + AppConfig.DEFAULT_PAGE_COUNT + "" + "-" + lat + "-" + lng);
-                return CategoryBiz.getMedicineList(mtdtype, topFlg, classId, orderby, keyword, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "", lat, lng);
+                return categoryBiz.getMedicineList(mtdtype, topFlg, classId, orderby, keyword, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "", lat, lng);
             }
 
             @Override
             protected void onExecuteSucceeded(List<MedicineListModel> medicineListModel) {
-                Log.e(AppConfig.ERR_TAG, "get data success");
                 closeLoding();
                 if (medicineListModel == null || medicineListModel.size() <= 0) {
                     end = true;
@@ -314,43 +311,6 @@ public class ActivityMedicineList extends BaseActivity {
     }
 
 
-    private void findlist() {
-        setLoding(this, false);
-        new BizDataAsyncTask<List<MedicineListModel>>() {
-            @Override
-            protected List<MedicineListModel> doExecute() throws ZYException, BizFailure {
-                Log.e(AppConfig.ERR_TAG, classId + "/" + orderby + pageIndex);
-//                return CategoryBiz.findMedicineList(classId, orderby, pageIndex + "", "" + AppConfig.DEFAULT_PAGE_COUNT);
-                return GsonUtils.Json2ArrayList("[ { \"WAREID\": \"005968\", \"WARENAME\": \"Y螺旋藻片（百合康）\", \"WARETYPE\": \"031001\", \"PRESCRIPTION_FLG\": \"3\", \"WARESPEC\": \"250mg*2000片\", \"WAREUNIT\": \"瓶\", \"PROD_ADD\": \"                                                            \", \"PRODUCER\": \"荣成百合生物技术有限公司\", \"SALEPRICE\": 318, \"MEMPRICE\": 0, \"PARITYWARE\": \",\", \"CLICK_NUM\": 630, \"SALE_NUM\": 0, \"VALID_FLG\": \"1\", \"UPD_DATE\": 1508801493000, \"PROMPRICE\": 74.4, \"MEMPROMPRICE\": 318, \"BEGINTIME\": 1505404800000, \"ENDTIME\": 1505491199000, \"TOP_FLG\": \"0\", \"COMMODITY_SORT\": 0, \"PROFIT_MARGIN\": 0.77, \"RECOMMEND_SORT\": 0, \"ADMIN_USER_NAME\": \"邱守哲\", \"SUMQTY\": 1, \"OID_GROUP_ID\": \"sxljt\", \"GROUP_NAME\": \"山西蓝九天药业连锁有限公司\", \"LOGISTICS_COMPANY\": \"沁水中村店\", \"LOGISTICS_COMPANY_ID\": \"021\", \"ORG_PRINCIPAL\": \"姚书庭\", \"ORG_MOBILE\": \"15713563517\", \"AREA\": \"6\", \"LNG\": 111.998017, \"LAT\": 35.570456, \"BUSAVLID_FLG\": \"0\", \"DEL_FLG\": \"0\", \"DISTANCE\": 11993438, \"DISTANCE_TEXT\": \"106.3公里\", \"DURATION_TEXT\": \"1444分钟\", \"QISONG\": \"￥58起送\", \"BAOYOU\": \"￥108包邮\", \"POSTAGE\": \"配送费￥0\" } ]", MedicineListModel.class);
-            }
-
-            @Override
-            protected void onExecuteSucceeded(List<MedicineListModel> medicineListModel) {
-                Log.e(AppConfig.ERR_TAG, "find data success");
-                closeLoding();
-                Log.e(AppConfig.ERR_TAG, GsonUtils.Bean2Json(medicineListModel));
-                if (medicineListModel == null || medicineListModel.size() <= 0) {
-                    end = true;
-                    adapter.setEmptyView(noData);
-                }
-                adapter.addData(medicineListModel);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            protected void OnExecuteFailed() {
-                adapter.setEmptyView(noData);
-                closeLoding();
-            }
-        }.execute();
-    }
-
-    private View getFooterView() {
-        View view = getLayoutInflater().inflate(R.layout.main_end_view, (ViewGroup) recyclerView.getParent(), false);
-        return view;
-    }
-
-
     private class MyAdapter extends BaseQuickAdapter<MedicineListModel> {
 
         public MyAdapter() {
@@ -370,26 +330,22 @@ public class ActivityMedicineList extends BaseActivity {
                     qisong = "￥" + medicineListModel.getQISONG() + "配送|",
                     baoyou = "￥" + medicineListModel.getBAOYOU() + "包邮",
                     postage = "   配送费￥" + medicineListModel.getPOSTAGE() + "\n",
-                    price = "￥" + medicineListModel.getSALEPRICE() + "\n";
+                    price = "￥" + medicineListModel.getSALEPRICE() + "";
 
 
             StringBuilder sbName = new StringBuilder().append(detailFlg).append(brand + " ").append(wareName).append(size);
             baseViewHolder.setText(R.id.item_goods_omecol_goods_name, sbName);
 
             StringBuilder sb = new StringBuilder()
-                    .append(price).append(shopname).append(postage)
+                    .append(shopname).append(postage)
                     .append(distanceText)
                     .append(durationText)
                     .append(qisong).append(baoyou);
-            int priceStart = sb.indexOf(price);
-            int priceEnd = priceStart + price.length();
             int shopnameStart = sb.indexOf(shopname), shopnameEnd = shopnameStart + shopname.length();
 
             SpannableString sbs = new SpannableString(sb.toString());
 //            sbs.setSpan(new ForegroundColorSpan(Color.RED), 0, detailFlg.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            sbs.setSpan(new RelativeSizeSpan(1.2f), priceStart, priceEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             sbs.setSpan(new RelativeSizeSpan(0.9f), shopnameEnd, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            sbs.setSpan(new ForegroundColorSpan(Color.RED), priceStart, priceEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             sbs.setSpan(new ForegroundColorSpan(ActivityCompat.getColor(ActivityMedicineList.this, R.color.font_1)), shopnameStart, shopnameEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             baseViewHolder.setText(R.id.item_goods_omecol_goods_info, sbs);
 //                    .setText(R.id.money, medicineListModel.getSALEPRICE());
@@ -407,6 +363,28 @@ public class ActivityMedicineList extends BaseActivity {
                 goodsBizStat.setVisibility(View.VISIBLE);
             }
 
+            /**
+             * 活动小图标
+             */
+            baseViewHolder.setVisible(R.id.item_goods_huodong_te, false);
+            baseViewHolder.setVisible(R.id.item_goods_huodong_zeng, false);
+
+            baseViewHolder.setText(R.id.item_goods_omecol_goods_money, price);
+            baseViewHolder.setVisible(R.id.item_goods_omecol_goods_money_old, false);
+            //活动状况显示
+            String tpF = medicineListModel.getTOP_FLG();
+            if (GoodsModel.HUODONG_TEJIA.equals(tpF)) {
+                baseViewHolder.setVisible(R.id.item_goods_huodong_te, true);
+                baseViewHolder.setText(R.id.item_goods_omecol_goods_money, medicineListModel.getPROMPRICE());
+                baseViewHolder.setText(R.id.item_goods_omecol_goods_money_old, price);
+                baseViewHolder.setVisible(R.id.item_goods_omecol_goods_money_old, true);
+            } else if (GoodsModel.HUODONG_JIFEN.equals(tpF)) {
+                baseViewHolder.setVisible(R.id.item_goods_huodong_jifen, true);
+                baseViewHolder.setText(R.id.item_goods_omecol_goods_money, "￥" + Utils.formatFee(medicineListModel.getSALEPRICE() + "") + " + " + Utils.formatFee(medicineListModel.getCOST_POINT()) + "积分");
+                baseViewHolder.setText(R.id.item_goods_omecol_goods_money_old, price);
+            } else if (Arrays.asList(GoodsModel.HUODONG_MANZENG).contains(medicineListModel.getTOP_FLG())) {
+                baseViewHolder.setVisible(R.id.item_goods_huodong_zeng, true);
+            }
 
         }
     }

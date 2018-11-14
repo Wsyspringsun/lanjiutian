@@ -1,5 +1,6 @@
 package com.wyw.ljtds.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -32,14 +33,18 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.squareup.picasso.Picasso;
 import com.sunfusheng.marqueeview.MarqueeView;
+import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
+import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.HomePageModel1;
 import com.wyw.ljtds.model.IConCatInfo;
+import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.ui.goods.ActivityGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityGoodsList;
 import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
 import com.wyw.ljtds.ui.goods.LifeShopActivity;
+import com.wyw.ljtds.ui.goods.PointShopLifeGoodsListActivity;
 import com.wyw.ljtds.ui.goods.ShopActivity;
 import com.wyw.ljtds.ui.home.ActivityHomeWeb;
 import com.wyw.ljtds.ui.home.HuoDongActivity;
@@ -178,9 +183,12 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
 
     private void bindIconListData(IconListViewHolder holder, IConCatInfo iconData) {
         holder.data = iconData;
-        holder.tvCatName.setText(iconData.getName());
+        /*holder.tvCatName.setText(iconData.getName());
 //            holder.sdvIcon.setImageURI(Uri.parse(itemData.getImgPath()));
-        String imgUrl = iconData.getImgPath();
+        String imgUrl = iconData.getImgPath();*/
+        holder.tvCatName.setText(iconData.get("advertizeShowName"));
+//            holder.sdvIcon.setImageURI(Uri.parse(itemData.getImgPath()));
+        String imgUrl = iconData.get("headImgsUrl");
         Utils.log("imgUrl:" + imgUrl);
         Picasso.with(context).load(imgUrl).into(holder.sdvIcon);
     }
@@ -343,42 +351,8 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
                     @Override
                     public void onItemClick(int position) {
                         Map<String, String> mItem = bannerImgList.get(position);
-                        String flg = mItem.get("flg");
-                        if (!StringUtils.isEmpty(flg)) {
-                            String headId = mItem.get("headId");
-                            //详情：X,列表 L 店铺 D 电子币 DZ 抽奖 CJ 满赠 MZ 特价 TJ 秒杀 MS
-                            Intent it = null;
-                            switch (flg) {
-                                case "X":
-                                    it = ActivityLifeGoodsInfo.getIntent(context, headId);
-                                    break;
-                                case "L":
-                                    it = ActivityGoodsList.getIntent(context, headId);
-                                    break;
-                                case "D":
-                                    it = LifeShopActivity.getIntent(context, headId);
-                                    break;
-                                case "DZ":
-                                    it = HuoDongActivity.getIntent(context, "5");
-                                    break;
-                                case "CJ":
-                                    it = HuoDongActivity.getIntent(context, "1");
-                                    break;
-                                case "MZ":
-                                    it = HuoDongActivity.getIntent(context, "2");
-                                    break;
-                                case "TJ":
-                                    it = HuoDongActivity.getIntent(context, "3");
-                                    break;
-                                case "MS":
-                                    it = HuoDongActivity.getIntent(context, "4");
-                                    break;
-                                default:
-                                    break;
-                            }
-                            if (it != null)
-                                context.startActivity(it);
-                        }
+                        handleIconClick(mItem);
+
 
                     }
                 });
@@ -387,6 +361,10 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
 
             }
         }
+    }
+
+    private void handleIconClick(Map<String, String> mItem) {
+        MainActivity.navPage( context, mItem);
     }
 
     class IconListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -403,8 +381,9 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View v) {
-            Intent it = ActivityGoodsList.getIntent(context, data.getCommodityTypeId());
-            context.startActivity(it);
+            handleIconClick(data);
+//            Intent it = ActivityGoodsList.getIntent(context, data.getCommodityTypeId());
+//            context.startActivity(it);
         }
     }
 
@@ -431,7 +410,7 @@ public class LifeIndexAdapter extends RecyclerView.Adapter {
                 public void onClick(View view) {
                     if (data == null) return;
                     String typeId = data.getCommodityTypeId();
-                    Intent it = ActivityGoodsList.getIntent(context, typeId);
+                    Intent it = ActivityGoodsList.getIntent(context, typeId, "");
                     context.startActivity(it);
                 }
             });

@@ -149,7 +149,7 @@ public class LogisticTraceActivity extends AppCompatActivity {
                 return;
             }
 
-            LatLng currentLatLng = mapUtil.convertTrace2Map(point.getLocation());
+            LatLng currentLatLng = MapUtil.convertTrace2Map(point.getLocation());
             if (null == currentLatLng) {
                 return;
             }

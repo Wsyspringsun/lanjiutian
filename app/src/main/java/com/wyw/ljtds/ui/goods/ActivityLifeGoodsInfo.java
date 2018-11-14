@@ -20,6 +20,7 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.CommodityDetailsModel;
+import com.wyw.ljtds.model.GoodsModel;
 import com.wyw.ljtds.model.OrderCommDto;
 import com.wyw.ljtds.model.OrderGroupDto;
 import com.wyw.ljtds.model.OrderTradeDto;
@@ -28,6 +29,7 @@ import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.model.XiaoNengData;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.user.ActivityLoginOfValidCode;
+import com.wyw.ljtds.ui.user.order.ActivityOrder;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
@@ -40,7 +42,9 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.xiaoneng.uiapi.Ntalker;
 
@@ -50,11 +54,19 @@ import cn.xiaoneng.uiapi.Ntalker;
  */
 @ContentView(R.layout.activity_goods_info)
 public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
+    GoodsBiz goodsBiz = null;
+
     private static final String TAG_LIFE_GOODS_ID = "com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo.TAG_LIFE_GOODS_ID";
     private FragmentGoodsInfo fragmentCommodityInfo = new FragmentGoodsInfo();
     private Dialog dialogConsult;
     private CommodityDetailsModel commodityModel;
     private String comId;
+
+    @ViewInject(R.id.activity_goods_info_tv_goumai)
+    TextView tvGoumai;
+    @ViewInject(R.id.activity_goods_info_tv_addcart)
+    TextView tvShopcart;
+
 
     @Event(value = {R.id.activity_goods_info_rl_shoucang, R.id.activity_goods_info_rl_shop, R.id.activity_goods_info_rl_kefu, R.id.activity_goods_info_tv_goumai, R.id.activity_goods_info_tv_addcart, R.id.shopping_cart})
     private void onClick(View v) {
@@ -69,35 +81,88 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
                     return;
                 }
 
-                if (fragmentCommodityInfo.seledSize == null) {
-                    fragmentCommodityInfo.showSelDialog(new MyCallback() {
-                        @Override
-                        public void callback(Object... params) {
-                            fragmentCommodityInfo.tv_current_goods.setText(fragmentCommodityInfo.selDialog.tvSeled.getText().toString());
-                            if (params == null || params.length <= 0) return;
-                            fragmentCommodityInfo.seledColor = (CommodityDetailsModel.ColorList) params[0];
-                            fragmentCommodityInfo.seledSize = (CommodityDetailsModel.SizeList) params[1];
-                            fragmentCommodityInfo.seledNum = (int) params[2];
-                            fragmentCommodityInfo.selDialog.dismiss();
-
-                            if (commodityModel != null) {
-                                if (!validData()) return;
-                                OrderTradeDto order = info2Order();
-                                Intent it = ActivityGoodsSubmit.getIntent(ActivityLifeGoodsInfo.this, order);
-                                startActivity(it);
-                            }
-
-                        }
-                    });
+                if (commodityModel == null) return;
+                if (commodityModel.getColorList() == null || commodityModel.getColorList().size() <= 0) {
                     return;
                 }
-//
-                if (commodityModel != null) {
-                    if (!validData()) return;
-                    OrderTradeDto order = info2Order();
-                    Intent it = ActivityGoodsSubmit.getIntent(this, order);
-                    startActivity(it);
+                final CommodityDetailsModel.ColorList selcolor = commodityModel.getColorList().get(0);
+                if (selcolor.getSizeList() == null || selcolor.getSizeList().size() <= 0) {
+                    return;
                 }
+                final CommodityDetailsModel.SizeList selSize = selcolor.getSizeList().get(0);
+
+                if (GoodsModel.TOP_FLG_LINGYUAN.equals(commodityModel.getTopFlg())) {
+                    setLoding(this, false);
+                    new BizDataAsyncTask<String>() {
+                        @Override
+                        protected String doExecute() throws ZYException, BizFailure {
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("SHOP_NAME", commodityModel.getGroupName());
+                            map.put("OID_GROUP_ID", commodityModel.getOidGroupId());
+                            map.put("COMMODITY_ID", commodityModel.getCommodityId());
+                            commodityModel.getColorList().get(0).getColorName();
+                            map.put("COMMODITY_COLOR", selcolor.getColorName());
+                            map.put("COMMODITY_SIZE", selSize.getCommoditySize());
+
+                            String data = GsonUtils.Bean2Json(map);
+                            return goodsBiz.createOrderByLing(data);
+                        }
+
+                        @Override
+                        protected void onExecuteSucceeded(String s) {
+                            Utils.log("createOrderByLing:" + s);
+                            ToastUtil.show(ActivityLifeGoodsInfo.this, "领取成功，请在订单列表查看");
+                            startActivity(ActivityOrder.getIntent(ActivityLifeGoodsInfo.this, 0));
+                            closeLoding();
+                        }
+
+                        @Override
+                        protected void OnExecuteFailed() {
+                            closeLoding();
+                        }
+                    }.execute();
+                } else {
+                    if (fragmentCommodityInfo.seledSize == null) {
+                        fragmentCommodityInfo.showSelDialog(new MyCallback() {
+                            @Override
+                            public void callback(Object... params) {
+                                fragmentCommodityInfo.tv_current_goods.setText(fragmentCommodityInfo.selDialog.tvSeled.getText().toString());
+                                if (params == null || params.length <= 0) return;
+                                fragmentCommodityInfo.seledColor = (CommodityDetailsModel.ColorList) params[0];
+                                fragmentCommodityInfo.seledSize = (CommodityDetailsModel.SizeList) params[1];
+                                fragmentCommodityInfo.seledNum = (int) params[2];
+                                fragmentCommodityInfo.selDialog.dismiss();
+
+                                if (commodityModel != null) {
+                                    if (!validData()) return;
+                                    OrderTradeDto order = info2Order();
+                                    Intent it = null;
+                                    if (GoodsModel.TOP_FLG_ZHIJIEGOU.equals(commodityModel.getTopFlg())) {
+                                        it = ActivityGoodsSubmit.getIntent(ActivityLifeGoodsInfo.this, order, GoodsModel.TOP_FLG_ZHIJIEGOU);
+                                    } else {
+                                        it = ActivityGoodsSubmit.getIntent(ActivityLifeGoodsInfo.this, order);
+                                    }
+                                    startActivity(it);
+                                }
+
+                            }
+                        });
+                        return;
+                    }
+//
+                    if (commodityModel != null) {
+                        if (!validData()) return;
+                        OrderTradeDto order = info2Order();
+                        Intent it = null;
+                        if (GoodsModel.TOP_FLG_ZHIJIEGOU.equals(commodityModel.getTopFlg())) {
+                            it = ActivityGoodsSubmit.getIntent(ActivityLifeGoodsInfo.this, order, GoodsModel.TOP_FLG_ZHIJIEGOU);
+                        } else {
+                            it = ActivityGoodsSubmit.getIntent(this, order);
+                        }
+                        startActivity(it);
+                    }
+                }
+
 
                 break;
             case R.id.activity_goods_info_rl_shoucang:
@@ -245,7 +310,7 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//
+        goodsBiz = GoodsBiz.getInstance(this);
         tvGoumai.setText(R.string.goumai);
         initFragmentList(getIntent().getStringExtra(TAG_LIFE_GOODS_ID));
 //
@@ -323,6 +388,16 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
             setToolMainEnable(true);
         else
             setToolMainEnable(false);
+
+        if (GoodsModel.TOP_FLG_LINGYUAN.equals(commodityModel.getTopFlg())) {
+            tvGoumai.setText(R.string.huodong_lingyuangou);
+            tvShopcart.setVisibility(View.GONE);
+        }
+
+        if (GoodsModel.TOP_FLG_ZHIJIEGOU.equals(commodityModel.getTopFlg())) {
+            tvShopcart.setVisibility(View.GONE);
+        }
+
 
         XiaoNengData xnd = commodityModel.getXiaonengData();
         if (xnd != null) {

@@ -14,9 +14,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.UserBiz;
@@ -35,6 +37,7 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,16 +47,16 @@ import java.util.TimerTask;
 
 @ContentView(R.layout.activity_regist1)
 public class ActivityRegist1 extends BaseActivity {
-    @ViewInject(R.id.header_title)
+    @ViewInject(R.id.activity_fragment_title)
     private TextView title;
-    @ViewInject(R.id.header_return_text)
-    private TextView return_tv;
     @ViewInject(R.id.fasong)
     private Button button;
-    @ViewInject(R.id.code)
+    @ViewInject(R.id.activity_regist1_code)
     private EditText code;
-    @ViewInject(R.id.mima)
+    @ViewInject(R.id.activity_regist1_mima)
     private EditText password;
+    @ViewInject(R.id.activity_regist1_tuijianren_mobile)
+    private EditText tuijianMobile;
 
     @ViewInject(R.id.chk_agree_license)
     private CheckBox chkAgreeLicense;
@@ -64,9 +67,13 @@ public class ActivityRegist1 extends BaseActivity {
     private int count = AppConfig.PHONE_VALIDCODE_TEIMER;//60秒
     private String phone = "";
 
-    @Event(value = {R.id.next, R.id.header_return, R.id.fasong, R.id.zhuce_text})
+    @Event(value = {R.id.back, R.id.next, R.id.header_return, R.id.fasong, R.id.zhuce_text})
     private void onclick(View v) {
         switch (v.getId()) {
+            case R.id.back:
+                finish();
+                break;
+
             case R.id.next:
 //                if (StringUtils.isEmpty(code.getText().toString().trim())){
 //                    //ToastUtil.show(this,);
@@ -77,7 +84,6 @@ public class ActivityRegist1 extends BaseActivity {
                     return;
                 }
                 password.setText(password.getText().toString().trim());
-                Log.e(AppConfig.ERR_TAG, "data:" + password.getText().toString() + "/len:" + password.getText().length());
                 if (StringUtils.isEmpty(password.getText())) {
                     ToastUtil.show(this, getString(R.string.password_valid));
                 } else if (password.getText().length() > 20 || password.getText().length() < 6) {
@@ -109,12 +115,15 @@ public class ActivityRegist1 extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        title.setText("设置密码");
-        return_tv.setText("账号登陆");
+//        showSentTicket();
 
+        initView();
+    }
+
+    private void initView() {
+        title.setText("设置密码");
         phone = getIntent().getStringExtra(AppConfig.IntentExtraKey.PHONE_NUMBER);
 
-        getCode(phone);
         runTimerTask();
     }
 
@@ -136,62 +145,31 @@ public class ActivityRegist1 extends BaseActivity {
     /**
      * 注册
      */
-    BizDataAsyncTask<String> registTask;
-
     private void doRegist() {
-        registTask = new BizDataAsyncTask<String>() {
+        setLoding(this, false);
+        new BizDataAsyncTask<Map>() {
 
             @Override
-            protected String doExecute() throws ZYException, BizFailure {
-                return UserBiz.register(phone, code.getText().toString().trim(), password.getText().toString().trim(), "");
+            protected Map doExecute() throws ZYException, BizFailure {
+                return UserBiz.register(phone, code.getText().toString().trim(), password.getText().toString().trim(), tuijianMobile.getText().toString().trim());
             }
 
             @Override
-            protected void onExecuteSucceeded(String result) {
+            protected void onExecuteSucceeded(Map result) {
                 closeLoding();
 
+                String token = (String) result.get("token");
+                String isShowImg = (String) result.get("isShowImg");
+
 //                getLog = 1
-                PreferenceCache.putToken(result); // 持久化缓存token
+                PreferenceCache.putToken(token); // 持久化缓存token
                 PreferenceCache.putAutoLogin(true);// 记录是否自动登录
                 PreferenceCache.putUsername(phone);
 
                 if (PreferenceCache.isAutoLogin()) {
                     PreferenceCache.putPhoneNum(phone);
                 }
-                isShowSentTicket();
-            }
-
-            @Override
-            protected void OnExecuteFailed() {
-                closeLoding();
-            }
-        };
-        registTask.execute();
-
-    }
-
-    private void isShowSentTicket() {
-        setLoding(this, false);
-        new BizDataAsyncTask<String>() {
-
-            @Override
-            protected String doExecute() throws ZYException, BizFailure {
-                return UserBiz.getLog();
-            }
-
-            @Override
-            protected void onExecuteSucceeded(String result) {
-                Utils.log("getLog:" + result);
-                closeLoding();
-                if ("1".equals(result)) {
-                    //显示赠送优惠券的
-                    showSentTicket();
-                } else {
-                    Intent it = new Intent(ActivityRegist1.this, MainActivity.class);
-                    AppConfig.currSel = 4;
-                    it.putExtra(AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel);
-                    startActivity(it);
-                }
+                isShowSentTicket(isShowImg);
             }
 
             @Override
@@ -199,45 +177,59 @@ public class ActivityRegist1 extends BaseActivity {
                 closeLoding();
             }
         }.execute();
+
+    }
+
+    private void isShowSentTicket(String isShowImg) {
+        switch (isShowImg) {
+            case "1":
+                //显示赠送优惠券的
+                showSentTicket();
+                break;
+            default:
+                AppConfig.currSel = 4;
+                Intent it = MainActivity.getIntent(ActivityRegist1.this);
+                startActivity(it);
+                ActivityRegist1.this.finish();
+                break;
+        }
     }
 
     private void showSentTicket() {
-        super.onResume();
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.fragment_send_ticket, (ViewGroup) findViewById(R.id.fragment_con));
-        SimpleDraweeView sdv = (SimpleDraweeView) layout.findViewById(R.id.fragment_send_ticket_sdv_show);
-        sdv.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + "/.appinit/regist_ok.png"));
-//       final Dialog dialog = new AlertDialog.Builder(this)).setView(layout).create();
+        ImageView ivClose = (ImageView) layout.findViewById(R.id.fragment_send_ticket_close);
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = MainActivity.getIntent(ActivityRegist1.this);
+                AppConfig.currSel = AppConfig.DEFAULT_INDEX_FRAGMENT;
+//                it.putExtra(AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel);
+                startActivity(it);
+                ActivityRegist1.this.finish();
+            }
+        });
+
+        ImageView sdv = (ImageView) layout.findViewById(R.id.fragment_send_ticket_sdv_show);
+        Picasso.with(this).load(Uri.parse(AppConfig.IMAGE_PATH_LJT_ECOMERCE + "/ecommerce/images/mobileIndexImages/regist_ok.png")).placeholder(R.drawable.img_adv_zhanwei).into(sdv);
         Dialog dialog = new Dialog(ActivityRegist1.this, R.style.Theme_AppCompat_Dialog);
-//        dialog.setContentView(R.layout.fragment_send_ticket);
         dialog.setContentView(layout);
         dialog.setCancelable(false);
         dialog.setTitle(R.string.gongxi);
 
-//        Window dialogWindow = dialog.getWindow();
-//        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-//        dialogWindow.setGravity(Gravity.LEFT | Gravity.TOP);
-//        lp.alpha = 0.9f; // 透明度
-        dialog.show();
-
-        View view = layout.findViewById(R.id.btn_sent_ticket);
-        view.setOnClickListener(new View.OnClickListener() {
+        sdv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //申请领取优惠券
-//                doGetTicketTask();
-//                Log.e(AppConfig.ERR_TAG, "恭喜您");
-                Intent it = new Intent(ActivityRegist1.this, MainActivity.class);
-                AppConfig.currSel = 4;
-                it.putExtra(AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel);
+                MainActivity.TAG_CMD = MainActivity.TAG_CMD_UserInfoExtraActivity;
+                AppConfig.currSel = AppConfig.DEFAULT_INDEX_FRAGMENT;
+                Intent it = MainActivity.getIntent(ActivityRegist1.this);
                 startActivity(it);
+                ActivityRegist1.this.finish();
 
-//                dialog.dismiss();
-//                Intent it = new Intent(TestActivity.this, ActivityLogin.class);
-//                startActivity(it);
             }
         });
 
+        dialog.show();
 
     }
 

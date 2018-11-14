@@ -115,6 +115,7 @@
 
             <ImageView
                 android:id="@+id/jiantou1"
+                android:contentDescription="@string/title_search"
                 android:layout_width="@dimen/x16"
                 android:layout_height="@dimen/x15"
                 android:layout_alignParentRight="true"

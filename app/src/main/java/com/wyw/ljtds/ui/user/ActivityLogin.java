@@ -70,8 +70,9 @@ public class ActivityLogin extends BaseActivity {
                 break;
 
             case R.id.zhuce:
-                it = new Intent(this, ActivityRegist.class);
+                it = ActivityRegist.getIntent(this);
                 startActivity(it);
+//                finish();
                 break;
 
             case R.id.next:
@@ -176,7 +177,7 @@ public class ActivityLogin extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == event.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             InputMethodUtils.keyBoxIsShow(this);
 
 //            Intent it = new Intent(this, MainActivity.class);

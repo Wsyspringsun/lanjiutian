@@ -28,6 +28,16 @@ import cn.jpush.android.api.JPushInterface;
  */
 
 public class UserBiz {
+    private Context context;
+
+    public UserBiz(Context context) {
+        this.context = context;
+    }
+
+    public static UserBiz getInstance(Context context) {
+        return new UserBiz(context);
+    }
+
     /**
      * 判断是否登录
      *
@@ -99,40 +109,70 @@ public class UserBiz {
         params.setAsJsonContent(true);
         params.setBodyContent(json);
         x.http().post(params, callback);
-        /*x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.e("err", result);
-                try {
-                    JSONObject jsonData = new JSONObject(result);
-                    String success = jsonData.getString("success");
-                    String msg = jsonData.getString("msg");
-                    if (success.equals("0")) {
-                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-
-                        finish();
-                        // Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                    } else if (success.equals("2")) {
-                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                //解析result
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-                closeLoding();
-            }
-
-            @Override
-            public void onFinished() {
-            }
-        });*/
     }
+
+    /**
+     * 获取某个用户获奖列表
+     * @param oidUserId
+     * @param callback
+     */
+    public void loadAwards(String oidUserId, Callback.CommonCallback callback) {
+        BaseJson<Map<String, String>> baseJson = new BaseJson<>();
+        Map<String, String> data = new HashMap<>();
+        LoginModel loginer = MyApplication.getCurrentLoginer();
+        data.put("oidUserId", oidUserId);
+        data.put("busNo", loginer.getOidGroupId());
+        Header head = CommonBiz.getDataHeader();
+        baseJson.setHead(head);
+        baseJson.setBody(data);
+        Gson gson = new Gson();
+        String json = gson.toJson(baseJson);
+        RequestParams params = new RequestParams(AppConfig.WEB_DOMAIN + "/v/prize/myPrize");
+        params.setAsJsonContent(true);
+        params.setBodyContent(json);
+        x.http().post(params, callback);
+    }
+
+    /**
+     * 领取奖品
+     * @param integralDrawLogId
+     * @param callback
+     */
+    public void doGainAward(String integralDrawLogId, Callback.CommonCallback callback) {
+        BaseJson<Map<String, String>> baseJson = new BaseJson<>();
+        Map<String, String> data = new HashMap<>();
+        data.put("integralDrawLogId", integralDrawLogId);
+        Header head = CommonBiz.getDataHeader();
+        baseJson.setHead(head);
+        baseJson.setBody(data);
+        Gson gson = new Gson();
+        String json = gson.toJson(baseJson);
+        RequestParams params = new RequestParams(AppConfig.WEB_DOMAIN + "/v/prize/drawPrize");
+        params.setAsJsonContent(true);
+        params.setBodyContent(json);
+        x.http().post(params, callback);
+    }
+
+    /**
+     * 获取商铺所有获奖记录
+     * @param integralDrawLogId
+     * @param callback
+     */
+    public void groupPrize( Callback.CommonCallback callback) {
+        LoginModel loginer = MyApplication.getCurrentLoginer();
+        BaseJson<Map<String, String>> baseJson = new BaseJson<>();
+        Map<String, String> data = new HashMap<>();
+        data.put("busNo", loginer.getOidGroupId());
+        Header head = CommonBiz.getDataHeader();
+        baseJson.setHead(head);
+        baseJson.setBody(data);
+        Gson gson = new Gson();
+        String json = gson.toJson(baseJson);
+        RequestParams params = new RequestParams(AppConfig.WEB_DOMAIN + "/v/prize/groupPrize");
+        params.setAsJsonContent(true);
+        params.setBodyContent(json);
+        x.http().post(params, callback);
+    }
+
+
 }

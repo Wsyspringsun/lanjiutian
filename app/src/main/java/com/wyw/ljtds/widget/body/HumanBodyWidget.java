@@ -50,7 +50,7 @@ public class HumanBodyWidget {
 
     private void init(Context context, FrameLayout container, Bundle savedInstanceState) {
         this.activity = (AppCompatActivity) context;
-        this.container = (WaveEffectLayout) container;
+        HumanBodyWidget.container = (WaveEffectLayout) container;
         mShowingBack = false;
         isMan = true;
 
@@ -63,7 +63,7 @@ public class HumanBodyWidget {
             inflater = LayoutInflater.from(context);
             frontView = (ImageView) inflater.inflate(R.layout.fragment_body_front, null);
             backView = (ImageView) inflater.inflate(R.layout.fragment_body_back, null);
-            this.container.addView(frontView);
+            HumanBodyWidget.container.addView(frontView);
         }
     }
 
@@ -93,7 +93,7 @@ public class HumanBodyWidget {
 
     public boolean flipBody(boolean isShowingBack) {
 
-        if (this.mShowingBack == isShowingBack)
+        if (mShowingBack == isShowingBack)
             return false;
 
         clearRegionView();
@@ -143,11 +143,11 @@ public class HumanBodyWidget {
 
 
     public Boolean toggleBodyGenderImage(Boolean isMan) {
-        if (this.isMan == isMan)
+        if (HumanBodyWidget.isMan == isMan)
             return false;
 
         clearRegionView();
-        this.isMan = isMan;
+        HumanBodyWidget.isMan = isMan;
         if (isAPI11) {
             if (mShowingBack) {
                 bodyFrontFragment.setMan(isMan);

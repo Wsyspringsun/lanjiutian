@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:fresco="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/basebackground"
-              android:orientation="vertical">
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basebackground"
+    android:orientation="vertical">
 
-    <include layout="@layout/main_header_return_red"/>
+    <include layout="@layout/main_header_return_red" />
 
     <RelativeLayout
         android:id="@+id/touxiang"
@@ -21,10 +21,10 @@
             android:layout_marginTop="@dimen/x2"
             android:singleLine="true"
             android:text="@string/touxiang"
-            android:textColor="@color/font_black2"/>
+            android:textColor="@color/font_black2" />
 
         <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/sdv_item_head_img"
+            android:id="@+id/activity_user_infomation_sdv_headphoto"
             android:layout_width="@dimen/x45"
             android:layout_height="@dimen/x45"
             android:layout_marginRight="@dimen/x10"
@@ -35,7 +35,7 @@
             fresco:placeholderImage="@mipmap/icon_moren_tou"
             fresco:roundAsCircle="true"
             fresco:roundingBorderColor="@color/gray1"
-            fresco:roundingBorderWidth="1dp"/>
+            fresco:roundingBorderWidth="1dp" />
 
         <ImageView
             android:id="@+id/touxiang_jt"
@@ -43,7 +43,7 @@
             android:layout_height="@dimen/x14"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/jiantou_you_hui"/>
+            android:src="@mipmap/jiantou_you_hui" />
 
     </RelativeLayout>
 
@@ -59,7 +59,7 @@
             style="@style/font_ww_14"
             android:layout_centerVertical="true"
             android:text="@string/manage_huiyuan"
-            android:textColor="@color/font_black2"/>
+            android:textColor="@color/font_black2" />
 
         <TextView
             android:id="@+id/name"
@@ -68,7 +68,7 @@
             android:layout_marginRight="@dimen/x8"
             android:layout_toLeftOf="@+id/mingzi_jt"
             android:text=""
-            android:textColor="@color/gray"/>
+            android:textColor="@color/gray" />
 
 
         <ImageView
@@ -77,7 +77,7 @@
             android:layout_height="@dimen/x14"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/jiantou_you_hui"/>
+            android:src="@mipmap/jiantou_you_hui" />
 
     </RelativeLayout>
 
@@ -93,7 +93,7 @@
             style="@style/font_ww_14"
             android:layout_centerVertical="true"
             android:text="@string/nicheng"
-            android:textColor="@color/font_black2"/>
+            android:textColor="@color/font_black2" />
 
         <TextView
             android:id="@+id/nicheng_tv"
@@ -101,7 +101,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x8"
             android:layout_toLeftOf="@+id/nicheng_jt"
-            android:textColor="@color/gray"/>
+            android:textColor="@color/gray" />
 
 
         <ImageView
@@ -110,7 +110,7 @@
             android:layout_height="@dimen/x14"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/jiantou_you_hui"/>
+            android:src="@mipmap/jiantou_you_hui" />
 
     </RelativeLayout>
 
@@ -126,7 +126,7 @@
             style="@style/font_ww_14"
             android:layout_centerVertical="true"
             android:text="@string/sex"
-            android:textColor="@color/font_black2"/>
+            android:textColor="@color/font_black2" />
 
         <TextView
             android:id="@+id/sex_tv"
@@ -134,8 +134,8 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x8"
             android:layout_toLeftOf="@+id/sex_jt"
-            android:text="保密"
-            android:textColor="@color/gray"/>
+            android:text="男"
+            android:textColor="@color/gray" />
 
 
         <ImageView
@@ -144,7 +144,7 @@
             android:layout_height="@dimen/x14"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/jiantou_you_hui"/>
+            android:src="@mipmap/jiantou_you_hui" />
 
     </RelativeLayout>
 
@@ -160,7 +160,7 @@
             style="@style/font_ww_14"
             android:layout_centerVertical="true"
             android:text="@string/birthday"
-            android:textColor="@color/font_black2"/>
+            android:textColor="@color/font_black2" />
 
         <TextView
             android:id="@+id/birthday_tv"
@@ -168,7 +168,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x8"
             android:layout_toLeftOf="@+id/birthday_jt"
-            android:textColor="@color/gray"/>
+            android:textColor="@color/gray" />
 
 
         <ImageView
@@ -177,7 +177,7 @@
             android:layout_height="@dimen/x14"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/jiantou_you_hui"/>
+            android:src="@mipmap/jiantou_you_hui" />
 
     </RelativeLayout>
 

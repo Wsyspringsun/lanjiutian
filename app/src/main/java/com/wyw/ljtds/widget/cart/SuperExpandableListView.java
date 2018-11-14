@@ -121,11 +121,7 @@ public class SuperExpandableListView extends ExpandableListView {
                 itemLayout = (ViewGroup) getChildAt(mCurrentViewPos - getFirstVisiblePosition());
                 if (itemLayout != null) {
                     int id = itemLayout.getId();
-                    if (id == R.id.SwipeMenuExpandableListView) {
-                        isChild = false;
-                    } else {
-                        isChild = true;
-                    }
+                    isChild = id != R.id.SwipeMenuExpandableListView;
                 /*if(itemLayout instanceof RelativeLayout){
                     isChild = false;
                 }else{
@@ -195,6 +191,6 @@ public class SuperExpandableListView extends ExpandableListView {
     }
 
     interface ButtonClickListener {
-        public void clickHappend(int position);
+        void clickHappend(int position);
     }
 }

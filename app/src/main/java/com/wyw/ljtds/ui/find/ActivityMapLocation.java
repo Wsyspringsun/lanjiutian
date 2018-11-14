@@ -186,7 +186,7 @@ public class ActivityMapLocation extends Activity {
                 sb.append("\nPoi: ");// POI信息
                 if (location.getPoiList() != null && !location.getPoiList().isEmpty()) {
                     for (int i = 0; i < location.getPoiList().size(); i++) {
-                        Poi poi = (Poi) location.getPoiList().get(i);
+                        Poi poi = location.getPoiList().get(i);
                         sb.append(poi.getName() + ";");
                     }
                 }

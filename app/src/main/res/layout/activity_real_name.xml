@@ -57,19 +57,19 @@
             android:text="@string/shiming_card"
             android:textColor="@color/font_black1" />
 
-        <EditText
-            android:id="@+id/ed_card"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/x10"
-            android:layout_weight="4"
-            android:background="@null"
-            android:digits="0123456789xX"
-            android:hint="@string/shiming_card"
-            android:inputType="number"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textSize="14sp" />
+        <!--<EditText-->
+            <!--android:id="@+id/ed_card"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginRight="@dimen/x10"-->
+            <!--android:layout_weight="4"-->
+            <!--android:background="@null"-->
+            <!--android:digits="0123456789xX"-->
+            <!--android:hint="@string/shiming_card"-->
+            <!--android:inputType="number"-->
+            <!--android:maxLines="1"-->
+            <!--android:singleLine="true"-->
+            <!--erinfo0ndroid:textSize="14sp" />-->
 
     </LinearLayout>
 
@@ -114,6 +114,7 @@
             android:id="@+id/realname_chk_agr"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/x20"
+            android:enabled="false"
             android:checked="true" />
 
         <TextView

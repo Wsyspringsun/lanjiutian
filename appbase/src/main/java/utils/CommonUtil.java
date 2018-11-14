@@ -141,4 +141,22 @@ public class CommonUtil {
         BigDecimal bVal = new BigDecimal(val);
         return df.format(bVal);
     }
+
+    /**
+     * 将null用字符串表示
+     *
+     * @param noNullVal 不能使用null表示的字符串
+     * @param nullshow  在null情况下用来表示的值
+     * @return
+     */
+    public static String  noNullString(String noNullVal, String nullshow) {
+        if ("".equals(noNullVal) || noNullVal == null) {
+            return nullshow;
+        }
+        return noNullVal;
+    }
+
+    public static String noNullString(String noNullVal) {
+        return noNullString(noNullVal, "未知");
+    }
 }

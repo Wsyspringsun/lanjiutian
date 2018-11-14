@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basebackground"
+    android:orientation="vertical">
+
+    <include layout="@layout/fragment_toolbar_common_white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x10"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:background="@color/white"
+            android:padding="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:text="客服工号"
+                android:textColor="@color/font_black2" />
+
+            <TextView
+                android:id="@+id/activity_waitter_tv_userid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/holder" />
+
+        </RelativeLayout>
+
+        <!--客服姓名-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:background="@color/white"
+            android:padding="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:text="客服姓名"
+                android:textColor="@color/font_black2" />
+
+            <TextView
+                android:id="@+id/activity_waitter_tv_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/holder" />
+
+        </RelativeLayout>
+
+        <!--客服电话-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:background="@color/white"
+            android:padding="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:text="客服电话"
+                android:textColor="@color/font_black2" />
+
+            <TextView
+                android:id="@+id/activity_waitter_tv_tel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/holder" />
+
+
+        </RelativeLayout>
+
+        <!--门店名称-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:background="@color/white"
+            android:padding="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:text="门店名称"
+                android:textColor="@color/font_black2" />
+
+            <TextView
+                android:id="@+id/activity_waitter_tv_logistics_company"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/holder" />
+
+        </RelativeLayout>
+
+        <!--门店联系人-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:background="@color/white"
+            android:padding="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:text="门店联系人"
+                android:textColor="@color/font_black2" />
+
+            <TextView
+                android:id="@+id/activity_waitter_tv_org_principal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/holder" />
+
+        </RelativeLayout>
+        <!--门店联系电话-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:background="@color/white"
+            android:padding="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:text="门店联系电话"
+                android:textColor="@color/font_black2" />
+
+            <TextView
+                android:id="@+id/activity_waitter_tv_org_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/holder" />
+
+        </RelativeLayout>
+
+        <!--门店地址-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:background="@color/white"
+            android:padding="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:text="门店地址"
+                android:textColor="@color/font_black2" />
+
+            <TextView
+                android:id="@+id/activity_waitter_tv_org_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/holder" />
+
+        </RelativeLayout>
+
+        <!--客服投诉电话-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:background="@color/white"
+            android:padding="@dimen/x10">
+
+            <TextView
+                style="@style/font_ww_14"
+                android:layout_centerVertical="true"
+                android:text="客服投诉电话"
+                android:textColor="@color/font_black2" />
+
+            <TextView
+                android:id="@+id/activity_waitter_tv_customer_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/holder" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

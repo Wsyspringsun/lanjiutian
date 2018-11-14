@@ -23,6 +23,7 @@ import com.wyw.ljtds.model.MessageModel;
 import com.wyw.ljtds.model.PointRecord;
 import com.wyw.ljtds.model.UserDataModel;
 import com.wyw.ljtds.model.UserModel;
+import com.wyw.ljtds.model.UserWaitterModel;
 import com.wyw.ljtds.model.WalletModel;
 import com.wyw.ljtds.model.Ticket;
 import com.wyw.ljtds.ui.user.ActivityLoginOfValidCode;
@@ -32,7 +33,9 @@ import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.xiaoneng.uiapi.Ntalker;
 
@@ -65,7 +68,7 @@ public class UserBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static String register(String phoneNum, String verifyCode
+    public static Map register(String phoneNum, String verifyCode
             , String password, String invitor) throws BizFailure, ZYException {
 
         SoapProcessor ksoap2 = new SoapProcessor("Service", "regist",
@@ -77,7 +80,10 @@ public class UserBiz extends BaseBiz {
         ksoap2.setProperty("introducer", invitor, PropertyType.TYPE_STRING);
         ksoap2.setProperty("terminalType", AppConfig.TERMINALTYPE, PropertyType.TYPE_STRING);
 
-        return ksoap2.request().getAsString();
+        Gson gson = new GsonBuilder().create();
+        TypeToken<HashMap> tt = new TypeToken<HashMap>() {
+        };
+        return gson.fromJson(ksoap2.request(), tt.getType());
     }
 
     /**
@@ -177,13 +183,15 @@ public class UserBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static int realNameAuth(String realName, String cardId)
+    public static int realNameAuth(String realName, String cardId, String carteVitalFlg, String alwaysBuyDrug)
             throws BizFailure, ZYException {
 
         SoapProcessor ksoap = new SoapProcessor("Service", "realNameAuth", true);
 
         ksoap.setProperty("realName", realName, PropertyType.TYPE_STRING);
         ksoap.setProperty("cardId", cardId, PropertyType.TYPE_STRING);
+        ksoap.setProperty("carteVitalFlg", carteVitalFlg, PropertyType.TYPE_STRING);
+        ksoap.setProperty("alwaysBuyDrug", alwaysBuyDrug, PropertyType.TYPE_STRING);
 
         return ksoap.request().getAsInt();
     }
@@ -362,7 +370,7 @@ public class UserBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static UserModel getUser() throws BizFailure, ZYException {
+    public UserModel getUser() throws BizFailure, ZYException {
         SoapProcessor ksoap2 = new SoapProcessor("Service", "getPerInformation", true);
         JsonElement element = ksoap2.request();
         Gson gson = new GsonBuilder().create();
@@ -745,10 +753,11 @@ public class UserBiz extends BaseBiz {
      * @param terminalType
      * @return
      */
-    public String registWX(String wxId, String nickName, String tel, String validCode) throws BizFailure, ZYException {
+    public String registWX(String wxId, String openId, String nickName, String tel, String validCode) throws BizFailure, ZYException {
         String method = "registWX";
         SoapProcessor sp = new SoapProcessor("Service", method, false);
         sp.setProperty("wxId", wxId, PropertyType.TYPE_STRING);
+        sp.setProperty("openId", openId, PropertyType.TYPE_STRING);
         sp.setProperty("nickName", nickName, PropertyType.TYPE_STRING);
         sp.setProperty("tel", tel, PropertyType.TYPE_STRING);
         sp.setProperty("validCode", validCode, PropertyType.TYPE_STRING);
@@ -772,7 +781,81 @@ public class UserBiz extends BaseBiz {
         return sp.request().getAsString();
     }
 
+    public String systemDate() throws BizFailure, ZYException {
+        String method = "getSystemDateMill";
+        SoapProcessor sp = new SoapProcessor("Service", method, false);
+        return sp.request().getAsString();
+    }
+
     public static UserBiz getInstance(Context context) {
         return new UserBiz(context);
     }
+
+    /*
+    赠送积分
+    * @param token
+    * @param giveType 赠送原因 1：积分转发
+    * @return
+    */
+    public String givePoint() throws BizFailure, ZYException {
+        String method = "givePoint";
+        SoapProcessor sp = new SoapProcessor("Service", method, true);
+        return sp.requestStr();
+    }
+
+    /**
+     * 绑定推介人
+     *
+     * @param referrer推介人账号
+     * @return
+     */
+    public String bindReferrer(String referrer) throws ZYException {
+        String method = "bindReferrer";
+        SoapProcessor sp = new SoapProcessor("Service", method, true);
+        sp.setProperty("referrer", referrer, PropertyType.TYPE_STRING);
+        return sp.requestStr();
+    }
+
+    public String loadExchangeIndex() throws ZYException {
+        String method = "exchangeIndex";
+        SoapProcessor sp = new SoapProcessor("Service", method, true);
+        return sp.requestStr();
+    }
+
+    public String exchangeCoupon(String couponId, String tempId, String couponName) throws ZYException {
+        String method = "exchangeCoupon";
+        SoapProcessor sp = new SoapProcessor("Service", method, true);
+        sp.setProperty("couponId", couponId, PropertyType.TYPE_STRING);
+        sp.setProperty("tempId", tempId, PropertyType.TYPE_STRING);
+        sp.setProperty("couponName", couponName, PropertyType.TYPE_STRING);
+        return sp.requestStr();
+
+    }
+
+    /**
+     * @param refereeId 推荐人工号
+     * @throws ZYException
+     */
+    public UserWaitterModel getCustomerService(String refereeId) throws ZYException {
+        String method = "getCustomerService";
+        SoapProcessor sp = new SoapProcessor("Service", method, false);
+        sp.setProperty("refereeId", refereeId, PropertyType.TYPE_STRING);
+        Gson gson = new GsonBuilder().create();
+        TypeToken<UserWaitterModel> tt = new TypeToken<UserWaitterModel>() {
+        };
+        JsonElement result = sp.request();
+        return gson.fromJson(result, tt.getType());
+    }
+
+    /**
+     * 获取推介人
+     * @return
+     */
+    /*public String getReferrer() throws ZYException {
+        String method = "getReferrer";
+        SoapProcessor sp = new SoapProcessor("Service", method, true);
+        return sp.requestStr();
+    }*/
+
+
 }

@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#90000000"
     android:orientation="vertical">
 
-    <!--<android.support.v7.widget.Toolbar-->
-    <!--android:id="@+id/toolbar_common"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="?attr/actionBarSize"-->
-    <!--android:layout_gravity="center"-->
-    <!--android:background="@color/base_bar"-->
-    <!--android:minHeight="?attr/actionBarSize"-->
-    <!--app:navigationIcon="?attr/homeAsUpIndicator"-->
-    <!--app:title="@string/myqrcode"-->
-    <!--app:titleTextColor="@color/white"></android.support.v7.widget.Toolbar>-->
-
+    <include layout="@layout/main_header_return_red" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/x50"
+        android:layout_marginLeft="@dimen/x20"
+        android:layout_marginRight="@dimen/x20"
         android:layout_marginTop="@dimen/x50"
-        android:background="@color/white"
+        android:background="#EEFEFEFF"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -34,8 +26,8 @@
 
             <ImageView
                 android:id="@+id/fragment_user_qrcode_photo"
-                android:layout_width="@dimen/x40"
-                android:layout_height="@dimen/x40"
+                android:layout_width="@dimen/x50"
+                android:layout_height="@dimen/x50"
                 android:layout_alignParentLeft="true"
                 android:padding="3dp"
                 android:src="@mipmap/zhanweitu" />
@@ -45,20 +37,42 @@
                 android:id="@+id/fragment_user_qrcode_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/fragment_user_qrcode_photo"
                 android:padding="3dp"
                 android:text="@string/holder" />
 
 
         </RelativeLayout>
-        <!---->
+
+        <ImageView
+            android:id="@+id/fragment_user_barcode_idcode"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x20"
+            android:layout_marginLeft="@dimen/vertical_margin_lg"
+            android:layout_marginRight="@dimen/vertical_margin_lg"
+            android:layout_marginTop="@dimen/vertical_margin_lg" />
+
         <ImageView
             android:id="@+id/fragment_user_qrcode_idcode"
-            android:layout_width="@dimen/x270"
-            android:layout_height="@dimen/x270"
+            android:layout_width="@dimen/x248"
+            android:layout_height="@dimen/x248"
             android:layout_gravity="center"
+            android:layout_marginTop="@dimen/vertical_margin_lg"
+            android:padding="@dimen/x28"
             android:scaleType="fitXY"
             android:src="@mipmap/zhanweitu" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/x6"
+            android:padding="3dp"
+            android:text="扫描二维码"
+            android:textColor="@color/font_2"
+            android:textSize="@dimen/font_7" />
 
     </LinearLayout>
 

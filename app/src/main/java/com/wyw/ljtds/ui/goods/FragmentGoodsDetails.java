@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -15,6 +16,7 @@ import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.CommodityDetailsModel;
 import com.wyw.ljtds.model.MedicineDetailsModel;
 import com.wyw.ljtds.ui.base.BaseFragment;
+import com.wyw.ljtds.ui.user.manage.ActivityBigImage;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -27,7 +29,6 @@ import java.text.DecimalFormat;
 
 @ContentView(R.layout.fragment_goods_info_details)
 public class FragmentGoodsDetails extends BaseFragment {
-    private static String ARG_CONTENT = "ARG_CONTENT";
     @ViewInject(R.id.webviews)
     private WebView webView;
     DecimalFormat format = new DecimalFormat("#%");//format格式化百分比
@@ -50,7 +51,6 @@ public class FragmentGoodsDetails extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.e(AppConfig.ERR_TAG, "FragmentGoodsDetails   onActivityCreated........");
 
         WebSettings setting = webView.getSettings();
         setting.setDomStorageEnabled(true);
@@ -61,7 +61,6 @@ public class FragmentGoodsDetails extends BaseFragment {
         setting.setBuiltInZoomControls(true);
         setting.setSupportZoom(true);
 
-
     }
 
     public void bindData2View(String html) {
@@ -71,8 +70,18 @@ public class FragmentGoodsDetails extends BaseFragment {
                 "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\" />\n" +
                 "<style type='text/css'>img{width:" + format.format(1) + ";height:auto}</style>" +
                 "</head>\n" +
-                "<body>\n" + html + "\n</body>\n" +
+                "<body>\n" + html +
+                "<script src=\"http://code.jquery.com/jquery-1.11.3.min.js\"></script>"+
+                "<script type='text/javascript'> $(function(){ $('img').click(function(){ var me = $(this); var data = me.attr('src'); alert(data); if (typeof (andObj) != 'undefined' && andObj != null) { andObj.doReq(data); return false; } return true; }); }); </script>"+
+                "\n</body>\n" +
                 "</html>";
+        /*//响应js发起的抽奖请求
+        webView.addJavascriptInterface(new Object() {
+            @JavascriptInterface
+            public void doReq(String json) {
+                startActivity(ActivityBigImage.getIntent(getActivity(), json));
+            }
+        }, "andObj");*/
 
         webView.loadDataWithBaseURL("fake://not/needed", str, "text/html", "utf-8", null);
     }

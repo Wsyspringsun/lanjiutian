@@ -3,6 +3,7 @@ package com.wyw.ljtds.wxapi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -30,6 +31,7 @@ import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.model.ServerResponse;
 import com.wyw.ljtds.model.UserModel;
 import com.wyw.ljtds.model.WXUserInfo;
+import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.user.ActivityLoginBindPhone;
 import com.wyw.ljtds.ui.user.order.ActivityOrder;
 import com.wyw.ljtds.utils.ToastUtil;
@@ -40,7 +42,8 @@ import cn.xiaoneng.uiapi.Ntalker;
 import static com.wyw.ljtds.R.id.context;
 import static com.wyw.ljtds.R.id.ed_phone;
 
-public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
+public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler {
+    public static final String ACTION_WXSHARE_OK = "com.wyw.ljtds.wxapi.WXEntryActivity.ACTION_WXSHARE_OK"; //进行了分享
     public static final String SHARE_RESULT_OK = "0"; //进行了分享
 
     private static final String TAG = "MicroMsg.SDKSample.WXPayEntryActivity";
@@ -73,8 +76,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
     @Override
     public void onResp(BaseResp resp) {
-        Utils.log(" net ...  WX Ent onResp");
-        Utils.log("onWXFinish, errCode = " + resp.errCode + "...resp:" + resp);
+        setLoding(this,false);
         if (resp instanceof SendAuth.Resp) {
             //授权登录 的结果
             if (0 == resp.errCode) {
@@ -90,40 +92,46 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
                             @Override
                             protected String doExecute() throws ZYException, BizFailure {
-                                return userBiz.loginWx(code);
+                                return UserBiz.loginWx(code);
                             }
 
                             @Override
                             protected void onExecuteSucceeded(String s) {
                                 Utils.log("wexin result:" + s);
                                 JsonParser parser = new JsonParser();
-                                JsonObject jsonObject = parser.parse(s).getAsJsonObject();
-                                String statCode = jsonObject.get(SoapProcessor.RESPONSE_STATUSCODE).getAsString();
-                                JsonElement resultElement;
-                                if (ServerResponse.STAT_LOGINWX_ERR.equals(statCode)) {
-                                    //当前微信用户没有在平台上注册，跳到手机
-                                    resultElement = jsonObject.get(SoapProcessor.RESPONSE_RESULT);
-                                    Gson gson = new GsonBuilder().create();
+                                try {
+                                    JsonObject jsonObject = parser.parse(s).getAsJsonObject();
+                                    String statCode = jsonObject.get(SoapProcessor.RESPONSE_STATUSCODE).getAsString();
+                                    JsonElement resultElement;
+                                    if (ServerResponse.STAT_LOGINWX_ERR.equals(statCode)) {
+                                        //当前微信用户没有在平台上注册，跳到手机
+                                        resultElement = jsonObject.get(SoapProcessor.RESPONSE_RESULT);
+                                        Gson gson = new GsonBuilder().create();
 
-                                    TypeToken<WXUserInfo> tt = new TypeToken<WXUserInfo>() {
-                                    };
-                                    WXUserInfo wxUi = gson.fromJson(resultElement, tt.getType());
-                                    startActivity(ActivityLoginBindPhone.getIntent(WXEntryActivity.this, wxUi.getWxId(), wxUi.getNickName()));
+                                        TypeToken<WXUserInfo> tt = new TypeToken<WXUserInfo>() {
+                                        };
+                                        WXUserInfo wxUi = gson.fromJson(resultElement, tt.getType());
+                                        startActivity(ActivityLoginBindPhone.getIntent(WXEntryActivity.this,wxUi.getOpenId(), wxUi.getWxId(), wxUi.getNickName()));
 
-                                    finish();
-                                } else if (ServerResponse.STAT_OK.equals(statCode)) {
-                                    //login 成功  ???
-                                    resultElement = jsonObject.get(SoapProcessor.RESPONSE_RESULT);
-                                    String token = resultElement.getAsString();
-                                    getUserInfo(token);
-                                } else if (ServerResponse.STAT_USER_MSG.equals(statCode)) {
-                                    String msg = jsonObject.get(SoapProcessor.RESPONSE_MESSAGE).getAsString();
-                                    ToastUtil.show(WXEntryActivity.this, msg);
-                                } else {
-                                    String msg = jsonObject.get(SoapProcessor.RESPONSE_MESSAGE).getAsString();
-                                    ToastUtil.show(WXEntryActivity.this, getString(R.string.msg_crash));
-                                    Utils.log(msg);
+                                        finish();
+                                    } else if (ServerResponse.STAT_OK.equals(statCode)) {
+                                        //login 成功  ???
+                                        resultElement = jsonObject.get(SoapProcessor.RESPONSE_RESULT);
+                                        String token = resultElement.getAsString();
+                                        getUserInfo(token);
+                                    } else if (ServerResponse.STAT_USER_MSG.equals(statCode)) {
+                                        String msg = jsonObject.get(SoapProcessor.RESPONSE_MESSAGE).getAsString();
+                                        ToastUtil.show(WXEntryActivity.this, msg);
+                                    } else {
+                                        String msg = jsonObject.get(SoapProcessor.RESPONSE_MESSAGE).getAsString();
+                                        ToastUtil.show(WXEntryActivity.this, getString(R.string.msg_crash));
+                                        Utils.log(msg);
+                                    }
+                                } catch (Exception ex) {
+                                    Utils.log(ex.getMessage());
+                                    ToastUtil.show(WXEntryActivity.this,"服务器故障");
                                 }
+
                             }
 
                             @Override
@@ -155,6 +163,12 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         }
 
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        closeLoding();
     }
 
     private void getUserInfo(final String token) {

@@ -119,11 +119,13 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     public void setLoding() {
+        if (loading) return;
         loading = true;
         mDialog = LoadingDialogUtils.createLoadingDialog(this, "加载中...");
     }
 
     public void closeLoding() {
+        if (!loading) return;
         loading = false;
         LoadingDialogUtils.closeDialog(mDialog);
     }

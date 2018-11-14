@@ -200,7 +200,7 @@ public class StarBarView extends View {
         if ((specMode == MeasureSpec.EXACTLY)) {
             result = specSize;
         } else {
-            result = (int) (getPaddingLeft() + getPaddingRight() + (mSpaceWidth + mStarWidth) * (starMaxNumber));
+            result = getPaddingLeft() + getPaddingRight() + (mSpaceWidth + mStarWidth) * (starMaxNumber);
             if (specMode == MeasureSpec.AT_MOST) {
                 result = Math.min(result, specSize);
             }
@@ -216,7 +216,7 @@ public class StarBarView extends View {
         if (specMode == MeasureSpec.EXACTLY) {
             result = specSize;
         } else {
-            result = (int) (mStarHeight + getPaddingTop() + getPaddingBottom());
+            result = mStarHeight + getPaddingTop() + getPaddingBottom();
             if (specMode == MeasureSpec.AT_MOST) {
                 result = Math.min(result, specSize);
             }

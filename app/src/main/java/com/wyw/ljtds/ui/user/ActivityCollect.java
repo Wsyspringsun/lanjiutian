@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -26,14 +24,11 @@ import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
-import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.AppManager;
 import com.wyw.ljtds.model.FavoriteModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
-import com.wyw.ljtds.ui.goods.ActivityGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
-import com.wyw.ljtds.ui.goods.FragmentGoodsDetails;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.Utils;
@@ -56,7 +51,7 @@ public class ActivityCollect extends BaseActivity {
     public static String TAG_MY_SHOUCANG = "tag_shoucang";
     public static String TAG_MY_ZUJI = "tag_zuji";
 
-    @ViewInject(R.id.reclcyer)
+    @ViewInject(R.id.activity_collect_goodslist)
     private RecyclerView recyclerView;
     @ViewInject(R.id.jiantou)
     private ImageView jianTou;
@@ -152,7 +147,7 @@ public class ActivityCollect extends BaseActivity {
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
                 if (index == 0) {
                     FavoriteModel dataItem = adapter.getItem(i);
-                    Intent it ;
+                    Intent it;
                     if (TAG_MY_SHOUCANG.equals(tagMy)) {
                         //收藏
                         if (dataItem.getGoodsFlg().equals("0")) {
@@ -304,19 +299,19 @@ public class ActivityCollect extends BaseActivity {
 //            final CheckBox checkBox = baseViewHolder.getView( R.id.check );
 //            adapter.getData().get( baseViewHolder.getPosition() ).setCheck( checkBox.isChecked() );
             if (index == 0) {
-                baseViewHolder.setVisible(R.id.check, false)
-                        .setChecked(R.id.check, false);
+                baseViewHolder.setVisible(R.id.item_user_goodsitem_check, false)
+                        .setChecked(R.id.item_user_goodsitem_check, false);
                 for (int i = 0; i < adapter.getData().size(); i++) {
                     adapter.getData().get(i).setCheck(false);
                 }
             } else {
 
-                baseViewHolder.setVisible(R.id.check, true);
+                baseViewHolder.setVisible(R.id.item_user_goodsitem_check, true);
             }
 
 
             //加载图片
-            SimpleDraweeView imageView = baseViewHolder.getView(R.id.goods_img);
+            SimpleDraweeView imageView = baseViewHolder.getView(R.id.item_user_goodsitem_goods_img);
             imageView.setImageURI(Uri.parse(messageModel.getImgPath()));
 
             String title = messageModel.getTitle();
@@ -325,9 +320,9 @@ public class ActivityCollect extends BaseActivity {
                     title = title.substring(1);
                 }
             }
-            baseViewHolder.setText(R.id.goods_title, title)
-                    .setText(R.id.money, "￥" + Utils.formatFee(messageModel.getCostMoney() + ""))
-                    .setOnCheckedChangeListener(R.id.check, new CompoundButton.OnCheckedChangeListener() {
+            baseViewHolder.setText(R.id.item_user_goodsitem_goods_title, title)
+                    .setText(R.id.item_user_goodsitem_money, "￥" + Utils.formatFee(messageModel.getCostMoney() + ""))
+                    .setOnCheckedChangeListener(R.id.item_user_goodsitem_check, new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                             adapter.getData().get(baseViewHolder.getPosition()).setCheck(b);

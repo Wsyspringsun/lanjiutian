@@ -2,8 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!--圆形对勾的checkbox-->
     <item android:state_checked="true"
-        android:drawable="@mipmap/icon_checkbox_yes" /><!--设置选中图片-->
+        android:drawable="@drawable/icon_checkbox_yes" /><!--设置选中图片-->
     <item android:state_checked="false"
-        android:drawable="@mipmap/icon_checkbox_no" /><!--设置未选中图片-->
-    <!--<item android:drawable="@mipmap/icon_checkbox_no" />-->
+        android:drawable="@drawable/icon_checkbox_no" /><!--设置未选中图片-->
 </selector>

@@ -17,6 +17,7 @@ import com.wyw.ljtds.R;
 import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.MyLocation;
 import com.wyw.ljtds.model.SingleCurrentUser;
+import com.wyw.ljtds.utils.Utils;
 
 import java.util.List;
 
@@ -85,6 +86,7 @@ public class SelDefaultAddressFragment extends DialogFragment {
         initView(v);
         initEvent();
         initData();
+//        Utils.log("onCreateDialog:.......");
 
         return new AlertDialog.Builder(getActivity()).setView(v).setCancelable(false).create();
     }

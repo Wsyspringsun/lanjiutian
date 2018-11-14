@@ -27,6 +27,7 @@ import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
 import com.wyw.ljtds.ui.user.ActivityLoginOfValidCode;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.dialog.LoadingDialogUtils;
 
 import org.xutils.x;
@@ -147,6 +148,7 @@ public class BaseActivity extends AppCompatActivity implements XNSDKListener {
     @Override
     protected void onStart() {
         super.onStart();
+        Utils.log(this.getLocalClassName()+" onStart ");
     }
 
     @Override

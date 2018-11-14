@@ -5,12 +5,12 @@ android {
         ljt_mgr {
             keyAlias 'ljtmgr'
             keyPassword 'ljtds123'
-            storeFile file('/home/wsy/AndroidStudioProjects/androidproject/keystore/ljt_mgr.jks')
+            storeFile file('F:\\seeyoung\\androidProject\\androidproject\\keystore\\ljt_mgr.jks')
             storePassword 'ljtds123'
         }
     }
     compileSdkVersion 23
-    buildToolsVersion "25.0.1"
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.wyw.ljtmgr"
@@ -56,7 +56,6 @@ dependencies {
     compile 'org.xutils:xutils:3.3.38'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.1.3'
     compile 'com.gxz.pagerslidingtabstrip:library:1.3'
     compile 'com.facebook.fresco:fresco:0.9.0'
     compile 'com.alibaba:fastjson:1.1.64.android'
@@ -73,13 +72,12 @@ dependencies {
         transitive = true
     }
     compile 'cat.ereza:customactivityoncrash:1.5.0'
-//    依赖了RestHttp加载网络图片
+    //    依赖了RestHttp加载网络图片
     compile 'cn.alien95:resthttp:1.0.5'
-//    Android九宫格显示多图或item
+    //            storeFile file('/home/wsy/AndroidStudioProjects/androidproject/keystore/ljt_mgr.jks')
+    //    Android九宫格显示多图或item
     compile 'cn.lemon:multiview:1.0.1'
     compile project(':appbase')
-
-
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

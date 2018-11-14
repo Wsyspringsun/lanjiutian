@@ -41,7 +41,10 @@
                     android:layout_gravity="top|right"
                     android:layout_marginRight="@dimen/vertical_margin"
                     android:scaleType="fitCenter"
-                    android:src="@mipmap/feichufang" />
+                    android:src="@mipmap/feichufang"
+                    android:visibility="gone" />
+
+                <include layout="@layout/fragment_goods_huodong" />
 
             </FrameLayout>
 

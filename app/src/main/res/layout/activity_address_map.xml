@@ -55,27 +55,48 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_margin="@dimen/vertical_margin"
-            android:text="@string/confirm" />
+            android:background="@color/base_red"
+            android:text="@string/confirm"
+            android:textColor="@color/white" />
 
-        <TextView
-            android:id="@+id/activity_address_map_tv_mylocation"
-            style="@style/font_ww_18_black"
+        <RelativeLayout
+            android:id="@+id/activity_address_map_rl_addressdesc"
             android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/activity_address_map_btn_confirm"
-            android:layout_marginLeft="@dimen/vertical_margin"
-            android:layout_marginRight="@dimen/vertical_margin"
-            android:paddingLeft="@dimen/normal_padding"
-            android:text="@string/searchposition" />
+            android:layout_above="@id/activity_address_map_btn_confirm">
 
+            <ImageView
+                android:id="@+id/activity_address_map_iv_searchmore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_jiantou_right" />
+
+
+            <TextView
+                android:id="@+id/activity_address_map_tv_mylocation"
+                style="@style/font_ww_18_black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/vertical_margin"
+                android:layout_marginRight="@dimen/vertical_margin"
+                android:layout_toLeftOf="@id/activity_address_map_iv_searchmore"
+                android:background="@color/white"
+                android:paddingLeft="@dimen/normal_padding"
+                android:text="@string/searchposition" />
+
+        </RelativeLayout>
 
         <ImageButton
             android:id="@+id/activity_address_map_btn_location"
             android:layout_width="@dimen/x30"
             android:layout_height="@dimen/x30"
-            android:layout_above="@id/activity_address_map_tv_mylocation"
+            android:layout_above="@id/activity_address_map_rl_addressdesc"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/vertical_margin_mid"
             android:src="@drawable/ic_location_my" />
 
 

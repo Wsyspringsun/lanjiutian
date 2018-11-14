@@ -3,6 +3,7 @@ package com.wyw.ljtds.ui.goods;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.Business;
+import com.wyw.ljtds.model.CreatOrderModel;
 import com.wyw.ljtds.model.OrderGroupDto;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.utils.GsonUtils;
@@ -61,7 +63,8 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
 
 
     private Map<RadioButton, String> mapFapiaoRbList;
-    Business orderModel;
+//    Business orderModel;
+    private CreatOrderModel orderModel;
 
     @Event(value = {R.id.queding, R.id.header_return, R.id.activity_orderbill_rb_fapiao_no, R.id.activity_orderbill_rb_fapiao_yes})
     private void onClick(View v) {
@@ -71,20 +74,13 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
                 break;
             case R.id.queding:
                 Intent mIntent = new Intent();
-//                mIntent.putExtra("possition", getIntent().getIntExtra("possition", 0));
-//                mIntent.putExtra("peisong", "0");
-//                mIntent.putExtra("fapiao_flg1", "1");
-//                mIntent.putExtra("fapiao_flg2", "0");
-//                mIntent.putExtra("fapiao_flg4", fapiao4);
-//                mIntent.putExtra("fapiao_flg3", editText.getText().toString().trim());
                 if (rbgFapiao.getCheckedRadioButtonId() == R.id.activity_orderbill_rb_fapiao_no) {
                     orderModel.setINVOICE_TAX("");
                     orderModel.setINVOICE_TITLE("");
                     orderModel.setINVOICE_CONTENT("");
                     orderModel.setINVOICE_TYPE("");
                     orderModel.setINVOICE_ORG("");
-                    String jsonStr = GsonUtils.Bean2Json(orderModel);
-                    mIntent.putExtra(TAG_ORDER, jsonStr);
+                    mIntent.putExtra(TAG_ORDER, (Parcelable) orderModel);
                     setResult(AppConfig.IntentExtraKey.RESULT_OK, mIntent);
                     finish();
                 } else {
@@ -96,8 +92,7 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
                         ToastUtil.show(this, "请填写发票抬头信息");
                     } else {
                         orderModel.setINVOICE_TITLE(edTitle.getText().toString().trim());
-                        String jsonStr = GsonUtils.Bean2Json(orderModel);
-                        mIntent.putExtra(TAG_ORDER, jsonStr);
+                        mIntent.putExtra(TAG_ORDER, (Parcelable) orderModel);
                         setResult(AppConfig.IntentExtraKey.RESULT_OK, mIntent);
                         finish();
                     }
@@ -126,20 +121,18 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         edCompanyId.setVisibility(View.GONE);
+        //监听是个人发票还是公司发票
         rgOrgLvl.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 Log.e(AppConfig.ERR_TAG, "changge");
                 switch (checkedId) {
                     case R.id.dialog_pay_bill_gongsi:
-                        Log.e(AppConfig.ERR_TAG, "changge : gongsi");
                         edCompanyId.setVisibility(View.VISIBLE);
                         orderModel.setINVOICE_ORG("1");
                         break;
                     case R.id.dialog_pay_bill_gren:
-                        Log.e(AppConfig.ERR_TAG, "changge : geren");
                         edCompanyId.setVisibility(View.GONE);
                         orderModel.setINVOICE_ORG("0");
                         break;
@@ -148,26 +141,22 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
         });
 
 
-        title.setText("选择配送方式及发票");
+        title.setText("选择发票");
         rgOrgLvl.check(R.id.dialog_pay_bill_gren);
 
 
         //bind initial data to views
         mapFapiaoRbList = new HashMap<>();
-        String jsonStr = getIntent().getStringExtra(TAG_ORDER);
-        if (!StringUtils.isEmpty(jsonStr)) {
-            //it data by intent data
-            orderModel = GsonUtils.Json2Bean(jsonStr, Business.class);
-        } else {
-            orderModel = new Business();
-        }
-        if ("0".equals(orderModel.getINVOICE_FLG())) {
+        orderModel = getIntent().getParcelableExtra(TAG_ORDER);
+
+        if ("0".equals(orderModel.getINVOICE_FLG()) || StringUtils.isEmpty(orderModel.getINVOICE_FLG())) {
             //不开发票
             llXiangQing.setVisibility(View.GONE);
             rbgFapiao.check(R.id.activity_orderbill_rb_fapiao_no);
         } else {
             //初始化 数据
             llXiangQing.setVisibility(View.VISIBLE);
+            //开发票
             rbgFapiao.check(R.id.activity_orderbill_rb_fapiao_yes);
 
             rbFapiaoYes.setText(Business.mapFapiaoCatText.get(orderModel.getINVOICE_CONTENT()));
@@ -188,16 +177,9 @@ public class ActivityGoodsSubmitBill extends BaseActivity {
         }
     }
 
-    public static Intent getIntent(Context context, OrderGroupDto biz) {
+    public static Intent getIntent(Context context, Parcelable invoiceInfo) {
         Intent it = new Intent(context, ActivityGoodsSubmitBill.class);
-        String jsonStr = GsonUtils.Bean2Json(biz);
-        it.putExtra(TAG_ORDER, jsonStr);
-//        it.putExtra("possition", biz);
-//        it.putExtra("fapiao_flg1", biz.getINVOICE_FLG());
-//        it.putExtra("fapiao_flg2", biz.getINVOICE_TYPE());
-//        it.putExtra("fapiao_flg3", biz.getINVOICE_TITLE());
-//        it.putExtra("fapiao_flg4", biz.getINVOICE_CONTENT());
-//        it.putExtra("peisong", biz.getDISTRIBUTION_MODE());
+        it.putExtra(TAG_ORDER, invoiceInfo);
         return it;
     }
 }

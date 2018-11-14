@@ -67,13 +67,24 @@
 
 
     <Button
+        android:id="@+id/fragment_order_detail_btn_delegate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/margin"
+        android:background="@drawable/button_selector"
+        android:text="@string/logistic_delegate"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_5" />
+
+    <Button
         android:id="@+id/fragment_order_detail_btn_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="@dimen/margin"
         android:background="@drawable/button_selector"
-        android:text="拦件"
+        android:text="揽件"
         android:textColor="@color/white"
         android:textSize="@dimen/font_5" />
 

@@ -62,8 +62,6 @@
 
                 <RadioButton
                     android:id="@+id/dialog_pay_choice_peisong_gain"
-
-                    android:visibility="gone"
                     android:layout_width="@dimen/x64"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x15"
@@ -100,7 +98,7 @@
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/zhifu_rb1"
+                    android:id="@+id/zhifu_rb_onlinepay"
                     android:layout_width="@dimen/x64"
                     android:layout_height="wrap_content"
                     android:background="@drawable/select_btn_order"
@@ -112,7 +110,7 @@
                     android:textSize="14sp" />
 
                 <RadioButton
-                    android:id="@+id/zhifu_rb2"
+                    android:id="@+id/zhifu_rb_daofu"
                     android:layout_width="@dimen/x64"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x15"

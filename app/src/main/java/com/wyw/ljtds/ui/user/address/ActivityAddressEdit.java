@@ -246,6 +246,7 @@ public class ActivityAddressEdit extends BaseActivity {
         if (REQUEST_PROVICE == requestCode) {
             String addr = data.getStringExtra(AddressMapActivity.TAG_ADDRESS_POI_ADDRESS);
             String lat = data.getStringExtra(AddressMapActivity.TAG_ADDRESS_POI_LAT);
+            Utils.log("addr lat" + lat);
             shengshi.setText(addr);
 
             addrModel.setLOCATION(addr);
@@ -255,7 +256,7 @@ public class ActivityAddressEdit extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == event.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             finish();
         }
         return super.onKeyDown(keyCode, event);

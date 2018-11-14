@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.CreatOrderModel;
+import com.wyw.ljtds.model.GoodsModel;
 import com.wyw.ljtds.model.OrderTrade;
 import com.wyw.ljtds.model.OrderTradeDto;
 import com.wyw.ljtds.ui.base.BaseActivity;
@@ -42,6 +43,8 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
     private static final String TAG_DISTRIBUTIONMODE = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmitChoice.TAG_DISTRIBUTIONMODE";
     private static final String TAG_PAYMENTMETHOD = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmitChoice.TAG_PAYMENTMETHOD";
     private static final String TAG_INS_USER_ID = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmitChoice.TAG_INS_USER_ID";
+    private static final String TAG_TOP_FLG = "com.wyw.ljtds.ui.goods.ActivityGoodsSubmitChoice.TAG_TOP_FLG";
+
     @ViewInject(R.id.header_title)
     private TextView title;
     @ViewInject(R.id.time1)
@@ -52,8 +55,13 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
     RadioGroup rgZhifu;
     @ViewInject(R.id.dialog_pay_choice_peisong)
     RadioGroup rgPeisong;
-    @ViewInject(R.id.zhifu_rb1)
-    RadioButton rbZhifu1;
+    @ViewInject(R.id.zhifu_rb_daofu)
+    RadioButton rbZhifuDaofu;
+    @ViewInject(R.id.dialog_pay_choice_peisong_send)
+    RadioButton rbPeisongSend;
+    @ViewInject(R.id.dialog_pay_choice_peisong_gain)
+    RadioButton rbPeisongGain;
+
 
     private ArrayAdapter adapter1;
 
@@ -61,7 +69,7 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
     private void onClick(View v) {
         Intent mIntent = new Intent();
 
-        if (rgZhifu.getCheckedRadioButtonId() == R.id.zhifu_rb1) {
+        if (rgZhifu.getCheckedRadioButtonId() == R.id.zhifu_rb_onlinepay) {
             //在线支付
             mIntent.putExtra(TAG_ZHIFU, "0");
         } else {
@@ -122,24 +130,43 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
         //设置默认值
         String disMtd = getIntent().getStringExtra(TAG_DISTRIBUTIONMODE);
         String payMtd = getIntent().getStringExtra(TAG_PAYMENTMETHOD);
-        if (OrderTrade.DISTRIBUTION_MODE_SEND.equals(disMtd)) {
-            rgPeisong.check(R.id.dialog_pay_choice_peisong_send);
-        } else if (OrderTrade.DISTRIBUTION_MODE_DIY.equals(disMtd)) {
+        String topFlg = getIntent().getStringExtra(TAG_TOP_FLG);
+        if (OrderTrade.DISTRIBUTION_MODE_DIY.equals(disMtd)) {
             rgPeisong.check(R.id.dialog_pay_choice_peisong_gain);
+        } else {
+            rgPeisong.check(R.id.dialog_pay_choice_peisong_send);
         }
 
         //禁止医药行业在线支付
+        /*
+        String insUserId = getIntent().getStringExtra(TAG_INS_USER_ID);
+
+        if (AppConfig.GROUP_LJT.equals(insUserId)) {
+            rbZhifuOnlinepay.setVisibility(View.GONE);
+        } else {
+            rbZhifuOnlinepay.setVisibility(View.VISIBLE);
+        }*/
         String insUserId = getIntent().getStringExtra(TAG_INS_USER_ID);
         if (AppConfig.GROUP_LJT.equals(insUserId)) {
-            rbZhifu1.setVisibility(View.GONE);
-        } else {
-            rbZhifu1.setVisibility(View.VISIBLE);
+            //不能门店自提
+            rgPeisong.check(R.id.dialog_pay_choice_peisong_send);
+            rbPeisongGain.setVisibility(View.GONE);
         }
 
         if (OrderTrade.PAYMTD_ONLINE.equals(payMtd)) {
-            rgZhifu.check(R.id.zhifu_rb1);
+            rgZhifu.check(R.id.zhifu_rb_onlinepay);
         } else if (OrderTrade.PAYMTD_MONEY.equals(payMtd)) {
-            rgZhifu.check(R.id.zhifu_rb2);
+            rgZhifu.check(R.id.zhifu_rb_daofu);
+        }
+
+        if (GoodsModel.TOP_FLG_ZHIJIEGOU.equals(topFlg)) {
+            //只能货到付款
+            rgZhifu.check(R.id.zhifu_rb_onlinepay);
+            rbZhifuDaofu.setVisibility(View.GONE);
+
+            //只能门店自提
+            rgPeisong.check(R.id.dialog_pay_choice_peisong_gain);
+            rbPeisongSend.setVisibility(View.GONE);
         }
 
 
@@ -150,7 +177,7 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
 //        }
 
 //        if (zhifu_s.equals("在线支付")) {
-//            radioGroup1.check(R.id.zhifu_rb1);
+//            radioGroup1.check(R.id.zhifu_rb_onlinepay);
 //        } else {
 //            radioGroup1.check(R.id.zhifu_rb2);
 //        }
@@ -158,11 +185,13 @@ public class ActivityGoodsSubmitChoice extends BaseActivity {
     }
 
 
-    public static Intent getIntent(Context context, String distributionMode, String paymentMethod, String insUserId) {
+    public static Intent getIntent(Context context, String distributionMode, String paymentMethod, String insUserId, String topFlg) {
         Intent it = new Intent(context, ActivityGoodsSubmitChoice.class);
+        Utils.log("showOrder:" + " TAG_DISTRIBUTIONMODE :" + distributionMode);
         it.putExtra(TAG_DISTRIBUTIONMODE, distributionMode);
         it.putExtra(TAG_PAYMENTMETHOD, paymentMethod);
         it.putExtra(TAG_INS_USER_ID, insUserId);
+        it.putExtra(TAG_TOP_FLG, topFlg);
         return it;
     }
 }

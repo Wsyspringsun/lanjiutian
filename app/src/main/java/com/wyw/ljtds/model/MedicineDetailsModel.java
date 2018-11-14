@@ -10,7 +10,9 @@ import java.util.List;
  */
 
 public class MedicineDetailsModel extends MedicineListModel {
+
     public static final String PRESCRIPTION_FLG_RX = "1"; //非处方
+    public static final String PRESCRIPTION_FLG_OTC = "2"; //非处方
     private String SHARE_TITLE;  //分享主题
     private String SHARE_DESCRIPTION; //分享描述
     //商品折扣
@@ -42,8 +44,6 @@ public class MedicineDetailsModel extends MedicineListModel {
     private BigDecimal PILE;
     //销量
     private int SALE_NUM;
-    //营销标识    0:新品,1：置顶,2:推荐,3:活动，4：品牌，5：折扣，6：医药，7:热卖
-    private String TOP_FLG;
     //计量单位
     private String WAREUNIT;
     //产地
@@ -156,13 +156,7 @@ public class MedicineDetailsModel extends MedicineListModel {
         this.SALE_NUM = SALE_NUM;
     }
 
-    public String getTOP_FLG() {
-        return TOP_FLG;
-    }
 
-    public void setTOP_FLG(String TOP_FLG) {
-        this.TOP_FLG = TOP_FLG;
-    }
 
     public BigDecimal getMEMPRICE2() {
         return MEMPRICE2;

@@ -1,5 +1,6 @@
 package com.wyw.ljtds.biz.biz;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -27,6 +28,14 @@ import cn.xiaoneng.uiutils.XNUIUtils;
  */
 
 public class CategoryBiz extends BaseBiz {
+    private Context context = null;
+
+    public static CategoryBiz getInstance(Context ctx) {
+        CategoryBiz ins = new CategoryBiz();
+        ins.context = ctx;
+        return ins;
+    }
+
     /**
      * 获取商品一级菜单
      *
@@ -146,10 +155,11 @@ public class CategoryBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static List<CommodityListModel> getCommodityList(String classId, String orderby, String keyword, String startIdx, String pageSize)
+    public static List<CommodityListModel> getCommodityList(String topFlg, String classId, String orderby, String keyword, String startIdx, String pageSize)
             throws BizFailure, ZYException {
 
         SoapProcessor ksoap2 = new SoapProcessor("Service", "getCommodityList", false);
+        ksoap2.setProperty("topFlg", topFlg, PropertyType.TYPE_STRING);
         ksoap2.setProperty("classId", classId, PropertyType.TYPE_STRING);
         ksoap2.setProperty("orderby", orderby, PropertyType.TYPE_STRING);
         ksoap2.setProperty("keyword", keyword, PropertyType.TYPE_STRING);
@@ -181,7 +191,7 @@ public class CategoryBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
-    public static List<MedicineListModel> getMedicineList(String type, String topFlg, String classId, String orderby, String keyword, String startIdx, String pageSize, String lat, String lng)
+    public List<MedicineListModel> getMedicineList(String type, String topFlg, String classId, String orderby, String keyword, String startIdx, String pageSize, String lat, String lng)
             throws BizFailure, ZYException {
         SoapProcessor ksoap2 = new SoapProcessor("Service", "getMedicineList", false);
         ksoap2.setProperty("type", type, PropertyType.TYPE_STRING);
@@ -245,4 +255,11 @@ public class CategoryBiz extends BaseBiz {
         return bms;
     }
 
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
 }

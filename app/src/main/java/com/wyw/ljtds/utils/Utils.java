@@ -1,21 +1,29 @@
 package com.wyw.ljtds.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -28,8 +36,11 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.weixin.uikit.MMAlert;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.SoapProcessor;
+import com.wyw.ljtds.biz.exception.BizFailure;
+import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.MyApplication;
+import com.wyw.ljtds.ui.user.manage.UserInfoExtraActivity;
 import com.wyw.ljtds.ui.user.order.LogisticTraceActivity;
 
 import junit.framework.Assert;
@@ -69,6 +80,12 @@ public class Utils {
     private static final int MMAlertSelect2 = 1;
     private static final int MMAlertSelect3 = 2;
 
+
+    public static final String RESPONSE_STATUS = "status";
+    public static final String RESPONSE_MESSAGE = "message";
+    public static final String RESPONSE_RESULT = "result";
+    public static final String RESPONSE_STATUSCODE = "statusCode";
+
     private static String REG_PATTERN_PHONE = "\\d{7}|0\\d{10}|13\\d{9}|14\\d{9}|15\\d{9}|17\\d{9}|18\\d{9}";
     private static final String TAG = "SDK_Sample.Util";
     private static final int MAX_DECODE_PICTURE_SIZE = 1920 * 1440;
@@ -77,21 +94,21 @@ public class Utils {
     public final static String CoorType_BD09LL = "bd09ll";
     public final static String CoorType_BD09MC = "bd09";
     /***
-     *61 ： GPS定位结果，GPS定位成功。
-     *62 ： 无法获取有效定位依据，定位失败，请检查运营商网络或者wifi网络是否正常开启，尝试重新请求定位。
-     *63 ： 网络异常，没有成功向服务器发起请求，请确认当前测试手机网络是否通畅，尝试重新请求定位。
-     *65 ： 定位缓存的结果。
-     *66 ： 离线定位结果。通过requestOfflineLocaiton调用时对应的返回结果。
-     *67 ： 离线定位失败。通过requestOfflineLocaiton调用时对应的返回结果。
-     *68 ： 网络连接失败时，查找本地离线定位时对应的返回结果。
-     *161： 网络定位结果，网络定位定位成功。
-     *162： 请求串密文解析失败。
-     *167： 服务端定位失败，请您检查是否禁用获取位置信息权限，尝试重新请求定位。
-     *502： key参数错误，请按照说明文档重新申请KEY。
-     *505： key不存在或者非法，请按照说明文档重新申请KEY。
-     *601： key服务被开发者自己禁用，请按照说明文档重新申请KEY。
-     *602： key mcode不匹配，您的ak配置过程中安全码设置有问题，请确保：sha1正确，“;”分号是英文状态；且包名是您当前运行应用的包名，请按照说明文档重新申请KEY。
-     *501～700：key验证失败，请按照说明文档重新申请KEY。
+     * 61 ： GPS定位结果，GPS定位成功。
+     * 62 ： 无法获取有效定位依据，定位失败，请检查运营商网络或者wifi网络是否正常开启，尝试重新请求定位。
+     * 63 ： 网络异常，没有成功向服务器发起请求，请确认当前测试手机网络是否通畅，尝试重新请求定位。
+     * 65 ： 定位缓存的结果。
+     * 66 ： 离线定位结果。通过requestOfflineLocaiton调用时对应的返回结果。
+     * 67 ： 离线定位失败。通过requestOfflineLocaiton调用时对应的返回结果。
+     * 68 ： 网络连接失败时，查找本地离线定位时对应的返回结果。
+     * 161： 网络定位结果，网络定位定位成功。
+     * 162： 请求串密文解析失败。
+     * 167： 服务端定位失败，请您检查是否禁用获取位置信息权限，尝试重新请求定位。
+     * 502： key参数错误，请按照说明文档重新申请KEY。
+     * 505： key不存在或者非法，请按照说明文档重新申请KEY。
+     * 601： key服务被开发者自己禁用，请按照说明文档重新申请KEY。
+     * 602： key mcode不匹配，您的ak配置过程中安全码设置有问题，请确保：sha1正确，“;”分号是英文状态；且包名是您当前运行应用的包名，请按照说明文档重新申请KEY。
+     * 501～700：key验证失败，请按照说明文档重新申请KEY。
      */
 
     public static float[] EARTH_WEIGHT = {0.1f, 0.2f, 0.4f, 0.6f, 0.8f}; // 推算计算权重_地球
@@ -136,6 +153,79 @@ public class Utils {
             inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
         }
         return inSampleSize;
+    }
+
+    /**
+     * 在左边拼接字符，达到制定总长度
+     *
+     * @param sH 要进行拼接的字符串
+     * @param s  拼接的字符
+     * @param i  最终结果的总长度
+     * @return
+     */
+    public static String leftPad(String sH, String s, int i) {
+        if (sH == null) return "";
+        String temp = sH;
+        while (temp.length() < i) {
+            temp = s + temp;
+        }
+        return temp;
+    }
+
+    /**
+     * 图片保存为文件
+     *
+     * @param filename
+     * @param bitmap
+     */
+    public static void saveFile(String filename, Bitmap bitmap) {
+        File f = new File(filename);
+        FileOutputStream fos = null;
+        try {
+            f.createNewFile();
+            fos = new FileOutputStream(f);
+            Bitmap.CompressFormat cprsFormat = Bitmap.CompressFormat.PNG;
+            bitmap.compress(cprsFormat, 100, fos);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            if (fos != null) {
+                fos.flush();
+                fos.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void showErrMsg(Activity context, String err) {
+        ToastUtil.show(context, err);
+    }
+
+    public static Integer[] range(int start, int end) {
+        Integer[] arr = new Integer[end - start];
+        int i = 0, x = start;
+        while (x < end) {
+            arr[i] = x;
+            x++;
+            i++;
+        }
+        return arr;
+    }
+
+    public static <T> String join(T[] arr, String s) {
+        if (arr == null) return "";
+        if (arr.length <= 0) return "";
+        StringBuilder sb = new StringBuilder();
+        for (T i : arr) {
+            sb.append(String.valueOf(i)).append(s);
+        }
+        if (sb.lastIndexOf(s) == sb.length() - 1)
+            return sb.substring(0, sb.length());
+        return sb.toString();
     }
 
 
@@ -267,6 +357,7 @@ public class Utils {
         StackTraceElement[] trace = new Throwable().getStackTrace();
         if (trace != null && trace.length > 1) {
             int segmentSize = 3 * 1024;
+            if (StringUtils.isEmpty(content)) return;
             long length = content.length();
             if (length <= segmentSize) {// 长度小于等于限制直接打印
                 Log.i(AppConfig.ERR_TAG, trace[1].getClassName() + "#" + trace[1].getMethodName() + " > " + trace[1].getLineNumber() + " :" + content);
@@ -280,6 +371,21 @@ public class Utils {
                 Log.i(AppConfig.ERR_TAG, " > " + content);
             }
         }
+    }
+
+    public static JsonElement parseResponse(String response) throws ZYException, BizFailure {
+        JsonParser parser = new JsonParser();
+        JsonObject jsonObject = parser.parse(response).getAsJsonObject();
+        JsonElement resultElement;
+
+        boolean status = jsonObject.get(RESPONSE_STATUS).getAsBoolean();
+        if (!status) {
+            String message = jsonObject.get(RESPONSE_MESSAGE).getAsString();
+            throw new BizFailure(message);
+        }
+
+        resultElement = jsonObject.get(RESPONSE_RESULT);
+        return resultElement;
     }
 
     public static void debug(String content) {
@@ -407,87 +513,12 @@ public class Utils {
     }
 
     public static Bitmap extractThumbNail(final String path, final int height, final int width, final boolean crop) {
-        Assert.assertTrue(path != null && !path.equals("") && height > 0 && width > 0);
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-
-        try {
-            options.inJustDecodeBounds = true;
-            Bitmap tmp = BitmapFactory.decodeFile(path, options);
-            if (tmp != null) {
-                tmp.recycle();
-                tmp = null;
-            }
-
-            Log.d(TAG, "extractThumbNail: round=" + width + "x" + height + ", crop=" + crop);
-            final double beY = options.outHeight * 1.0 / height;
-            final double beX = options.outWidth * 1.0 / width;
-            Log.d(TAG, "extractThumbNail: extract beX = " + beX + ", beY = " + beY);
-            options.inSampleSize = (int) (crop ? (beY > beX ? beX : beY) : (beY < beX ? beX : beY));
-            if (options.inSampleSize <= 1) {
-                options.inSampleSize = 1;
-            }
-
-            // NOTE: out of memory error
-            while (options.outHeight * options.outWidth / options.inSampleSize > MAX_DECODE_PICTURE_SIZE) {
-                options.inSampleSize++;
-            }
-
-            int newHeight = height;
-            int newWidth = width;
-            if (crop) {
-                if (beY > beX) {
-                    newHeight = (int) (newWidth * 1.0 * options.outHeight / options.outWidth);
-                } else {
-                    newWidth = (int) (newHeight * 1.0 * options.outWidth / options.outHeight);
-                }
-            } else {
-                if (beY < beX) {
-                    newHeight = (int) (newWidth * 1.0 * options.outHeight / options.outWidth);
-                } else {
-                    newWidth = (int) (newHeight * 1.0 * options.outWidth / options.outHeight);
-                }
-            }
-
-            options.inJustDecodeBounds = false;
-
-            Log.i(TAG, "bitmap required size=" + newWidth + "x" + newHeight + ", orig=" + options.outWidth + "x" + options.outHeight + ", sample=" + options.inSampleSize);
-            Bitmap bm = BitmapFactory.decodeFile(path, options);
-            if (bm == null) {
-                Log.e(TAG, "bitmap decode failed");
-                return null;
-            }
-
-            Log.i(TAG, "bitmap decoded size=" + bm.getWidth() + "x" + bm.getHeight());
-            final Bitmap scale = Bitmap.createScaledBitmap(bm, newWidth, newHeight, true);
-            if (scale != null) {
-                bm.recycle();
-                bm = scale;
-            }
-
-            if (crop) {
-                final Bitmap cropped = Bitmap.createBitmap(bm, (bm.getWidth() - width) >> 1, (bm.getHeight() - height) >> 1, width, height);
-                if (cropped == null) {
-                    return bm;
-                }
-
-                bm.recycle();
-                bm = cropped;
-                Log.i(TAG, "bitmap croped size=" + bm.getWidth() + "x" + bm.getHeight());
-            }
-            return bm;
-
-        } catch (final OutOfMemoryError e) {
-            Log.e(TAG, "decode bitmap failed: " + e.getMessage());
-            options = null;
-        }
-
         return null;
     }
 
     public static Bitmap getQRCodeBitmap(Activity context, String content) {
-        int width = 500;
-        int height = 500;
+        int width = 200;
+        int height = 200;
         String format = "png";// 图像类型
         Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
@@ -641,7 +672,7 @@ public class Utils {
             }
         } else {
             //当前无网络连接,请在设置中打开网络
-            Toast.makeText(context, "当前无网络连接", Toast.LENGTH_LONG);
+            ToastUtil.show(context, "当前无网络连接");
         }
         return "";
     }
@@ -685,9 +716,9 @@ public class Utils {
                         Bitmap.CompressFormat cprsFormatDefault = Bitmap.CompressFormat.PNG;
                         msg.thumbData = Utils.bmpToByteArray(cprsFormatDefault, bmpDefault, true);
 
+                        Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.send_music_thumb);
+                        Bitmap.CompressFormat cprsFormat = Bitmap.CompressFormat.PNG;
                         if (!StringUtils.isEmpty(imgUrl)) {
-                            Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.send_music_thumb);
-                            Bitmap.CompressFormat cprsFormat = Bitmap.CompressFormat.PNG;
                             int fixIdx = imgUrl.lastIndexOf('.');
                             if (fixIdx > 0) {
                                 String fix = imgUrl.substring(fixIdx);
@@ -704,12 +735,12 @@ public class Utils {
                                 }
                             }
 
-                            if (bmp != null && !bmp.isRecycled()) {
-                                Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, AppConfig.THUMB_SIZE, AppConfig.THUMB_SIZE, true);
-                                Utils.log("thumbBmp:" + thumbBmp.getByteCount());
-                                msg.thumbData = Utils.bmpToByteArray(cprsFormat, thumbBmp, true);
-                                bmp.recycle();
-                            }
+
+                        }
+                        if (bmp != null && !bmp.isRecycled()) {
+                            Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, AppConfig.THUMB_SIZE, AppConfig.THUMB_SIZE, true);
+                            msg.thumbData = Utils.bmpToByteArray(cprsFormat, thumbBmp, true);
+                            bmp.recycle();
                         }
 
 
@@ -736,5 +767,18 @@ public class Utils {
 
     private static String buildTransaction(final String type) {
         return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+    }
+
+    public static void loadNetTime(Context context, LocationListener listner) {
+//        通过网络或者GPS的方式。
+        LocationManager locMan = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        //获取最近一次知道的时间
+        //        long networkTS = locMan.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getTime();
+
+        //        或者实时的获取时间：
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listner); //获取当前时间
     }
 }

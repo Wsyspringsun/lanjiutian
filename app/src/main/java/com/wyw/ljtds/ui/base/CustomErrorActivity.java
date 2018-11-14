@@ -17,6 +17,7 @@
 package com.wyw.ljtds.ui.base;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -68,7 +69,7 @@ public class CustomErrorActivity extends Activity {
         OutputStreamWriter outputStreamWriter=null;
         BufferedWriter bufferedWriter=null;
         try {
-            fileOutputStream= MyApplication.getAppContext().openFileOutput( AppConfig.CACHE_ROOT_NAME, MyApplication.getAppContext().MODE_APPEND);
+            fileOutputStream= MyApplication.getAppContext().openFileOutput( AppConfig.CACHE_ROOT_NAME, MODE_APPEND);
             outputStreamWriter=new OutputStreamWriter(fileOutputStream);
             bufferedWriter=new BufferedWriter(outputStreamWriter);
             bufferedWriter.write(data);

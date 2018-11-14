@@ -33,7 +33,7 @@ public class BottomDialog {
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams params = bottomDialog.getWindow().getAttributes();
         params.height = (int) (display.getHeight() * 0.5); // 高度设置为屏幕的0.5
-        params.width = (int) (display.getWidth() * 1);
+        params.width = display.getWidth() * 1;
         bottomDialog.getWindow().setAttributes( params );
         bottomDialog.getWindow().setGravity( Gravity.BOTTOM );
         bottomDialog.getWindow().setWindowAnimations( R.style.popWindow_anim_style );

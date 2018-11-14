@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -43,6 +44,7 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.List;
+import java.util.concurrent.RunnableFuture;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -155,7 +157,7 @@ public class AddressSelActivity extends BaseActivity implements EasyPermissions.
                         v.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent it = AddressSearchActivity.getIntent(AddressSelActivity.this);
+                                Intent it = AddressSearchActivity.getIntent(AddressSelActivity.this,"");
                                 startActivityForResult(it, REQUEST_SEARCH_ADDRESS);
                             }
                         });
@@ -312,8 +314,21 @@ public class AddressSelActivity extends BaseActivity implements EasyPermissions.
 
     private void regLocListener() {
         setLoding(this, false);
-        ((MyApplication) getApplication()).locationService.registerListener(locationListner); //注销掉监听
-        ((MyApplication) getApplication()).locationService.start();// 定位SDK
+//        ((MyApplication) getApplication()).locationService.registerListener(locationListner); //注销掉监听
+//        ((MyApplication) getApplication()).locationService.start();// 定位SDK
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                closeLoding();
+                if (SingleCurrentUser.bdLocation != null) {
+                    MyLocation loc = MyLocation.newInstance(SingleCurrentUser.bdLocation.getLatitude(), SingleCurrentUser.bdLocation.getLongitude(), SingleCurrentUser.bdLocation.getAddrStr());
+                    updateLocationItem(loc);
+                }
+
+            }
+        }, 2000);
+
+
     }
 
 }

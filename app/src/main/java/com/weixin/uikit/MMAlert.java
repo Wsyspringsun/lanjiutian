@@ -294,7 +294,7 @@ public final class MMAlert {
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams params = alert.getWindow().getAttributes();
 //        params.height = params.height;
-        params.width = (int) (display.getWidth() * 1);
+        params.width = display.getWidth() * 1;
         params.dimAmount = 0.2f;
         alert.getWindow().setAttributes(params);
         alert.getWindow().setGravity(Gravity.BOTTOM);

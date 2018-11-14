@@ -12,22 +12,21 @@
     android:paddingRight="@dimen/x10"
     android:paddingTop="@dimen/x5">
 
-    <!--<com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/item_goods_grid_sdv"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        fresco:fadeDuration="200"
-        fresco:failureImage="@mipmap/zhanweitu"
-        fresco:failureImageScaleType="fitCenter"
-        fresco:placeholderImage="@mipmap/zhanweitu" />-->
-    <ImageView
-        android:id="@+id/item_goods_grid_sdv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:src="@mipmap/zhanweitu" />
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/item_goods_grid_sdv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/zhanweitu" />
+
+        <include layout="@layout/fragment_goods_listitem_huodong" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/goods_title"
@@ -45,5 +44,13 @@
         style="@style/font_ww_14"
         android:text="@string/money_renminbi"
         android:textColor="@color/base_bar" />
+
+    <com.wyw.ljtds.widget.TextViewDel
+        android:id="@+id/item_goods_grid_money_old"
+        style="@style/font_ww_14"
+        android:text="@string/money_renminbi"
+        android:textColor="@color/base_bar"
+        android:visibility="gone"
+        fresco:delLineColor="@color/black" />
 
 </LinearLayout>

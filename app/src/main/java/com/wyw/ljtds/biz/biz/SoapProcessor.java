@@ -39,7 +39,7 @@ import com.wyw.ljtds.utils.Utils;
 
 public class SoapProcessor {
 
-    public static enum PropertyType {
+    public enum PropertyType {
         TYPE_STRING(0), TYPE_INTEGER(1), TYPE_LONG(2), TYPE_BOOLEAN(3), TYPE_OBJECT(
                 4);
 
@@ -157,11 +157,11 @@ public class SoapProcessor {
         try {
             androidHttpTransport.call(null, envelope);
             if (envelope.bodyIn instanceof SoapFault) {
-                Log.e(AppConfig.ERR_TAG, envelope.bodyIn.toString());
+                Utils.log(envelope.bodyIn.toString());
             }
-
             response = (SoapObject) (envelope.bodyIn);
         } catch (IOException e) {
+            Utils.log(e.getMessage());
             if (e instanceof SocketTimeoutException) {
                 throw new OperationTimeOutException(e);
             }
@@ -175,6 +175,7 @@ public class SoapProcessor {
         String result = response.getProperty("return").toString();
 
         // LogUtil.e(result);
+//        Log.e(AppConfig.ERR_TAG,"soap " + this.mMethodName + " response:" + result);
         Utils.log("soap " + this.mMethodName + " response:" + result);
 
         return parseResponse(result);

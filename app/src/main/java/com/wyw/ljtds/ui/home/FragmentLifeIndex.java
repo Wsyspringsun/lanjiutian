@@ -103,7 +103,7 @@ public class FragmentLifeIndex extends BaseFragment {
         super.onStop();
     }
 
-    @Event(value = {R.id.ll_search, R.id.zxing, R.id.right_img, R.id.img_home_active_goods})
+    @Event(value = {R.id.ll_search, R.id.zxing, R.id.right_img })
     private void onclick(View view) {
         Intent it;
         switch (view.getId()) {
@@ -120,11 +120,6 @@ public class FragmentLifeIndex extends BaseFragment {
                 startActivity(it);
                 break;
 
-            case R.id.img_home_active_goods:
-                it = new Intent(getActivity(), ActivityGoodsList.class);
-                it.putExtra("typeid", "");
-                startActivity(it);
-                break;
             case R.id.right_img:
                 startActivity(new Intent(getActivity(), ActivityMessage.class));
                 break;
@@ -208,30 +203,6 @@ public class FragmentLifeIndex extends BaseFragment {
             });
         }
 
-
-        /*rylvIndexMain.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (0 == newState) {
-                    //0标识到达了
-//                    int fp = ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-                    //完成滑动
-                    *//*if (fp == 0) {
-                        llLifeHeader.setBackgroundColor(Color.TRANSPARENT);
-                    } else {
-                        llLifeHeader.setBackgroundColor(getResources().getColor(R.color.base_bar));
-                    }*//*
-                }
-//                Log.e(AppConfig.ERR_TAG, "newState:" + newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-//
-            }
-        });*/
     }
 
     //从网络加载首页所有数据
@@ -262,24 +233,6 @@ public class FragmentLifeIndex extends BaseFragment {
     private void bindData2View() {
         LifeIndexAdapter adapter = new LifeIndexAdapter(getActivity(), homePageModel);
         rylvIndexMain.setAdapter(adapter);
-        //广播新闻
-//        data = new ArrayList<>();
-//        for (int i = 0; i < homePageModel.getNews().size(); i++) {
-//            data.add(homePageModel.getNews().get(i).getTITLE());
-//        }
-//        marqueeView.startWithList(data);
-//
-//
-//        //推荐
-//        list1 = new ArrayList<>();
-//        list1 = homePageModel.getRecommendComms();
-//        for (int j = 0; j < list1.size(); j++) {
-//            list1.get(j).setFlg(false);
-//        }
-//        adapter.setNewData(list1);
-//        adapter.notifyDataSetChanged();
-//
-//        updIconRecyview(homePageModel);
 
     }
 

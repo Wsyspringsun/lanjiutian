@@ -1,6 +1,7 @@
 package com.wyw.ljtds.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,6 +13,11 @@ public class CommodityDetailsModel extends GoodsModel {
     public static final String CUXIAOFLG_YES = "1";
     //是否促销 0 未促销 1 促销
     private String cuxiaoFlg;
+    //积分购买
+    private String costPoint;
+    private Long activeStartDate;
+    private Long miaoShaDaojishi;
+    private String marketPrice; //零元购时的原价
 
     private XiaoNengData xiaonengData;
     //商品id
@@ -41,7 +47,7 @@ public class CommodityDetailsModel extends GoodsModel {
     private String htmlPath;
     //是否vip
     private String vipFlg;
-    //营销标志(0新品，1置顶，2推荐，3活动，4品牌，5折扣，6医药，7热卖)
+    //营销标志(0新品，1置顶，2推荐，3活动，4品牌，5折扣，6医药，7热卖,20零元购)
     private String topFlg;
     //店铺id
     private String oidGroupId;
@@ -260,6 +266,38 @@ public class CommodityDetailsModel extends GoodsModel {
 
     public void setShareTitle(String shareTitle) {
         this.shareTitle = shareTitle;
+    }
+
+    public Long getMiaoShaDaojishi() {
+        return miaoShaDaojishi;
+    }
+
+    public void setMiaoShaDaojishi(Long miaoShaDaojishi) {
+        this.miaoShaDaojishi = miaoShaDaojishi;
+    }
+
+    public Long getActiveStartDate() {
+        return activeStartDate;
+    }
+
+    public void setActiveStartDate(Long activeStartDate) {
+        this.activeStartDate = activeStartDate;
+    }
+
+    public String getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(String marketPrice) {
+        this.marketPrice = marketPrice;
+    }
+
+    public String getCostPoint() {
+        return costPoint;
+    }
+
+    public void setCostPoint(String costPoint) {
+        this.costPoint = costPoint;
     }
 
     public class ColorList {

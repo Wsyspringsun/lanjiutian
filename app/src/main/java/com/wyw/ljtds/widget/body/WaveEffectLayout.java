@@ -228,11 +228,8 @@ public class WaveEffectLayout extends FrameLayout implements Runnable {
         int top = location[1];
         int right = left + view.getMeasuredWidth();
         int bottom = top + view.getMeasuredHeight();
-        if (view.isClickable() && y >= top && y <= bottom
-                && x >= left && x <= right) {
-            return true;
-        }
-        return false;
+        return view.isClickable() && y >= top && y <= bottom
+                && x >= left && x <= right;
     }
 
     @Override
@@ -260,8 +257,6 @@ public class WaveEffectLayout extends FrameLayout implements Runnable {
             }
         }
     }
-
-    ;
 
     private void initParametersForRegion() {
 

@@ -96,6 +96,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".MainActivity"
@@ -158,8 +159,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Login"
-            android:windowSoftInputMode="stateVisible|adjustPan">
-        </activity>
+            android:windowSoftInputMode="stateVisible|adjustPan"></activity>
 
 
         <!--绑定手机号-->
@@ -227,18 +227,20 @@
             android:screenOrientation="portrait">
 
         </activity>
-
+        <!--订单确认-->
         <activity
             android:name=".ui.goods.ActivityGoodsSubmit"
             android:screenOrientation="portrait"
             android:theme="@style/Login"
             android:windowSoftInputMode="adjustPan|stateHidden"></activity>
 
+        <!--选择发票-->
         <activity
             android:name=".ui.goods.ActivityGoodsSubmitBill"
             android:screenOrientation="portrait"
             android:theme="@style/Login"
             android:windowSoftInputMode="adjustPan" />
+        <!--选择配送方式和支付方式-->
         <activity
             android:name=".ui.goods.ActivityGoodsSubmitChoice"
             android:screenOrientation="portrait"
@@ -264,21 +266,24 @@
 
         </activity>
 
-
+        <!--订单详情-->
         <activity
             android:name=".ui.user.order.ActivityOrderInfo"
             android:screenOrientation="portrait"
             android:theme="@style/Login" />
+        <!--评价页面-->
         <activity
             android:name=".ui.user.order.ActivityEvaluate"
             android:screenOrientation="portrait"
             android:theme="@style/Login"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--售后申请-->
         <activity
             android:name=".ui.user.order.ActivityAfterMarket"
             android:screenOrientation="portrait"
             android:theme="@style/Login"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--物流信息-->
         <activity
             android:name=".ui.user.order.ActivityLogistics"
             android:screenOrientation="portrait"
@@ -291,26 +296,35 @@
         <activity
             android:name=".ui.user.manage.ActivityInformation"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.user.manage.ActivityWaitter"
+            android:screenOrientation="portrait" />
+        <!--地址列表-->
         <activity
             android:name=".ui.user.address.AddressActivity"
             android:label="收货地址"
             android:screenOrientation="portrait"></activity>
+        <!--选择地址-->
         <activity
             android:name=".ui.user.address.AddressSelActivity"
             android:label="选择地址"
             android:screenOrientation="portrait">
 
         </activity>
+        <!--地址区域地图-->
         <activity
             android:name=".ui.user.address.AddressMapActivity"
             android:label="选择地址"
             android:screenOrientation="portrait">
 
         </activity>
+        <!--编辑地址-->
         <activity
             android:name=".ui.user.address.ActivityAddressEdit"
             android:screenOrientation="portrait"
             android:theme="@style/Login"></activity>
+        <!--搜索地址-->
         <activity
             android:name=".ui.user.address.AddressSearchActivity"
             android:label="搜索地址"
@@ -324,20 +338,24 @@
             android:name=".ui.user.address.ActivityCity"
             android:screenOrientation="portrait"
             android:theme="@style/Login" />
+        <!--实名认证-->
         <activity
             android:name=".ui.user.manage.ActivityRealName"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible|adjustResize" />
+        <!--版本更新-->
         <activity
             android:name=".ui.user.manage.ActivityUpdate"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.manage.ActivitySecurity"
             android:screenOrientation="portrait" />
+        <!--修改密码-->
         <activity
             android:name=".ui.user.manage.ActivityAmendPassword"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
+        <!--找回密码-->
         <activity
             android:name=".ui.user.manage.ActivityAmendPassword1"
             android:screenOrientation="portrait"
@@ -347,36 +365,40 @@
             android:screenOrientation="portrait" />
 
         <!-- 我的 -->
+        <!-- 我的收藏 -->
         <activity
             android:name=".ui.user.ActivityCollect"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Login" />
-        <activity
-            android:name=".ui.user.ActivityRanking"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/Login" />
-        <activity
-            android:name=".ui.user.ActivityFavorite"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/Login" />
+
+        <!--我的钱包-->
         <activity
             android:name=".ui.user.ActivityWallet"
             android:screenOrientation="portrait" />
+        <!--我的信息-->
         <activity
             android:name=".ui.user.ActivityMessage"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.manage.QrCodeActivity"
+            android:name=".ui.goods.PointShopMedicineActivity"
+            android:label="积分商城"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.help.ActivityHelp"
-            android:screenOrientation="portrait"
-            android:theme="@style/Login" />
+            android:name=".ui.goods.PointShopLifeGoodsListActivity"
+            android:label="积分商城"
+            android:screenOrientation="portrait" />
 
 
+        <!--我的二维码-->
+        <activity
+            android:name=".ui.user.manage.QrCodeActivity"
+            android:screenOrientation="portrait" />
+        <!--帮助中心-->
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.5" />
         <meta-data
             android:name="BaiduMobAd_STAT_ID"
             android:value="e60050ac68" />
@@ -477,8 +499,7 @@
         <activity
             android:name="cn.xiaoneng.activity.ShowCameraActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyDialogTopRight" />
+            android:screenOrientation="portrait" />
         <activity
             android:name="cn.xiaoneng.activity.ShowAlbumActivity"
             android:launchMode="singleTask"
@@ -527,9 +548,6 @@
 
 
         <activity
-            android:name=".ui.user.help.WebShowActivity"
-            android:label="@string/title_activity_web_show" />
-        <activity
             android:name=".ui.user.wallet.BalanceActivity"
             android:label="@string/title_activity_balance" />
         <activity
@@ -550,12 +568,6 @@
         <activity
             android:name=".ui.user.wallet.DianZiBiActivity"
             android:label="@string/title_activity_web_show"></activity>
-        <activity
-            android:name=".ui.TestActivity"
-            android:label="@string/title_activity_test">
-
-
-        </activity>
         <activity
             android:name=".ui.user.order.ReturnGoodsOrderListActivity"
             android:label="@string/title_return"></activity>
@@ -595,6 +607,14 @@
         <activity
             android:name=".ui.user.order.ReturnGoodsOrderInfoActivity"
             android:label="@string/edit_evaluate"></activity>
+
+        <activity
+            android:name=".ui.user.manage.UserInfoExtraActivity"
+            android:label="@string/userinfoextra_title"></activity>
+        <activity
+            android:name=".ui.user.wallet.PointShopActivity"
+            android:label="@string/title_pointshop"></activity>
+        <!--customactivityend-->
 
 
         <!--jiguang========================极光推送需要的组建 begin======================== -->
@@ -669,8 +689,7 @@
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:exported="false"
-            android:theme="@style/MyDialogStyle">
+            android:exported="false">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="${applicationId}" />
@@ -736,13 +755,22 @@
             </intent-filter>-->
         </activity>
 
+
         <receiver
             android:name=".receivers.AppRegister"
             android:permission="com.tencent.mm.plugin.permission.SEND">
             <intent-filter>
                 <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP" />
             </intent-filter>
-        </receiver>
+        </receiver><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" /><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <!--<meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />-->
 
 
     </application>

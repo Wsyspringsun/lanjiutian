@@ -52,7 +52,7 @@
     </style>
 
     <!-- 等待动画 dialog -->
-    <style name="MyDialogStyle">
+    <style name="LjtDialogStyle">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>

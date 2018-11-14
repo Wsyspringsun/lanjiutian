@@ -52,7 +52,6 @@ public class OrderBiz {
         RequestParams params = new RequestParams(AppConfig.WEB_DOMAIN + "/v/order/orderList");
         params.setAsJsonContent(true);
         params.setBodyContent(data);
-        Log.e(AppConfig.TAG_ERR, "params......." + gson.toJson(params));
         x.http().post(params, callback);
     }
 
@@ -86,9 +85,12 @@ public class OrderBiz {
         x.http().post(params, callback);
     }
 
+    /**
+     * 揽件
+     * @param model
+     * @param callback
+     */
     public static void sendOrder(LogisticInfo model, Callback.CommonCallback callback) {
-
-
         Header head = CommonBiz.getDataHeader();
         BaseJson<LogisticInfo> baseJson = new BaseJson<>();
         baseJson.setHead(head);

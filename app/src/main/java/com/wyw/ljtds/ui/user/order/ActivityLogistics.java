@@ -229,7 +229,7 @@ public class ActivityLogistics extends BaseActivity {
             } else {
                 baseViewHolder.setText(R.id.item_order_submit_goods_size, "产地：" + goods.getCOMMODITY_COLOR() + " ;规格：" + goods.getCOMMODITY_SIZE());
             }
-            baseViewHolder.setText(R.id.item_order_submit_goods_title, goods.getCOMMODITY_NAME())
+            baseViewHolder.setText(R.id.item_order_submit_goods_title, StringUtils.deletaFirst(goods.getCOMMODITY_NAME()))
                     .setText(R.id.item_order_submit_goods_money, "￥" + goods.getCOST_MONEY())
                     .setText(R.id.item_order_submit_goods_number, "X" + goods.getEXCHANGE_QUANLITY());
 

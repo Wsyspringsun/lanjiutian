@@ -22,14 +22,14 @@ import org.xutils.view.annotation.ViewInject;
 /**
  * create by wsy on 2017-07-28
  */
-@ContentView(R.layout.activity_fragment)
-public class TicketActivity extends BaseActivityFragment {
-
+@ContentView(R.layout.fragment_tickets)
+public class TicketActivity extends BaseActivity {
     @ViewInject(R.id.activity_fragment_title)
-    private TextView tvTitle ;
+    private TextView tvTitle;
 
-    @Event(value = {R.id.back, R.id.message})
+    @Event(value = {R.id.back,R.id.message,R.id.sel_ticket_dianzibi, R.id.sel_ticket_mianyouquan, R.id.sel_ticket_daijinquan})
     private void onClick(View v) {
+        Intent it = null;
         switch (v.getId()) {
             case R.id.back:
                 finish();
@@ -37,24 +37,28 @@ public class TicketActivity extends BaseActivityFragment {
             case R.id.message:
                 startActivity(new Intent(this, ActivityMessage.class));
                 break;
+            case R.id.sel_ticket_dianzibi:
+                it = new Intent(this, DianZiBiActivity.class);
+                startActivity(it);
+                break;
+            case R.id.sel_ticket_mianyouquan:
+                //抵用邮费
+                it = new Intent(this, YouHuiQuanActivity.class);
+                startActivity(it);
+                break;
+            case R.id.sel_ticket_daijinquan:
+                it = new Intent(this, DaiJinQuanListActivity.class);
+                startActivity(it);
+                break;
             default:
                 break;
         }
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-    }
 
     @Override
-    protected Fragment createFragment() {
-        return TicketFragment.newInstance("","");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         tvTitle.setText(R.string.user_youhuiquan);
     }
 }

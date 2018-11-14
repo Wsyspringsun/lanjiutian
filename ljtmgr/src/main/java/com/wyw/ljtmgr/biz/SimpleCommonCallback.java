@@ -52,8 +52,8 @@ public abstract class SimpleCommonCallback<T extends ServerResponse> implements 
                 context.startActivity(it);
             }
         } else {
-            Log.e(AppConfig.TAG_ERR, "data UnKonw stat........" + rlt.getMsg());
-            Toast.makeText(context, "未知错误:" + rlt.getMsg(), Toast.LENGTH_LONG).show();
+            Log.e(AppConfig.TAG_ERR, "data UnKonw stat........" + rlt.getSuccess() + "--" + rlt.getMsg());
+//            Toast.makeText(context, "未知错误:" + rlt.getMsg(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -63,7 +63,7 @@ public abstract class SimpleCommonCallback<T extends ServerResponse> implements 
     public void onError(Throwable ex, boolean isOnCallback) {
         ex.printStackTrace();
         Log.e(AppConfig.TAG_ERR, "onError........" + ex.getMessage());
-        Toast.makeText(context, "服务器发生故障,请联系管理员", Toast.LENGTH_LONG).show();
+//        Toast.makeText(context, "网络不给力...", Toast.LENGTH_LONG).show();
     }
 
     @Override

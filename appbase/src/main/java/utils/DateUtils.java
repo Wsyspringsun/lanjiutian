@@ -58,6 +58,11 @@ public class DateUtils {
     }
 
 
+    public static String parseTime(Long l) {
+        return parseTime(l, "yyyy-MM-dd HH:mm:ss");
+    }
+
+
     /**
      * 格式化时间
      *

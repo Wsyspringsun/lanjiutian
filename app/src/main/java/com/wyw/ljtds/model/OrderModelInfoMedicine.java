@@ -10,7 +10,6 @@ import java.util.List;
 public class OrderModelInfoMedicine extends OrderGroupDto {
     private XiaoNengData xiaonengData;
     private String ADDRESS; //商铺地址
-    private BigDecimal POINT_MONEY;
     private BigDecimal PAY_AMOUNT;
     private String USER_ADDRESS_ID;
     private Long COMPLETE_DATE;
@@ -102,14 +101,6 @@ public class OrderModelInfoMedicine extends OrderGroupDto {
 
     public void setPAYMENT_METHOD(String PAYMENT_METHOD) {
         this.PAYMENT_METHOD = PAYMENT_METHOD;
-    }
-
-    public BigDecimal getPOINT_MONEY() {
-        return POINT_MONEY;
-    }
-
-    public void setPOINT_MONEY(BigDecimal POINT_MONEY) {
-        this.POINT_MONEY = POINT_MONEY;
     }
 
 }

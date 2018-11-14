@@ -1,10 +1,10 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
-apply plugin: 'com.novoda.bintray-release'
+//apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "25.0.1"
+    buildToolsVersion '27.0.3'
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
@@ -29,6 +29,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.3.0'
 }
 
+/*
 publish {
     userOrg = 'mylhyl'
     groupId = 'com.mylhyl'
@@ -36,4 +37,4 @@ publish {
     version = '2.1.4'
     description = 'circleDialog ios style'
     website = "https://github.com/mylhyl/Android-CircleDialog"
-}
+}*/

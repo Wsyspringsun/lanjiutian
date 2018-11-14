@@ -1,18 +1,10 @@
 package com.wyw.ljtds;
 
-import android.app.AlertDialog;
 import android.app.AppOpsManager;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -21,8 +13,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
 import com.baidu.mobstat.StatService;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -31,43 +21,51 @@ import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
-import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.MyLocation;
 import com.wyw.ljtds.model.SingleCurrentUser;
-import com.wyw.ljtds.model.UpdateAppModel;
+import com.wyw.ljtds.model.UserModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.cart.FragmentCart;
 import com.wyw.ljtds.ui.category.FragmentCategory;
+import com.wyw.ljtds.ui.find.ActivityFindCategort;
 import com.wyw.ljtds.ui.find.FragmentFind;
+import com.wyw.ljtds.ui.goods.ActivityGoodsList;
+import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
+import com.wyw.ljtds.ui.goods.ActivityMedicineList;
+import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
+import com.wyw.ljtds.ui.goods.LifeShopActivity;
+import com.wyw.ljtds.ui.goods.PointShopLifeGoodsListActivity;
+import com.wyw.ljtds.ui.goods.PointShopMedicineActivity;
+import com.wyw.ljtds.ui.goods.ShopActivity;
 import com.wyw.ljtds.ui.home.FragmentLifeIndex;
 import com.wyw.ljtds.ui.home.FragmentUserIndex;
-import com.wyw.ljtds.utils.GsonUtils;
+import com.wyw.ljtds.ui.home.HuoDongActivity;
+import com.wyw.ljtds.ui.user.ActivityRegist;
+import com.wyw.ljtds.ui.user.manage.UserInfoExtraActivity;
+import com.wyw.ljtds.ui.user.wallet.PointShopActivity;
+import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
-import com.wyw.ljtds.utils.Utils;
 
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
 @ContentView(R.layout.activity_main)//setcontextview
-public class MainActivity extends BaseActivity  {
+public class MainActivity extends BaseActivity {
     protected static final int REQUEST_PERMS_LOCATION = 0;//请求Location权限
 
+    public static String TAG_CMD = "";
+    public static final String TAG_CMD_UserInfoExtraActivity = "com.wyw.ljtds.MainActivity.TAG_CMD_UserInfoExtraActivity";
     public static final String TAG_POSITION = "TAG_POSITION";
 
     private static final String CHECK_OP_NO_THROW = "checkOpNoThrow";
@@ -104,37 +102,18 @@ public class MainActivity extends BaseActivity  {
     @ViewInject(R.id.iv_user)
     private ImageView iv_user;
 
-    //    private FragmentHome fragmentHome;
     private FragmentLifeIndex fragmentHome;
     private FragmentCategory fragmentCategory;
     private FragmentFind fragmentFind;
     private FragmentCart fragmentCart;
     private FragmentUserIndex fragmentUser;
 
-    private UpdateAppModel updateAppModel;
-    private BDLocationListener locationListner = new BDLocationListener() {
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-            closeLoding();
-            Log.e(AppConfig.ERR_TAG, "BDLocationListener  onReceiveLocation");
-            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-                //update location to addr
-                MyLocation loc = MyLocation.newInstance(location.getLatitude(), location.getLongitude(), location.getAddrStr());
-                initAddr(loc);
-            } else {
-                //update default location to addr
-                MyLocation loc = MyLocation.newInstance(SingleCurrentUser.defaultLat, SingleCurrentUser.defaultLng, SingleCurrentUser.defaultAddrStr);
-                initAddr(loc);
-                ToastUtil.show(MainActivity.this, MainActivity.this.getString(R.string.err_location));
-            }
-            ((MyApplication) MainActivity.this.getApplication()).locationService.unregisterListener(locationListner); //注销掉监听
-        }
-    };
     private List<AddressModel> addrlist;
     private Bundle savedInstanceState;
     private FragmentTransaction fragmentTransaction;
 
     private UserBiz bizUser;
+
 
     @Event(value = {R.id.home, R.id.category, R.id.find, R.id.shopping_cart, R.id.user})
     private void setlect(View v) {
@@ -182,8 +161,9 @@ public class MainActivity extends BaseActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         bizUser = UserBiz.getInstance(this);
-        callback();
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (savedInstanceState == null) {
             AppConfig.currSel = AppConfig.DEFAULT_INDEX_FRAGMENT;
@@ -210,18 +190,15 @@ public class MainActivity extends BaseActivity  {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ((MyApplication) getApplication()).onDestory();
-    }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        //need notify
-
+        if (TAG_CMD_UserInfoExtraActivity.equals(MainActivity.TAG_CMD)) {
+            startActivity(UserInfoExtraActivity.getIntent(MainActivity.this));
+            MainActivity.TAG_CMD = "";
+        }
 
         //other page point a fragment index
         if (AppConfig.currSel != -1) {
@@ -233,10 +210,12 @@ public class MainActivity extends BaseActivity  {
             if (UserBiz.isLogined()) {
                 loadLoginerInfo();
                 loadUserAddr();
+                getUser();
             } else {
                 loadUserLocation();
             }
         }
+
     }
 
     private void loadLoginerInfo() {
@@ -323,7 +302,6 @@ public class MainActivity extends BaseActivity  {
                 if (fragmentFind == null) {
                     fragmentFind = new FragmentFind();
                 }
-
                 selectFragment(fragmentFind, fragmentTransaction);
                 break;
             case 3:
@@ -420,127 +398,12 @@ public class MainActivity extends BaseActivity  {
         initAddr(loc);
     }
 
-    /**
-     * 更新版本
-     */
-    private void callback() {
-        RequestParams params = new RequestParams(AppConfig.APP_UPDATE_URL);
-        Callback.Cancelable cancelable = x.http().get(params, new Callback.CommonCallback<String>() {
-
-            @Override
-            public void onSuccess(String result) {
-                updateAppModel = GsonUtils.Json2Bean(result, UpdateAppModel.class);
-                PackageManager packageManager = getPackageManager();
-                // getPackageName()是你当前类的包名，0代表是获取版本信息
-                PackageInfo packInfo = null;
-                try {
-                    packInfo = packageManager.getPackageInfo(getPackageName(), 0);
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }
-                String version = packInfo.versionName;
-                Log.e(AppConfig.ERR_TAG, "version:" + version + "; " + updateAppModel.getAndroid());
-//                if (!version.equals(updateAppModel.getAndroid())) {
-                if (version.compareTo(updateAppModel.getAndroid()) < 0) {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(
-                            MainActivity.this).setTitle("下载更新").setMessage(updateAppModel.getAndroid_update_message())
-                            .setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.dismiss();
-                                    downloadFile(updateAppModel.getAndroid_download_link(), AppConfig.CACHE_ROOT_NAME);
-                                }
-                            });
-                    if (!updateAppModel.getAndroid_force_update().equals("1")) {
-                        dialog.setNegativeButton("稍后更新", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        });
-                    }
-                    dialog.setCancelable(false).show();
-
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-
-        });
-    }
-
-    private void downloadFile(final String url, String path) {
-
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        RequestParams requestParams = new RequestParams(url);
-        requestParams.setSaveFilePath(path);
-        x.http().get(requestParams, new Callback.ProgressCallback<File>() {
-            @Override
-            public void onWaiting() {
-            }
-
-            @Override
-            public void onStarted() {
-            }
-
-            @Override
-            public void onLoading(long total, long current, boolean isDownloading) {
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressDialog.setMessage("亲，努力下载中。。。");
-                progressDialog.show();
-                progressDialog.setMax((int) total);
-                progressDialog.setProgress((int) current);
-            }
-
-            @Override
-            public void onSuccess(File result) {
-
-                progressDialog.dismiss();
-                File apkFile = new File(AppConfig.CACHE_ROOT_NAME);
-                if (!apkFile.exists()) {
-                    return;
-                }
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setDataAndType(Uri.parse("file://" + apkFile.toString()),
-                        "application/vnd.android.package-archive");
-                startActivity(intent);
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                ex.printStackTrace();
-                ToastUtil.show(MainActivity.this, "下载失败，请检查网络和SD卡");
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-            }
-
-            @Override
-            public void onFinished() {
-            }
-        });
-    }
 
     /**
      * 获取登录着的地址,获得成功则使用,否则使用Location
      */
     private void loadUserAddr() {
+        setLoding(this, false);
         new BizDataAsyncTask<List<AddressModel>>() {
             @Override
             protected List<AddressModel> doExecute() throws ZYException, BizFailure {
@@ -549,6 +412,7 @@ public class MainActivity extends BaseActivity  {
 
             @Override
             protected void onExecuteSucceeded(List<AddressModel> addressModels) {
+                closeLoding();
                 addrlist = addressModels;
                 if (addrlist == null || addrlist.size() <= 0) {
                     //用户没有地址,使用location
@@ -571,7 +435,6 @@ public class MainActivity extends BaseActivity  {
                         //upd addr
                         loc.setADDRESS_ID(model.getADDRESS_ID() + "");
                         initAddr(loc);
-                        closeLoding();
                     }
                 }
             }
@@ -584,21 +447,44 @@ public class MainActivity extends BaseActivity  {
 
     }
 
+    private void getUser() {
+        new BizDataAsyncTask<UserModel>() {
+            @Override
+            protected UserModel doExecute() throws ZYException, BizFailure {
+                return bizUser.getUser();
+            }
+
+            @Override
+            protected void onExecuteSucceeded(UserModel data) {
+                SingleCurrentUser.userInfo = data;
+            }
+
+            @Override
+            protected void OnExecuteFailed() {
+                closeLoding();
+            }
+        }.execute();
+    }
+
     private void loadUserLocation() {
         //request location permission
         Log.e(AppConfig.ERR_TAG, "loadUserLocation");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            String[] perms = {android.Manifest.permission.ACCESS_FINE_LOCATION};
-            if (!EasyPermissions.hasPermissions(this, perms)) {
-                //没有权限，进行权限申请
-                loadDefaultLocation();
-            } else {
-                //有权限，直接使用
-                regLocListener();
-            }
+
+        String[] perms = {android.Manifest.permission.ACCESS_FINE_LOCATION};
+        if (!EasyPermissions.hasPermissions(this, perms)) {
+            //没有权限，进行权限申请,使用默认定位地址
+            loadDefaultLocation();
         } else {
+            //有权限，直接使用
             regLocListener();
         }
+
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//
+//        } else {
+//            regLocListener();
+//        }
 
     }
 
@@ -606,11 +492,123 @@ public class MainActivity extends BaseActivity  {
      * 注册位置监听
      */
     private void regLocListener() {
-        setLoding(this, false);
-        ((MyApplication) MainActivity.this.getApplication()).locationService.registerListener(locationListner); //注销掉监听
-        ((MyApplication) getApplication()).locationService.start();// 定位SDK
+        MyLocation loc = null;
+        if (SingleCurrentUser.bdLocation != null) {
+            loc = MyLocation.newInstance(SingleCurrentUser.bdLocation.getLatitude(), SingleCurrentUser.bdLocation.getLongitude(), SingleCurrentUser.bdLocation.getAddrStr());
+        } else {
+            loc = MyLocation.newInstance(SingleCurrentUser.defaultLat, SingleCurrentUser.defaultLng, SingleCurrentUser.defaultAddrStr);
+        }
+        initAddr(loc);
 
     }
 
+    public static Intent getIntent(Context ctx) {
+        Intent it = new Intent(ctx, MainActivity.class);
+        return it;
+    }
+
+    /***
+     * YX：医药馆商品详情 LX：生活馆商品详情 LL：生活馆列表 YL：医药馆列表 Y
+     * D：医药馆店铺 LD：生活馆店铺 DZ：电子币 CJ：抽奖 MZ：满赠 TJ：特价
+     * MS：秒杀 KJ：砍价 FL：福利 LY：0元购
+     * "name":"积分兑换","value":"JFDH",
+     * "name":"医药馆积分商城","value":"JFYL",
+     * "name":"生活馆积分商城","value":"JFLL"
+     *
+     * @param context
+     * @param flg
+     */
+    public static void navPage(Context context, Map m) {
+
+        Intent it = null;
+        if (m == null) return;
+
+        String flg = (String) m.get("flg");
+        String headId = (String) m.get("headId");
+        String advertizeShowName = (String) m.get("advertizeShowName");
+        switch (flg) {
+            case "ZC":
+                if (UserBiz.isLogined()) {
+                    if (!StringUtils.isEmpty(advertizeShowName)) {
+                        ToastUtil.show(context, advertizeShowName);
+                    }
+                } else {
+                    it = ActivityRegist.getIntent(context);
+                }
+                break;
+            case "YX":
+                it = ActivityMedicinesInfo.getIntent(context, headId, "");
+                break;
+            case "YL":
+                it = ActivityMedicineList.getIntent(context, "0", "", headId, "");
+                break;
+            case "D":
+                it = ShopActivity.getIntent(context, headId);
+                break;
+            case "DZ":
+                //电子币
+                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_DIANZIBI);
+                break;
+            case "CJ":
+                //抽奖
+                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_CHOJIANG);
+                break;
+            case "MZ":
+                //满就送
+                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_MANZENG);
+                break;
+            case "TJ":
+                //特价
+                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_TEJIA);
+                break;
+            case "MS":
+                //秒杀
+                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_MIAOSHA);
+                break;
+            case "FL":
+                //福利中心
+                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_LIST);
+                break;
+            case "ZY":
+                //轻松找药
+                it = new Intent(context, ActivityFindCategort.class);
+                break;
+            case "KJ":
+                //砍价
+                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_KANJIA);
+                break;
+            case "LY":
+                //零元购
+                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_LINGYUANGOU);
+                break;
+            case "ZX":
+                //咨询
+                ((BaseActivity) context).openChat("", "", AppConfig.CHAT_XN_LJT_SETTINGID2, AppConfig.CHAT_XN_LJT_TITLE2, false, "");
+                break;
+            case "JFDH":
+                it = PointShopActivity.getIntent(context);
+                break;
+            case "JFYL":
+                //积分商城
+                it = PointShopMedicineActivity.getIntent(context);
+                break;
+            case "LX":
+                it = ActivityLifeGoodsInfo.getIntent(context, headId);
+                break;
+            case "LL":
+                it = ActivityGoodsList.getIntent(context, headId, "");
+                break;
+            case "LD":
+                it = LifeShopActivity.getIntent(context, headId);
+                break;
+            case "JFLL":
+                it = PointShopLifeGoodsListActivity.getIntent(context);
+                break;
+            default:
+                break;
+        }
+        if (it != null)
+            context.startActivity(it);
+    }
 
 }

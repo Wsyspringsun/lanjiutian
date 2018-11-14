@@ -26,6 +26,7 @@ import com.wyw.ljtds.ui.base.BaseActivityFragment;
 import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.utils.DateUtils;
 import com.wyw.ljtds.utils.GsonUtils;
+import com.wyw.ljtds.utils.StringUtils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -131,13 +132,30 @@ public class ChoJiangRecFragment extends BaseFragment {
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, ChoJiangRec choJiangRec) {
-            baseViewHolder.setText(R.id.item_chojiang_msg, choJiangRec.getAWARD_NAME())
-                    .setText(R.id.item_chojiang_date, choJiangRec.getINS_DATE());
+            baseViewHolder.setText(R.id.item_chojiang_msg, choJiangRec.getAWARD_NAME());
+            String offdate = "抽奖时间：" + choJiangRec.getUPD_DATE() + "";
+            if (!StringUtils.isEmpty(offdate)) {
+                baseViewHolder.setText(R.id.item_chojiang_date, offdate);
+            }
+
+            String addr = "联系方式：";
+
+            if (ChoJiangRec.AWARD_TYPE_SHIWU.equals(choJiangRec.getAWARD_TYPE())) {
+                if (!StringUtils.isEmpty(choJiangRec.getBUSNAME())) {
+                    addr += choJiangRec.getBUSNAME() + " ";
+                }
+
+            }
+            if (!StringUtils.isEmpty(choJiangRec.getORG_MOBILE())) {
+                addr += choJiangRec.getORG_MOBILE();
+            }
+
+            baseViewHolder.setText(R.id.item_chojiang_addr, addr);
             if ("0".equals(choJiangRec.getVALID_FLG())) {
                 baseViewHolder.setImageDrawable(R.id.item_chojiang_stat, getResources().getDrawable(R.drawable.jiang_wait));
             } else if ("1".equals(choJiangRec.getVALID_FLG())) {
                 baseViewHolder.setImageDrawable(R.id.item_chojiang_stat, getResources().getDrawable(R.drawable.jiang_gain));
-            }else{
+            } else {
                 baseViewHolder.setImageDrawable(R.id.item_chojiang_stat, getResources().getDrawable(R.drawable.jiang_disable));
             }
 

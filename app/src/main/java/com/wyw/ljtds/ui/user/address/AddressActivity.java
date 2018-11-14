@@ -230,11 +230,11 @@ public class AddressActivity extends BaseActivity {
 
             rlOp = (RelativeLayout) itemView.findViewById(R.id.item_address_rl_op);
             Boolean isSel = AddressActivity.this.getIntent().getBooleanExtra(TAG_SELECTED_ADDRESS, false);
-            if (isSel) {
+            /*if (isSel) {
                 rlOp.setVisibility(View.GONE);
             } else {
                 rlOp.setVisibility(View.VISIBLE);
-            }
+            }*/
 
             itemView.setOnClickListener(this);
             llytIsCheck.setOnClickListener(this);
@@ -250,7 +250,6 @@ public class AddressActivity extends BaseActivity {
                     Boolean isSel = AddressActivity.this.getIntent().getBooleanExtra(TAG_SELECTED_ADDRESS, false);
                     if (!isSel)
                         return;
-                    Utils.log( "Click..................");
                     it = new Intent();
                     it.putExtra(TAG_SELECTED_ADDRESS, data);
                     AddressActivity.this.setResult(Activity.RESULT_OK, it);

@@ -4,7 +4,8 @@ package com.wyw.ljtmgr.model;
  * Created by Administrator on 2017/8/1.
  */
 public class LoginModel extends ServerResponse {
-    private String adminUserId;
+    public static final String VALIDFLG_DIANZHANG = "1";
+    private String adminUserId; //登录的帐号 手机号码
 
     private String oidGroupId;
 
@@ -17,6 +18,8 @@ public class LoginModel extends ServerResponse {
     private String adminUserName;
 
     private String mos;
+
+    private String validFlg; //是否是店长1:是 0:不是
 
     public String getToken() {
         return token;
@@ -72,5 +75,13 @@ public class LoginModel extends ServerResponse {
 
     public void setOidGroupId(String oidGroupId) {
         this.oidGroupId = oidGroupId;
+    }
+
+    public String getValidFlg() {
+        return validFlg;
+    }
+
+    public void setValidFlg(String validFlg) {
+        this.validFlg = validFlg;
     }
 }

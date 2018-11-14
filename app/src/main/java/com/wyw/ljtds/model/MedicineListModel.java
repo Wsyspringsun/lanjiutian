@@ -9,18 +9,25 @@ import com.wyw.ljtds.utils.Utils;
 public class MedicineListModel extends GoodsModel {
     public static final String BUSAVLID_FLG_YES = "0"; // 营业状态  0:营业中，1:休息中
     public static final String BUSAVLID_FLG_NO = "1"; // 营业状态  0:营业中，1:休息中
+    //营销标识    0:新品,1：置顶,2:推荐,3:活动，4：品牌，5：折扣，6：医药，7:热卖
+    private String TOP_FLG;
     //id
     private String WAREID;
     //名字
     private String WARENAME;
     //价格
     private String SALEPRICE;
+    //原价格
+    private String ORIGINAL_PRICE;
+    //特价
+    private String PROMPRICE;
     //介绍
     private String TREATMENT;
     //图片
     private String IMG_PATH;
     //店铺id
     private String GROUPID;
+    private String COST_POINT;
     private String LNG; // 经度
     private String LAT; // 纬度
     private String BUSAVLID_FLG = ""; // 营业状态  0:营业中，1:休息中
@@ -198,5 +205,37 @@ public class MedicineListModel extends GoodsModel {
             return "未知";
         }
 
+    }
+
+    public String getTOP_FLG() {
+        return TOP_FLG;
+    }
+
+    public void setTOP_FLG(String TOP_FLG) {
+        this.TOP_FLG = TOP_FLG;
+    }
+
+    public String getORIGINAL_PRICE() {
+        return ORIGINAL_PRICE;
+    }
+
+    public void setORIGINAL_PRICE(String ORIGINAL_PRICE) {
+        this.ORIGINAL_PRICE = ORIGINAL_PRICE;
+    }
+
+    public String getPROMPRICE() {
+        return PROMPRICE;
+    }
+
+    public void setPROMPRICE(String PROMPRICE) {
+        this.PROMPRICE = PROMPRICE;
+    }
+
+    public String getCOST_POINT() {
+        return COST_POINT;
+    }
+
+    public void setCOST_POINT(String COST_POINT) {
+        this.COST_POINT = COST_POINT;
     }
 }

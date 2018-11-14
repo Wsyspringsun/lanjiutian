@@ -21,11 +21,11 @@
         android:layout_height="@dimen/x35"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/text_border"
+        android:background="@color/base_bar"
         android:gravity="center"
         android:padding="@dimen/normal_padding"
         android:text="@string/address_add"
-        android:textColor="@color/blue"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 
 </RelativeLayout>

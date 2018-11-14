@@ -2,75 +2,42 @@ package com.wyw.ljtds.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.baidu.mobstat.ExtraInfo;
-import com.bigkoo.convenientbanner.ConvenientBanner;
-import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
-import com.bigkoo.convenientbanner.holder.Holder;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
-import com.facebook.drawee.gestures.GestureDetector;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jauker.widget.BadgeView;
 import com.squareup.picasso.Picasso;
-import com.sunfusheng.marqueeview.MarqueeView;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.config.AppConfig;
-import com.wyw.ljtds.model.HomePageModel1;
-import com.wyw.ljtds.model.IConCatInfo;
 import com.wyw.ljtds.model.IconText;
 import com.wyw.ljtds.model.RecommendModel;
 import com.wyw.ljtds.model.UserDataModel;
 import com.wyw.ljtds.model.UserIndexModel;
 import com.wyw.ljtds.model.UserModel;
 import com.wyw.ljtds.ui.base.ActivityWebView;
-import com.wyw.ljtds.ui.goods.ActivityGoodsList;
-import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
-import com.wyw.ljtds.ui.goods.ShopActivity;
-import com.wyw.ljtds.ui.home.ActivityHomeWeb;
-import com.wyw.ljtds.ui.home.HuoDongActivity;
 import com.wyw.ljtds.ui.user.ActivityCollect;
 import com.wyw.ljtds.ui.user.ActivityLogin;
-import com.wyw.ljtds.ui.user.ActivityLoginOfValidCode;
 import com.wyw.ljtds.ui.user.ActivityMessage;
 import com.wyw.ljtds.ui.user.ActivityWallet;
 import com.wyw.ljtds.ui.user.manage.ActivityManage;
-import com.wyw.ljtds.ui.user.order.ActivityAfterMarket;
 import com.wyw.ljtds.ui.user.order.ActivityOrder;
 import com.wyw.ljtds.ui.user.order.ReturnGoodsOrderListActivity;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.Utils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static com.wyw.ljtds.adapter.goodsinfo.MedicineItemAdapter1.RESIZE;
 
@@ -219,7 +186,7 @@ public class UserIndexAdapter extends RecyclerView.Adapter {
                 hBannerHolder.infoname.setText("--");
                 hBannerHolder.photo.setImageURI(Uri.parse(""));
             } else {
-                hBannerHolder.infojifen.setText("积分：" + data.getUSER_POINT() + "分");
+                hBannerHolder.infojifen.setText("积分：" + Utils.formatFee(data.getUSER_POINT() + "") + "分");
                 hBannerHolder.infoname.setText(data.getMOBILE());
 
                 if (StringUtils.isEmpty(data.getUSER_ICON_FILE_ID())) {
@@ -342,7 +309,7 @@ public class UserIndexAdapter extends RecyclerView.Adapter {
             photo = (SimpleDraweeView) itemView.findViewById(R.id.fragment_user_index_userinfo_img_photo);
             message = (ImageView) itemView.findViewById(R.id.fragment_user_index_userinfo_img_message);
             infoname = (TextView) itemView.findViewById(R.id.fragment_user_index_userinfo_ll_infoname);
-            infojifen = (TextView) itemView.findViewById(R.id.fragment_user_index_userinfo_ll_infoname);
+            infojifen = (TextView) itemView.findViewById(R.id.fragment_user_index_userinfo_ll_infojifen);
             zhanghuguanli = (LinearLayout) itemView.findViewById(R.id.fragment_user_info_userinfo_zhanghuguanli);
 
             message.setOnClickListener(this);
@@ -358,8 +325,7 @@ public class UserIndexAdapter extends RecyclerView.Adapter {
                     it = ActivityMessage.getIntent(context);
                     break;
                 default:
-                    it = new Intent(context, ActivityManage.class);
-                    it.putExtra("user", data);
+                    it = ActivityManage.getIntent(context, data);
                     break;
             }
             context.startActivity(it);
@@ -392,7 +358,7 @@ public class UserIndexAdapter extends RecyclerView.Adapter {
 
             if (!UserBiz.isLogined()) {
                 //去登录
-                context.startActivity(ActivityLoginOfValidCode.getIntent(context));
+                context.startActivity(ActivityLogin.getIntent(context));
                 return;
             }
 

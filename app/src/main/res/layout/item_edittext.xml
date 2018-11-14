@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<EditText xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/vertical_margin_lg"
+    android:layout_marginLeft="@dimen/vertical_margin_lg"
+    android:layout_marginRight="@dimen/vertical_margin_lg"
+    android:layout_marginTop="@dimen/vertical_margin_lg"
+    android:background="@null"
+    android:inputType="number"
+    android:padding="@dimen/padding3"
+    android:textAlignment="viewStart"
+    android:textColor="@color/font_1"
+    android:textSize="@dimen/font_6" />
+
+

@@ -5,7 +5,7 @@
     android:background="@color/basebackground"
     android:orientation="vertical">
 
-    <include layout="@layout/main_header_return_red" />
+    <include layout="@layout/fragment_toolbar_common" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
 
 
             <EditText
-                android:id="@+id/code"
+                android:id="@+id/activity_regist1_code"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2.5"
@@ -66,7 +66,7 @@
 
 
             <EditText
-                android:id="@+id/mima"
+                android:id="@+id/activity_regist1_mima"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/x2"
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/vertical_margin"
             android:layout_marginTop="@dimen/vertical_margin"
-            android:text="推荐人：" />
+            android:text="推荐码：" />
 
         <LinearLayout
             android:layout_width="match_parent"

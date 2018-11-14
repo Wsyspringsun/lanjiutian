@@ -29,11 +29,13 @@ public class AppConfig {
         switch (TAG_DOMAIN) {
             case 1:
                 WEB_DOMAIN = "http://192.168.2.114:8080/ljt_mobile_store";
-                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/upload/images";
+//                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/upload/images";
+                IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";
                 break;
             case 2:
-                WEB_DOMAIN = "http://cs.lanjiutian.com/ljt_mobile_store";
-                IMAGE_PATH_LJT = "http://cs.lanjiutian.com/upload/images";
+                WEB_DOMAIN = "http://csbj.lanjiutian.com/ljt_mobile_store";
+//                WEB_DOMAIN = "http://192.168.3.88/ljt_mobile_store";
+                IMAGE_PATH_LJT = "http://www.lanjiutian.com/upload/images";
                 break;
             case 3:
                 WEB_DOMAIN = "http://www.lanjiutian.com/ljt_mobile_store";

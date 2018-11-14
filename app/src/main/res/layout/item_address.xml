@@ -60,15 +60,18 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+
             <RadioButton
                 android:id="@+id/item_address_chk_ischeck"
                 style="@style/MyCheckBox"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
                 style="@style/font_ww_14"
                 android:layout_marginLeft="@dimen/x6"
+                android:padding="@dimen/padding1"
                 android:text="@string/address_moren"
                 android:textColor="@color/base_bar" />
 

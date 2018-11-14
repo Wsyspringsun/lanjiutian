@@ -32,6 +32,7 @@
                     android:layout_height="match_parent"
                     android:background="#ffffff"
                     app:canLoop="true" />
+                <include layout="@layout/fragment_goods_huodong"/>
             </FrameLayout>
 
             <View
@@ -159,9 +160,10 @@
                         android:textSize="@dimen/font_4"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <com.wyw.ljtds.widget.TextViewDel
                         android:id="@+id/tv_old_price"
                         android:enabled="false"
+                        app:delLineColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/x10"

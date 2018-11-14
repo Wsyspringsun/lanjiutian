@@ -1,10 +1,8 @@
 package com.wyw.ljtds.ui.goods;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -19,23 +17,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
-import android.util.StringBuilderPrinter;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
-import android.webkit.WebView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,42 +34,31 @@ import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.holder.Holder;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.facebook.drawee.gestures.GestureDetector;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.gxz.PagerSlidingTabStrip;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
-import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
-import com.wyw.ljtds.adapter.DataListAdapter;
-import com.wyw.ljtds.biz.biz.GoodsBiz;
 import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
-import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.model.AddressModel;
+import com.wyw.ljtds.model.GoodsModel;
 import com.wyw.ljtds.model.MedicineDetailsEvaluateModel;
 import com.wyw.ljtds.model.MedicineDetailsModel;
-import com.wyw.ljtds.model.MedicineShop;
 import com.wyw.ljtds.model.MyLocation;
-import com.wyw.ljtds.model.ShoppingCartAddModel;
 import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.ui.user.address.ActivityAddress;
 import com.wyw.ljtds.ui.user.address.ActivityAddressEdit;
 import com.wyw.ljtds.ui.user.address.AddressActivity;
 import com.wyw.ljtds.utils.DateUtils;
-import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.MyCallback;
 import com.wyw.ljtds.widget.NumberButton;
 import com.wyw.ljtds.widget.RecycleViewDivider;
-import com.wyw.ljtds.widget.dialog.BottomDialog;
-import com.wyw.ljtds.widget.dialog.ShopListDialog;
-import com.wyw.ljtds.widget.goodsinfo.SlideDetailsLayout;
-import com.ysnows.page.Page;
 import com.ysnows.page.PageBehavior;
 import com.ysnows.page.PageContainer;
 
@@ -88,13 +67,11 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.zip.Inflater;
-
-import cn.bingoogolapple.photopicker.activity.BGAPhotoPreviewActivity;
-import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
 
 /**
  * Created by Administrator on 2017/3/12 0012.
@@ -110,6 +87,28 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
     View.OnClickListener itemClickListener;
     //送至地址变更监听
     List<MyCallback> sendToAddrChangeListeners = new ArrayList<>();
+
+    @ViewInject(R.id.fragment_goods_info_huodong_tejia)
+    private FrameLayout rlHuodongTejia;
+    @ViewInject(R.id.fragment_goods_info_huodong_tejia_jiage)
+    private TextView tvTejiaJiage;
+    @ViewInject(R.id.fragment_goods_info_huodong_tejia_yuanjia)
+    private TextView tvTejiaYuanjia;
+
+
+    @ViewInject(R.id.fragment_goods_info_huodong_manzeng)
+    private FrameLayout rlHuodongManzeng;
+    @ViewInject(R.id.fragment_goods_info_huodong_miaoshu)
+    private TextView tvHuodongManzengMiaoShu;
+
+
+    @ViewInject(R.id.fragment_goods_info_huodong_jifen)
+    private FrameLayout rlHuodongJifen;
+
+
+    @ViewInject(R.id.fragment_goods_info_huodong_qiang)
+    private FrameLayout rlHuodongQiang;
+
 
     @ViewInject(R.id.fragment_goods_info_sumqty)
     private TextView tvSumqty;
@@ -431,23 +430,53 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
         if (model.getIMAGES() != null) {
             setLoopView(model.getIMAGES());
         }
+
+
+        //活动标志
+        String huodongFlg = model.getTOP_FLG();
         //内容
         String wareName = StringUtils.deletaFirst(model.getWARENAME()),
                 detailFlg = model.getCOMMODITY_PARAMETER() == null ? "" : model.getCOMMODITY_PARAMETER(),
                 size = model.getWARESPEC(),
                 brand = model.getCOMMODITY_BRAND() + "  ",
                 price = "\n￥" + model.getSALEPRICE(),
-                treatment = model.getTREATMENT() == null ? "\n\n" : "\n\n" + StringUtils.sub(model.getTREATMENT(), 0, 50),
+//                treatment = model.getTREATMENT() == null ? "\n\n" : "\n\n" + StringUtils.sub(model.getTREATMENT(), 0, 50),
+                treatment = "",
                 postage = model.getPOSTAGE(),
                 prodAdd = "\n\n生产企业: " + model.getPRODUCER();
-//                detailFlg = model.getFLG_DETAIL()"[买而送一]",
-//        Log.e(AppConfig.ERR_TAG, "treatment:" + treatment);
-        StringBuilder sb = new StringBuilder().append(detailFlg).append(brand).append(wareName).append(size).append(postage).append(price).append(prodAdd).append(treatment);
+
+
+        if (GoodsModel.HUODONG_JIFEN.equals(huodongFlg)) {
+            String costPoint = "+" + Utils.formatFee(model.getCOST_POINT());
+            price = price + costPoint + "积分";
+            price = price + "(若您的积分不足，可按原价" + Utils.formatFee(model.getORIGINAL_PRICE()) + "元购买本商品！)";
+        }
+//        if (bizUser.isLogined()) {
+//            BigDecimal userPoint = SingleCurrentUser.userInfo.getUSER_POINT();
+//            if (userPoint.compareTo(BigDecimal.ZERO) < 0) {
+//            }
+//        }
+
+        StringBuilder sb = new StringBuilder();
+        Date now = new Date();
+        String nowStr = now.getTime() + "";
+//        存在额外优惠信息，并且商品在优惠活动期限内显示信息
+        if (!StringUtils.isEmpty(detailFlg)) {
+            sb.append("[" + detailFlg + "]");
+//            Utils.log("medicine info:" + nowStr + " --" + model.getACTIVE_END_DATE() + "---" + model.getACTIVE_END_DATE());
+//            if (nowStr.compareTo(model.getACTIVE_END_DATE()) >= 0 && nowStr.compareTo(model.getACTIVE_END_DATE()) <= 0) {
+//            }
+        }
+        sb.append(brand).append(wareName).append(size).append(postage).append(price).append(prodAdd).append(treatment);
         if (MedicineDetailsModel.PRESCRIPTION_FLG_RX.equals(medicineModel.getPRESCRIPTION_FLG())) {
             imgChuFang.setImageDrawable(ActivityCompat.getDrawable(getActivity(), R.mipmap.chufang));
             sb.append("\n" + getString(R.string.warning_chufang));
-        } else {
+            imgChuFang.setVisibility(View.VISIBLE);
+        } else if (MedicineDetailsModel.PRESCRIPTION_FLG_OTC.equals(medicineModel.getPRESCRIPTION_FLG())) {
             imgChuFang.setImageDrawable(ActivityCompat.getDrawable(getActivity(), R.mipmap.feichufang));
+            imgChuFang.setVisibility(View.VISIBLE);
+        } else {
+            imgChuFang.setVisibility(View.GONE);
         }
 
         int priceStart = sb.indexOf(price), priceEnd = priceStart + price.length();
@@ -462,21 +491,6 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
         tvContent.setText(sbs);
         //合计
         setHejiVal(numberButton.getNumber());
-        //default address or location
-        /*if (model.getUSER_ADDRESS() != null) {
-            //default address
-//            AddressModel addr = model.getUSER_ADDRESS();
-//            addrText = addr.getCONSIGNEE_ADDRESS();
-
-            addrText = model.getUSER_ADDRESS();
-
-        } else {
-            //default location
-            addrText = SingleCurrentUser.location.getAddrStr();
-        }
-*/
-
-        //default shop address
         String shopname = model.getLOGISTICS_COMPANY(),
                 distanceText = model.getDISTANCE_TEXT(),
                 durationText = model.getDURATION_TEXT(),
@@ -487,18 +501,32 @@ public class FragmentMedcinesInfo extends BaseFragment implements PageBehavior.O
 
         StringBuilder sbShop = new StringBuilder().append(shopname).append(" " + postage);
         SpannableString sbsShop = new SpannableString(sbShop.toString());
-        /*int busFlgStart = sbShop.toString().indexOf(busFlg);
-        int busFlgEnd = busFlgStart + busFlg.length();
-        if (busFlgStart >= 0) {
-            sbsShop.setSpan(new BackgroundColorSpan(Color.RED), busFlgStart, busFlgEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            sbsShop.setSpan(new ForegroundColorSpan(Color.WHITE), busFlgStart, busFlgEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            sbsShop.setSpan(new RelativeSizeSpan(0.8f), busFlgStart, busFlgEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }*/
         tvShopAddress.setText(sbsShop);
+
 
         StringBuilder sbShopExtra = new StringBuilder();
         sbShopExtra.append(distanceText).append("|" + durationText).append("   ").append(qisong).append("|" + baoyou);
         tvShopExtra.setText(sbShopExtra.toString());
+
+        //判断活动类别，显示活动样式
+        rlHuodongTejia.setVisibility(View.GONE);
+        rlHuodongManzeng.setVisibility(View.GONE);
+        rlHuodongQiang.setVisibility(View.GONE);
+        rlHuodongJifen.setVisibility(View.GONE);
+
+
+        if (GoodsModel.HUODONG_TEJIA.equals(huodongFlg)) {
+            //特价
+            rlHuodongTejia.setVisibility(View.VISIBLE);
+            tvTejiaJiage.setText(Utils.formatFee(model.getSALEPRICE() + ""));
+            tvTejiaYuanjia.setText(Utils.formatFee(model.getORIGINAL_PRICE()));
+        } else if (Arrays.asList(GoodsModel.HUODONG_MANZENG).contains(huodongFlg)) {
+            //满赠
+            rlHuodongManzeng.setVisibility(View.VISIBLE);
+            tvHuodongManzengMiaoShu.setText(detailFlg);
+        } else if (GoodsModel.HUODONG_JIFEN.equals(huodongFlg)) {
+            rlHuodongJifen.setVisibility(View.VISIBLE);
+        }
 
         //门店信息
         //评论

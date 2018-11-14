@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.wyw.ljtmgr.R;
 import com.wyw.ljtmgr.config.AppConfig;
@@ -32,7 +35,7 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private void initView() {
-//        initToolbar();
+        initToolbar();
     }
 
     @Override
@@ -66,5 +69,16 @@ public class OrderDetailActivity extends BaseActivity {
         it.putExtra(TAG_STAT, stat);
         Log.e(AppConfig.TAG_ERR, "stat:" + stat);
         return it;
+    }
+
+    protected void initToolbar() {
+        TextView title = (TextView) findViewById(R.id.fragment_toolbar_common_title);
+        title.setText(getTitle());
+        LinearLayout llLeft = (LinearLayout) findViewById(R.id.fragment_toolbar_common_left);
+        for (int i = 0; i < llLeft.getChildCount(); i++) {
+            ImageView imgItem = (ImageView) llLeft.getChildAt(i);
+            imgItem.setOnClickListener(toolbarListener);
+        }
+
     }
 }

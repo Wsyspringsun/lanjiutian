@@ -1,10 +1,12 @@
 package com.wyw.ljtds.model;
 
+import java.util.HashMap;
+
 /**
  * Created by wsy on 17-9-13.
  */
 
-public class IConCatInfo {
+public class IConCatInfo extends HashMap<String,String> {
     private String name;
     private String commodityTypeId;
     private String imgPath;

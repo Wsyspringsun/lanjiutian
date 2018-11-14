@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/bg_dianzibi_head" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/vertical_margin_lg">
+
+            <TextView
+                android:id="@+id/dianzibi_tv_total"
+                style="@style/font_ww_22_red"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="数量：0" />
+
+            <ImageView
+                android:id="@+id/dianzibi_iv_barcode"
+                android:layout_width="@dimen/x160"
+                android:layout_height="@dimen/x20"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/dianzibi_tv_total"
+                android:contentDescription="条形码" />
+
+        </RelativeLayout>
+
+
+    </FrameLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_list_dianzibi_ryv_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+</LinearLayout>

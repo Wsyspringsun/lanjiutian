@@ -1,62 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:fresco="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/ll_shoucang"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/x85"
-                android:background="@color/white"
-                android:orientation="vertical">
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_user_goodsitem_ll_shoucang"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x85"
+    android:background="@drawable/bg_toothed"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/vertical_margin_lg"
+    android:paddingTop="@dimen/vertical_margin_lg">
 
     <CheckBox
-        android:id="@+id/check"
+        android:id="@+id/item_user_goodsitem_check"
         style="@style/MyCheckBox"
         android:layout_width="@dimen/x20"
         android:layout_height="@dimen/x20"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/x10"
         android:checked="false"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/goods_img"
+        android:id="@+id/item_user_goodsitem_goods_img"
         android:layout_width="@dimen/x77"
         android:layout_height="@dimen/x77"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/x10"
-        android:layout_toRightOf="@+id/check"
+        android:layout_toRightOf="@+id/item_user_goodsitem_check"
         android:scaleType="fitXY"
         android:src="@mipmap/test_goods"
         fresco:failureImage="@mipmap/zhanweitu"
         fresco:failureImageScaleType="centerInside"
         fresco:placeholderImage="@mipmap/zhanweitu"
-        fresco:placeholderImageScaleType="fitCenter"/>
+        fresco:placeholderImageScaleType="fitCenter" />
 
     <TextView
-        android:id="@+id/goods_title"
+        android:id="@+id/item_user_goodsitem_goods_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/goods_img"
+        android:layout_alignTop="@+id/item_user_goodsitem_goods_img"
         android:layout_marginLeft="@dimen/x16"
         android:layout_marginRight="@dimen/x10"
         android:layout_marginTop="@dimen/x6"
-        android:layout_toRightOf="@+id/goods_img"
+        android:layout_toRightOf="@+id/item_user_goodsitem_goods_img"
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="@color/font_black2"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
     <TextView
-        android:id="@+id/money"
+        android:id="@+id/item_user_goodsitem_money"
         style="@style/font_ww_14"
-        android:layout_alignBottom="@+id/goods_img"
-        android:layout_alignLeft="@+id/goods_title"
+        android:layout_alignBottom="@id/item_user_goodsitem_goods_img"
+        android:layout_alignLeft="@+id/item_user_goodsitem_goods_title"
         android:layout_marginBottom="@dimen/x9"
-        android:textColor="@color/base_bar"/>
+        android:textColor="@color/base_bar" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/x2"
         android:layout_alignParentBottom="true"
-        android:background="@color/basebackground"/>
+        android:background="@color/basebackground" />
 
 </RelativeLayout>

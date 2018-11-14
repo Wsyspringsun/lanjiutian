@@ -2,12 +2,9 @@ package com.wyw.ljtds.ui.home;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,36 +17,47 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.HomeBiz;
+import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
-import com.wyw.ljtds.model.CommodityListModel;
+import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.ui.base.BaseActivity;
-import com.wyw.ljtds.ui.base.BaseActivityFragment;
 import com.wyw.ljtds.ui.base.BaseFragment;
-import com.wyw.ljtds.ui.goods.ActivityGoodsInfo;
+import com.wyw.ljtds.ui.goods.ActivityGoodsList;
 import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
+import com.wyw.ljtds.ui.user.ActivityLoginOfValidCode;
 import com.wyw.ljtds.ui.user.wallet.ChojiangRecActivity;
+import com.wyw.ljtds.ui.user.wallet.PointShopActivity;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.ToolbarManager;
+import com.wyw.ljtds.utils.Utils;
+import com.wyw.ljtds.wxapi.WXEntryActivity;
 
-import org.json.JSONObject;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
-import java.io.Console;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
+
+import static com.wyw.ljtds.ui.home.HuoDongActivity.FLG_HUODONG_CHOJIANG;
+import static com.wyw.ljtds.ui.home.HuoDongActivity.FLG_HUODONG_DIANZIBI;
+import static com.wyw.ljtds.ui.home.HuoDongActivity.FLG_HUODONG_JIFENDUIHUAN;
+import static com.wyw.ljtds.ui.home.HuoDongActivity.FLG_HUODONG_KANJIA;
+import static com.wyw.ljtds.ui.home.HuoDongActivity.FLG_HUODONG_LINGYUANGOU;
+import static com.wyw.ljtds.ui.home.HuoDongActivity.FLG_HUODONG_LIST;
+import static com.wyw.ljtds.ui.home.HuoDongActivity.FLG_HUODONG_MANZENG;
+import static com.wyw.ljtds.ui.home.HuoDongActivity.FLG_HUODONG_MIAOSHA;
+import static com.wyw.ljtds.ui.home.HuoDongActivity.FLG_HUODONG_TEJIA;
 
 /**
  * Created by wsy on 17-7-28.
@@ -58,11 +66,13 @@ import java.util.List;
 @ContentView(R.layout.fragment_web)
 public class HuoDongFragment extends BaseFragment implements ToolbarManager.IconBtnManager {
     private static final String ARG_CATEGORY = "arg_category";
+    private static final String DIALOG_WXSHARE = "DIALOG_WXSHARE";
     @ViewInject(R.id.fragment_web_webview)
     private WebView webView;
     @ViewInject(R.id.fragment_web_img_err)
     private ImageView imgErr;
 
+    UserBiz userBiz;
 
     //加载的路径
     private String url;
@@ -77,10 +87,119 @@ public class HuoDongFragment extends BaseFragment implements ToolbarManager.Icon
         return fragment;
     }
 
-    /*
-     * 毫秒转化时分秒毫秒
-     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        String category = getArguments().getString(ARG_CATEGORY);
+        //分享了抽奖页面 赠送积分
+        if (FLG_HUODONG_CHOJIANG.equals(category)) {
+            if (!UserBiz.isLogined()) return;
+            if (WXEntryActivity.SHARE_RESULT_OK.equals(PreferenceCache.getWXShareResult())) {
+                PreferenceCache.putWXShareResult("");
 
+                setLoding(getActivity(), false);
+                new BizDataAsyncTask<String>() {
+                    @Override
+                    protected String doExecute() throws ZYException, BizFailure {
+                        return userBiz.givePoint();
+                    }
+
+                    @Override
+                    protected void onExecuteSucceeded(String s) {
+                        closeLoding();
+                        try {
+                            Map<String, Object> rlt = GsonUtils.Json2Bean(s, HashMap.class);
+                            String msg = (String) rlt.get("message");
+                            ToastUtil.show(getActivity(), msg);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            Utils.log("GivePointEx data:" + s);
+                            Utils.log("GivePointEx err:" + ex.getMessage());
+                        } finally {
+                            if (webView != null)
+                                webView.reload();
+                        }
+                    }
+
+                    @Override
+                    protected void OnExecuteFailed() {
+                        closeLoding();
+                    }
+                }.execute();
+
+
+            }
+
+        }
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        userBiz = UserBiz.getInstance(getActivity());
+        String category = getArguments().getString(ARG_CATEGORY);
+        switch (category) {
+            case FLG_HUODONG_LIST:
+                url = AppConfig.WS_BASE_HTML_URL + "huodonglist.html";
+                break;
+            case FLG_HUODONG_CHOJIANG:
+                if (UserBiz.isLogined()) {
+                    Utils.log("tn:" + PreferenceCache.getToken());
+                    url = AppConfig.WS_BASE_JSP_URL + "chojiang.jsp?tn=" + PreferenceCache.getToken();
+                } else {
+                    startActivity(ActivityLoginOfValidCode.getIntent(getActivity()));
+                    getActivity().finish();
+                    return;
+                }
+                break;
+            case FLG_HUODONG_MANZENG:
+                url = AppConfig.WS_BASE_JSP_URL + "mansong.jsp";
+                break;
+            case FLG_HUODONG_TEJIA:
+                url = AppConfig.WS_BASE_JSP_URL + "tejia.jsp";
+                break;
+            case FLG_HUODONG_MIAOSHA:
+                url = AppConfig.WS_BASE_JSP_URL + "xianshiqiang.jsp";
+                break;
+            case FLG_HUODONG_KANJIA:
+                if (UserBiz.isLogined()) {
+//                    url = AppConfig.WEB_APP_URL + "/activity/bargain.html?tn=" + PreferenceCache.getToken();
+                    url = AppConfig.WEB_APP_URL + "/activity/bargain.html?s=app&token=" + PreferenceCache.getToken();
+                } else {
+                    ToastUtil.show(getActivity(), "请登录");
+                    startActivity(ActivityLoginOfValidCode.getIntent(getActivity()));
+                    getActivity().finish();
+                    return;
+                }
+//                url = AppConfig.WS_BASE_JSP_URL + "dianzibi.jsp";
+                break;
+            case FLG_HUODONG_DIANZIBI:
+                url = AppConfig.WS_BASE_JSP_URL + "dianzibi.jsp";
+                break;
+            case FLG_HUODONG_LINGYUANGOU:
+                url = AppConfig.WEB_APP_URL + "/lifeSearch.html?s=app&keypress=0元购";
+
+//                startActivity(ActivityGoodsList.getIntent(getActivity(), "", "0元购"));
+//                getActivity().finish();
+                break;
+            case FLG_HUODONG_JIFENDUIHUAN:
+                if (UserBiz.isLogined()) {
+//                    url = AppConfig.WEB_APP_URL + "/activity/bargain.html?tn=" + PreferenceCache.getToken();
+                    startActivity(PointShopActivity.getIntent(getActivity()));
+                    getActivity().finish();
+                } else {
+                    ToastUtil.show(getActivity(), "请登录");
+                    startActivity(ActivityLoginOfValidCode.getIntent(getActivity()));
+                    getActivity().finish();
+                    return;
+                }
+                break;
+            default:
+                break;
+        }
+
+    }
 
     @Nullable
     @Override
@@ -94,27 +213,6 @@ public class HuoDongFragment extends BaseFragment implements ToolbarManager.Icon
             }
         });
 
-        String category = getArguments().getString(ARG_CATEGORY);
-        switch (category) {
-            case "1":
-                url = AppConfig.WS_BASE_JSP_URL + "chojiang.jsp";
-                break;
-            case "2":
-                url = AppConfig.WS_BASE_JSP_URL + "mansong.jsp";
-                break;
-            case "3":
-                url = AppConfig.WS_BASE_JSP_URL + "tejia.jsp";
-                break;
-            case "4":
-                url = AppConfig.WS_BASE_JSP_URL + "xianshiqiang.jsp";
-                break;
-            case "5":
-                url = AppConfig.WS_BASE_JSP_URL + "dianzibi.jsp";
-                break;
-            default:
-                break;
-        }
-
 
         WebSettings setting = webView.getSettings();
         setting.setJavaScriptEnabled(true);
@@ -122,7 +220,17 @@ public class HuoDongFragment extends BaseFragment implements ToolbarManager.Icon
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return false;
+                // 如下方案可在非微信内部WebView的H5页面中调出微信支付
+                if (url.startsWith("weixin://wap/pay?")) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(url));
+                    startActivity(intent);
+                    return true;
+                }
+
+                return super.shouldOverrideUrlLoading(view, url);
+//                return true;
             }
 
             @Override
@@ -131,11 +239,13 @@ public class HuoDongFragment extends BaseFragment implements ToolbarManager.Icon
                 webView.setVisibility(View.GONE);
                 imgErr.setVisibility(View.GONE);
                 loadError = false;
+                if (!isAdded()) return;
                 ((BaseActivity) getActivity()).setLoding(getActivity(), false);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
+                if (!isAdded()) return;
                 ((BaseActivity) getActivity()).closeLoding();
                 if (loadError) {
                     imgErr.setVisibility(View.VISIBLE);
@@ -157,7 +267,6 @@ public class HuoDongFragment extends BaseFragment implements ToolbarManager.Icon
         webView.addJavascriptInterface(new Object() {
             @JavascriptInterface
             public void doReq(String json) {
-                Log.e(AppConfig.ERR_TAG, "handleJsEvent....................");
                 HuoDongFragment.this.handleJsEvent(json);
 //                ((BaseActivity) getActivity()).closeLoding();
 //                Log.e(AppConfig.ERR_TAG, "result:" + s);
@@ -170,13 +279,13 @@ public class HuoDongFragment extends BaseFragment implements ToolbarManager.Icon
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress >= 100) {
-                }
+//                if (newProgress >= 100) {
+//                }
             }
 
             @Override
             public void onReceivedTitle(WebView view, String title) {
-                Log.e(AppConfig.ERR_TAG, title);
+                Utils.log("webview title:" + title);
                 //判断标题 title 中是否包含有“error”字段，如果包含“error”字段，则设置加载失败，显示加载失败的视图
                 if (!StringUtils.isEmpty(title) && title.toLowerCase().contains("error")) {
                     loadError = true;
@@ -186,16 +295,25 @@ public class HuoDongFragment extends BaseFragment implements ToolbarManager.Icon
 
 
 //        webView.loadDataWithBaseURL("fake://not/needed", str, "text/html", "utf-8", null);
-        webView.loadUrl(url);
-
+        if (!StringUtils.isEmpty(url)) {
+            Utils.log("webview url:" + url);
+            webView.loadUrl(url);
+        }
         return view;
     }
 
     private void handleJsEvent(String json) {
         String category = getArguments().getString(ARG_CATEGORY);
         Log.e(AppConfig.ERR_TAG, "category:" + category);
+        Gson gson = new GsonBuilder().create();
+        HashMap map = null;
+        Intent it = null;
         switch (category) {
-            case "1":
+            case FLG_HUODONG_LIST:
+                it = HuoDongActivity.getIntent(getActivity(), json);
+                startActivity(it);
+                break;
+            case FLG_HUODONG_CHOJIANG:
                 //抽奖
                 if ("0".equals(json)) {
                     new BizDataAsyncTask<String>() {
@@ -217,37 +335,41 @@ public class HuoDongFragment extends BaseFragment implements ToolbarManager.Icon
                         }
                     }.execute();
                 } else if ("1".equals(json)) {
-                    Intent it = ChojiangRecActivity.getIntent(getActivity());
+                    it = ChojiangRecActivity.getIntent(getActivity());
                     startActivity(it);
                 }
 
 //                setLoding(getActivity(), false);
                 break;
-            case "2":
-            case "3":
-            case "4":
+            case FLG_HUODONG_MANZENG:
+            case FLG_HUODONG_TEJIA:
+            case FLG_HUODONG_MIAOSHA:
+            case FLG_HUODONG_DIANZIBI:
+            case FLG_HUODONG_LINGYUANGOU:
                 //进入商品详情
-                Gson gson = new GsonBuilder().create();
-                HashMap map = gson.fromJson(json, HashMap.class);
+                map = gson.fromJson(json, HashMap.class);
                 Log.e(AppConfig.ERR_TAG, "json:" + json);
                 String commId = map.get("commid") + "";
                 String isMedcine = map.get("isMedicine") + "";
-                Log.e(AppConfig.ERR_TAG, "isMedicine:" + isMedcine);
-                Log.e(AppConfig.ERR_TAG, "commid:" + commId);
-                Intent it = null;
-                if ("1".equals(isMedcine)) {
+                if ("2".equals(isMedcine)) {
+                    //医药馆产品
+                    it = ActivityMedicinesInfo.getIntent(getActivity(), commId, (String) map.get("logistId"));
+                } else {
                     //生活馆产品
                     it = ActivityLifeGoodsInfo.getIntent(getActivity(), commId);
-                } else if ("2".equals(isMedcine)) {
-                    //医药馆产品
-                    String logId = map.get("logistId") + "";
-                    if(StringUtils.isEmpty(logId)){
-                        it = ActivityMedicinesInfo.getIntent(getActivity(), commId, "001");
-                    }else{
-                        it = ActivityMedicinesInfo.getIntent(getActivity(), commId, logId);
-                    }
                 }
                 startActivity(it);
+                break;
+            case FLG_HUODONG_KANJIA:
+                //调用微信分享
+                map = gson.fromJson(json, HashMap.class);
+                Log.e(AppConfig.ERR_TAG, "json:" + json);
+                String imgUrl = map.get("imgUrl") + "";
+                String link = map.get("link") + "";
+                Utils.log("webview link:" + link);
+                String title = map.get("title") + "";
+                String desc = map.get("desc") + "";
+                Utils.wechatShare(getActivity(), title, desc, imgUrl, link);
                 break;
             default:
                 Log.e(AppConfig.ERR_TAG, "request:" + json);
@@ -270,6 +392,22 @@ public class HuoDongFragment extends BaseFragment implements ToolbarManager.Icon
                         webView.reload();
                     }
                 });
+                break;
+            case 3:
+                String category = getArguments().getString(ARG_CATEGORY);
+                if (FLG_HUODONG_CHOJIANG.equals(category)) {
+                    v.setVisibility(View.VISIBLE);
+                    v.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String imgUrl = "empty";
+                            String link = AppConfig.WS_BASE_JSP_URL + "chojiang.jsp";
+                            String desc = "蓝九天积分抽大奖，快来试手气！";
+                            Utils.wechatShare(getActivity(), "积分抽奖", desc, imgUrl, link);
+                        }
+                    });
+                }
+
                 break;
             default:
                 break;

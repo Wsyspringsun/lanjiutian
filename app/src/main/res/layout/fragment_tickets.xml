@@ -5,6 +5,8 @@
     android:background="@color/basebackground"
     android:orientation="vertical">
 
+    <include layout="@layout/fragment_toolbar_common" />
+
     <RelativeLayout
         android:id="@+id/sel_ticket_dianzibi"
         android:layout_width="match_parent"

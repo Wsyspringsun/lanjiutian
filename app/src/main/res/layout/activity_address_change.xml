@@ -14,7 +14,7 @@
         android:padding="@dimen/padding2"
         android:text="当前位置" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/activity_address_change_rl_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +22,8 @@
 
         <TextView
             android:id="@+id/activity_address_change_tv_currentloc"
-            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:text="当前地址xxx" />
@@ -30,7 +31,7 @@
         <LinearLayout
             android:id="@+id/activity_address_change_ll_location"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:orientation="horizontal">
 
@@ -38,6 +39,7 @@
                 android:id="@+id/activity_address_change_img_location"
                 android:layout_width="@dimen/x14"
                 android:layout_height="@dimen/x14"
+                android:contentDescription="@string/title_location"
                 android:src="@drawable/ic_location_my" />
 
             <TextView
@@ -50,7 +52,7 @@
         </LinearLayout>
 
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"

@@ -98,7 +98,7 @@
                 android:lines="1"
                 android:paddingLeft="@dimen/x15"
                 android:hint="@string/sousuo"
-                android:textColor="@color/font_2"
+                android:textColor="@color/black"
                 android:textSize="@dimen/font_5" />
 
             <ImageView

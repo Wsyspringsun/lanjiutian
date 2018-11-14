@@ -7,6 +7,13 @@ import java.util.List;
  */
 
 public class OrderDetailModel extends ServerResponse {
+    public static final String PAYMTD_ONLINE = "0";// 在线支付
+    public static final String PAYMTD_MONEY = "C";// 货到付款
+    public static final String PAYMTD_WECHAT = "1";// 微信支付
+    public static final String PAYMTD_ACCOUNT = "2";// 余额支付
+    public static final String PAYMTD_ALI = "3";// 支付宝支付
+    public static final String PAYMTD_UNION = "4";// 银联支付
+
     private String flag;//0医药 1 生活馆商品
     private String orderId;
     private String insDate;

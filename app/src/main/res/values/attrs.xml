@@ -102,12 +102,13 @@
         <item name="android:textColor">@color/font_red</item>
     </style>
 
-    <!-- 圆形checkbox -->
-    <style name="MyCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
-        <item name="android:button">@drawable/checkbox_selected</item>
-        <item name="android:layout_width">@dimen/x24</item>
-        <item name="android:layout_height">@dimen/x24</item>
-    </style>
+
+
+
+    <!--带删除线的文本框-->
+    <declare-styleable name="TextViewDel">
+        <attr name="delLineColor" format="color" />
+    </declare-styleable>
 
 
     <!--星星控件属性-->
@@ -169,7 +170,7 @@
     </style>
 
     <!-- 等待动画 dialog -->
-    <style name="MyDialogStyle">
+    <style name="LjtDialogStyle">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
@@ -291,5 +292,16 @@
     <!--评价-->
     <style name="MyRadioButtonEvaHao" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/radio_button_evaluate_hao</item>
+    </style>
+
+    <!--倒计时活动倒计时文字样式-->
+    <style name="font_goodsinfo_daojishi">
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:background">#CC0000</item>
+        <item name="android:textSize">@dimen/font_5</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_marginRight">1dp</item>
+        <item name="android:layout_marginLeft">1dp</item>
     </style>
 </resources>

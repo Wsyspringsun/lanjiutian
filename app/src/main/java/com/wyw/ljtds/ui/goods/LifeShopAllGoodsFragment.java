@@ -1,26 +1,17 @@
 package com.wyw.ljtds.ui.goods;
 
 import android.content.Intent;
-
-import com.chad.library.adapter.base.listener.OnItemClickListener;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.listener.SimpleClickListener;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.Picasso;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.adapter.commodity.CommodityAdapter;
 import com.wyw.ljtds.biz.biz.GoodsBiz;
@@ -28,17 +19,13 @@ import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.model.CommodityListModel;
-import com.wyw.ljtds.model.ShopImg;
 import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.utils.Utils;
-import com.wyw.ljtds.widget.DividerGridItemDecoration;
 import com.wyw.ljtds.widget.SpaceItemDecoration;
-import com.wyw.ljtds.widget.logistics.item.LinearDividerItemDecoration;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

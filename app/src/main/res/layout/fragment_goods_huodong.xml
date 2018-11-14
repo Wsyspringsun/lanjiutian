@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--满赠-->
+    <FrameLayout
+        android:id="@+id/fragment_goods_info_huodong_manzeng"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:src="@drawable/ic_huodong_zeng" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/bg_huodong_zeng" />
+
+            <TextView
+                android:id="@+id/fragment_goods_info_huodong_miaoshu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="满赠信息"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_3"
+                android:textStyle="bold" />
+
+        </FrameLayout>
+
+
+    </FrameLayout>
+
+
+    <!--抢好货-->
+
+    <FrameLayout
+        android:id="@+id/fragment_goods_info_huodong_qiang"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_huodong_miao" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/bg_huodong_miao" />
+
+            <TextView
+                android:id="@+id/fragment_goods_info_huodong_qiang_startdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="x月x日xx:xx开始"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_6"
+                android:textStyle="bold" />
+
+            <!--倒计时区域-->
+            <RelativeLayout
+                android:layout_width="@dimen/x67"
+                android:layout_height="match_parent"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="@dimen/vertical_margin_mid"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/fragment_goods_info_huodong_qiang_stattitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/vertical_margin"
+                    android:text="开始倒计时"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_6"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/fragment_goods_info_huodong_qiang_daojishi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/fragment_goods_info_huodong_qiang_stattitle"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/fragment_goods_info_huodong_qiang_shi"
+                        style="@style/font_goodsinfo_daojishi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="xx" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=":"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_6" />
+
+                    <TextView
+                        android:id="@+id/fragment_goods_info_huodong_qiang_fen"
+                        style="@style/font_goodsinfo_daojishi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="xx" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=":"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_6" />
+
+                    <TextView
+                        android:id="@+id/fragment_goods_info_huodong_qiang_miao"
+                        style="@style/font_goodsinfo_daojishi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="xx" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </FrameLayout>
+
+
+    </FrameLayout>
+
+    <!--特价-->
+    <FrameLayout
+        android:id="@+id/fragment_goods_info_huodong_tejia"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:src="@drawable/ic_huodong_te" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:adjustViewBounds="true"
+            android:src="@drawable/bg_huodong_te" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:background="@drawable/bg_huodong_te_yuan"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/vertical_margin"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:text="@string/huodong_tejia_biaozhi"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_5"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="￥"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_7" />
+
+                <TextView
+                    android:id="@+id/fragment_goods_info_huodong_tejia_jiage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="xx.xx"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_1" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <com.wyw.ljtds.widget.TextViewDel
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="￥"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_7"
+                    app:delLineColor="@color/white" />
+
+                <com.wyw.ljtds.widget.TextViewDel
+                    android:id="@+id/fragment_goods_info_huodong_tejia_yuanjia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="xx.xx"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_6"
+                    app:delLineColor="@color/white" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+    <!--积分-->
+    <FrameLayout
+        android:id="@+id/fragment_goods_info_huodong_jifen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:src="@drawable/ic_huodong_jifen" />
+
+    </FrameLayout>
+
+
+</FrameLayout>

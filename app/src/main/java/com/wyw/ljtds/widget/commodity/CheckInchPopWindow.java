@@ -38,7 +38,7 @@ public class CheckInchPopWindow implements OnDismissListener, OnClickListener {
         /**
          * 商品详情被选中回调
          */
-        public abstract void onComplete(CheckInchModel result);
+        void onComplete(CheckInchModel result);
     }
 
     private OnSelectedCompleteLinstener onSelectedCompleteListener;
@@ -393,9 +393,9 @@ public class CheckInchPopWindow implements OnDismissListener, OnClickListener {
 
     public interface OnItemClickListener {
 
-        public void onClickAdd2Car(CheckInchModel result);
+        void onClickAdd2Car(CheckInchModel result);
 
-        public void onClickBuyNow(CheckInchModel result);
+        void onClickBuyNow(CheckInchModel result);
     }
 
     public void setSelect(CheckInchModel checkInchModel) {

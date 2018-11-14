@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x90"
+    android:layout_marginBottom="@dimen/vertical_margin_lg"
+    android:layout_marginLeft="@dimen/vertical_margin_lg"
+    android:layout_marginRight="@dimen/vertical_margin_lg"
+    android:layout_marginTop="@dimen/vertical_margin_mid"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="@dimen/x75"
+                android:layout_height="@dimen/x64"
+                android:layout_gravity="center"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/item_daijinquan_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="￥xx.xx"
+                    android:textSize="@dimen/font_1" />
+
+                <TextView
+                    android:id="@+id/item_daijinquan_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/item_daijinquan_amount"
+                    android:gravity="center_horizontal"
+                    android:text="xx"
+                    android:textSize="@dimen/font_7" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/vertical_margin_lg"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/item_daijinquan_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/vertical_margin"
+                    android:text="红包"
+                    android:textColor="@color/font_1" />
+
+                <TextView
+                    android:id="@+id/item_daijinquan_term"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="有效期至："
+                    android:textColor="@color/font_3"
+                    android:textSize="@dimen/font_4" />
+
+                <TextView
+                    android:id="@+id/item_daijinquan_rule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="使用规则："
+                    android:textColor="@color/font_3"
+                    android:textSize="@dimen/font_4" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/item_daijinquan_qrcode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:scaleType="fitXY"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/gray1" />
+
+    <!--android:ems="1" 每列显示字数-->
+    <TextView
+        android:id="@+id/item_daijinquan_btn_barcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/vertical_margin_lg"
+        android:layout_marginRight="@dimen/vertical_margin_lg"
+        android:background="@drawable/bg_btn_barcode"
+        android:paddingBottom="@dimen/padding1"
+        android:paddingLeft="@dimen/padding1"
+        android:paddingRight="@dimen/padding1"
+        android:paddingTop="@dimen/padding1"
+        android:text="条形码"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_5" />
+
+</LinearLayout>

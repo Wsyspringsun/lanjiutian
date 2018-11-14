@@ -61,6 +61,7 @@ import static com.wyw.ljtds.R.id.tv_nearest_keywords;
 @ContentView(R.layout.activity_search_result)
 public class AddressSearchActivity extends BaseActivity {
     public static final String TAG_SELECT_ADDR = "com.wyw.ljtds.ui.user.address.AddressSearchActivity.TAG_SELECT_ADDR";
+    private static final String TAG_INITKEYWORD = "com.wyw.ljtds.ui.user.address.AddressSearchActivity.TAG_INITKEYWORD";
     @ViewInject(R.id.activity_search_result_tv_city)
     TextView tvCity;
     @ViewInject(R.id.activity_search_result_tv_cancel)
@@ -222,6 +223,13 @@ public class AddressSearchActivity extends BaseActivity {
                 sugLoadData();
             }
         });
+
+
+        //默认数据
+        String initKey = getIntent().getStringExtra(TAG_INITKEYWORD);
+        if (!StringUtils.isEmpty(initKey)) {
+            laodData(initKey);
+        }
     }
 
     //        2 创建POI检索监听者；
@@ -250,8 +258,9 @@ public class AddressSearchActivity extends BaseActivity {
         adapter.notifyDataSetChanged();
     }
 
-    public static Intent getIntent(Context context) {
+    public static Intent getIntent(Context context, String initkeyword) {
         Intent it = new Intent(context, AddressSearchActivity.class);
+        it.putExtra(TAG_INITKEYWORD, initkeyword);
         return it;
     }
 

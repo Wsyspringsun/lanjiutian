@@ -1,7 +1,9 @@
 package com.wyw.ljtds.utils;
 
 import android.content.Context;
+import android.support.annotation.StringRes;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.widget.Toast;
 
 /**
@@ -11,7 +13,11 @@ public class ToastUtil {
 
     private static Toast mToast;
 
-    public static void show(Context context, String message) {
+    public static void show(Context context, @StringRes int resId) {
+        show(context, context.getResources().getText(resId));
+    }
+
+    public static void show(Context context, CharSequence message) {
         if (context == null || TextUtils.isEmpty(message)) return;
         int duration;
         if (message.length() > 3) {
@@ -25,6 +31,7 @@ public class ToastUtil {
             mToast.setText(message);
             mToast.setDuration(duration);
         }
+        mToast.setGravity(Gravity.CENTER, 0, 0);
         mToast.show();
     }
 }

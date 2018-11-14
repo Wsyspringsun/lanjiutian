@@ -11,12 +11,14 @@ public class OrderTradeDto {
     private String SHARE_FLG ;  //是否分享成功
     private String COIN_FLG; //是否使用电子币
     private String COST_POINT; //使用积分数量
+    private String PAY_POINT;//交易消费积分
     private String DISTRIBUTION_DATE_END; //派送时间截止
     private String DISTRIBUTION_DATE_START; //派送时间起始
     private String ELECTRONIC_MONEY; //电子币 使用额度
     private String OID_USER_ID; //客户的 id
     private String PAYMENT_METHOD; //使用的支付方式
     private String PAY_AMOUNT; //实际 支付 总额度
+    private String DEDUCTIBLE_ALL_MONEY;
     private String POINT_MONEY; //积分抵用的 现金数量
     private String POSTAGE_FLG; //是否使用 邮费抵用券
     private String POSTAGE_ALL; //总运费
@@ -232,5 +234,21 @@ public class OrderTradeDto {
 
     public void setSHARE_FLG(String SHARE_FLG) {
         this.SHARE_FLG = SHARE_FLG;
+    }
+
+    public String getDEDUCTIBLE_ALL_MONEY() {
+        return DEDUCTIBLE_ALL_MONEY;
+    }
+
+    public void setDEDUCTIBLE_ALL_MONEY(String DEDUCTIBLE_ALL_MONEY) {
+        this.DEDUCTIBLE_ALL_MONEY = DEDUCTIBLE_ALL_MONEY;
+    }
+
+    public String getPAY_POINT() {
+        return PAY_POINT;
+    }
+
+    public void setPAY_POINT(String PAY_POINT) {
+        this.PAY_POINT = PAY_POINT;
     }
 }

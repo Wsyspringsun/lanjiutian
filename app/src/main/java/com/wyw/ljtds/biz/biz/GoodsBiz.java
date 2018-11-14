@@ -1,5 +1,6 @@
 package com.wyw.ljtds.biz.biz;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -37,6 +38,16 @@ import java.util.List;
  */
 
 public class GoodsBiz extends BaseBiz {
+    private Context context;
+
+    public GoodsBiz(Context context) {
+        this.context = context;
+    }
+
+    public static GoodsBiz getInstance(Context context) {
+        return new GoodsBiz(context);
+    }
+
     public static String getGoodsIdByBarcode(String barcode) throws BizFailure, ZYException {
         SoapProcessor ksoap = new SoapProcessor("Service", "getMedicineByBarcode", false);
         ksoap.setProperty("barcode", barcode, SoapProcessor.PropertyType.TYPE_STRING);
@@ -51,6 +62,7 @@ public class GoodsBiz extends BaseBiz {
      * @throws BizFailure
      * @throws ZYException
      */
+
     public static CommodityDetailsModel getGoods(String commodityId) throws BizFailure, ZYException {
         SoapProcessor ksoap;
         if (!StringUtils.isEmpty(PreferenceCache.getToken())) {
@@ -423,7 +435,7 @@ public class GoodsBiz extends BaseBiz {
      * 获取商铺的商品
      *
      * @param typeFlg  0: 1: 新品  “”全部
-     * @param storeId 商铺id
+     * @param storeId  商铺id
      * @param keyword
      * @param startIdx
      * @return
@@ -502,5 +514,24 @@ public class GoodsBiz extends BaseBiz {
         };
         ShopModel fs = gson.fromJson(element, tt.getType());
         return fs;
+    }
+
+    /**
+     * 生成零元购订单
+     *
+     * @param data
+     * @return
+     */
+    public String createOrderByLing(String data) throws BizFailure, ZYException{
+        SoapProcessor ksoap = new SoapProcessor("Service", "createOrderByLing", true);
+//        ksoap.setProperty("token", PreferenceCache.getToken(), SoapProcessor.PropertyType.TYPE_STRING);
+        ksoap.setProperty("data", data, SoapProcessor.PropertyType.TYPE_STRING);
+        JsonElement element = ksoap.request();
+        return element.toString();
+    }
+
+    public String alwaysBuyDrug() throws ZYException {
+        SoapProcessor ksoap = new SoapProcessor("Service", "alwaysBuyDrug", false);
+        return ksoap.requestStr();
     }
 }

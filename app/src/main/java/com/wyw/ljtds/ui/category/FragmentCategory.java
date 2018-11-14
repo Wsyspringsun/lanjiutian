@@ -65,7 +65,6 @@ public class FragmentCategory extends BaseFragment {
         super.onResume();
 
         if (pager == null) return;
-        pager.setCurrentItem(1);
     }
 
     @Override
@@ -81,6 +80,7 @@ public class FragmentCategory extends BaseFragment {
         pager.setAdapter(new MyFrPagerAdapter(getActivity().getSupportFragmentManager(), titles, fragmentList));
         tabs.setViewPager(pager);
 
+        pager.setCurrentItem(1);
     }
 
 }

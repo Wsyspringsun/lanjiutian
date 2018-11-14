@@ -72,7 +72,6 @@ public class ShopListDialog extends Dialog {
                 }
             }
         });
-        ;
         btnQuxiao = (ImageView) vShopList.findViewById(R.id.fragment_addr_medicine_shop_list_btn_quxiao);
         btnQuxiao.setOnClickListener(new View.OnClickListener() {
             @Override

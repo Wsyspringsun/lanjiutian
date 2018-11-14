@@ -1,10 +1,11 @@
 package com.wyw.ljtds.ui.goods;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Paint;
+import android.location.Location;
+import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -15,13 +16,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
@@ -30,7 +29,6 @@ import com.bigkoo.convenientbanner.holder.Holder;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.gxz.PagerSlidingTabStrip;
 import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.GoodsBiz;
@@ -40,37 +38,30 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.CommodityDetailsModel;
-import com.wyw.ljtds.model.GoodSubmitModel1;
-import com.wyw.ljtds.model.GoodSubmitModel2;
-import com.wyw.ljtds.model.GoodSubmitModel3;
+import com.wyw.ljtds.model.GoodsModel;
 import com.wyw.ljtds.model.MedicineDetailsEvaluateModel;
-import com.wyw.ljtds.model.ShoppingCartAddModel;
-import com.wyw.ljtds.model.SqlFavoritesModel;
 import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.utils.DateUtils;
-import com.wyw.ljtds.utils.GsonUtils;
-import com.wyw.ljtds.utils.SqlUtils;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.MyCallback;
 import com.wyw.ljtds.widget.RecycleViewDivider;
+import com.wyw.ljtds.widget.TextViewDel;
 import com.wyw.ljtds.widget.commodity.CheckInchModel;
-import com.wyw.ljtds.widget.commodity.CheckInchPopWindow;
 import com.wyw.ljtds.widget.dialog.LifeGoodsSelectDialog;
 import com.wyw.ljtds.widget.goodsinfo.SlideDetailsLayout;
 import com.ysnows.page.PageBehavior;
 import com.ysnows.page.PageContainer;
 
-import org.xutils.DbManager;
-import org.xutils.ex.DbException;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
 
-import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPreviewActivity;
@@ -87,6 +78,50 @@ import static com.squareup.picasso.MemoryPolicy.NO_STORE;
 public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayout.OnSlideDetailsListener {
     @ViewInject(R.id.fragment_goods_info_container)
     private PageContainer container;
+
+    /**
+     * 特价活动
+     **/
+    @ViewInject(R.id.fragment_goods_info_huodong_tejia)
+    private FrameLayout rlHuodongTejia;
+    @ViewInject(R.id.fragment_goods_info_huodong_tejia_jiage)
+    private TextView tvTejiaJiage;
+    @ViewInject(R.id.fragment_goods_info_huodong_tejia_yuanjia)
+    private TextView tvTejiaYuanjia;
+    //    积分商品
+    @ViewInject(R.id.fragment_goods_info_huodong_jifen)
+    private FrameLayout rlHuodongJifen;
+    /**
+     * 满赠活动
+     **/
+    @ViewInject(R.id.fragment_goods_info_huodong_manzeng)
+    private FrameLayout rlHuodongManzeng;
+    @ViewInject(R.id.fragment_goods_info_huodong_miaoshu)
+    private TextView tvHuodongManzengMiaoShu;
+    /**
+     * 秒杀活动
+     **/
+    @ViewInject(R.id.fragment_goods_info_huodong_qiang)
+    private FrameLayout rlHuodongQiang;
+    @ViewInject(R.id.fragment_goods_info_huodong_qiang_startdate)
+    private TextView tvHuodongQiangStartDate;
+    @ViewInject(R.id.fragment_goods_info_huodong_qiang_stattitle)
+    private TextView tvHuodongQiangStat;
+    @ViewInject(R.id.fragment_goods_info_huodong_qiang_daojishi)
+    private LinearLayout tvHuodongQiangDaojishi;
+    @ViewInject(R.id.fragment_goods_info_huodong_qiang_shi)
+    private TextView tvHuodongQiangShi;
+    @ViewInject(R.id.fragment_goods_info_huodong_qiang_fen)
+    private TextView tvHuodongQiangFen;
+    @ViewInject(R.id.fragment_goods_info_huodong_qiang_miao)
+    private TextView tvHuodongQiangMiao;
+
+    private CountDownTimer timer;
+    private Long daojishi;
+    //基本静态数据
+    final int HBASE = 1000 * 60 * 60;
+    final int DBASE = 24 * HBASE;
+
 
     @ViewInject(R.id.fab_up_slide)
     private FloatingActionButton fab_up_slide;
@@ -123,7 +158,7 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
     @ViewInject(R.id.tv_new_price)
     private TextView tv_new_price;
     @ViewInject(R.id.tv_old_price)
-    private TextView tv_old_price;
+    private TextViewDel tv_old_price;
 
     public LifeGoodsSelectDialog selDialog;
     public FragmentGoodsParameter fragmentGoodsParameter;
@@ -140,6 +175,7 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
     private CommodityDetailsModel model;
     public CheckInchModel checkInchModel;
 
+    public UserBiz userBiz;
     public CommodityDetailsModel.ColorList seledColor;
     public CommodityDetailsModel.SizeList seledSize;
     public int seledNum;
@@ -228,6 +264,13 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
         vp_item_goods_img.startTurning(3000);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (timer != null)
+            timer.cancel();
+    }
+
     //
 //    // 停止自动翻页
     @Override
@@ -241,7 +284,7 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        userBiz = UserBiz.getInstance(getActivity());
 //        flag_otc.setVisibility(View.GONE);
 
         fragmentGoodsDetails = new FragmentGoodsDetails();
@@ -399,17 +442,33 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
     }*/
 
     public void updeta(CommodityDetailsModel commodityDetailsModel) {
+        if (!isAdded()) return;
         model = commodityDetailsModel;
+        if (model == null) return;
 
         CommodityDetailsModel.SizeList firstDetail = model.getColorList().get(0).getSizeList().get(0);
         tv_goods_title.setText(model.getTitle());
-        if (CommodityDetailsModel.CUXIAOFLG_YES.equals(model.getCuxiaoFlg())) {
+
+        if (GoodsModel.HUODONG_JIFEN.equals(model.getTopFlg())) {
+            String costPoint = "+" + Utils.formatFee(model.getCostPoint()) + "积分";
+            String price = Utils.formatFee("" + model.getCostMoney()) + costPoint;
+            price = price + "(您的积分不足，可按原价" + Utils.formatFee(model.getYuanJia()) + "元购买本商品！)";
+            tv_new_price.setText(getString(R.string.money_renminbi, price));
+            tv_old_price.setVisibility(View.GONE);
+        } else if (GoodsModel.TOP_FLG_LINGYUAN.equals(model.getTopFlg())) {
+            tv_new_price.setText(getString(R.string.money_renminbi, Utils.formatFee("" + model.getCostMoney())));
+            tv_old_price.setText(getString(R.string.money_renminbi, Utils.formatFee("" + model.getMarketPrice())));
+            tv_old_price.setVisibility(View.VISIBLE);
+
+        } else if (CommodityDetailsModel.CUXIAOFLG_YES.equals(model.getCuxiaoFlg())) {
             tv_new_price.setText(getString(R.string.money_renminbi, Utils.formatFee(model.getPromprice())));
-            tv_old_price.setText(getString(R.string.money_renminbi, Utils.formatFee("" + model.getYuanJia())));
+//            tv_old_price.setText(getString(R.string.money_renminbi, Utils.formatFee("" + model.getYuanJia())));
+            tv_old_price.setText(getString(R.string.money_renminbi, Utils.formatFee("" + model.getMarketPrice())));
             tv_old_price.setVisibility(View.VISIBLE);
         } else {
             tv_new_price.setText(getString(R.string.money_renminbi, Utils.formatFee("" + model.getCostMoney())));
-            tv_old_price.setVisibility(View.GONE);
+            tv_old_price.setText(getString(R.string.money_renminbi, Utils.formatFee("" + model.getMarketPrice())));
+            tv_old_price.setVisibility(View.VISIBLE);
         }
 //        tv_old_price.setText(model.getColorList().get(0).getSizeList().get(0).getMarketPrice() + "");
 
@@ -448,8 +507,97 @@ public class FragmentGoodsInfo extends BaseFragment implements SlideDetailsLayou
         //轮播
         setLoopView(images);
 
+        //判断活动类别，显示活动样式
+        rlHuodongQiang.setVisibility(View.GONE);
+        rlHuodongManzeng.setVisibility(View.GONE);
+        rlHuodongTejia.setVisibility(View.GONE);
+        rlHuodongJifen.setVisibility(View.GONE);
+        String huodongFlg = model.getTopFlg();
+        if (GoodsModel.HUODONG_TEJIA.equals(huodongFlg)) {
+            //特价
+            rlHuodongTejia.setVisibility(View.VISIBLE);
+            tvTejiaJiage.setText(Utils.formatFee("" + model.getCostMoney()));
+            tvTejiaYuanjia.setText(Utils.formatFee(model.getMarketPrice()));
+        } else if (GoodsModel.HUODONG_JIFEN.equals(huodongFlg)) {
+            //积分
+            rlHuodongJifen.setVisibility(View.VISIBLE);
+        } else if (GoodsModel.HUODONG_MIAOSHA.equals(huodongFlg)) {
+            rlHuodongQiang.setVisibility(View.VISIBLE);
+
+            new BizDataAsyncTask<String>() {
+                @Override
+                protected String doExecute() throws ZYException, BizFailure {
+                    return userBiz.systemDate();
+                }
+
+                @Override
+                protected void onExecuteSucceeded(String s) {
+                    long lNow = Long.parseLong(s);
+                    daojishi = model.getActiveStartDate() - lNow;
+                    if (daojishi <= (-1 * 0.5 * HBASE)) {
+                        //半个小时结束
+                        tvHuodongQiangStat.setText(R.string.huodong_xianshiqiang_qiangwan);
+                        tvHuodongQiangDaojishi.setVisibility(View.GONE);
+                    } else if (daojishi > DBASE) {
+                        //大于1天未开始
+                        tvHuodongQiangStat.setText("暂未开始");
+                        tvHuodongQiangDaojishi.setVisibility(View.GONE);
+                    } else if (daojishi > 0) {
+                        //倒计时
+                        timer = new CountDownTimer(daojishi, 1000) {
+
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+//                        tvGetCode.setText(getString(R.string.yanzhengma_huoqu_timer, (millisUntilFinished / 1000)));
+//                        int myD = (int) Math.floor(millisUntilFinished / (DBASE)); //天
+                                int myH = (int) ((millisUntilFinished / HBASE) % 24); //小时
+                                int myM = (int) ((millisUntilFinished / 1000 / 60) % 60); //分钟
+                                int myS = (int) ((millisUntilFinished / 1000) % 60); //秒
+                                String sH = myH + "";
+                                String sM = myM + "";
+                                String sS = myS + "";
+                                sH = Utils.leftPad(sH, "0", 2);
+                                sM = Utils.leftPad(sM, "0", 2);
+                                sS = Utils.leftPad(sS, "0", 2);
+
+                                tvHuodongQiangShi.setText(sH);
+                                tvHuodongQiangFen.setText(sM);
+                                tvHuodongQiangMiao.setText(sS);
+                                tvHuodongQiangDaojishi.setVisibility(View.VISIBLE);
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                tvHuodongQiangShi.setText("xx");
+                                tvHuodongQiangFen.setText("xx");
+                                tvHuodongQiangMiao.setText("xx");
+                                tvHuodongQiangDaojishi.setVisibility(View.GONE);
+                                tvHuodongQiangStat.setText(R.string.huodong_xianshiqiang_qiang);
+                            }
+                        };
+                        timer.start();
+                    } else {
+                        tvHuodongQiangStat.setText(R.string.huodong_xianshiqiang_qiang);
+                        tvHuodongQiangDaojishi.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                protected void OnExecuteFailed() {
+
+                }
+            }.execute();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("MM月dd日hh:mm开始");
+            tvHuodongQiangStartDate.setText(sdf.format(new Date(model.getActiveStartDate())));
+
+        } else if (Arrays.asList(GoodsModel.HUODONG_MANZENG).contains(huodongFlg)) {
+            //满赠
+            rlHuodongManzeng.setVisibility(View.VISIBLE);
+            tvHuodongManzengMiaoShu.setText(model.getCommodityParameter());
+        }
+
         //评论数量
-        Log.e(AppConfig.ERR_TAG, "eva count:" + model.getEVALUATE_CNT() + "");
 //        tvGoodInfoComment.setText(model.getEVALUATE_CNT() + "");
         //评价信息
         if (!model.getEvaluateList().isEmpty() && model.getEvaluateList() != null) {

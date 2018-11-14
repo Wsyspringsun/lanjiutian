@@ -140,24 +140,6 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/x4"
-                    android:layout_marginTop="@dimen/x4">
-
-                    <TextView
-                        style="@style/font_ww_14"
-                        android:text="@string/order_userremark"
-                        android:textColor="@color/gray" />
-
-                    <TextView
-                        android:id="@+id/activity_order_info_tv_orderremark"
-                        style="@style/font_ww_14"
-                        android:layout_alignParentRight="true"
-                        android:textColor="@color/gray" />
-
-                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -166,7 +148,7 @@
 
                     <TextView
                         style="@style/font_ww_14"
-                        android:text="@string/order_yunfei"
+                        android:text="邮费抵扣"
                         android:textColor="@color/gray" />
 
                     <TextView
@@ -201,8 +183,28 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="39dp"
-                    android:layout_marginTop="9dp">
+                    android:layout_marginBottom="@dimen/x4"
+                    android:layout_marginTop="@dimen/x4">
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:text="@string/order_discount_youhuiquan"
+                        android:textColor="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/activity_order_info_discount_youhuiquan"
+                        style="@style/font_ww_14"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/gray" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/x4"
+                    android:layout_marginTop="@dimen/x4">
 
                     <TextView
                         style="@style/font_ww_14"
@@ -225,6 +227,26 @@
 
                     <TextView
                         style="@style/font_ww_14"
+                        android:text="随机优惠"
+                        android:textColor="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/tv_orderinfo_rand_money"
+                        style="@style/font_ww_14"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/gray" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/x4"
+                    android:layout_marginTop="@dimen/x4">
+
+                    <TextView
+                        style="@style/font_ww_14"
                         android:text="@string/order_dingdan"
                         android:textColor="@color/font_black2"
                         android:textStyle="bold" />
@@ -236,6 +258,50 @@
                         android:textColor="@color/base_bar" />
 
                 </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/x4"
+                    android:layout_marginTop="@dimen/x4">
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:text="@string/order_userremark"
+                        android:textColor="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/activity_order_info_tv_orderremark"
+                        style="@style/font_ww_14"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/gray" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/activity_order_info_ll_orderqrcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/x4"
+                    android:layout_marginTop="@dimen/x4"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/font_ww_14"
+                        android:text="订单二维码"
+                        android:textColor="@color/gray" />
+
+                    <ImageView
+                        android:id="@+id/activity_order_info_tv_orderqrcode"
+                        android:layout_width="@dimen/x95"
+                        android:layout_height="@dimen/x95"
+                        android:layout_gravity="center"
+                        android:contentDescription="订单二维码"
+                        android:src="@drawable/img_adv_zhanwei" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -313,10 +379,12 @@
 
                 <TextView
                     android:id="@+id/dingdan2"
-                    style="@style/font_ww_14"
-                    android:layout_marginTop="@dimen/x7"
-                    android:textColor="@color/font_black2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/vertical_margin_lg"
+                    android:textColor="@color/font_1"
                     android:visibility="gone" />
+
 
                 <TextView
                     android:id="@+id/fapiao"

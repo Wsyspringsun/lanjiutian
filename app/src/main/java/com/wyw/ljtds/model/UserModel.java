@@ -10,6 +10,8 @@ import java.math.BigDecimal;
  */
 
 public class UserModel extends BaseModel implements Parcelable {
+
+    private String INTRODUCER_OID_USER_ID;//推荐人工号
     //唯一标识
     private String OID_USER_ID;
     //昵称
@@ -44,6 +46,30 @@ public class UserModel extends BaseModel implements Parcelable {
     private Address DEFAULT_ADDRESS;
     //生日
     private Long BIRTHDAY = null;
+    //是否有医保卡
+    private String CARTE_VITAL_FLG;
+    //常买的药品
+    private String OFTEN_BUY_TYPE;
+
+    public String getCARTE_VITAL_FLG() {
+        return CARTE_VITAL_FLG;
+    }
+
+    public void setCARTE_VITAL_FLG(String CARTE_VITAL_FLG) {
+        this.CARTE_VITAL_FLG = CARTE_VITAL_FLG;
+    }
+
+    public String getOFTEN_BUY_TYPE() {
+        return OFTEN_BUY_TYPE;
+    }
+
+    public void setOFTEN_BUY_TYPE(String OFTEN_BUY_TYPE) {
+        this.OFTEN_BUY_TYPE = OFTEN_BUY_TYPE;
+    }
+
+    public static Creator<UserModel> getCREATOR() {
+        return CREATOR;
+    }
 
     public Long getBIRTHDAY() {
         return BIRTHDAY;
@@ -311,4 +337,13 @@ public class UserModel extends BaseModel implements Parcelable {
             return new UserModel[size];
         }
     };
+
+    public String getINTRODUCER_OID_USER_ID() {
+        return INTRODUCER_OID_USER_ID;
+    }
+
+    public void setINTRODUCER_OID_USER_ID(String INTRODUCER_OID_USER_ID) {
+        this.INTRODUCER_OID_USER_ID = INTRODUCER_OID_USER_ID;
+    }
+
 }

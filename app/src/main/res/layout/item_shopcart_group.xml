@@ -3,17 +3,17 @@
     android:id="@+id/SwipeMenuExpandableListView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/vertical_margin_mid"
+    android:layout_marginLeft="@dimen/vertical_margin_lg"
+    android:layout_marginRight="@dimen/vertical_margin_lg"
+    android:layout_marginTop="@dimen/vertical_margin_mid"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/padding1">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/vertical_margin"
-        android:layout_marginLeft="@dimen/vertical_margin_mid"
-        android:layout_marginRight="@dimen/vertical_margin_mid"
-        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_marginBottom="@dimen/vertical_margin_mid"
         android:background="@color/white">
 
         <CheckBox
@@ -28,8 +28,8 @@
 
         <ImageView
             android:id="@+id/iv_source_image"
-            android:layout_width="@dimen/x20"
-            android:layout_height="@dimen/x20"
+            android:layout_width="@dimen/x16"
+            android:layout_height="@dimen/x16"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x10"
             android:layout_toRightOf="@id/item_shopcart_group_chk"
@@ -47,7 +47,7 @@
             android:textSize="@dimen/font_5" />
 
         <ImageView
-            android:layout_width="@dimen/x16"
+            android:layout_width="@dimen/x13"
             android:layout_height="@dimen/x13"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x5"
@@ -57,26 +57,14 @@
 
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray1" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/reclcyer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/vertical_margin_mid"
-        android:layout_marginRight="@dimen/vertical_margin_mid">
-
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/vertical_margin_mid"
-        android:layout_marginLeft="@dimen/vertical_margin_mid"
-        android:layout_marginRight="@dimen/vertical_margin_mid"
         android:layout_marginTop="@dimen/vertical_margin_mid"
         android:background="@color/white">
 
@@ -102,8 +90,8 @@
             android:background="@drawable/text_border"
             android:gravity="center"
             android:text="本店优惠"
-            android:textColor="@color/base_red"
             android:textAlignment="center"
+            android:textColor="@color/base_red"
             android:textSize="9dp" />
 
         <TextView

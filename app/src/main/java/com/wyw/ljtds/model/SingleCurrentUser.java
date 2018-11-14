@@ -1,13 +1,24 @@
 package com.wyw.ljtds.model;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+
 import com.baidu.location.BDLocation;
+import com.wyw.ljtds.utils.FileUtils;
+import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.Utils;
+
+import java.io.File;
 
 /**
  * Created by wsy on 17-12-21.
  */
 
 public class SingleCurrentUser {
+
+
+
+    public static UserModel userInfo;
     public static MyLocation location;
     public static BDLocation bdLocation;
     public static final double defaultLat = 35.48991025753593f;

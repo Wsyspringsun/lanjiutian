@@ -18,6 +18,7 @@ import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.model.UserModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.utils.StringUtils;
@@ -33,13 +34,12 @@ import org.xutils.view.annotation.ViewInject;
 
 @ContentView(R.layout.activity_real_name)
 public class ActivityRealName extends BaseActivity {
-    @ViewInject(R.id.ed_name)
+/*    @ViewInject(R.id.ed_name)
     private EditText ed_name;
     @ViewInject(R.id.ed_card)
     private EditText ed_card;
     @ViewInject(R.id.header_title)
     private TextView header_title;
-    private UserModel user;
     @ViewInject(R.id.realname_chk_agr)
     CheckBox realnameChkAgr;
     @ViewInject(R.id.next)
@@ -87,7 +87,6 @@ public class ActivityRealName extends BaseActivity {
             }
         });
 
-        user = getIntent().getParcelableExtra(ActivityManage.TAG_USER);
     }
 
     BizDataAsyncTask<Integer> realName;
@@ -96,18 +95,16 @@ public class ActivityRealName extends BaseActivity {
         realName = new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                Log.e("*********", ed_name.getText().toString().trim() + " ; " + ed_card.getText().toString().trim());
                 return UserBiz.realNameAuth(ed_name.getText().toString().trim(), ed_card.getText().toString().trim());
             }
 
             @Override
             protected void onExecuteSucceeded(Integer o) {
                 if (o == 1) {
-                    user.setID_CARD(ed_card.getText().toString().trim());
-                    user.setUSER_NAME(ed_name.getText().toString().trim());
-                    Intent it = new Intent();
-                    it.putExtra(ActivityManage.TAG_USER, user);
-                    setResult(AppConfig.IntentExtraKey.RESULT_OK, it);
+                    if(SingleCurrentUser.userInfo==null)return;
+                    SingleCurrentUser.userInfo.setID_CARD(ed_card.getText().toString().trim());
+                    SingleCurrentUser.userInfo.setUSER_NAME(ed_name.getText().toString().trim());
+                    setResult(AppConfig.IntentExtraKey.RESULT_OK);
                     finish();
                 }
             }
@@ -120,5 +117,5 @@ public class ActivityRealName extends BaseActivity {
 
         };
         realName.execute();
-    }
+    }*/
 }

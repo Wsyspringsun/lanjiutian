@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.wyw.ljtds.biz.exception.BizFailure;
 import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.model.UserModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.utils.DateUtils;
@@ -42,7 +44,9 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -56,10 +60,13 @@ import pub.devrel.easypermissions.EasyPermissions;
 @ContentView(R.layout.activity_user_information)
 public class ActivityInformation extends BaseActivity implements EasyPermissions.PermissionCallbacks {
     private static final String BIRTHDAY_TIP = "点击设置生日";
+    private static final int CHANGE_SEX = 0;
+    private static final int CHANGE_BIRTHDAY = 1;
+    private static final int CHANGE_NICKNAME = 2;
     @ViewInject(R.id.birthday_tv)
     private TextView birthday_tv;
-    @ViewInject(R.id.sdv_item_head_img)
-    private SimpleDraweeView sdv_item_head_img;
+    @ViewInject(R.id.activity_user_infomation_sdv_headphoto)
+    private SimpleDraweeView headPhoto;
     @ViewInject(R.id.header_title)
     private TextView title;
     @ViewInject(R.id.name)
@@ -68,10 +75,8 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
     private TextView nicheng_tv;
     @ViewInject(R.id.sex_tv)
     private TextView sex_tv;
-
     private EditText et;
     private int index = 0;
-    private UserModel user;
     private CutImage cutImage = null;//选择剪切头像
     private static final int REQUEST_CODE_PERMISSION_CAMERA = 1;
     private Bitmap bitmap;
@@ -81,11 +86,8 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
 
         switch (view.getId()) {
             case R.id.header_return:
-                Intent it = new Intent();
-                it.putExtra(ActivityManage.TAG_USER, user);
-                setResult(AppConfig.IntentExtraKey.RESULT_OK, it);
+                setResult(AppConfig.IntentExtraKey.RESULT_OK);
                 finish();
-
                 break;
 
             case R.id.birthday:
@@ -100,9 +102,7 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
                     public void onSure(int year, int month, int day, long time) {
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         String date = dateFormat.format(time);
-                        birthday_tv.setText(date);
-                        setLoding(ActivityInformation.this, false);
-                        add(nicheng_tv.getText().toString().trim(), birthday_tv.getText().toString().trim(), sex_tv.getText().toString().trim());
+                        add(date, CHANGE_BIRTHDAY);
                     }
                 });
                 time_Dialog.show();
@@ -122,13 +122,7 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
                         if (StringUtils.isEmpty(et.getText().toString().trim())) {
                             ToastUtil.show(ActivityInformation.this, "昵称不能为空");
                         } else {
-                            nicheng_tv.setText(et.getText());
-                            String birthdayVal = "";
-                            if (!BIRTHDAY_TIP.equals(birthday_tv.getText().toString())) {
-                                birthdayVal = birthday_tv.getText().toString();
-                            }
-                            setLoding(ActivityInformation.this, false);
-                            add(nicheng_tv.getText().toString().trim(), birthdayVal, sex_tv.getText().toString());
+                            add(et.getText().toString(), CHANGE_NICKNAME);
                         }
 
                     }
@@ -143,9 +137,7 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
                                 index = i;
-                                sex_tv.setText(items[i]);
-                                setLoding(ActivityInformation.this, false);
-                                add(nicheng_tv.getText().toString().trim(), birthday_tv.getText().toString(), sex_tv.getText().toString());
+                                add(items[i], CHANGE_SEX);
                             }
                         }).show();
 
@@ -160,17 +152,18 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
         title.setText(R.string.gerenxinxi);
         cutImage = new CutImage(this);
 
-        user = getIntent().getParcelableExtra(ActivityManage.TAG_USER);
+        UserModel user = SingleCurrentUser.userInfo;
+        if (user == null) return;
         name.setText(user.getMOBILE());
-        sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + user.getUSER_ICON_FILE_ID()));
+        headPhoto.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + user.getUSER_ICON_FILE_ID()));
         nicheng_tv.setText(user.getNICKNAME());
-        if (user.getBIRTHDAY() != 0) {
+        if (user.getBIRTHDAY()!=null && user.getBIRTHDAY() != 0) {
             birthday_tv.setText(DateUtils.parseTime(user.getBIRTHDAY() + ""));
         } else {
             birthday_tv.setText(BIRTHDAY_TIP);
         }
         if (StringUtils.isEmpty(user.getSEX())) {
-            sex_tv.setText("保密");
+            sex_tv.setText("未知");
             index = 0;
         } else {
             if (user.getSEX().equals("男") || user.getSEX().equals("0")) {
@@ -215,17 +208,61 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
 
     BizDataAsyncTask<Integer> addTask;
 
-    private void add(final String nc, final String sr, final String xb) {
-        addTask = new BizDataAsyncTask<Integer>() {
+    /**
+     * @param nc 暱称
+     * @param sr 生日
+     * @param xb 性别
+     */
+    private void add(final String val, final int type) {
+        setLoding(ActivityInformation.this, false);
+        new BizDataAsyncTask<Integer>() {
             @Override
             protected Integer doExecute() throws ZYException, BizFailure {
-                return UserBiz.addPerInfomation(nc, sr, xb);
+                if (SingleCurrentUser.userInfo == null) return -1;
+                String birthday = "";
+                if (SingleCurrentUser.userInfo.getBIRTHDAY() != null && SingleCurrentUser.userInfo.getBIRTHDAY() != 0) {
+                    birthday = DateUtils.parseTime(SingleCurrentUser.userInfo.getBIRTHDAY() + "");
+                }
+                switch (type) {
+                    case CHANGE_SEX:
+                        return UserBiz.addPerInfomation(SingleCurrentUser.userInfo.getNICKNAME(), birthday, val);
+                    case CHANGE_BIRTHDAY:
+                        return UserBiz.addPerInfomation(SingleCurrentUser.userInfo.getNICKNAME(), val, SingleCurrentUser.userInfo.getSEX());
+                    case CHANGE_NICKNAME:
+                        return UserBiz.addPerInfomation(val, birthday, SingleCurrentUser.userInfo.getSEX());
+                    default:
+                        return -1;
+                }
             }
 
             @Override
             protected void onExecuteSucceeded(Integer s) {
+                if (SingleCurrentUser.userInfo == null) return;
                 if (s == 1) {
-                    user.setNICKNAME(nicheng_tv.getText().toString());
+                    //更新成功
+                    switch (type) {
+                        case CHANGE_SEX:
+                            SingleCurrentUser.userInfo.setSEX(val);
+                            sex_tv.setText(val);
+                            break;
+                        case CHANGE_BIRTHDAY:
+                            long dateBirthday = 0;
+                            try {
+                                SimpleDateFormat  sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                dateBirthday = sdf.parse(val).getTime();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            SingleCurrentUser.userInfo.setBIRTHDAY(dateBirthday);
+                            birthday_tv.setText(val);
+                            break;
+                        case CHANGE_NICKNAME:
+                            SingleCurrentUser.userInfo.setNICKNAME(val);
+                            nicheng_tv.setText(val);
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 closeLoding();
             }
@@ -234,8 +271,9 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
             protected void OnExecuteFailed() {
                 closeLoding();
             }
-        };
-        addTask.execute();
+        }.execute();
+
+
     }
 
     @Override
@@ -280,8 +318,8 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
 
             @Override
             protected void onExecuteSucceeded(final String s) {
-                user.setUSER_ICON_FILE_ID(s);
-                sdv_item_head_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + s));
+                SingleCurrentUser.userInfo.setUSER_ICON_FILE_ID(s);
+                headPhoto.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + s));
                 closeLoding();
             }
 
@@ -327,10 +365,8 @@ public class ActivityInformation extends BaseActivity implements EasyPermissions
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == event.KEYCODE_BACK) {
-            Intent it = new Intent();
-            it.putExtra(ActivityManage.TAG_USER, user);
-            setResult(AppConfig.IntentExtraKey.RESULT_OK, it);
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            setResult(AppConfig.IntentExtraKey.RESULT_OK);
             finish();
 
         }

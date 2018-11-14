@@ -5,6 +5,7 @@ package com.wyw.ljtds.model;
  * 微信认证后获取的微信用户信息
  */
 public class WXUserInfo {
+    private String openId;//
     private String wxId;//微信id
     private String nickName; // 昵称
     private String sex; //性别
@@ -31,5 +32,13 @@ public class WXUserInfo {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

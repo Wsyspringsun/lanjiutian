@@ -29,7 +29,7 @@
         android:background="#00FFFFFF"
         android:fitsSystemWindows="true"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <include layout="@layout/main_header_search" />
     </LinearLayout>

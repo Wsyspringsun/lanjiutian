@@ -134,6 +134,10 @@ public class FragmentOrderList extends BaseFragment {
         recyclerView.addOnItemTouchListener(new SimpleClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+                if (adapter1 == null)
+                    return;
+                if (adapter1.getItemCount() <= 0)
+                    return;
                 Intent it = new Intent(getActivity(), ActivityOrderInfo.class);
                 it.putExtra("id", adapter1.getItem(i).getORDER_GROUP_ID());
                 startActivity(it);

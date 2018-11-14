@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BaiduMapsApiDemo/BaiduMapsApiDemo.iml" filepath="$PROJECT_DIR$/BaiduMapsApiDemo/BaiduMapsApiDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/MarqueeView/MarqueeView.iml" filepath="$PROJECT_DIR$/MarqueeView/MarqueeView.iml" />
-      <module fileurl="file://$PROJECT_DIR$/MyApplication.iml" filepath="$PROJECT_DIR$/MyApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/androidproject.iml" filepath="$PROJECT_DIR$/androidproject.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/appbase/appbase.iml" filepath="$PROJECT_DIR$/appbase/appbase.iml" />

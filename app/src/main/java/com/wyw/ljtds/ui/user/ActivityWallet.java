@@ -16,9 +16,11 @@ import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.WalletModel;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.user.wallet.BalanceActivity;
+import com.wyw.ljtds.ui.user.wallet.ChojiangRecActivity;
 import com.wyw.ljtds.ui.user.wallet.PointRecordActivity;
 import com.wyw.ljtds.ui.user.wallet.TicketActivity;
 import com.wyw.ljtds.utils.GsonUtils;
+import com.wyw.ljtds.utils.StringUtils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -36,11 +38,13 @@ public class ActivityWallet extends BaseActivity {
     private TextView title;
     @ViewInject(R.id.jifen)
     private TextView jifen;
+    @ViewInject(R.id.activity_wallet_sumCouponNum)
+    private TextView sumCouponNum;
     @ViewInject(R.id.money)
     private TextView money;
     WalletModel wallModel;
 
-    @Event(value = {R.id.header_return, R.id.sel_wallet_jifen, R.id.sel_wallet_youhuiquan, R.id.sel_wallet_yue})
+    @Event(value = {R.id.sel_wallet_chojiangrec, R.id.header_return, R.id.sel_wallet_jifen, R.id.sel_wallet_youhuiquan, R.id.sel_wallet_yue})
     private void onClick(View view) {
         Intent it = null;
         switch (view.getId()) {
@@ -57,6 +61,10 @@ public class ActivityWallet extends BaseActivity {
                 break;
             case R.id.sel_wallet_yue:
                 it = new Intent(this, BalanceActivity.class);
+                startActivity(it);
+                break;
+            case R.id.sel_wallet_chojiangrec:
+                it = ChojiangRecActivity.getIntent(ActivityWallet.this);
                 startActivity(it);
                 break;
             default:
@@ -93,8 +101,15 @@ public class ActivityWallet extends BaseActivity {
             protected void onExecuteSucceeded(WalletModel model) {
                 closeLoding();
                 wallModel = model;
-                jifen.setText(wallModel.getUsablePoint() + "");
-                money.setText("￥" + wallModel.getCardbalance() + "");
+                if (!StringUtils.isEmpty(wallModel.getUsablePoint())) {
+                    jifen.setText(wallModel.getUsablePoint() + "");
+                }
+                if (!StringUtils.isEmpty(wallModel.getCardbalance())) {
+                    money.setText("￥" + wallModel.getCardbalance() + "");
+                }
+                if (!StringUtils.isEmpty(wallModel.getSumCouponNum())) {
+                    sumCouponNum.setText("" + wallModel.getSumCouponNum());
+                }
             }
 
             @Override

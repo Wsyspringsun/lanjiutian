@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
+import com.wyw.ljtds.model.GoodsModel;
 import com.wyw.ljtds.model.MedicineListModel;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.Utils;
@@ -34,7 +35,20 @@ public class MedicineItemAdapter1 extends BaseQuickAdapter<MedicineListModel> {
                 .setText(R.id.money, "￥" + recommendModel.getSALEPRICE() + "");
 
         ImageView goods_img = baseViewHolder.getView(R.id.item_goods_grid_sdv);
-        Picasso.with(mContext).load(Uri.parse(recommendModel.getIMG_PATH())).resize(RESIZE, RESIZE).into(goods_img);
-        Utils.log("recommendModel.getIMG_PATH():" + recommendModel.getIMG_PATH());
+        if (!StringUtils.isEmpty(recommendModel.getIMG_PATH())) {
+            Picasso.with(mContext).load(Uri.parse(recommendModel.getIMG_PATH())).resize(RESIZE, RESIZE).placeholder(R.mipmap.zhanweitu).into(goods_img);
+        }
+
+        /**
+         * 活动小图标
+         */
+        baseViewHolder.setVisible(R.id.item_goods_huodong_te, false);
+        baseViewHolder.setVisible(R.id.item_goods_huodong_zeng, false);
+        if (GoodsModel.HUODONG_TEJIA.equals(recommendModel.getTOP_FLG())) {
+            baseViewHolder.setVisible(R.id.item_goods_huodong_te, true);
+        } else if (GoodsModel.HUODONG_MANZENG.equals(recommendModel.getTOP_FLG())) {
+            baseViewHolder.setVisible(R.id.item_goods_huodong_zeng, true);
+        }
+
     }
 }

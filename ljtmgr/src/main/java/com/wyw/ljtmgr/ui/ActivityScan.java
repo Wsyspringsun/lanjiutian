@@ -3,6 +3,7 @@ package com.wyw.ljtmgr.ui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -162,7 +163,7 @@ public class ActivityScan extends BaseActivity implements QRCodeView.Delegate {
     }
 
 
-    public static Intent getIntent(LogisticInfoActivity context) {
+    public static Intent getIntent(Context context) {
         Intent it = new Intent(context, ActivityScan.class);
         return it;
     }

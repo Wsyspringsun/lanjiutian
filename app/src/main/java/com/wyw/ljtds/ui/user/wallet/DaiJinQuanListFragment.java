@@ -1,5 +1,6 @@
 package com.wyw.ljtds.ui.user.wallet;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,11 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.UserBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
@@ -23,11 +26,14 @@ import com.wyw.ljtds.model.DianZiBiLog;
 import com.wyw.ljtds.model.Ticket;
 import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.utils.GsonUtils;
+import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.List;
+
+import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder;
 
 /**
  * Created by wsy on 17-7-28.
@@ -37,7 +43,7 @@ import java.util.List;
 public class DaiJinQuanListFragment extends BaseFragment {
     @ViewInject(R.id.reclcyer)
     private RecyclerView recyclerView;
-    private MyAdapter1 adapter1;
+    private RecyclerView.Adapter adapter1;
     private List<Ticket> list;
     private LinearLayoutManager linearLayoutManager;
 
@@ -58,7 +64,7 @@ public class DaiJinQuanListFragment extends BaseFragment {
         new BizDataAsyncTask<List<Ticket>>() {
             @Override
             protected List<Ticket> doExecute() throws ZYException, BizFailure {
-                return UserBiz.readTicket("2");
+                return UserBiz.readTicket("2,5,6");
             }
 
             @Override
@@ -96,20 +102,37 @@ public class DaiJinQuanListFragment extends BaseFragment {
     }
 
     private void updAdapter() {
+        if (list == null) return;
         if (adapter1 == null) {
-            adapter1 = new MyAdapter1();
-            View noData = getActivity().getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
-            adapter1.setEmptyView(noData);
+            adapter1 = new RecyclerView.Adapter<TicketItemHolder>() {
+                @Override
+                public TicketItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                    View view = getActivity().getLayoutInflater().inflate(R.layout.item_daijinquan, parent, false);
+                    return new TicketItemHolder(view);
+                }
+
+                @Override
+                public void onBindViewHolder(TicketItemHolder holder, int position) {
+                    Ticket itemData = list.get(position);
+                    holder.itemData = itemData;
+                    holder.tvAmount.setText("￥" + Utils.formatFee("" + itemData.getSINGLE_AMOUNT()));
+                    holder.tvDesc.setText("满" + Utils.formatFee(itemData.getMINIMUM_TENDER_AMOUNT()) + "可用");
+                    holder.tvName.setText(itemData.getRED_PACKET_TEMPLET_NAME());
+                    holder.tvRule.setText(itemData.getREMARK());
+                    holder.tvTerm.setText("有限日期：" + itemData.getTERM());
+//                    Picasso.with(PointShopActivity.this).load(AppConfig.IMAGE_PATH_LJT + itemData.getIMG_PATH()).into(holder.ivItem);
+                }
+
+                @Override
+                public int getItemCount() {
+                    if (list == null)
+                        return 0;
+                    return list.size();
+                }
+            };
+
             recyclerView.setAdapter(adapter1);
         }
-        if (list == null || list.size() <= 0) {
-            return;
-        }
-
-        adapter1.setNewData(list);
-        Log.e(AppConfig.ERR_TAG, GsonUtils.List2Json(list));
-
-        adapter1.notifyDataSetChanged();
     }
 
     private void initRecyclerView() {
@@ -118,16 +141,50 @@ public class DaiJinQuanListFragment extends BaseFragment {
         recyclerView.setLayoutManager(linearLayoutManager);
     }
 
-    private class MyAdapter1 extends BaseQuickAdapter<Ticket> {
-        public MyAdapter1() {
-            super(R.layout.item_daijinquan_list, list);
-        }
+    private class TicketItemHolder extends RecyclerView.ViewHolder {
+        ImageView ivCode;
+        TextView tvAmount;
+        TextView tvDesc;
+        TextView tvShowBarcode;
+        TextView tvName;
+        TextView tvTerm;
+        TextView tvRule;
 
-        @Override
-        protected void convert(BaseViewHolder baseViewHolder, Ticket s) {
-//            baseViewHolder.setText(R.id.item_daijinquan_list_tv_cost, )
-//                    .setText(R.id.item_dianzibi_electronic_orderid, s.getORDER_TRADE_ID())
-//                    .setText(R.id.item_dianzibi_electronic_insdate, s.getINS_DATE());
+        Ticket itemData;
+
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.item_daijinquan_btn_barcode:
+                        if (ivCode.getDrawable() == null) {
+                            Bitmap bitmap = QRCodeEncoder.syncEncodeBarcode(itemData.getRED_PACKET_LOG_ID(), 400, 120, 0);
+                            ivCode.setImageBitmap(bitmap);
+                        }
+                        if (ivCode.getVisibility() == View.VISIBLE) {
+                            ivCode.setVisibility(View.GONE);
+                        } else {
+                            ivCode.setVisibility(View.VISIBLE);
+                        }
+                        break;
+                }
+
+            }
+        };
+
+        public TicketItemHolder(View itemView) {
+            super(itemView);
+            ivCode = (ImageView) itemView.findViewById(R.id.item_daijinquan_qrcode);
+
+
+            tvAmount = (TextView) itemView.findViewById(R.id.item_daijinquan_amount);
+            tvDesc = (TextView) itemView.findViewById(R.id.item_daijinquan_desc);
+            tvName = (TextView) itemView.findViewById(R.id.item_daijinquan_name);
+            tvTerm = (TextView) itemView.findViewById(R.id.item_daijinquan_term);
+            tvRule = (TextView) itemView.findViewById(R.id.item_daijinquan_rule);
+            tvShowBarcode = (TextView) itemView.findViewById(R.id.item_daijinquan_btn_barcode);
+            tvShowBarcode.setOnClickListener(onClickListener);
+
         }
     }
 }

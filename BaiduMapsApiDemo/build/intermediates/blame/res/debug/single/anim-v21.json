@@ -1,10 +1,10 @@
 [
     {
-        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim-v21/design_bottom_sheet_slide_out.xml",
-        "source": "/home/wsy/.android/build-cache/517be5b978a64a705022b7feab459295d9b0e9d7/output/res/anim-v21/design_bottom_sheet_slide_out.xml"
+        "merged": "F:\\seeyoung\\androidProject\\androidproject\\BaiduMapsApiDemo\\build\\intermediates\\res\\merged\\debug\\anim-v21\\design_bottom_sheet_slide_out.xml",
+        "source": "F:\\seeyoung\\androidProject\\androidproject\\BaiduMapsApiDemo\\build\\intermediates\\exploded-aar\\com.android.support\\design\\23.3.0\\res\\anim-v21\\design_bottom_sheet_slide_out.xml"
     },
     {
-        "merged": "/home/wsy/AndroidStudioProjects/androidproject/BaiduMapsApiDemo/build/intermediates/res/merged/debug/anim-v21/design_bottom_sheet_slide_in.xml",
-        "source": "/home/wsy/.android/build-cache/517be5b978a64a705022b7feab459295d9b0e9d7/output/res/anim-v21/design_bottom_sheet_slide_in.xml"
+        "merged": "F:\\seeyoung\\androidProject\\androidproject\\BaiduMapsApiDemo\\build\\intermediates\\res\\merged\\debug\\anim-v21\\design_bottom_sheet_slide_in.xml",
+        "source": "F:\\seeyoung\\androidProject\\androidproject\\BaiduMapsApiDemo\\build\\intermediates\\exploded-aar\\com.android.support\\design\\23.3.0\\res\\anim-v21\\design_bottom_sheet_slide_in.xml"
     }
 ]

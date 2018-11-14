@@ -24,6 +24,11 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/vertical_margin"
+        android:background="@color/gray1" />
+
     <RelativeLayout
         android:id="@+id/footer"
         android:layout_width="match_parent"
@@ -40,6 +45,7 @@
             android:layout_width="@dimen/x90"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/vertical_margin"
             android:background="@color/base_bar"
             android:gravity="center"
             android:text="@string/order_tijiao"
@@ -50,9 +56,19 @@
             android:id="@+id/activity_order_submit_money"
             style="@style/font_ww_16"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/vertical_margin"
+            android:layout_marginLeft="@dimen/vertical_margin_mid"
             android:text="合计:0"
             android:textColor="@color/base_bar" />
+
+        <TextView
+            android:id="@+id/activity_order_submit_money_discount"
+            style="@style/font_ww_16"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/activity_order_submit_money"
+            android:layout_toLeftOf="@id/submit"
+            android:text="优惠:0"
+            android:textColor="@color/base_bar"
+            android:textSize="@dimen/font_6" />
 
 
     </RelativeLayout>

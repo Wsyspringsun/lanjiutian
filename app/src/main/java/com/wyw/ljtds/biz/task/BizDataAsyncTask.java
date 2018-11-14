@@ -15,7 +15,9 @@ import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.config.PreferenceCache;
 import com.wyw.ljtds.utils.NetUtil;
+import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.Utils;
+
 
 
 /**
@@ -106,8 +108,7 @@ public abstract class BizDataAsyncTask<Result> extends
     protected abstract void OnExecuteFailed();
 
     protected void onNetworkNotAvailable() {
-        Toast.makeText(MyApplication.getAppContext(), R.string.network_not_available,
-                Toast.LENGTH_SHORT).show();
+        ToastUtil.show(MyApplication.getAppContext(), R.string.network_not_available);
         OnExecuteFailed();
     }
 
@@ -121,8 +122,7 @@ public abstract class BizDataAsyncTask<Result> extends
         Utils.log(this.getClass().getName() + " BizTask onExecuteFailure.......:" + failure.getMessage());
         OnExecuteFailed();
         if (mFailure.getMessage().contains("Token") || mFailure.getMessage().contains("用户名密码")) {// token认证失败
-            Toast.makeText(MyApplication.getAppContext(), R.string.auth_expire,
-                    Toast.LENGTH_LONG).show();
+            ToastUtil.show(MyApplication.getAppContext(),R.string.auth_expire);
             PreferenceCache.putToken("");
             PreferenceCache.putUsername("");
             PreferenceCache.putPhoneNum("");
@@ -135,17 +135,14 @@ public abstract class BizDataAsyncTask<Result> extends
 //            it.putExtra(AppConfig.IntentExtraKey.ADDRESS_FROM, 4);
 //            MyApplication.getAppContext().startActivity(it);
 
-            Toast.makeText(MyApplication.getAppContext(), "请在我的账户中维护您的送货地址",
-                    Toast.LENGTH_LONG).show();
+            ToastUtil.show(MyApplication.getAppContext(), "请在我的账户中维护您的送货地址" );
         } else {
-            Toast.makeText(MyApplication.getAppContext(), failure.getMessage(),
-                    Toast.LENGTH_LONG).show();
+            ToastUtil.show(MyApplication.getAppContext(), failure.getMessage());
         }
     }
 
     protected void onOperationTimeout() {
-        Toast.makeText(MyApplication.getAppContext(), R.string.msg_opreation_timeout,
-                Toast.LENGTH_SHORT).show();
+        ToastUtil.show(MyApplication.getAppContext(), R.string.msg_opreation_timeout);
         OnExecuteFailed();
     }
 }

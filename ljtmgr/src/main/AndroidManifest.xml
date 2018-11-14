@@ -123,37 +123,56 @@
 
         <activity
             android:name="com.wyw.ljtmgr.ui.OrderDetailActivity"
-            android:label="@string/title_orderdetail"></activity>
+            android:label="@string/title_orderdetail"
+            android:screenOrientation="portrait"></activity>
 
 
         <activity
+            android:screenOrientation="portrait"
             android:name="com.wyw.ljtmgr.ui.LogisticInfoActivity"
             android:label="第三方物流">
 
         </activity>
 
         <activity
+            android:screenOrientation="portrait"
             android:name="com.wyw.ljtmgr.ui.ActivityScan"
             android:label="二维码"></activity>
 
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.ActivitySetting"
             android:label="@string/title_setting" />
 
         <activity
+            android:screenOrientation="portrait"
             android:name="com.wyw.ljtmgr.ui.UpdatePasswordActivity"
             android:label="@string/title_updatepwd" />
 
         <activity
+            android:screenOrientation="portrait"
             android:name="com.wyw.ljtmgr.ui.DelegaterEditActivity"
             android:label="@string/title_home"></activity>
 
         <activity
+            android:screenOrientation="portrait"
             android:name="com.wyw.ljtmgr.ui.LogisticMapActivity"
             android:label="@string/title_home">
 
         </activity>
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.wyw.ljtmgr.ui.AwardListlActivity"
+            android:label="@string/title_awardlist">
+        </activity>
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.wyw.ljtmgr.ui.AwardNeedListlActivity"
+            android:label="@string/title_awardneedlist">
+        </activity>
+
+
 
 
         <!--定位用的service：-->
@@ -243,8 +262,8 @@
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:exported="false"
-            android:theme="@style/MyDialogStyle">
+            android:exported="false">
+            android:theme="@style/JPushDialogStyle" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="${applicationId}" />

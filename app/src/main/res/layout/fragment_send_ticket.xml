@@ -5,21 +5,37 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/fragment_send_ticket_sdv_show"
-        fresco:actualImageScaleType="fitXY"
-        fresco:fadeDuration="200"
-        fresco:failureImage="@mipmap/zhanweitu"
-        fresco:failureImageScaleType="centerInside"
-        fresco:placeholderImage="@mipmap/zhanweitu"
-        android:layout_width="@dimen/x300"
-        android:layout_height="@dimen/x300" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/fragment_send_ticket_sdv_show"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/img_data_ok" />
+
+        <ImageView
+            android:id="@+id/fragment_send_ticket_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:layout_marginRight="@dimen/vertical_margin"
+            android:elevation="@dimen/vertical_margin"
+            android:src="@drawable/ic_cancel" />
+
+    </FrameLayout>
+
 
     <Button
         android:id="@+id/btn_sent_ticket"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_submit_yuan"
         android:text="@string/ok"
         android:textColor="@color/white" />
+
 </LinearLayout>

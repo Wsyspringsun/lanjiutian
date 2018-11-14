@@ -1,7 +1,9 @@
 package com.wyw.ljtds.ui.user;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -9,15 +11,20 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.squareup.picasso.Picasso;
+import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.SoapProcessor;
 import com.wyw.ljtds.biz.biz.UserBiz;
@@ -48,6 +55,7 @@ import cn.xiaoneng.uiapi.Ntalker;
 
 @ContentView(R.layout.activity_login_bindphone)
 public class ActivityLoginBindPhone extends BaseActivity {
+    private static final String TAG_OPENID = "com.wyw.ljtds.ui.user.ActivityLoginBindPhone.TAG_OPENID";
     private static final String TAG_WXID = "com.wyw.ljtds.ui.user.ActivityLoginBindPhone.TAG_WXID";
     private static final String TAG_NICKNAME = "com.wyw.ljtds.ui.user.ActivityLoginBindPhone.TAG_NICKNAME";
     UserBiz bizUser;
@@ -77,15 +85,14 @@ public class ActivityLoginBindPhone extends BaseActivity {
             tvGetCode.setEnabled(true);
         }
     };
-    ;
 
     @Event(value = {R.id.activity_login_bindphone_getcode, R.id.activity_login_bindphone_next})
     private void onclick(View v) {
         String phone = tvPhone.getText().toString().trim();
         switch (v.getId()) {
             case R.id.activity_login_bindphone_getcode:
-                setLoding(this, false);
                 if (StringUtils.isEmpty(phone)) return;
+                setLoding(this, false);
                 requestVerificationCode(phone);
 
                 break;
@@ -95,17 +102,19 @@ public class ActivityLoginBindPhone extends BaseActivity {
                 if (StringUtils.isEmpty(validcode)) return;
                 String wxId = getIntent().getStringExtra(TAG_WXID);
                 String nickName = getIntent().getStringExtra(TAG_NICKNAME);
-                registWX(wxId, nickName, phone, validcode);
+                String openId = getIntent().getStringExtra(TAG_OPENID);
+                registWX(wxId, openId, nickName, phone, validcode);
                 break;
 
         }
     }
 
-    private void registWX(final String wxId, final String nickName, final String phone, final String validcode) {
+    private void registWX(final String wxId, final String openId, final String nickName, final String phone, final String validcode) {
+        setLoding(this, false);
         new BizDataAsyncTask<String>() {
             @Override
             protected String doExecute() throws ZYException, BizFailure {
-                return bizUser.registWX(wxId, nickName, phone, validcode);
+                return bizUser.registWX(wxId, openId, nickName, phone, validcode);
             }
 
             @Override
@@ -127,8 +136,12 @@ public class ActivityLoginBindPhone extends BaseActivity {
                         PreferenceCache.putPhoneNum(tvPhone.getText().toString().trim());
                     }
                     Ntalker.getBaseInstance().login(((MyApplication) getApplication()).entityName, tvPhone.getText().toString().trim(), 0);
+                    finish();
+
+                    //弹出赠送
+//                    isShowSentTicket("1");
+
                 }
-                finish();
             }
 
             @Override
@@ -163,7 +176,16 @@ public class ActivityLoginBindPhone extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        timer.cancel();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -173,6 +195,61 @@ public class ActivityLoginBindPhone extends BaseActivity {
         initViews();
 
         initEvents();
+    }
+
+    private void showSentTicket() {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.fragment_send_ticket, (ViewGroup) findViewById(R.id.fragment_con));
+        ImageView ivClose = (ImageView) layout.findViewById(R.id.fragment_send_ticket_close);
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = MainActivity.getIntent(ActivityLoginBindPhone.this);
+                AppConfig.currSel = AppConfig.DEFAULT_INDEX_FRAGMENT;
+//                it.putExtra(AppConfig.IntentExtraKey.BOTTOM_MENU_INDEX, AppConfig.currSel);
+                startActivity(it);
+                ActivityLoginBindPhone.this.finish();
+            }
+        });
+
+        ImageView sdv = (ImageView) layout.findViewById(R.id.fragment_send_ticket_sdv_show);
+        Picasso.with(this).load(Uri.parse(AppConfig.IMAGE_PATH_LJT_ECOMERCE + "/ecommerce/images/mobileIndexImages/regist_ok.png")).placeholder(R.drawable.img_adv_zhanwei).into(sdv);
+        Dialog dialog = new Dialog(ActivityLoginBindPhone.this, R.style.Theme_AppCompat_Dialog);
+        dialog.setContentView(layout);
+        dialog.setCancelable(false);
+        dialog.setTitle(R.string.gongxi);
+
+        dialog.show();
+
+        View btn = layout.findViewById(R.id.btn_sent_ticket);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.TAG_CMD = MainActivity.TAG_CMD_UserInfoExtraActivity;
+                AppConfig.currSel = AppConfig.DEFAULT_INDEX_FRAGMENT;
+                Intent it = MainActivity.getIntent(ActivityLoginBindPhone.this);
+                startActivity(it);
+                ActivityLoginBindPhone.this.finish();
+
+            }
+        });
+
+
+    }
+
+    private void isShowSentTicket(String isShowImg) {
+        switch (isShowImg) {
+            case "1":
+                //显示赠送优惠券的
+                showSentTicket();
+                break;
+            default:
+                AppConfig.currSel = 4;
+                Intent it = MainActivity.getIntent(ActivityLoginBindPhone.this);
+                startActivity(it);
+                ActivityLoginBindPhone.this.finish();
+                break;
+        }
     }
 
     private void initViews() {
@@ -189,8 +266,9 @@ public class ActivityLoginBindPhone extends BaseActivity {
 
     }
 
-    public static Intent getIntent(Context context, String wxId, String nickName) {
+    public static Intent getIntent(Context context, String openId, String wxId, String nickName) {
         Intent intent = new Intent(context, ActivityLoginBindPhone.class);
+        intent.putExtra(TAG_OPENID, openId);
         intent.putExtra(TAG_WXID, wxId);
         intent.putExtra(TAG_NICKNAME, nickName);
         return intent;

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -43,6 +44,7 @@ import com.wyw.ljtds.service.LocationService;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.ToolbarManager;
+import com.wyw.ljtds.utils.Utils;
 
 import java.util.List;
 
@@ -56,31 +58,39 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class AddressMapActivity extends Activity {
     public static final String TAG_ADDRESS_POI_LAT = "com.wyw.ljtds.ui.user.address.AdressMapActivity.TAG_ADDRESS_POI_LAT";
     public static final String TAG_ADDRESS_POI_ADDRESS = "com.wyw.ljtds.ui.user.address.AdressMapActivity.TAG_ADDRESS_POI_ADDRESS";
-    private static final int accuracyCircleFillColor = 0xAAFFFF88;
-    private static final int accuracyCircleStrokeColor = 0xAA00FF00;
     private static final int REQUEST_SEARCH_ADDRESS = 0;
     public static final String TAG_FROM = "com.wyw.ljtds.ui.user.address.AddressMapActivity.TAG_FROM";
     public static final String TAG_FROM_MAIN = "1";
-    public static final String TAG_FROM_ADDR = "2";
     private static final int REQUEST_PERMS_LOCATION = 0;
 
     private int mCurrentDirection = 0;
-    private LocationMode mCurrentMode;
     private MyLocationData locData;
     MapView mMapView;
     BaiduMap mBaiduMap;
     private MyLocation myLocation; //location到的地址
     private GeoCoder geoCoder;
 
+    private String name = ""; //名称概要
+    private String address; //具体地址
+    private View.OnClickListener goSearchListner = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent it = AddressSearchActivity.getIntent(AddressMapActivity.this, name);
+            startActivityForResult(it, REQUEST_SEARCH_ADDRESS);
+        }
+    };
+
     // UI相关
     OnCheckedChangeListener radioButtonListener;
-    boolean isFirstLoc = true; // 是否首次定位
     private boolean isSmooth;
     private ImageView ivCenterPoint;
     private Button btnConfirm;
     private ImageButton btnLocation;
     private TextView tvAddress;
-    private Point centerPoint;
+
+    double lat = 0d;
+    double lng = 0d;
+    String addr = "";
 
     int[] iCenter = new int[2];
     private BDLocationListener locationListner = new BDLocationListener() {
@@ -94,6 +104,7 @@ public class AddressMapActivity extends Activity {
             }
         }
     };
+    private RelativeLayout rlAddressDesc;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,13 +120,7 @@ public class AddressMapActivity extends Activity {
                     case 4:
                         //search address
                         v.setVisibility(View.VISIBLE);
-                        v.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent it = AddressSearchActivity.getIntent(AddressMapActivity.this);
-                                startActivityForResult(it, REQUEST_SEARCH_ADDRESS);
-                            }
-                        });
+                        v.setOnClickListener(goSearchListner);
                         //go to map search
                         break;
                 }
@@ -151,15 +156,10 @@ public class AddressMapActivity extends Activity {
 
         ivCenterPoint = (ImageView) findViewById(R.id.activity_address_map_centerpoint);
         ivCenterPoint.getLocationInWindow(iCenter);
-        centerPoint = new Point(iCenter[0], iCenter[1]);
+
+        rlAddressDesc = (RelativeLayout) findViewById(R.id.activity_address_map_rl_addressdesc);
+        rlAddressDesc.setOnClickListener(goSearchListner);
         tvAddress = (TextView) findViewById(R.id.activity_address_map_tv_mylocation);
-        tvAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent it = AddressSearchActivity.getIntent(AddressMapActivity.this);
-                startActivityForResult(it, REQUEST_SEARCH_ADDRESS);
-            }
-        });
         btnConfirm = (Button) findViewById(R.id.activity_address_map_btn_confirm);
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,23 +169,23 @@ public class AddressMapActivity extends Activity {
                     return;
                 }
 
-
-                if (poi == null) {
-                    ToastUtil.show(AddressMapActivity.this, "没有选择地址");
-                    return;
-                }
                 String tf = getIntent().getStringExtra(TAG_FROM);
                 if (TAG_FROM_MAIN.equals(tf)) {
                     SingleCurrentUser.locStyle = SingleCurrentUser.locStyleCustom;
                 }
-                data.putExtra(TAG_ADDRESS_POI_LAT, "|" + poi.location.longitude + "|" + poi.location.latitude);
-                data.putExtra(TAG_ADDRESS_POI_ADDRESS, tvAddress.getText().toString());
+
+                Utils.log("locationrlt:lng|lat" + lng + "|" + lat + "|" + addr);
+
+                data.putExtra(TAG_ADDRESS_POI_LAT, "|" + lng + "|" + lat);
+                data.putExtra(TAG_ADDRESS_POI_ADDRESS, addr);
+
                 setResult(Activity.RESULT_OK, data);
                 finish();
             }
         });
         // 地图初始化
         mMapView = (MapView) findViewById(R.id.activity_address_map_mapview);
+        mMapView.showScaleControl(false);
         mBaiduMap = mMapView.getMap();
         geoCoder = GeoCoder.newInstance();
         geoCoder.setOnGetGeoCodeResultListener(geoListener);
@@ -231,7 +231,6 @@ public class AddressMapActivity extends Activity {
         }
         targetMyLocation();
 
-
     }
 
     private void regLocListener() {
@@ -265,7 +264,14 @@ public class AddressMapActivity extends Activity {
                 LatLng ll = new LatLng(srl.latitude,
                         srl.longitude);
                 targetMap2Center(ll);
-                tvAddress.setText(searchRlt.name + "\n" + searchRlt.address);
+
+                lat = srl.latitude;
+                lng = srl.longitude;
+                name = searchRlt.name;
+                address = searchRlt.address;
+                addr = searchRlt.name + "\n" + searchRlt.address;
+
+                tvAddress.setText(addr);
 
                 break;
         }
@@ -281,7 +287,6 @@ public class AddressMapActivity extends Activity {
 //        mBaiduMap.clear();
         MapStatus.Builder builder = new MapStatus.Builder();
         builder.target(latlng).zoom(AppConfig.MAP_ZOOM);
-//        builder.targetScreen(centerPoint);
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
         //更改文本显示地址
         /*new Handler().postDelayed(new Runnable() {
@@ -354,7 +359,6 @@ public class AddressMapActivity extends Activity {
 
     }
 
-    private PoiInfo poi;
     OnGetGeoCoderResultListener geoListener = new OnGetGeoCoderResultListener() {
 
         @Override
@@ -373,8 +377,16 @@ public class AddressMapActivity extends Activity {
                 tvAddress.setText(getString(R.string.searchposition));
                 return;
             }
-            poi = poilist.get(0);
-            tvAddress.setText(poi.name + "\n" + poi.address);
+            PoiInfo poi = poilist.get(0);
+
+            lng = poi.location.longitude;
+            lat = poi.location.latitude;
+            name = poi.name;
+            address = poi.address;
+            addr = poi.name + "\n" + poi.address;
+
+            tvAddress.setText(addr);
+
         }
     };
 }

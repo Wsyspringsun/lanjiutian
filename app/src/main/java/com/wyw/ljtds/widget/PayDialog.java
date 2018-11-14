@@ -36,8 +36,8 @@ public class PayDialog {
     private PayDialog.PayMethodSelectedListener dialogListener;
 
     public interface PayMethodSelectedListener {
-        public void onItemSelected(OrderTrade order);
-        public void onDialogClose();
+        void onItemSelected(OrderTrade order);
+        void onDialogClose();
     }
 
     private Map<String, CheckBox> chkList = new HashMap<>();

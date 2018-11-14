@@ -155,7 +155,7 @@ public class StepView extends RecyclerView {
         }
     }
 
-    public static interface BindViewListener {
+    public interface BindViewListener {
         void onBindView(TextView itemMsg, TextView itemDate, Object data);
     }
 

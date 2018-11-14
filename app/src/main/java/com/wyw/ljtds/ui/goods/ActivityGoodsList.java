@@ -29,11 +29,13 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.CommodityListModel;
+import com.wyw.ljtds.model.GoodsModel;
 import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.home.ActivitySearch;
 import com.wyw.ljtds.ui.user.ActivityMessage;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.DividerGridItemDecoration;
 import com.wyw.ljtds.widget.RecycleViewDivider;
 import com.wyw.ljtds.widget.SpaceItemDecoration;
@@ -53,6 +55,7 @@ import static com.wyw.ljtds.adapter.goodsinfo.MedicineItemAdapter1.RESIZE;
 @ContentView(R.layout.activity_goods_list)
 public class ActivityGoodsList extends BaseActivity {
     private static final String TAG_TYPE_ID = "com.wyw.ljtds.ui.goods.ActivityGoodsList.TAG_TYPE_ID";
+    private static final String TAG_TYPE_KEYWORD = "search";
     @ViewInject(R.id.activity_goods_list_sr)
     SwipeRefreshLayout srl;
     @ViewInject(R.id.recyclerView)
@@ -65,8 +68,6 @@ public class ActivityGoodsList extends BaseActivity {
     private TextView search;
     @ViewInject(R.id.ll_message)
     private LinearLayout llMessage;
-    @ViewInject(R.id.xiaoxi)
-    private ImageView image;
     @ViewInject(R.id.paixu1_tv)
     private TextView paixu1_tv;
     @ViewInject(R.id.paixu1_iv)
@@ -94,13 +95,14 @@ public class ActivityGoodsList extends BaseActivity {
     private String classId = "";//分类的typeid
     private String orderby = "";
 
-    public static Intent getIntent(Context ctx, String typeId) {
+    public static Intent getIntent(Context ctx, String typeId, String keyword) {
         Intent it = new Intent(ctx, ActivityGoodsList.class);
         it.putExtra(TAG_TYPE_ID, typeId);
+        it.putExtra(TAG_TYPE_KEYWORD, keyword);
         return it;
     }
 
-    @Event(value = {R.id.back, R.id.edHeader, R.id.xiaoxi, R.id.paixu1, R.id.paixu2, R.id.paixu3, R.id.paixu4})
+    @Event(value = {R.id.back, R.id.edHeader, R.id.paixu1, R.id.paixu2, R.id.paixu3, R.id.paixu4})
     private void onclick(View view) {
         Intent it;
         switch (view.getId()) {
@@ -110,11 +112,6 @@ public class ActivityGoodsList extends BaseActivity {
 
             case R.id.edHeader:
                 startActivity(ActivitySearch.getIntent(this, 1, search.getText().toString()));
-                break;
-
-            case R.id.xiaoxi:
-                it = new Intent(this, ActivityMessage.class);
-                startActivity(it);
                 break;
 
             case R.id.paixu1:
@@ -175,7 +172,7 @@ public class ActivityGoodsList extends BaseActivity {
                 srl.setRefreshing(false);
             }
         });
-        keyword = getIntent().getStringExtra("search");
+        keyword = getIntent().getStringExtra(TAG_TYPE_KEYWORD);
         if (!StringUtils.isEmpty(keyword)) {
             search.setText(keyword);
         }
@@ -228,9 +225,9 @@ public class ActivityGoodsList extends BaseActivity {
             protected List<CommodityListModel> doExecute() throws ZYException, BizFailure {
                 Log.e(AppConfig.ERR_TAG, "params:" + classid + "; " + keyword + "; " + orderby + "; " + loadmore + "; " + refresh);
                 if (refresh) {
-                    return CategoryBiz.getCommodityList(classid, orderby, keyword, "0", AppConfig.DEFAULT_PAGE_COUNT + "");
+                    return CategoryBiz.getCommodityList("", classid, orderby, keyword, "0", AppConfig.DEFAULT_PAGE_COUNT + "");
                 } else {
-                    return CategoryBiz.getCommodityList(classid, orderby, keyword, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "");
+                    return CategoryBiz.getCommodityList(GoodsModel.HUODONG_JIFEN, classid, orderby, keyword, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "");
                 }
             }
 
@@ -266,7 +263,6 @@ public class ActivityGoodsList extends BaseActivity {
                     adapter.notifyDataSetChanged();
                 }
 
-                Log.e("****", commodityListModels.size() + ";    " + pageIndex + ";  " + adapter.getData().size() + "");
 
                 pageIndex++;
                 closeLoding();
@@ -297,16 +293,30 @@ public class ActivityGoodsList extends BaseActivity {
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, CommodityListModel commodityListModel) {
+            baseViewHolder.setVisible(R.id.item_goods_grid_money_old, false);
             baseViewHolder.setText(R.id.goods_title, StringUtils.deletaFirst(commodityListModel.getTitle()))
-                    .setText(R.id.money, commodityListModel.getCostMoney() + "");
+                    .setText(R.id.money, "￥" + Utils.formatFee(commodityListModel.getCostMoney() + ""));
+            if (GoodsModel.TOP_FLG_LINGYUAN.equals(commodityListModel.getTopFlg())) {
+                baseViewHolder.setText(R.id.item_goods_grid_money_old, "￥" + Utils.formatFee(commodityListModel.getMarketPrice() + ""));
+                baseViewHolder.setVisible(R.id.item_goods_grid_money_old, true);
+            }
 
 //            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_goods_grid_sdv);
             ImageView goods_img = baseViewHolder.getView(R.id.item_goods_grid_sdv);
             if (StringUtils.isEmpty(commodityListModel.getImgPath())) {
             } else {
-//                goods_img.setImageURI(Uri.parse("http://www.lanjiutian.com/upload/images" + commodityListModel.getImgPath()));
-//                goods_img.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + commodityListModel.getImgPath()));
-                Picasso.with(mContext).load(Uri.parse(AppConfig.IMAGE_PATH_LJT + commodityListModel.getImgPath())).resize(RESIZE, RESIZE).into(goods_img);
+                Picasso.with(mContext).load(Uri.parse(AppConfig.IMAGE_PATH_LJT + commodityListModel.getImgPath())).resize(RESIZE, RESIZE).placeholder(R.mipmap.zhanweitu).into(goods_img);
+            }
+
+            /**
+             * 活动小图标
+             */
+            baseViewHolder.setVisible(R.id.item_goods_huodong_te, false);
+            baseViewHolder.setVisible(R.id.item_goods_huodong_zeng, false);
+            if (GoodsModel.HUODONG_TEJIA.equals(commodityListModel.getTopFlg())) {
+                baseViewHolder.setVisible(R.id.item_goods_huodong_te, true);
+            } else if (GoodsModel.HUODONG_MANZENG.equals(commodityListModel.getTopFlg())) {
+                baseViewHolder.setVisible(R.id.item_goods_huodong_zeng, true);
             }
 
         }

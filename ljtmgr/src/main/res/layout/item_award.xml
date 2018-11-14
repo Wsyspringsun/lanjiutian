@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin2"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/margin"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/item_award_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="奖品："
+            android:textColor="@color/font_2"
+            android:textSize="@dimen/font_3" />
+
+
+        <TextView
+            android:id="@+id/item_award_userinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_award_name"
+            android:text="中奖者："
+            android:textColor="@color/font_1"
+            android:textSize="@dimen/font_4" />
+
+
+        <TextView
+            android:id="@+id/item_award_busname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_award_userinfo"
+            android:text="领奖门店："
+            android:textColor="@color/font_1"
+            android:textSize="@dimen/font_5" />
+
+        <TextView
+            android:id="@+id/item_award_insdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_award_busname"
+            android:text="抽奖时间："
+            android:textColor="@color/font_1"
+            android:textSize="@dimen/font_5" />
+
+        <TextView
+            android:id="@+id/item_award_upddate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_award_insdate"
+            android:text="领奖时间："
+            android:textColor="@color/font_1"
+            android:textSize="@dimen/font_5" />
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/item_award_stat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginRight="@dimen/margin"
+        android:text="状态" />
+</LinearLayout>

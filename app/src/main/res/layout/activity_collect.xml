@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/header"
@@ -11,18 +11,18 @@
         android:background="@color/white">
 
         <View
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:background="@color/gray1"/>
+            android:layout_alignParentBottom="true"
+            android:background="@color/gray1" />
 
         <LinearLayout
             android:id="@+id/header_return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x10"
             android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
@@ -30,73 +30,73 @@
                 android:layout_width="@dimen/x16"
                 android:layout_height="@dimen/x16"
                 android:scaleType="fitXY"
-                android:src="@mipmap/jiantou_zuo_hei"/>
+                android:src="@mipmap/jiantou_zuo_hei" />
 
             <TextView
                 android:id="@+id/header_return_text"
-                android:layout_marginLeft="@dimen/x4"
                 style="@style/font_ww_16"
+                android:layout_marginLeft="@dimen/x4"
                 android:textColor="@color/font_black1" />
 
         </LinearLayout>
 
         <TextView
-            android:layout_centerInParent="true"
+            android:id="@+id/header_title"
             style="@style/font_ww_16_black"
-            android:id="@+id/header_title"/>
+            android:layout_centerInParent="true" />
 
         <TextView
-            android:textColor="@color/font_black2"
+            android:id="@+id/header_edit"
+            style="@style/font_ww_14"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x10"
-            android:layout_alignParentRight="true"
-            style="@style/font_ww_14"
             android:text="@string/bianji"
-            android:id="@+id/header_edit"/>
+            android:textColor="@color/font_black2" />
 
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/activity_collect_goodslist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@id/reclcyer"
-        android:layout_below="@id/header"
         android:layout_above="@+id/footer"
+        android:layout_below="@id/header"
         android:overScrollMode="never">
 
     </android.support.v7.widget.RecyclerView>
 
     <LinearLayout
-        android:visibility="gone"
-        android:layout_alignParentBottom="true"
         android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x35"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/add_car"
-            android:visibility="gone"
-            android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="加入购物车"
             android:background="@color/juse"
+            android:gravity="center"
+            android:text="加入购物车"
+            android:textColor="@color/white"
             android:textSize="16sp"
-            android:textColor="@color/white"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/shanchu"
-            android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/shanchu"
             android:background="@color/base_bar"
-            android:textSize="16sp"
-            android:textColor="@color/white"/>
+            android:gravity="center"
+            android:text="@string/shanchu"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
 
     </LinearLayout>
 

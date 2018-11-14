@@ -10,13 +10,19 @@ import java.util.List;
  */
 
 public class OrderGroupDto {
+    private Double RAND_SUB_MONEY;//随机降价
+    private String FL_PREFERENTIAL_ID;
+    private String COUPON_ALL_MONEY;//优惠券优惠金额
+    private String GROUP_DEDUCTIBLE_ALL_MONEY;//店铺总优惠金额
     private String COIN_FLG; //1:使用 0:没有使用
     private Integer COST_POINT = 0;
+    private int POINT_MONEY = 0;
     private Double SHARE_MONEY = 0d;
     private String ORDER_GROUP_ID;
     private String ORDER_TRADE_ID;
     private String OID_GROUP_ID;
     private String OID_GROUP_NAME;
+    private String GROUP_REDUCTION_MONEY;//店铺优惠信息
     private String POSTAGE;
     private String POSTAGE_FLG; //1:使用 0 : 没有使用
     private Integer POST_NUM; //抵邮券数量
@@ -27,7 +33,7 @@ public class OrderGroupDto {
     private String PREFERENTIAL_ID;
     private Integer ELECTRONIC_MONEY = 0;
     private Integer ELECTRONIC_USEABLE_MONEY; //电子币数量
-    private String COUPON_MONEY;
+    private String COUPON_MONEY; //优惠券优惠
     private String COUPON_USEABLE_MONEY;
     private String GROUP_EXCHANGE_QUANLITY;
     private String RED_PACKET_MONEY;
@@ -453,5 +459,55 @@ public class OrderGroupDto {
 
     public void setSHARE_MONEY(Double SHARE_MONEY) {
         this.SHARE_MONEY = SHARE_MONEY;
+    }
+
+
+    public int getPOINT_MONEY() {
+        return POINT_MONEY;
+    }
+
+
+    public void setPOINT_MONEY(int POINT_MONEY) {
+        this.POINT_MONEY = POINT_MONEY;
+    }
+
+    public String getCOUPON_ALL_MONEY() {
+        return COUPON_ALL_MONEY;
+    }
+
+    public void setCOUPON_ALL_MONEY(String COUPON_ALL_MONEY) {
+        this.COUPON_ALL_MONEY = COUPON_ALL_MONEY;
+    }
+
+    public String getGROUP_DEDUCTIBLE_ALL_MONEY() {
+        return GROUP_DEDUCTIBLE_ALL_MONEY;
+    }
+
+    public void setGROUP_DEDUCTIBLE_ALL_MONEY(String GROUP_DEDUCTIBLE_ALL_MONEY) {
+        this.GROUP_DEDUCTIBLE_ALL_MONEY = GROUP_DEDUCTIBLE_ALL_MONEY;
+    }
+
+    public String getGROUP_REDUCTION_MONEY() {
+        return GROUP_REDUCTION_MONEY;
+    }
+
+    public void setGROUP_REDUCTION_MONEY(String GROUP_REDUCTION_MONEY) {
+        this.GROUP_REDUCTION_MONEY = GROUP_REDUCTION_MONEY;
+    }
+
+    public String getFL_PREFERENTIAL_ID() {
+        return FL_PREFERENTIAL_ID;
+    }
+
+    public void setFL_PREFERENTIAL_ID(String FL_PREFERENTIAL_ID) {
+        this.FL_PREFERENTIAL_ID = FL_PREFERENTIAL_ID;
+    }
+
+    public Double getRAND_SUB_MONEY() {
+        return RAND_SUB_MONEY;
+    }
+
+    public void setRAND_SUB_MONEY(Double RAND_SUB_MONEY) {
+        this.RAND_SUB_MONEY = RAND_SUB_MONEY;
     }
 }

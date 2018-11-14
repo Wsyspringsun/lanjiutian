@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/fragment_toolbar_common_white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:duplicateParentState="true"
+                android:src="@drawable/bg_pointshopgoods" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x30"
+                android:layout_gravity="top"
+                android:layout_marginBottom="@dimen/vertical_margin_lg"
+                android:layout_marginTop="@dimen/vertical_margin_lg"
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:id="@+id/activity_point_shop_goods_search"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/x13"
+                    android:layout_marginRight="@dimen/x13"
+                    android:layout_weight="1"
+                    android:background="@drawable/background_search_edit"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.wyw.ljtds.widget.ClearEditText
+                        android:id="@+id/activity_point_shop_goods_search_keyword"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:background="@null"
+                        android:gravity="center_vertical"
+                        android:hint="@string/sousuo"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:paddingLeft="@dimen/x15"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/font_5" />
+
+                    <ImageView
+                        android:id="@+id/activity_point_shop_goods_iv_search"
+                        android:layout_width="0dp"
+                        android:layout_height="15dp"
+                        android:layout_weight="1"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_sousuo" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/vertical_margin_lg"
+                    android:visibility="gone"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="我的积分"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_5" />
+
+                    <TextView
+                        android:id="@+id/activity_point_shop_goods_pointnum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_3" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/activity_point_shop_goods_data"
+            android:nestedScrollingEnabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FECA8E" />
+
+        <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1">-->
+
+        <!---->
+        <!--</FrameLayout>-->
+    </LinearLayout>
+
+</LinearLayout>

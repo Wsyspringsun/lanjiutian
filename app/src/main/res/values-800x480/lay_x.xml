@@ -32,7 +32,6 @@
 <dimen name="x33">49.5px</dimen>
 <dimen name="x34">51.0px</dimen>
 <dimen name="x35">52.5px</dimen>
-<dimen name="x36">54.0px</dimen>
     <dimen name="x38">57.0px</dimen>
     <dimen name="x40">60.0px</dimen>
     <dimen name="x42">63.0px</dimen>
@@ -56,16 +55,11 @@
     <dimen name="x120">180.0px</dimen>
     <dimen name="x135">202.5px</dimen>
     <dimen name="x140">210.0px</dimen>
-    <dimen name="x142">213.0px</dimen>
     <dimen name="x150">225.0px</dimen>
     <dimen name="x153">229.5px</dimen>
     <dimen name="x160">240.0px</dimen>
-    <dimen name="x170">255.0px</dimen>
-    <dimen name="x200">300.0px</dimen>
     <dimen name="x248">372.0px</dimen>
-    <dimen name="x255">382.5px</dimen>
     <dimen name="x270">405.0px</dimen>
     <dimen name="x300">450.0px</dimen>
     <dimen name="x320">480px</dimen>
-    <dimen name="x480">720px</dimen>
 </resources>

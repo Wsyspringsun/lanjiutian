@@ -17,11 +17,12 @@ import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.IconText;
 import com.wyw.ljtds.model.RecommendModel;
+import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.model.UserDataModel;
 import com.wyw.ljtds.model.UserIndexModel;
 import com.wyw.ljtds.model.UserModel;
 import com.wyw.ljtds.ui.base.BaseFragment;
-import com.wyw.ljtds.ui.user.ActivityLoginOfValidCode;
+import com.wyw.ljtds.ui.user.ActivityLogin;
 import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
@@ -43,9 +44,13 @@ public class FragmentUserIndex extends BaseFragment {
     private UserIndexAdapter adapter;
     private final int MYINDEX = 4;
 
+    UserBiz userBiz;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        userBiz = UserBiz.getInstance(getActivity());
 
         //init all view
         initView();
@@ -126,7 +131,7 @@ public class FragmentUserIndex extends BaseFragment {
             model.setUserOrderNumberModel(null);
             adapter = new UserIndexAdapter(getActivity(), model);
             rylvIndexMain.setAdapter(adapter);
-            startActivity(ActivityLoginOfValidCode.getIntent(getActivity()));
+            startActivity(ActivityLogin.getIntent(getActivity()));
             return;
         }
         getUser();
@@ -192,11 +197,12 @@ public class FragmentUserIndex extends BaseFragment {
         new BizDataAsyncTask<UserModel>() {
             @Override
             protected UserModel doExecute() throws ZYException, BizFailure {
-                return UserBiz.getUser();
+                return userBiz.getUser();
             }
 
             @Override
             protected void onExecuteSucceeded(UserModel data) {
+                SingleCurrentUser.userInfo = data;
                 model.setUserModel(data);
                 loadUserOrderNumber();
             }

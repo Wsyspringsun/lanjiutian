@@ -42,6 +42,10 @@
 
             <include layout="@layout/textview_title" />
 
+            <include layout="@layout/textview_title" />
+
+            <include layout="@layout/textview_title" />
+
         </LinearLayout>
 
 

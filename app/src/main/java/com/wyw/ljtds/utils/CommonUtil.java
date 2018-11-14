@@ -53,7 +53,7 @@ public class CommonUtil {
      * @return
      */
     public static boolean isEqualToZero(double value) {
-        return Math.abs(value - 0.0) < 0.01 ? true : false;
+        return Math.abs(value - 0.0) < 0.01;
     }
 
     /**

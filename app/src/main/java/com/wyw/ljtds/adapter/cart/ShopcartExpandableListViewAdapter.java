@@ -225,7 +225,7 @@ public class ShopcartExpandableListViewAdapter extends BaseExpandableListAdapter
          * @param groupPosition 组元素位置
          * @param isChecked     组元素选中与否
          */
-        public void checkGroup(int groupPosition, boolean isChecked);
+        void checkGroup(int groupPosition, boolean isChecked);
 
         /**
          * 子选框状态改变时触发的事件
@@ -234,7 +234,7 @@ public class ShopcartExpandableListViewAdapter extends BaseExpandableListAdapter
          * @param childPosition 子元素位置
          * @param isChecked     子元素选中与否
          */
-        public void checkChild(int groupPosition, int childPosition, boolean isChecked);
+        void checkChild(int groupPosition, int childPosition, boolean isChecked);
     }
 
     /**
@@ -249,7 +249,7 @@ public class ShopcartExpandableListViewAdapter extends BaseExpandableListAdapter
          * @param showCountView 用于展示变化后数量的View
          * @param isChecked     子元素选中与否
          */
-        public void doIncrease(int groupPosition, int childPosition, View showCountView, boolean isChecked);
+        void doIncrease(int groupPosition, int childPosition, View showCountView, boolean isChecked);
 
         /**
          * 删减操作
@@ -259,7 +259,7 @@ public class ShopcartExpandableListViewAdapter extends BaseExpandableListAdapter
          * @param showCountView 用于展示变化后数量的View
          * @param isChecked     子元素选中与否
          */
-        public void doDecrease(int groupPosition, int childPosition, View showCountView, boolean isChecked);
+        void doDecrease(int groupPosition, int childPosition, View showCountView, boolean isChecked);
     }
 
 }

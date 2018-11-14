@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEE9E6"
+    android:orientation="vertical">
+
+    <include layout="@layout/fragment_toolbar_common" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x45"
+                android:layout_marginTop="@dimen/vertical_margin_lg"
+                android:gravity="center"
+                android:text="@string/userinfo_tip"
+                android:textColor="@color/font_1"
+                android:textSize="@dimen/font_5" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/vertical_margin_lg"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/padding3"
+                android:paddingRight="@dimen/padding3">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/name"
+                    android:textSize="@dimen/font_4" />
+
+                <EditText
+                    android:id="@+id/activity_userinfo_ed_realname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/vertical_margin_lg"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/padding3"
+                android:paddingRight="@dimen/padding3">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/shiming_card"
+                    android:textSize="@dimen/font_4" />
+
+                <EditText
+                    android:id="@+id/activity_userinfo_ed_cardId"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:digits="0123456789xX"
+                    android:hint="@string/shiming_card"
+                    android:inputType="number"
+                    android:maxLines="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/vertical_margin_lg"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/font_5"
+                android:paddingLeft="@dimen/padding3"
+                android:paddingRight="@dimen/padding3"
+                android:paddingTop="@dimen/font_5">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/userinfo_yibaoka"
+                    android:textSize="@dimen/font_4" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/activity_userinfo_ed_cartevitalflg"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/vertical_margin_lg"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/padding3"
+                android:paddingRight="@dimen/padding3">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/vertical_margin_lg"
+                    android:layout_marginTop="@dimen/vertical_margin_lg"
+                    android:text="@string/userinfo_changyongyao"
+                    android:textSize="@dimen/font_4" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/activity_userinfo_ryv_alwaysbuydrug"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x140"
+                    android:layout_marginBottom="@dimen/vertical_margin_lg"
+                    android:layout_marginLeft="@dimen/vertical_margin_lg"
+                    android:layout_weight="1"
+                    android:isScrollContainer="false"
+                    android:scrollbars="none" />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/activity_userinfo_btn_sure"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x35"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/vertical_margin_lg"
+        android:layout_marginLeft="@dimen/vertical_margin_lg"
+        android:layout_marginRight="@dimen/vertical_margin_lg"
+        android:background="@drawable/background_submit_yuan"
+        android:text="@string/complete"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_2" />
+
+
+</LinearLayout>
+

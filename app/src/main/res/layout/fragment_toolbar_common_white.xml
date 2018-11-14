@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x35"
+    android:background="@color/white">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_alignParentBottom="true"
+        android:background="@color/gray1" />
+
+    <LinearLayout
+        android:id="@+id/fragment_toolbar_common_white_return"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x10"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/x16"
+            android:layout_height="@dimen/x16"
+            android:scaleType="fitXY"
+            android:src="@mipmap/jiantou_zuo_hei" />
+
+        <TextView
+            style="@style/font_ww_16"
+            android:layout_marginLeft="@dimen/x4"
+            android:textColor="@color/font_black1" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/fragment_toolbar_common_white_title"
+        style="@style/font_ww_16_black"
+        android:layout_centerInParent="true"
+        android:text="标题" />
+
+</RelativeLayout>
+

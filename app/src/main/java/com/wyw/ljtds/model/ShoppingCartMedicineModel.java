@@ -15,6 +15,7 @@ public class ShoppingCartMedicineModel extends OrderCommDto {
     private String PRESCRIPTION_FLG;
     private String CUXIAO_FLG;
     private String PROMPRICE;
+    private String SUMQTY;
 
     public String getWARETYPE() {
         return WARETYPE;
@@ -70,5 +71,13 @@ public class ShoppingCartMedicineModel extends OrderCommDto {
 
     public void setPROMPRICE(String PROMPRICE) {
         this.PROMPRICE = PROMPRICE;
+    }
+
+    public String getSUMQTY() {
+        return SUMQTY;
+    }
+
+    public void setSUMQTY(String SUMQTY) {
+        this.SUMQTY = SUMQTY;
     }
 }

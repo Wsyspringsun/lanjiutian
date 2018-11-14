@@ -5,12 +5,16 @@ package com.wyw.ljtds.model;
  */
 
 public class Ticket {
+    private double SINGLE_AMOUNT;//金额
     private String TOTAL_AMOUNT;
+    private String MINIMUM_TENDER_AMOUNT;
     private String TOTAL_CNT;
     private String TERM;
     private String RED_PACKET_LOG_ID;
     private String RED_PACKET_TEMPLET_ID;
+    private String RED_PACKET_TEMPLET_NAME;
     private String RED_PACKET_ID;
+    private String RED_PACKET_NAME;
     private String OID_USER_ID;
     private String ACQUISITION_AMOUNT;
     private String USED_AMOUNT;
@@ -18,11 +22,13 @@ public class Ticket {
     private String OPERATE_TYPE;
     private String VALID_FLG;
     private String INS_USER_ID;
+    private String IMG_PATH;
     private String INS_DATE;
     private String UPD_USER_ID;
     private String UPD_DATE;
     private String START_DATE;
     private String END_DATE;
+    private String REMARK;
 
     public String getTOTAL_AMOUNT() {
         return TOTAL_AMOUNT;
@@ -166,5 +172,53 @@ public class Ticket {
 
     public void setTERM(String TERM) {
         this.TERM = TERM;
+    }
+
+    public String getRED_PACKET_NAME() {
+        return RED_PACKET_NAME;
+    }
+
+    public void setRED_PACKET_NAME(String RED_PACKET_NAME) {
+        this.RED_PACKET_NAME = RED_PACKET_NAME;
+    }
+
+    public String getIMG_PATH() {
+        return IMG_PATH;
+    }
+
+    public void setIMG_PATH(String IMG_PATH) {
+        this.IMG_PATH = IMG_PATH;
+    }
+
+    public String getRED_PACKET_TEMPLET_NAME() {
+        return RED_PACKET_TEMPLET_NAME;
+    }
+
+    public void setRED_PACKET_TEMPLET_NAME(String RED_PACKET_TEMPLET_NAME) {
+        this.RED_PACKET_TEMPLET_NAME = RED_PACKET_TEMPLET_NAME;
+    }
+
+    public double getSINGLE_AMOUNT() {
+        return SINGLE_AMOUNT;
+    }
+
+    public void setSINGLE_AMOUNT(double SINGLE_AMOUNT) {
+        this.SINGLE_AMOUNT = SINGLE_AMOUNT;
+    }
+
+    public String getMINIMUM_TENDER_AMOUNT() {
+        return MINIMUM_TENDER_AMOUNT;
+    }
+
+    public void setMINIMUM_TENDER_AMOUNT(String MINIMUM_TENDER_AMOUNT) {
+        this.MINIMUM_TENDER_AMOUNT = MINIMUM_TENDER_AMOUNT;
+    }
+
+    public String getREMARK() {
+        return REMARK;
+    }
+
+    public void setREMARK(String REMARK) {
+        this.REMARK = REMARK;
     }
 }

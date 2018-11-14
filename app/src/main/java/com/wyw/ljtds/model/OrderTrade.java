@@ -8,7 +8,6 @@ import java.util.Map;
  * trade order
  **/
 public class OrderTrade {
-    public static final String DISTRIBUTION_MODE_SEND = "0";//送货上门
     public static final String DISTRIBUTION_MODE_DIY = "1";//自己去取
 
     public static final String PAYMTD_ONLINE = "0";// 在线支付

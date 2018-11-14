@@ -18,7 +18,7 @@ public class Business extends OrderGroupDto {
     public static Map<String, String> mapFapiaoCatText = new HashMap<>();
 
     static {
-        mapFapiaoCatText.put("0", "明细");
+        mapFapiaoCatText.put("0", "发票明细");
         mapFapiaoCatText.put("1", "办公用品");
         mapFapiaoCatText.put("2", "家居用品");
         mapFapiaoCatText.put("3", "药品");

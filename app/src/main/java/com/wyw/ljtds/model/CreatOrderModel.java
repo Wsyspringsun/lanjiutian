@@ -1,5 +1,8 @@
 package com.wyw.ljtds.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -7,7 +10,8 @@ import java.util.List;
  * Created by Administrator on 2017/4/13 0013.
  */
 
-public class CreatOrderModel extends OrderTradeDto implements Serializable {
+public class CreatOrderModel extends OrderTradeDto implements Serializable, Parcelable {
+    private String PREFERENTIAL_ID; //优惠券id
     private String INVOICE_FLG = "0";
     private String INVOICE_TYPE;
     private String INVOICE_ID;
@@ -18,6 +22,46 @@ public class CreatOrderModel extends OrderTradeDto implements Serializable {
     private String INVOICE_CONTENT;
 
     private String DISTRIBUTION_MODE = "0";
+
+    protected CreatOrderModel(Parcel in) {
+        INVOICE_FLG = in.readString();
+        INVOICE_TYPE = in.readString();
+        INVOICE_ID = in.readString();
+        INVOICE_TAX = in.readString();
+        INVOICE_ORG = in.readString();
+        INVOICE_TITLE = in.readString();
+        INVOICE_CONTENT = in.readString();
+        DISTRIBUTION_MODE = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(INVOICE_FLG);
+        dest.writeString(INVOICE_TYPE);
+        dest.writeString(INVOICE_ID);
+        dest.writeString(INVOICE_TAX);
+        dest.writeString(INVOICE_ORG);
+        dest.writeString(INVOICE_TITLE);
+        dest.writeString(INVOICE_CONTENT);
+        dest.writeString(DISTRIBUTION_MODE);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<CreatOrderModel> CREATOR = new Creator<CreatOrderModel>() {
+        @Override
+        public CreatOrderModel createFromParcel(Parcel in) {
+            return new CreatOrderModel(in);
+        }
+
+        @Override
+        public CreatOrderModel[] newArray(int size) {
+            return new CreatOrderModel[size];
+        }
+    };
 
     public String getINVOICE_FLG() {
         return INVOICE_FLG;
@@ -83,138 +127,14 @@ public class CreatOrderModel extends OrderTradeDto implements Serializable {
         this.INVOICE_ORG = INVOICE_ORG;
     }
 
-    /*    //获取的 地址 id
-            private String ADDRESS_ID;
-            //配送时间 起始
-            private String DISTRIBUTION_DATE_START;
-            //配送时间 截止
-            private String DISTRIBUTION_DATE_END;
-            //花费积分数
-            private String COST_POINT;
-            //支付方式
-            private String PAYMENT_METHOD;
-            //使用电子币标识
-            private String COIN_FLG;
-            //使用邮费抵用券标识
-            private String POSTAGE_FLG;
-            //应付金额
-            private String PAY_AMOUNT;
-            //积分抵用金额
-            private String POINT_MONEY;
-            //商品总价额
-            private String TRADE_MONEY_ALL;
-            //账户下可用积分数量
-            private String USER_POINT;
-            //地址
-            private USER_ADDRESS USER_ADDRESS;
-            //店铺list
-            private List<Business> DETAILS;
+    public String getPREFERENTIAL_ID() {
+        return PREFERENTIAL_ID;
+    }
 
-            public List<Business> getDETAILS() {
-                return DETAILS;
-            }
+    public void setPREFERENTIAL_ID(String PREFERENTIAL_ID) {
+        this.PREFERENTIAL_ID = PREFERENTIAL_ID;
+    }
 
-            public void setDETAILS(List<Business> DETAILS) {
-                this.DETAILS = DETAILS;
-            }
-
-            public String getCOST_POINT() {
-                return COST_POINT;
-            }
-
-            public void setCOST_POINT(String COST_POINT) {
-                this.COST_POINT = COST_POINT;
-            }
-
-            public String getPAYMENT_METHOD() {
-                return PAYMENT_METHOD;
-            }
-
-            public void setPAYMENT_METHOD(String PAYMENT_METHOD) {
-                this.PAYMENT_METHOD = PAYMENT_METHOD;
-            }
-
-            public String getPAY_AMOUNT() {
-                return PAY_AMOUNT;
-            }
-
-            public void setPAY_AMOUNT(String PAY_AMOUNT) {
-                this.PAY_AMOUNT = PAY_AMOUNT;
-            }
-
-            public String getPOINT_MONEY() {
-                return POINT_MONEY;
-            }
-
-            public void setPOINT_MONEY(String POINT_MONEY) {
-                this.POINT_MONEY = POINT_MONEY;
-            }
-
-            public String getTRADE_MONEY_ALL() {
-                return TRADE_MONEY_ALL;
-            }
-
-            public void setTRADE_MONEY_ALL(String TRADE_MONEY_ALL) {
-                this.TRADE_MONEY_ALL = TRADE_MONEY_ALL;
-            }
-
-            public String getUSER_POINT() {
-                return USER_POINT;
-            }
-
-            public void setUSER_POINT(String USER_POINT) {
-                this.USER_POINT = USER_POINT;
-            }
-
-            public CreatOrderModel.USER_ADDRESS getUSER_ADDRESS() {
-                return USER_ADDRESS;
-            }
-
-            public void setUSER_ADDRESS(CreatOrderModel.USER_ADDRESS USER_ADDRESS) {
-                this.USER_ADDRESS = USER_ADDRESS;
-            }
-
-            public String getDISTRIBUTION_DATE_START() {
-                return DISTRIBUTION_DATE_START;
-            }
-
-            public void setDISTRIBUTION_DATE_START(String DISTRIBUTION_DATE_START) {
-                this.DISTRIBUTION_DATE_START = DISTRIBUTION_DATE_START;
-            }
-
-            public String getDISTRIBUTION_DATE_END() {
-                return DISTRIBUTION_DATE_END;
-            }
-
-            public void setDISTRIBUTION_DATE_END(String DISTRIBUTION_DATE_END) {
-                this.DISTRIBUTION_DATE_END = DISTRIBUTION_DATE_END;
-            }
-
-            public String getPOSTAGE_FLG() {
-                return POSTAGE_FLG;
-            }
-
-            public void setPOSTAGE_FLG(String POSTAGE_FLG) {
-                this.POSTAGE_FLG = POSTAGE_FLG;
-            }
-
-            public String getCOIN_FLG() {
-                return COIN_FLG;
-            }
-
-            public void setCOIN_FLG(String COIN_FLG) {
-                this.COIN_FLG = COIN_FLG;
-            }
-
-            public String getADDRESS_ID() {
-                return ADDRESS_ID;
-            }
-
-            public void setADDRESS_ID(String ADDRESS_ID) {
-                this.ADDRESS_ID = ADDRESS_ID;
-            }
-
-            */
     public class USER_ADDRESS {
         private String ADDRESS_DETAIL;
         private int ADDRESS_ID;

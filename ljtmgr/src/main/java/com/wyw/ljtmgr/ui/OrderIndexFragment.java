@@ -72,9 +72,10 @@ public class OrderIndexFragment extends Fragment {
     }
 
     public void loadOrder() {
-        Log.e(AppConfig.TAG_ERR, "stat:" + stat);
         if (!UserBiz.isLogined()) return;
         ((BaseActivity) getActivity()).setLoding();
+        Log.e(AppConfig.TAG_ERR, "newState pageIdx:" + pageIdx);
+
         OrderBiz.loadOrder(stat, pageIdx + "", new SimpleCommonCallback<OrderListResponse>(getActivity()) {
             @Override
             protected void handleResult(OrderListResponse result) {
@@ -90,17 +91,23 @@ public class OrderIndexFragment extends Fragment {
             return;
         }
 
+
         if (adapter == null) {
             adapter = new OrderListAdapter(getActivity(), orderListRes.getmOrderStat());
             ryvOrder.setAdapter(adapter);
+        }
+        if (orderListRes.getData() == null) {
+            end = true;
+            return;
+        }
+        if (orderListRes.getData().size() <=0 ) {
+            end = true;
+            return;
         }
         if (pageIdx <= 1) {
             adapter.list = orderListRes.getData();
         } else {
             adapter.list.addAll(orderListRes.getData());
-        }
-        if (adapter.list == null || adapter.list.size() <= 0) {
-            end = true;
         }
         adapter.setMstat(stat);
         adapter.notifyDataSetChanged();
@@ -112,6 +119,9 @@ public class OrderIndexFragment extends Fragment {
         srf.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                pageIdx = 1;
+                end = false;
+                adapter = null;
                 loadOrder();
                 srf.setRefreshing(false);
             }
@@ -148,6 +158,7 @@ public class OrderIndexFragment extends Fragment {
 
                 pageIdx = 1;
                 end = false;
+                adapter = null;
                 stat = nStat;
                 loadOrder();
             }
@@ -187,15 +198,17 @@ public class OrderIndexFragment extends Fragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+
+                Log.e(AppConfig.TAG_ERR, "newState:" + newState + "--");
                 if (0 == newState) {
                     //0标识到达了
                     int fp = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                    Log.e(AppConfig.TAG_ERR, "newState:" + newState + "--fp:" + fp);
                     //完成滑动
-                    if (fp == 1 && !end) {
+                    if ((fp + 1) >= adapter.getItemCount() && !end) {
                         pageIdx = pageIdx + 1;
                         loadOrder();
                     }
-//                    Log.e(AppConfig.TAG_ERR, "newState:" + newState + " fp" + fp);
                 }
             }
 

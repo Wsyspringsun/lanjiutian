@@ -34,6 +34,7 @@ import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.category.FragmentLife;
 import com.wyw.ljtds.ui.user.ActivityMessage;
 import com.wyw.ljtds.ui.user.wallet.BalanceFragment;
+import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.view.annotation.ContentView;
@@ -154,7 +155,11 @@ public class LifeShopActivity extends BaseActivity {
         ShopImg itemShop = shopImgs.get(0);
 //        tvShopName.setText(itemShop.getSHOP_NAME());
 //        sdvShopLogo.setImageURI(Uri.parse(itemShop.getIMAGE_PATH1()));
-        Picasso.with(this).load(Uri.parse(itemShop.getIMAGE_PATH1())).into(shopImg);
+        Utils.log("getIMAGE_PATH1():"+itemShop.getIMAGE_PATH1());
+        if(!StringUtils.isEmpty(itemShop.getIMAGE_PATH1())){
+            Picasso.with(this).load(Uri.parse(itemShop.getIMAGE_PATH1())).into(shopImg);
+        }
+//        Picasso.with(this).load(Uri.parse("http://www.lanjiutian.com/upload/images/368412d9df934cac99253c95ed5ac2fe/87a29a6baeda89941496febdae6308ed.png")).into(shopImg);
     }
 
     class LifeShopFragmentPagerAdapter extends FragmentPagerAdapter {

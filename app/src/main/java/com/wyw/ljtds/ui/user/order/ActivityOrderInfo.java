@@ -3,6 +3,11 @@ package com.wyw.ljtds.ui.user.order;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,7 +40,10 @@ import com.wyw.ljtds.model.AddressModel;
 import com.wyw.ljtds.model.MyLocation;
 import com.wyw.ljtds.model.OrderCommDto;
 import com.wyw.ljtds.model.OrderModelInfoMedicine;
+import com.wyw.ljtds.model.OrderTrade;
+import com.wyw.ljtds.model.OrderTradeDto;
 import com.wyw.ljtds.model.RecommendModel;
+import com.wyw.ljtds.model.TradeOrder;
 import com.wyw.ljtds.model.XiaoNengData;
 import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.goods.ActivityGoodsInfo;
@@ -54,6 +62,7 @@ import org.xutils.view.annotation.ViewInject;
 
 import java.util.List;
 
+import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -66,8 +75,6 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 @ContentView(R.layout.activity_order_info)
 public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.PermissionCallbacks {
-    @ViewInject(R.id.jiantou)
-    ImageView ivJianTou;
     @ViewInject(R.id.header_return_text)
     private TextView title;
     @ViewInject(R.id.reclcyer)
@@ -84,8 +91,19 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
     private TextView dianpu;
     @ViewInject(R.id.yunfei)
     private TextView yunfei;
+    @ViewInject(R.id.activity_order_info_discount_youhuiquan)
+    private TextView tvOrderinfoYohuiquan;
     @ViewInject(R.id.tv_orderinfo_dianzibi)
     private TextView tvOrderinfoDianzibi;
+    @ViewInject(R.id.tv_orderinfo_rand_money)
+    private TextView tvOrderinfoRandMoney;
+
+    @ViewInject(R.id.activity_order_info_ll_orderqrcode)
+    private LinearLayout llOrderQrcode;
+    @ViewInject(R.id.activity_order_info_tv_orderqrcode)
+    private ImageView ivOrderQrcode;
+
+
     @ViewInject(R.id.zongjia)
     private TextView zongjia;
     @ViewInject(R.id.dingdan)
@@ -104,25 +122,14 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
     LinearLayout images;
     @ViewInject(R.id.order_info_stat)
     TextView orderInfoStat;
-    //    private ImageView images;
-//    @ViewInject(R.id.tuijian)
-//    private RecyclerView tuijian;
-//    @ViewInject(R.id.tuijian_ll)
-//    private LinearLayout tuijian_ll;
 
     private MyAdapter adapter;
     private List<RecommendModel> recommends;
-    private MyAdapter1 adapter1;
-    private String orderId = "";
-    private String name = "";
-    private String image = "";
-    private String trade_id = "";
-    private String group_id = "";
     private static final int REQUEST_CODE_PERMISSION_CALL_PHONE = 1;
     private String order_status = "";
     private String phone = "";
     //客服
-    String settingid0 = "lj_1000_1493167191869";
+//    String settingid0 = "lj_1000_1493167191869";
     String settingid1 = "lj_1001_1496308413541";
     String groupName = "蓝九天";// 客服组默认名称
     private List<OrderCommDto> list;
@@ -152,50 +159,26 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 it = ActivityAfterMarket.getIntent(this, model.getORDER_GROUP_ID(), "", model.getLOGISTICS_COMPANY_ID());
                 startActivity(it);
                 break;
-
-//            case R.id.order_wuliu:
-//                if (order_status.equals("C") || order_status.equals("D") || order_status.equals("S")) {
-//                    it = new Intent(ActivityOrderInfo.this, ActivityLogistics.class);
-//                    it.putExtra("order_id", orderId);
-//                    startActivity(it);
-//                }
 //
-//                break;
-
             case R.id.lianxi:
-                //Log.e(AppConfig.ERR_TAG, "group_id:" + group_id);
-
+                if (model == null) return;
+                String trade_id = model.getORDER_TRADE_ID();
                 openChat("交易订单号：" + trade_id, "", model.getXiaonengData().getSettingid1(), model.getLOGISTICS_COMPANY(), false, "");
                 if (model != null && !AppConfig.GROUP_LJT.equals(model.getINS_USER_ID())) {
                     openChat("交易订单号：" + trade_id, "", model.getXiaonengData().getSettingid1(), model.getLOGISTICS_COMPANY(), false, "");
                 } else {
                     openChat("交易订单号：" + trade_id, "", AppConfig.CHAT_XN_LJT_SETTINGID1, AppConfig.CHAT_XN_LJT_TITLE1, false, "");
                 }
-                /*if (!StringUtils.isEmpty(group_id) && group_id.equals(AppConfig.GROUP_LJT)) {
-                    openChat("交易订单号：" + trade_id, "", settingid0, groupName, false, "");
-                } else if (!StringUtils.isEmpty(group_id)) {
-                    openChat("交易订单号：" + trade_id, "", settingid1, groupName, false, "");
-                }*/
-
-//                openChat("交易订单号：" + trade_id, "", AppConfig.CHAT_XN_LJT_SETTINGID1, AppConfig.CHAT_XN_LJT_TITLE1, false, "");
                 break;
 
             case R.id.boda:
-                //Log.e(AppConfig.ERR_TAG, "phone:" + phone);
                 if (StringUtils.isEmpty(phone)) {
-
                 } else {
                     call();
                 }
 
-
                 break;
 
-//            case R.id.order_shanchu:
-//                if (!StringUtils.isEmpty(trade_id)) {
-//                    delete(trade_id);
-//                }
-//                break;
             default:
                 break;
         }
@@ -207,9 +190,6 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
 
         title.setText(R.string.order_xiangqing);
 
-
-        ivJianTou.setVisibility(View.GONE);
-//        tuijian_ll.setVisibility(View.GONE);
 
         setLoding(this, false);
         getInfo(getIntent().getStringExtra("id"), "orderDetail");
@@ -232,21 +212,6 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
             }
         });
 
-//        tuijian.setLayoutManager(new GridLayoutManager(this, 2));
-//        tuijian.setItemAnimator(new DefaultItemAnimator());
-//        tuijian.addItemDecoration(new DividerGridItemDecoration(this));
-
-        adapter1 = new MyAdapter1();
-        /*tuijian.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                Intent it = new Intent(ActivityOrderInfo.this, ActivityMedicinesInfo.class);
-//                it.putExtra(AppConfig.IntentExtraKey.MEDICINE_INFO_ID, adapter1.getData().get(i).getWAREID());
-                startActivity(it);
-            }
-        });*/
-//        tuijian.setAdapter(adapter1);
-
     }
 
 
@@ -265,13 +230,8 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 model = orderModelInfoMedicine;
                 StringBuilder err = new StringBuilder();
                 MyLocation loc = AddressModel.parseLocation(err, orderModelInfoMedicine.getUSER_ADDRESS_LOCATION());
-                String userAddressId = "";
-                if (err.length() <= 0) {
-                    userAddressId = loc.getAddrStr();
-                }
-                String uname = "", phone = "";
+
                 //分别显示 地址信息
-//                address_dizhi.setText(uname + " " + phone + "\n" + userAddressId+orderModelInfoMedicine.getAD);
                 address_dizhi.setText(orderModelInfoMedicine.getUSER_ADDRESS_ID());
 
                 dianpu.setText(orderModelInfoMedicine.getLOGISTICS_COMPANY());
@@ -279,17 +239,23 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 tvOrderRemark.setText(orderModelInfoMedicine.getGROUP_REMARKS());
 
                 String postageFlg = orderModelInfoMedicine.getPOSTAGE_FLG();
-                String postageFlgDisplay = "";
                 if ("1".equals(postageFlg)) {
-                    postageFlgDisplay = getString(R.string.postage_flg_display);
+                    yunfei.setText("￥" + Utils.formatFee(orderModelInfoMedicine.getPOSTAGE() + ""));
+                } else {
+                    yunfei.setText("￥" + Utils.formatFee("0"));
                 }
-                yunfei.setText(postageFlgDisplay + "￥" + orderModelInfoMedicine.getPOSTAGE() + "");
-                tvOrderinfoDianzibi.setText("￥" + orderModelInfoMedicine.getELECTRONIC_MONEY());
+                tvOrderinfoDianzibi.setText("￥" + Utils.formatFee(orderModelInfoMedicine.getELECTRONIC_MONEY() + ""));
+                if (orderModelInfoMedicine.getRAND_SUB_MONEY() != null) {
+                    tvOrderinfoRandMoney.setText("￥" + Utils.formatFee(orderModelInfoMedicine.getRAND_SUB_MONEY() + ""));
+                } else {
+                    tvOrderinfoRandMoney.setText("￥" + "0");
+                }
+                tvOrderinfoYohuiquan.setText("￥" + Utils.formatFee(orderModelInfoMedicine.getCOUPON_MONEY()));
                 dingdan.setText("订单号：" + orderModelInfoMedicine.getORDER_TRADE_ID());
                 dingdan1.setText("创建时间：" + DateUtils.parseTime(orderModelInfoMedicine.getCREATE_DATE() + ""));
-                shangp_z.setText("￥" + orderModelInfoMedicine.getGROUP_MONEY_ALL() + "");
+                shangp_z.setText("(包含邮费" + Utils.formatFee(orderModelInfoMedicine.getPOSTAGE() + "") + "元)￥" + orderModelInfoMedicine.getGROUP_MONEY_ALL() + "");
                 zongjia.setText("￥" + orderModelInfoMedicine.getGROUP_PAY_AMOUNT());
-                jifen_d.setText("￥" + orderModelInfoMedicine.getPOINT_MONEY());
+                jifen_d.setText(Utils.formatFee(orderModelInfoMedicine.getCOST_POINT() + "") + "积分");
                 if (orderModelInfoMedicine.getCOMPLETE_DATE() != null) {
                     dingdan2.setVisibility(View.VISIBLE);
                     dingdan2.setText("完成时间：" + DateUtils.parseTime(orderModelInfoMedicine.getCOMPLETE_DATE() + ""));
@@ -310,58 +276,104 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 } else {
                     Utils.log("没有获取小能信息");
                 }
+                llOrderQrcode.setVisibility(View.GONE);
 
-                switch (orderModelInfoMedicine.getSTATUS()) {
-                    case "A":
-                        images.setBackground(getResources().getDrawable(R.mipmap.daifukuan));
-                        orderInfoStat.setText(R.string.daifu);
-                        tvShouhou.setVisibility(View.GONE);
-                        break;
+                String orderId = orderModelInfoMedicine.getORDER_GROUP_ID();
+                ActivityOrderInfo.this.phone = orderModelInfoMedicine.getORG_MOBILE();
 
-                    case "B":
-                        images.setBackground(getResources().getDrawable(R.mipmap.daifahuo));
-                        orderInfoStat.setText(R.string.daifa);
-                        tvShouhou.setVisibility(View.GONE);
-                        break;
-
-                    case "C":
-                        images.setBackground(getResources().getDrawable(R.mipmap.daishouhuo));
-                        orderInfoStat.setText(R.string.daishou);
-                        break;
-                    case "S":
-                        images.setBackground(getResources().getDrawable(R.mipmap.daipingjia));
-                        orderInfoStat.setText(R.string.complete);
-                        break;
-                    case "D":
-                        images.setBackground(getResources().getDrawable(R.mipmap.daipingjia));
-                        orderInfoStat.setText(R.string.daiping);
-                        break;
-
-                    case "E":
-                        images.setBackground(getResources().getDrawable(R.mipmap.guanbi));
-                        break;
-
-                }
 
                 list = orderModelInfoMedicine.getDETAILS();
                 adapter.setNewData(list);
                 adapter.notifyDataSetChanged();
 
 
-                orderId = orderModelInfoMedicine.getORDER_GROUP_ID();
-                name = orderModelInfoMedicine.getOID_GROUP_NAME();
-                trade_id = orderModelInfoMedicine.getORDER_TRADE_ID();
-                order_status = orderModelInfoMedicine.getSTATUS();
-                ActivityOrderInfo.this.phone = orderModelInfoMedicine.getORG_MOBILE();
-                image = orderModelInfoMedicine.getDETAILS().get(0).getIMG_PATH();
-                group_id = orderModelInfoMedicine.getOID_GROUP_ID();
                 if (AppConfig.GROUP_LJT.equals(orderModelInfoMedicine.getINS_USER_ID())) {
                     tvShouhou.setVisibility(View.GONE);
                 } else {
                     tvShouhou.setVisibility(View.VISIBLE);
                 }
 
-//                getrecommend( PreferenceCache.getToken(), trade_id );
+                /*String strC = "";
+                if (OrderTrade.PAYMTD_MONEY.equals(orderModelInfoMedicine.getPAYMENT_METHOD())) {
+                    strC = "(货到付款)";
+                }*/
+                String statDesc = "未知";
+                switch (orderModelInfoMedicine.getSTATUS()) {
+                    case "A":
+                        images.setBackground(getResources().getDrawable(R.mipmap.daifukuan));
+                        statDesc = getString(R.string.daifu);
+                        tvShouhou.setVisibility(View.GONE);
+                        break;
+
+                    case "B":
+                        images.setBackground(getResources().getDrawable(R.mipmap.daifahuo));
+                        statDesc = getString(R.string.daifa);
+                        tvShouhou.setVisibility(View.GONE);
+                        if (!OrderTrade.PAYMTD_MONEY.equals(orderModelInfoMedicine.getPAYMENT_METHOD())) {
+                            Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode("2#" + orderId, 150, Color.BLACK, null);
+                            ivOrderQrcode.setImageBitmap(bitmap);
+                            llOrderQrcode.setVisibility(View.VISIBLE);
+                        }
+                        break;
+
+                    case "C":
+                        images.setBackground(getResources().getDrawable(R.mipmap.daishouhuo));
+                        statDesc = getString(R.string.daishou);
+                        break;
+                    case "S":
+                        images.setBackground(getResources().getDrawable(R.mipmap.daipingjia));
+                        statDesc = getString(R.string.complete);
+                        break;
+                    case "D":
+                        images.setBackground(getResources().getDrawable(R.mipmap.daipingjia));
+                        statDesc = getString(R.string.daiping);
+                        break;
+
+                    case "E":
+                        images.setBackground(getResources().getDrawable(R.mipmap.guanbi));
+                        statDesc = getString(R.string.order_style7);
+                        break;
+
+                }
+
+                String payMtd = "";
+                switch (orderModelInfoMedicine.getPAYMENT_METHOD()) {
+                    case OrderTrade.PAYMTD_ONLINE:
+                        payMtd = "在线支付";
+                        break;
+                    case OrderTrade.PAYMTD_MONEY:
+                        payMtd = "货到付款";
+                        break;
+                    case OrderTrade.PAYMTD_WECHAT:
+                        payMtd = "微信支付";
+                        break;
+                    case OrderTrade.PAYMTD_ALI:
+                        payMtd = "支付宝支付";
+                        break;
+                    case OrderTrade.PAYMTD_UNION:
+                        payMtd = "银联支付";
+                        break;
+                    case OrderTrade.PAYMTD_ACCOUNT:
+                        payMtd = "余额支付";
+                        break;
+                }
+                if (!StringUtils.isEmpty(payMtd)) {
+                    payMtd = "(" + payMtd + ")";
+                }
+
+                orderInfoStat.setText(statDesc + payMtd);
+                /*
+                Bitmap logoBitmap = ((BitmapDrawable) getDrawable(R.drawable.ic_biaozhi)).getBitmap();
+                int start = 3;
+                Bitmap logo = Bitmap.createBitmap(logoBitmap.getWidth() + start * 2, logoBitmap.getHeight() + start * 2, Bitmap.Config.RGB_565);
+                logo.eraseColor(Color.WHITE);
+                Canvas canvas = new Canvas(logo);
+                Paint p = new Paint();
+                p.setColor(Color.WHITE);
+                canvas.drawBitmap(logoBitmap, start, start, p);
+                canvas.save(Canvas.ALL_SAVE_FLAG);
+                canvas.restore();
+*/
 
             }
 
@@ -538,7 +550,11 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
             } else {
                 baseViewHolder.setVisible(R.id.shouhou, false);
             }
-            baseViewHolder.setText(R.id.title, StringUtils.deletaFirst(goods.getCOMMODITY_NAME()))
+            String title = StringUtils.deletaFirst(goods.getCOMMODITY_NAME());
+            if (!StringUtils.isEmpty(goods.getGIVEAWAY())) {
+                title += "(" + goods.getGIVEAWAY() + ")";
+            }
+            baseViewHolder.setText(R.id.title, title)
                     .setText(R.id.money, "￥" + Utils.formatFee("" + goods.getCOST_MONEY()))
                     .setText(R.id.number, "X" + goods.getEXCHANGE_QUANLITY())
                     .setOnClickListener(R.id.shouhou, new View.OnClickListener() {

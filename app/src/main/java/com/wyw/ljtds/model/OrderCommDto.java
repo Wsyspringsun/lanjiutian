@@ -9,6 +9,7 @@ import com.wyw.ljtds.utils.Utils;
 public class OrderCommDto {
     public static final String SHARE_FLG_YES = "1";
 
+    private String COMMODITY_PARAMETER = "";//促销内容
     private String COMMODITY_ORDER_ID;
     private String OID_USER_ID;
     private String COMMODITY_ID;
@@ -22,7 +23,7 @@ public class OrderCommDto {
     private String COST_MONEY;
     private String COST_MONEY_ALL;
     private String SINGLE_ELECTRONIC_MONEY;
-    private String GIVEAWAY;
+    private String GIVEAWAY;//赠送的描述和数量
     private String ORDER_SOURCE;
     private String ORDER_STATUS;
     private String DEL_FLG;
@@ -36,6 +37,8 @@ public class OrderCommDto {
     private String IS_RETURNGOODS; //1:可以退  0 不可退
     private String SHARE_TITLE;  //分享主题
     private String SHARE_DESCRIPTION; //分享描述
+    private String COST_POINT;      //话费的积分数量
+    private String ORDER_COST_POINT;    //应付积分小计 COST_POINT*EXCHANGE_QUANLITY
 
     public String getCOMMODITY_ORDER_ID() {
         return COMMODITY_ORDER_ID;
@@ -251,5 +254,30 @@ public class OrderCommDto {
 
     public void setSHARE_FLG(String SHARE_FLG) {
         this.SHARE_FLG = SHARE_FLG;
+    }
+
+    public String getCOMMODITY_PARAMETER() {
+        return COMMODITY_PARAMETER;
+    }
+
+    public void setCOMMODITY_PARAMETER(String COMMODITY_PARAMETER) {
+        this.COMMODITY_PARAMETER = COMMODITY_PARAMETER;
+    }
+
+    public String getCOST_POINT() {
+        return COST_POINT;
+    }
+
+    public void setCOST_POINT(String COST_POINT) {
+        this.COST_POINT = COST_POINT;
+    }
+
+
+    public String getORDER_COST_POINT() {
+        return ORDER_COST_POINT;
+    }
+
+    public void setORDER_COST_POINT(String ORDER_COST_POINT) {
+        this.ORDER_COST_POINT = ORDER_COST_POINT;
     }
 }

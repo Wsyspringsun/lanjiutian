@@ -50,10 +50,6 @@ import cn.xiaoneng.xpush.XPush;
 public class MyApplication extends Application {
     private static UserBiz bizUser;
 
-    public interface LocationedInterface {
-        public void afterLocation(BDLocation location);
-    }
-
     public static int screenHeight = 0;
     public static int screenWidth = 0;
     //百度
@@ -83,18 +79,14 @@ public class MyApplication extends Application {
     }
 
     // Location listener
-    /*private BDLocationListener locationListner = new BDLocationListener() {
+    private BDLocationListener locationListner = new BDLocationListener() {
         @Override
         public void onReceiveLocation(BDLocation location) {
-            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+            if (location != null && !StringUtils.isEmpty(location.getAddrStr())) {
                 SingleCurrentUser.bdLocation = location;
-                if (SingleCurrentUser.location == null) {
-                    SingleCurrentUser.updateLocation(MyLocation.newInstance(location.getLatitude(), location.getLongitude(), location.getAddrStr()));
-                }
-//                locationService.unregisterListener(locationListner);
             }
         }
-    };*/
+    };
 
     @Override
     public void onCreate() {
@@ -117,11 +109,11 @@ public class MyApplication extends Application {
         //app crash收集
         CustomActivityOnCrash.setLaunchErrorActivityWhenInBackground(false);
         CustomActivityOnCrash.install(this);
-//        CustomActivityOnCrash.setShowErrorDetails(true);
-        CustomActivityOnCrash.setEventListener(new MyCrashEventListener());
-//        CustomActivityOnCrash.setEnableAppRestart(true);
+        CustomActivityOnCrash.setShowErrorDetails(true);
+        CustomActivityOnCrash.setEnableAppRestart(true);
 //        CustomActivityOnCrash.setRestartActivityClass(MainActivity.class);
-        CustomActivityOnCrash.setErrorActivityClass(MainActivity.class);
+//        CustomActivityOnCrash.setEventListener(new MyCrashEventListener());
+//        CustomActivityOnCrash.setErrorActivityClass(MainActivity.class);
         //小能
 //        Ntalker.getInstance().initSDK(this, "lj_1000", "lanjiutian"); //old version
         /**
@@ -188,12 +180,11 @@ public class MyApplication extends Application {
 
         //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
         LocationClientOption locOpt = locationService.getDefaultLocationClientOption();
+        locOpt.setScanSpan(8000);
+        locationService.registerListener(locationListner);
         locationService.setLocationOption(locOpt);
+        locationService.start();
 
-    }
-
-    public void onDestory() {
-        locationService.stop(); //停止定位服务
     }
 
 
@@ -281,7 +272,7 @@ public class MyApplication extends Application {
         @Override
         public void onLaunchErrorActivity() {
             Log.i(AppConfig.ERR_TAG, "onLaunchErrorActivity 抱歉，系统竟然崩溃了！");
-            ToastUtil.show(getAppContext(), "抱歉，网络异常，请检查网络环境！");
+//            ToastUtil.show(getAppContext(), "抱歉，网络异常，请检查网络环境！");
         }
 
         @Override

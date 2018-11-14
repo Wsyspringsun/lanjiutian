@@ -37,6 +37,7 @@ import com.wyw.ljtmgr.biz.SimpleCommonCallback;
 import com.wyw.ljtmgr.config.AppConfig;
 import com.wyw.ljtmgr.config.MyApplication;
 import com.wyw.ljtmgr.model.Header;
+import com.wyw.ljtmgr.model.LoginModel;
 import com.wyw.ljtmgr.model.LogisticInfo;
 import com.wyw.ljtmgr.model.OrderDetail;
 import com.wyw.ljtmgr.model.OrderDetailModel;
@@ -73,6 +74,8 @@ public class OrderDetailFragment extends Fragment {
 
     @ViewInject(R.id.fragment_order_detail_ryv)
     RecyclerView ryvOrder;
+    @ViewInject(R.id.fragment_order_detail_btn_delegate)
+    Button btnDelegate;
     @ViewInject(R.id.fragment_order_detail_btn_submit)
     Button btnSubmit;
     @ViewInject(R.id.fragment_order_detail_btn_songda)
@@ -141,6 +144,7 @@ public class OrderDetailFragment extends Fragment {
 
     private void loadData() {
         String orderId = getArguments().getString(ARG_ORDER_ID);
+        ((BaseActivity) getActivity()).setLoding();
         OrderBiz.loadOrderDetail(orderId, orderStat, new SimpleCommonCallback<OrderDetailModel>(getActivity()) {
 
             @Override
@@ -165,22 +169,42 @@ public class OrderDetailFragment extends Fragment {
                 ex.printStackTrace();
             }
         }
-        if (distance > 10) {
-            this.logisticStat = OrderStatus.DELEGATE;
+
+        if (!StringUtils.isEmpty(orderDetailModel.getDistributionDate())) {
+            tvLogiInfo.setText("预计" + orderDetailModel.getDistributionDate() + "送达");
         } else {
-            this.logisticStat = OrderStatus.LJT;
+            tvLogiInfo.setText("难以预计送达时间");
+        }
+        if (!StringUtils.isEmpty(orderDetailModel.getCourier())) {
+            tvLogiUsername.setText("派送员：" + orderDetailModel.getCourier());
+        } else {
+            tvLogiUsername.setText("派送员：未知 ");
         }
 
-        tvLogiInfo.setText("预计" + orderDetailModel.getDistributionDate() + "送达");
-        tvLogiUsername.setText("派送员：" + orderDetailModel.getCourier());
 
 //        A”:新订单“B”:进行中“C”:已取消 “D”:售后 “E”：已完成
 //        控制按钮显示状态
         resetBtn();
+
         String stat = orderDetailModel.getGroupStatus();
         switch (stat) {
             case OrderStatus.TOSHIPPED:
-                btnSubmit.setVisibility(View.VISIBLE);
+                //只有店长可以发货
+                String vF = myApp.getCurrentLoginer().getValidFlg();
+
+                Log.e(AppConfig.TAG_ERR, "dianzhang " + vF + " distance:" + distance);
+                if (LoginModel.VALIDFLG_DIANZHANG.equals(vF)) {
+                    btnDelegate.setVisibility(View.VISIBLE);
+                    btnSubmit.setVisibility(View.VISIBLE);
+                } else {
+                    if (distance > 10) {
+                        btnDelegate.setVisibility(View.GONE);
+                        btnSubmit.setVisibility(View.GONE);
+                    } else {
+                        btnSubmit.setVisibility(View.VISIBLE);
+                    }
+                }
+//                btnSubmit.setVisibility(View.VISIBLE);
                 llLogistic.setVisibility(View.GONE);
                 break;
             case OrderStatus.SHIPPED:
@@ -195,13 +219,31 @@ public class OrderDetailFragment extends Fragment {
                 btnSongda.setVisibility(View.GONE);
                 btnJuShou.setVisibility(View.GONE);
 //                llLogistic.setVisibility(View.GONE);
-                tvLogiInfo.setText(orderDetailModel.getUpdDate() + "已取消");
+                if (!StringUtils.isEmpty(orderDetailModel.getUpdDate())) {
+                    try {
+                        tvLogiInfo.setText(CommonUtil.formatTime(Long.parseLong(orderDetailModel.getUpdDate())) + "已取消");
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        tvLogiInfo.setText("已取消");
+                    }
+                } else {
+                    tvLogiInfo.setText("已取消");
+                }
                 break;
             case OrderStatus.LOGISTICSSERVICE:
                 btnSongda.setVisibility(View.GONE);
                 btnJuShou.setVisibility(View.GONE);
 //                llLogistic.setVisibility(View.GONE);
-                tvLogiInfo.setText(orderDetailModel.getUpdDate() + "已送达");
+                if (!StringUtils.isEmpty(orderDetailModel.getUpdDate())) {
+                    try {
+                        tvLogiInfo.setText(CommonUtil.formatTime(Long.parseLong(orderDetailModel.getUpdDate())) + "已送达");
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        tvLogiInfo.setText("已送达");
+                    }
+                } else {
+                    tvLogiInfo.setText("已送达");
+                }
                 break;
             case OrderStatus.APPLYRETURNED:
                 btnShouhouTongyi.setVisibility(View.VISIBLE);
@@ -244,12 +286,12 @@ public class OrderDetailFragment extends Fragment {
         }*/
 
 
-        btnSubmit.setTag(this.logisticStat);
-        if (OrderStatus.DELEGATE == this.logisticStat) {
-            btnSubmit.setText(getString(R.string.logistic_delegate));
-        } else {
-            btnSubmit.setText(getString(R.string.logistic_ljt));
-        }
+//        btnSubmit.setTag(this.logisticStat);
+//        if (OrderStatus.DELEGATE == this.logisticStat) {
+//            btnSubmit.setText(getString(R.string.logistic_delegate));
+//        } else {
+//            btnSubmit.setText(getString(R.string.logistic_ljt));
+//        }
         final VirtualLayoutManager layoutManager = new VirtualLayoutManager(getActivity());
         ryvOrder.setLayoutManager(layoutManager);
         final RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
@@ -284,6 +326,7 @@ public class OrderDetailFragment extends Fragment {
 
     private void resetBtn() {
         btnSubmit.setVisibility(View.GONE);
+        btnDelegate.setVisibility(View.GONE);
         btnSongda.setVisibility(View.GONE);
         btnJuShou.setVisibility(View.GONE);
         btnShouhouTongyi.setVisibility(View.GONE);
@@ -321,20 +364,23 @@ public class OrderDetailFragment extends Fragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getTag().equals(OrderStatus.DELEGATE)) {
-                    //第三方
-                    startActivityForResult(LogisticInfoActivity.getIntent(getActivity(), orderDetailModel.getOrderId()), REQUEST_DELEGATE_LOGISTIC);
-                } else {
-                    //蓝九天
-                    LogisticInfo logisticInfo = new LogisticInfo();
-                    logisticInfo.setOrderGroupId(orderDetailModel.getOrderId());
-                    logisticInfo.setLogisticsFlg("0");
-                    logisticInfo.setCourier(myApp.getCurrentLoginer().getAdminUserName());
-                    logisticInfo.setCourierMobile(myApp.getCurrentLoginer().getAdminUserId());
-                    //当前设备
-                    OrderBiz.sendOrder(logisticInfo, sendOrderCallback);
-                }
+                //蓝九天
+                LogisticInfo logisticInfo = new LogisticInfo();
+                logisticInfo.setOrderGroupId(orderDetailModel.getOrderId());
+                logisticInfo.setLogisticsFlg("0");
+                logisticInfo.setCourier(myApp.getCurrentLoginer().getAdminUserName());
+                logisticInfo.setCourierMobile(myApp.getCurrentLoginer().getAdminUserId());
+                //当前设备
+                OrderBiz.sendOrder(logisticInfo, sendOrderCallback);
+            }
+        });
 
+        //委托第三方送货
+        btnDelegate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //第三方
+                startActivityForResult(LogisticInfoActivity.getIntent(getActivity(), orderDetailModel.getOrderId()), REQUEST_DELEGATE_LOGISTIC);
             }
         });
 
@@ -343,6 +389,12 @@ public class OrderDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (OrderStatus.RECEIVED.equals(orderDetailModel.getGroupStatus())) {
+                    return;
+                }
+
+                if (!myApp.getCurrentLoginer().getAdminUserId().equals(orderDetailModel.getCourierMobile())) {
+                    Log.e(AppConfig.TAG_ERR, "current:" + myApp.getCurrentLoginer().getAdminUserId() + "---curior:" + orderDetailModel.getCourierMobile());
+                    Toast.makeText(getActivity(), "您非本单派送员，请联系本单派送员确认送达", Toast.LENGTH_LONG).show();
                     return;
                 }
                 OrderBiz.orderArrived(orderDetailModel, new SimpleCommonCallback<ServerResponse>(getActivity()) {
@@ -406,16 +458,38 @@ public class OrderDetailFragment extends Fragment {
         public void onBindViewHolder(HeaderViewHolder holder, int position) {
             Log.e(AppConfig.TAG_ERR, "OneColSubAdapter onBindViewHolder:" + position);
             StringBuilder sb = new StringBuilder("");
-            sb.append("订单编号:" + OrderDetailFragment.this.orderDetailModel.getOrderId() + "\n");
+            sb.append("订单编号:" + orderDetailModel.getOrderId() + "\n");
             sb.append("订单生成时间:" + utils.DateUtils.parseTime(orderDetailModel.getInsDate()) + "\n");
             sb.append("订单完成时间:" + utils.DateUtils.parseTime(orderDetailModel.getUpdDate()) + "\n");
             sb.append("订单状态:" + OrderStatus.getStatus(orderDetailModel.getGroupStatus()));
+            String payMtd = "未知";
+            switch (orderDetailModel.getPaymentMethod()) {
+                case OrderDetailModel.PAYMTD_ONLINE:
+                    payMtd = "在线支付";
+                    break;
+                case OrderDetailModel.PAYMTD_MONEY:
+                    payMtd = "货到付款";
+                    break;
+                case OrderDetailModel.PAYMTD_WECHAT:
+                    payMtd = "微信支付";
+                    break;
+                case OrderDetailModel.PAYMTD_ALI:
+                    payMtd = "支付宝支付";
+                    break;
+                case OrderDetailModel.PAYMTD_UNION:
+                    payMtd = "银联支付";
+                    break;
+                case OrderDetailModel.PAYMTD_ACCOUNT:
+                    payMtd = "余额支付";
+                    break;
+            }
+            sb.append("\n支付方式: " + payMtd);
             holder.itemdata = orderDetailModel;
             holder.tvOrderInfo.setText(sb.toString());
-            holder.tvName.setText(getString(R.string.order_detail_user_info_name, orderDetailModel.getReceiverName()));
-            holder.tvMobile.setText(getString(R.string.order_detail_user_info_mobile, orderDetailModel.getReceiverPhone()));
-            holder.tvAddr.setText(getString(R.string.order_detail_user_addr, orderDetailModel.getReceiverAddress()));
-            holder.tvDistance.setText(getString(R.string.order_detail_group_distance, orderDetailModel.getDistance()));
+            holder.tvName.setText(getString(R.string.order_detail_user_info_name, CommonUtil.noNullString(orderDetailModel.getReceiverName())));
+            holder.tvMobile.setText(getString(R.string.order_detail_user_info_mobile, CommonUtil.noNullString(orderDetailModel.getReceiverPhone())));
+            holder.tvAddr.setText(getString(R.string.order_detail_user_addr, CommonUtil.noNullString(orderDetailModel.getReceiverAddress())));
+            holder.tvDistance.setText(getString(R.string.order_detail_group_distance, CommonUtil.noNullString(orderDetailModel.getDistance())));
         }
 
         @Override
@@ -713,6 +787,9 @@ public class OrderDetailFragment extends Fragment {
             holder.tvNum.setText("x" + item.getExchangeQuanlity());
 //            item_order_goods_price
             StringBuilder sbInfo = new StringBuilder();
+            if (!StringUtils.isEmpty(item.getCommodityParameter())) {
+                sbInfo.append("(" + item.getCommodityParameter() + ")");
+            }
             sbInfo.append(StringUtils.deletaFirst(item.getTitle())).append("\n");
             String size = "";
             if ("0".equals(orderDetailModel.getFlag())) {

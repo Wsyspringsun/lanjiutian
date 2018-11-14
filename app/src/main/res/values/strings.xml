@@ -1,6 +1,5 @@
 <resources>
     <!--注册页面-->
-    <string name="reg_title">用户注册</string>
     <string name="reg_to_login">直接登录</string>
     <string name="reg_to_find_pwd">找回密码</string>
     <string name="reg_warning_phone_exist">手机号%s已注册过会员</string>
@@ -19,30 +18,11 @@
     <!-- 首页 -->
     <string name="saoma">扫一扫</string>
     <string name="sousuo">请输入关键词.</string>
-    <string name="home_button1">医药</string>
-    <string name="home_button2">特产</string>
-    <string name="home_button3">服饰</string>
-    <string name="home_button4">美妆</string>
-    <string name="home_button5">配饰</string>
-    <string name="home_button6">家居</string>
-    <string name="home_button7">母婴</string>
-    <string name="home_button8">家电</string>
-    <string name="hot">热卖好货</string>
-    <string name="home_activity">活动专区</string>
-    <string name="hot_list_title1">上衣</string>
-    <string name="hot_list_title2">裤子</string>
-    <string name="hot_list_title3">裙子</string>
-    <string name="hot_list_title4">男士毛衣</string>
-    <string name="hot_list_title5">针织装</string>
-    <string name="hot_list_title6">运动鞋</string>
-    <string name="hot_list_title7">白毛衣</string>
-    <string name="hot_list_title8">中跟</string>
 
 
     <!-- 分类 -->
     <string name="xiaoliang">销量</string>
     <string name="jiage">价格</string>
-    <string name="pingjia">评价</string>
     <string name="juli">距离</string>
     <string name="zonghe">综合</string>
     <string name="zuijinsousuo">最近搜索</string>
@@ -51,7 +31,6 @@
     <string name="kefu">客服</string>
     <string name="pay_result_tip">这个界面用于显示第三方app通过微信支付的结果</string>
     <!-- 医药馆 -->
-    <string name="dingwei_error">定位失败</string>
     <string name="find_button1">轻松找药</string>
     <string name="find_button2">男性</string>
     <string name="find_button3">女性</string>
@@ -60,9 +39,7 @@
     <string name="find_button6">医用器械</string>
     <string name="find_button7">成人用品</string>
     <string name="find_button8">用药咨询</string>
-    <string name="yiqiqiang">一起抢</string>
     <string name="gonggao_find">医药馆公告</string>
-    <string name="changjia">厂家:</string>
 
 
     <!-- 购物车 -->
@@ -70,9 +47,7 @@
     <string name="goumai">立即购买</string>
     <string name="xuqiu">提交需求</string>
     <string name="heji1">合计</string>
-    <string name="xiaoji">小计：</string>
     <string name="meiqian">￥100</string>
-    <string name="pay_choice0">支付方式</string>
     <string name="pay_choice1">在线支付</string>
     <string name="pay_choice2">货到付款</string>
     <string name="pay_choice3">账户余额支付</string>
@@ -82,23 +57,14 @@
     <string name="login_style_wechat">微信登录</string>
     <string name="login_style_username">帐号登录</string>
     <string name="login_style_validcode">验证码登录</string>
-    <string name="fapiao">发票信息</string>
     <string name="fapiao_xuanze">发票选择</string>
     <string name="fapiao_leixing">发票类型</string>
     <string name="fapiao_yes">发票明细</string>
-    <string name="fapiao_mx">明细</string>
-    <string name="fapiao_bg">办公用品</string>
-    <string name="fapiao_yy">药品</string>
-    <string name="fapiao_hc">耗材</string>
-    <string name="fapiao_jj">家居用品</string>
     <string name="fapiao_no">不开发票</string>
     <string name="fapiao_z">纸质发票</string>
     <string name="fapiao_d">电子发票</string>
     <string name="fapiao_gr">个人</string>
     <string name="fapiao_gs">公司</string>
-    <string name="jifendikou">积分抵扣</string>
-    <string name="shiqu">市区</string>
-    <string name="xiancheng">县城</string>
 
 
     <!-- 我的 -->
@@ -111,31 +77,30 @@
     <string name="user_jifen">我的积分</string>
     <string name="user_bangzhu">帮助中心</string>
     <string name="user_zhanghu">账户管理</string>
+    <string name="user_waitter">我的客服</string>
     <string name="user_dingdan">我的订单</string>
     <string name="daifu">待付款</string>
     <string name="daifa">待发货</string>
     <string name="daishou">待收货</string>
     <string name="daiping">待评价</string>
-    <string name="shohou">退款/售后</string>
-    <string name="tuijian_cai">猜你喜欢</string>
     <string name="zhucetiaoli">同意《蓝九天用户注册条例》</string>
     <string name="zhuce">手机快速注册</string>
     <string name="wangjimima">忘记密码</string>
     <string name="order_queren">确认订单</string>
     <string name="order_tijiao">提交订单</string>
-    <string name="order_chakan">查看订单</string>
     <string name="order_xiangqing">订单详情</string>
     <string name="order_style6">已完成</string>
     <string name="order_style7">交易关闭</string>
-    <string name="order_zongjia">商品总价</string>
+    <string name="order_zongjia">订单总价</string>
     <string name="order_yunfei">运费（快递）</string>
     <string name="order_quxiao">取消订单</string>
     <string name="order_shanchu">删除订单</string>
-    <string name="order_dingdan">订单总价</string>
+    <string name="order_dingdan">实付金额</string>
     <string name="order_pingjia">评价</string>
     <string name="order_lianxi1">联系卖家</string>
     <string name="order_lianxi2">拨打电话</string>
     <string name="order_dikou">积分抵扣</string>
+    <string name="order_discount_youhuiquan">优惠券抵扣</string>
     <string name="order_pf1">宝贝与描述相符</string>
     <string name="order_pf2">物流服务的质量</string>
     <string name="order_pf3">卖家的服务态度</string>
@@ -143,9 +108,6 @@
     <string name="order_pf5">物流的发货速度</string>
     <string name="fukuan">立即支付</string>
     <string name="querenshou">确认收货</string>
-    <string name="address_name">张三</string>
-    <string name="address_phone">18512395532</string>
-    <string name="address_ads">山西省晋城市城区钟家庄办事处文昌东街330号蓝九天电子商务2楼</string>
     <string name="address_moren">设为默认</string>
     <string name="address_add">新增地址</string>
     <string name="address_guanli">管理收货地址</string>
@@ -156,6 +118,11 @@
     <string name="shouhuo_xuanze">选择地区</string>
     <string name="shouhuo_shanchu">删除地址</string>
     <string name="touxiang">用户头像</string>
+    <string name="userinfo_tip">尊敬的用户，完善资料后可获得大量优惠券奖励！</string>
+    <string name="userinfo_title">个人信息</string>
+    <string name="userinfoextra_title">完善信息</string>
+    <string name="userinfo_yibaoka">医保卡</string>
+    <string name="userinfo_changyongyao">常购药品种类（可多选）</string>
     <string name="shiming">尊敬的用户，进行实名认证有助于提升账号安全，让我们更好的为您服务。</string>
     <string name="shiming_name">真实姓名</string>
     <string name="shiming_card">身份证号</string>
@@ -169,9 +136,6 @@
     <string name="shouhou_yuanyin">退货原因</string>
     <string name="shouhou_jine">退款金额</string>
     <string name="shouhou_shuoming">退货说明（可同时上传3张凭证）</string>
-    <string name="peisong">配送方式</string>
-    <string name="peisong1">送货上门</string>
-    <string name="peisong2">门店自取</string>
     <string name="message1">消息中心</string>
     <string name="message_type1">蓝九天客服</string>
     <string name="bangzhu_wenti">常见问题</string>
@@ -181,10 +145,11 @@
 
 
     <!-- 通用 -->
+    <string name="title_search">搜索</string>
+    <string name="title_location">定位</string>
     <string name="gengduo">更多></string>
     <string name="bianji">编辑</string>
     <string name="shanchu">删除</string>
-    <string name="hengxian">----</string>
     <string name="msg_opreation_timeout">与服务器连接超时，请稍后重试</string>
     <string name="network_not_available">无法连接到网络，请检查网络配置</string>
     <string name="auth_expire">您的用户授权已过期，请重新登录</string>
@@ -198,9 +163,7 @@
     <string name="yanzhengma_huoqu_timer">%d秒</string>
     <string name="yanzhengma2">请输入验证码</string>
     <string name="yanzhengma3">重新获取</string>
-    <string name="yanzhengma4">验证码已发送至</string>
     <string name="shezhimima">设置密码</string>
-    <string name="shezhimima1"></string>
     <string name="zhanghao">账号</string>
     <string name="mima">密码</string>
     <string name="mima1">请输入密码</string>
@@ -208,7 +171,6 @@
     <string name="login_bindphone_title">账户安全验证</string>
     <string name="login_bindphone">验证</string>
     <string name="no_login">去登录</string>
-    <string name="sousuo1">搜索</string>
     <string name="all">全部</string>
     <string name="qingxuanze">请选择商品规格</string>
     <string name="sex">性别</string>
@@ -219,8 +181,8 @@
     <string name="alert_xiugai">修改了信息还未保存，确定现在返回吗？</string>
     <string name="alert_dizhi">您必须拥有一个地址信息，请添加并保存</string>
     <string name="tijiao">提交</string>
-    <string name="number">数量</string>
     <string name="shouhou">售后</string>
+    <string name="mywaiter">我的客服</string>
     <string name="app_update">关于</string>
     <string name="pay_success">支付成功！</string>
     <string name="pay_fail">支付失败！</string>
@@ -236,25 +198,21 @@
     <string name="add_succeed">新增成功</string>
     <string name="error_app">APP出现未知错误，需重启！</string>
     <string name="double_tap_to_exit">再按一次退出程序</string>
-    <string name="exit_account">退出当前用户</string>
-    <string name="order_info">市区两小时内送达，县城两日内到货。详情请见帮助中心的区域划分。</string>
-    <!--<string name="order_point_info">。邮费：市区3元,县区5元；医药馆不包邮;生活馆市区满38元包邮，县区满58元包邮。\n消费1元送1积分，300积分抵1元，消费可用600积分。</string>-->
-    <string name="order_point_info">医药馆药品统一包邮。生活馆商品市区满38元包邮，38元以下邮费3元。县区满58元包邮，58元以下邮费5元。</string>
+    <string name="exit_account">退出当前用户？</string>
 
 
     <!--消费1元送1积分，300积分抵1元现金，消费可用600积分。-->
     <!-- 物流 -->
-    <string name="logistic_null">没有获取物流信息</string>
     <string name="title_activity_web_show">WebShowActivity</string>
     <string name="user_yue">我的余额</string>
     <string name="user_youhuiquan">我的优惠券</string>
+    <string name="user_jiang">我的奖品</string>
     <string name="title_activity_balance">BalanceActivity</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="balance_in">充值记录</string>
     <string name="balance_out">消费记录</string>
     <string name="title_activity_point">PointRecordActivity</string>
-    <string name="order_info_tousu">投诉建议</string>
     <string name="title_activity_cart">CartActivity</string>
     <string name="title_activity_test">Activity</string>
     <string name="gongxi">恭喜您</string>
@@ -263,7 +221,6 @@
     <string name="tickets_diyouquan">抵邮券</string>
     <string name="complete">完成</string>
     <string name="holder">未知</string>
-    <string name="datespan">有效期限</string>
     <string name="use_dianzibi">电子币</string>
     <string name="use_youfeiquan">抵邮券</string>
     <string name="use_youhuiquan">优惠券</string>
@@ -274,32 +231,31 @@
     <string name="order_dianzibi">电子币抵扣</string>
     <string name="postage_flg_display">(使用了抵邮券)</string>
     <string name="agree_license">请您同意协议</string>
-    <string name="use_dianzibi_refuse">拒绝使用电子币</string>
-    <string name="use_youfeiquan_refuse">拒绝使用邮费抵用券</string>
     <string name="shop">店铺</string>
-    <string name="shop_nearest">新品上架</string>
     <string name="confirm_order_submit">是否确认下单</string>
     <string name="shengshi_error">请选择所在区域</string>
     <string name="stat_unkwon">未知状态</string>
-    <string name="use">使用</string>
-    <string name="consult_tel">电话联系</string>
-    <string name="consult_kefu">在线客服</string>
-    <string name="tuijianrenTip">推荐人手机号(可选)</string>
+    <string name="tuijianrenTip">推荐工号(可选)</string>
     <string name="send_webpage">分享到微信</string>
     <string name="huodong_xianshiqiang">限时秒杀</string>
-    <string name="qianggou">去抢购</string>
+    <string name="huodong_xianshiqiang_qiang">疯抢中</string>
+    <string name="huodong_xianshiqiang_qiangwan">抢完了</string>
     <string name="title_activity_xianshiqiang">限时抢购</string>
-    <string name="holder_price">￥:XXX.XX</string>
+    <string name="huodong_list">福利中心</string>
     <string name="huodong_choujiang">积分抽奖</string>
     <string name="huodong_maisong">买就送</string>
     <string name="huodong_tejia">天天特价</string>
+    <string name="huodong_kanjia">砍价专区</string>
+    <string name="huodong_dianzibi">电子币专区</string>
+    <string name="huodong_lingyuangou">0元购</string>
+    <string name="huodong_jifenduihuan">积分兑换</string>
+    <string name="huodong_tejia_biaozhi">特  价</string>
     <string name="myqrcode">我的二维码</string>
     <string name="postage_msg">提示：本平台暂时只对市区开放，县区请咨询客服。</string>
-    <string name="customer_note">买家留言</string>
-    <string name="lingjiang_msg">请在有效期内尽快领取!\r\n\r\n领取时间:</string>
+    <string name="lingjiang_msg">有效期内领取!\r\n领取时间:</string>
     <string name="jiang_jilu">获奖记录</string>
     <string name="shop_addr">商铺地址：</string>
-    <string name="order_userremark">用户留言</string>
+    <string name="order_userremark">备注</string>
     <string name="wallet_daijinquan">代金券</string>
     <string name="shoucang">收藏</string>
     <string name="goumai_medicine">提交需求</string>
@@ -319,14 +275,12 @@
     <string name="pay_result_callback_msg" formatted="false">微信支付结果：%s</string>
 
 
-    <string name="launch_wx">启动微信</string>
     <string name="order_stat_return">退换货</string>
     <string name="order_stat_applyreturned">申请退换货</string>
     <string name="order_stat_agreereturned">同意退换货</string>
     <string name="order_stat_refusereturned">拒绝退换货</string>
     <string name="order_stat_returned">已退货</string>
     <string name="order_stat_refunded">已退款</string>
-    <string name="xiaoneng_ljt_kefu">蓝九天客服</string>
     <string name="xiaoneng_ljt_yaoshi">蓝九天药师</string>
     <string name="tousu">投诉</string>
     <string name="title_return">退换货</string>
@@ -339,16 +293,19 @@
     <string name="title_size_val">规格：%s</string>
     <string name="real_name_protocal">实名认证后，您的账户将能得到更完整的保护，支付更安全</string>
     <string name="medicine_info_busvalid_no">该店休息中,暂时无法为您服务</string>
-    <string name="addr_tip_search_loc">小区，写字楼，学校等</string>
-    <string name="perm_location">为获取您的当前位置,需要开启您的定位权限</string>
+    <string name="addr_tip_search_loc">输入关键字(小区名，学校名等)</string>
     <string name="perm_loc">为获取您的当前位置,需要开启您的定位权限</string>
     <string name="login_styles">或试试以下方式</string>
     <string name="msg_crash">抱歉，系统竟然出错了,请联系客服</string>
-    <string name="warning_chufang" >该药为处方药，依据国家法规，处方药需凭处方单进药店购买</string>
+    <string name="warning_chufang">该药为处方药，依据国家法规，处方药需凭处方单进药店购买</string>
 
     <!--订单 ??-->
     <string name="order_title_sharewx">温馨提示</string>
     <string name="order_content_sharewx">分享到微信可以立减1至3元</string>
     <string name="order_btn_sharewx_yes">分享</string>
     <string name="order_btn_sharewx_no">不用了</string>
+    <string name="chkall">-  全选</string>
+    <!--积分兑换-->
+    <string name="title_pointshop">积分兑换</string>
+    <string name="pointshop_desc">积分兑换现金券、电子币、实体奖品等</string>
 </resources>

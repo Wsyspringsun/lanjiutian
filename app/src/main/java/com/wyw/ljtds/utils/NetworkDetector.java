@@ -51,11 +51,8 @@ public class NetworkDetector {
 
         NetworkInfo networkInfo = manager
                 .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if (networkInfo == null || !networkInfo.isAvailable()) {
-            return false;
-        }
+        return !(networkInfo == null || !networkInfo.isAvailable());
 
-        return true;
     }
 
     /**
@@ -73,11 +70,8 @@ public class NetworkDetector {
 
         NetworkInfo networkInfo = manager
                 .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        if (networkInfo == null || !networkInfo.isAvailable()) {
-            return false;
-        }
+        return !(networkInfo == null || !networkInfo.isAvailable());
 
-        return true;
     }
 
     /**

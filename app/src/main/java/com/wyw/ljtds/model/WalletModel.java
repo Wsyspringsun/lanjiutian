@@ -17,8 +17,36 @@ public class WalletModel extends BaseModel {
     private BigDecimal FROZE_POINT;
     private BigDecimal CONVERTED_POINT;
 
-    private String cardbalance;
-    private String usablePoint;
+    private String cardbalance;//余额
+    private String usablePoint;//积分
+    private String postnum;  //免邮券张数
+    private String preferentialnum; //优惠券张数
+    private String sumCouponNum;//总优惠券张数
+
+    public String getSumCouponNum() {
+        return sumCouponNum;
+    }
+
+    public void setSumCouponNum(String sumCouponNum) {
+        this.sumCouponNum = sumCouponNum;
+    }
+
+    public String getPreferentialnum() {
+        return preferentialnum;
+    }
+
+    public void setPreferentialnum(String preferentialnum) {
+        this.preferentialnum = preferentialnum;
+    }
+
+    public String getPostnum() {
+        return postnum;
+    }
+
+    public void setPostnum(String postnum) {
+        this.postnum = postnum;
+    }
+
 
     public BigDecimal getUSABLE_POINT() {
         return USABLE_POINT;

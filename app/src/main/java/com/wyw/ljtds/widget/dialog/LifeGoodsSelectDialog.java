@@ -89,7 +89,6 @@ public class LifeGoodsSelectDialog extends Dialog {
                 }
             }
         });
-        ;
         btnQuxiao = (ImageView) view.findViewById(R.id.dialog_lifegoods_sel_cancel);
         btnQuxiao.setOnClickListener(new View.OnClickListener() {
             @Override

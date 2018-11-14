@@ -86,8 +86,8 @@ public class ShopAllGoodsFragment extends BaseFragment {
     private String orderby;
     private String keyword;
     private String category;
-    public static final String TYPE_SHOP = "0";
-    public static final String TYPE_HOT = "1";
+    public static final String TYPE_SHOP = "0";//本店产品
+    public static final String TYPE_HOT = "2"; //全店推荐
 
     @Event(value = {R.id.paixu1, R.id.paixu2, R.id.paixu3, R.id.paixu4})
     private void onclick(View view) {
@@ -170,6 +170,7 @@ public class ShopAllGoodsFragment extends BaseFragment {
         ((ShopActivity) getActivity()).addSearchCallBack(new MyCallback() {
             @Override
             public void callback(Object... params) {
+                pageIndex = 1;
                 keyword = (String) params[0];
                 loadData();
             }
@@ -177,6 +178,7 @@ public class ShopAllGoodsFragment extends BaseFragment {
             @Override
             public void callback(Object... params) {
                 MedicineTypeFirstModel mfm = (MedicineTypeFirstModel) params[0];
+                pageIndex = 1;
                 category = mfm.getCLASSCODE();
                 loadData();
             }
@@ -232,7 +234,10 @@ public class ShopAllGoodsFragment extends BaseFragment {
     }
 
     private void bindData2View() {
-        if (medicineList == null) return;
+        if (medicineList == null || medicineList.size() <= 0) {
+            end = true;
+            return;
+        }
         if (pageIndex == 1) {
             adapter.setNewData(medicineList);
         } else {
@@ -249,7 +254,6 @@ public class ShopAllGoodsFragment extends BaseFragment {
                 closeLoding();
 //                String shopId = "001";
                 String shopId = getArguments().getString(ARG_SHOPID);
-                Log.e(AppConfig.ERR_TAG, "ShopGoodsFragment shopId....." + shopId);
                 Map<String, String> data = new HashMap<>();
                 data.put("lat", SingleCurrentUser.location.getLatitude() + "");
                 data.put("lng", SingleCurrentUser.location.getLongitude() + "");
@@ -279,9 +283,6 @@ public class ShopAllGoodsFragment extends BaseFragment {
             protected void onExecuteSucceeded(List<MedicineListModel> medicineListModels) {
                 closeLoding();
                 medicineList = medicineListModels;
-                if (medicineList == null || medicineList.size() <= 0) {
-                    end = true;
-                }
                 bindData2View();
             }
 

@@ -9,6 +9,7 @@ import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.CommodityListModel;
+import com.wyw.ljtds.model.GoodsModel;
 import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.Utils;
 
@@ -33,7 +34,15 @@ public class CommodityAdapter extends BaseQuickAdapter<CommodityListModel> {
         ImageView goods_img = baseViewHolder.getView(R.id.item_goods_grid_sdv);
         if (StringUtils.isEmpty(commodityListModel.getImgPath())) {
         } else {
-            Picasso.with(mContext).load(Uri.parse(AppConfig.IMAGE_PATH_LJT + commodityListModel.getImgPath())).resize(RESIZE, RESIZE).into(goods_img);
+            Picasso.with(mContext).load(Uri.parse(AppConfig.IMAGE_PATH_LJT + commodityListModel.getImgPath())).resize(RESIZE, RESIZE).placeholder(R.mipmap.zhanweitu).into(goods_img);
+        }
+
+        baseViewHolder.setVisible(R.id.item_goods_huodong_te, false);
+        baseViewHolder.setVisible(R.id.item_goods_huodong_zeng, false);
+        if (GoodsModel.HUODONG_TEJIA.equals(commodityListModel.getTopFlg())) {
+            baseViewHolder.setVisible(R.id.item_goods_huodong_te, true);
+        } else if (GoodsModel.HUODONG_MANZENG.equals(commodityListModel.getTopFlg())) {
+            baseViewHolder.setVisible(R.id.item_goods_huodong_zeng, true);
         }
     }
 }

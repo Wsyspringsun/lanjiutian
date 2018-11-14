@@ -10,6 +10,8 @@ public class OrderDetail {
 
     private String commodityColor;
 
+    private String commodityParameter;//赠品信息
+
     private String barCode; //条形码
 
     private String exchangeQuanlity; //交易 数量
@@ -94,5 +96,13 @@ public class OrderDetail {
 
     public void setBarCode(String barCode) {
         this.barCode = barCode;
+    }
+
+    public String getCommodityParameter() {
+        return commodityParameter;
+    }
+
+    public void setCommodityParameter(String commodityParameter) {
+        this.commodityParameter = commodityParameter;
     }
 }

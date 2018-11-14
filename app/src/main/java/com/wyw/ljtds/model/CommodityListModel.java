@@ -10,6 +10,8 @@ import java.math.BigDecimal;
  */
 
 public class CommodityListModel extends BaseModel {
+    //零元购时的原价
+    private String marketPrice;
     //商品id
     private String commodityId;
     //商品类型id
@@ -18,6 +20,8 @@ public class CommodityListModel extends BaseModel {
     private String title;
     //价格
     private BigDecimal costMoney;
+    //积分
+    private String costPoint;
     //图片
     private String imgPath;
     //点击数量
@@ -26,6 +30,8 @@ public class CommodityListModel extends BaseModel {
     private String oidGroupId;
     //店铺名
     private String groupName;
+    //营销标志(0新品，1置顶，2推荐，3活动，4品牌，5折扣，6医药，7热卖)
+    private String topFlg;
 
     public String getOidGroupId() {
         return oidGroupId;
@@ -89,5 +95,29 @@ public class CommodityListModel extends BaseModel {
 
     public void setClickNum(int clickNum) {
         this.clickNum = clickNum;
+    }
+
+    public String getTopFlg() {
+        return topFlg;
+    }
+
+    public void setTopFlg(String topFlg) {
+        this.topFlg = topFlg;
+    }
+
+    public String getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(String marketPrice) {
+        this.marketPrice = marketPrice;
+    }
+
+    public String getCostPoint() {
+        return costPoint;
+    }
+
+    public void setCostPoint(String costPoint) {
+        this.costPoint = costPoint;
     }
 }

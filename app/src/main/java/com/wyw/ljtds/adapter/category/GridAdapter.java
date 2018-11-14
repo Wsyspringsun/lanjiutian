@@ -68,7 +68,7 @@ public class GridAdapter extends BaseAdapter {
         viewHolder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = ActivityGoodsList.getIntent(mContext, mChildrenBeanXes.get(position).getCommodityTypeId());
+                Intent it = ActivityGoodsList.getIntent(mContext, mChildrenBeanXes.get(position).getCommodityTypeId(),"");
                 mContext.startActivity(it);
             }
         });

@@ -2,19 +2,14 @@ package com.wyw.ljtds.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wyw.ljtds.R;
-import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.ui.base.BaseActivityFragment;
-import com.wyw.ljtds.ui.user.ActivityMessage;
-import com.wyw.ljtds.ui.user.wallet.DianZiBiListFragment;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -25,6 +20,16 @@ import org.xutils.view.annotation.ViewInject;
  */
 @ContentView(R.layout.activity_fragment)
 public class HuoDongActivity extends BaseActivityFragment {
+    public static final String FLG_HUODONG_LIST = "0";
+    public static final String FLG_HUODONG_CHOJIANG = "1";
+    public static final String FLG_HUODONG_MANZENG = "2";
+    public static final String FLG_HUODONG_TEJIA = "3";
+    public static final String FLG_HUODONG_MIAOSHA = "4";
+    public static final String FLG_HUODONG_KANJIA = "5";
+    public static final String FLG_HUODONG_DIANZIBI = "6";
+    public static final String FLG_HUODONG_LINGYUANGOU = "7";
+    public static final String FLG_HUODONG_JIFENDUIHUAN = "8";
+
     private static final String TAG_HUODONG_FLG = "com.wyw.ljtds.ui.home.HuoDongActivity";
     @ViewInject(R.id.activity_fragment_title)
     private TextView tvTitle;
@@ -58,17 +63,34 @@ public class HuoDongActivity extends BaseActivityFragment {
         String flg = getIntent().getStringExtra(TAG_HUODONG_FLG);
 
         switch (flg) {
-            case "1":
+            case FLG_HUODONG_LIST:
+                tvTitle.setText(getString(R.string.huodong_list));
+                break;
+            case FLG_HUODONG_CHOJIANG:
                 tvTitle.setText(getString(R.string.huodong_choujiang));
                 break;
-            case "2":
+            case FLG_HUODONG_MANZENG:
                 tvTitle.setText(getString(R.string.huodong_maisong));
                 break;
-            case "3":
+            case FLG_HUODONG_TEJIA:
                 tvTitle.setText(getString(R.string.huodong_tejia));
                 break;
-            default:
+            case FLG_HUODONG_MIAOSHA:
                 tvTitle.setText(getString(R.string.huodong_xianshiqiang));
+                break;
+            case FLG_HUODONG_KANJIA:
+                tvTitle.setText(getString(R.string.huodong_kanjia));
+                break;
+            case FLG_HUODONG_DIANZIBI:
+                tvTitle.setText(getString(R.string.huodong_dianzibi));
+                break;
+            case FLG_HUODONG_LINGYUANGOU:
+                tvTitle.setText(getString(R.string.huodong_lingyuangou));
+                break;
+            case FLG_HUODONG_JIFENDUIHUAN:
+                tvTitle.setText(getString(R.string.huodong_jifenduihuan));
+                break;
+            default:
                 break;
         }
     }
@@ -78,4 +100,5 @@ public class HuoDongActivity extends BaseActivityFragment {
         it.putExtra(TAG_HUODONG_FLG, flg);
         return it;
     }
+
 }

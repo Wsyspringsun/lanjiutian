@@ -1,5 +1,6 @@
 package com.wyw.ljtds.ui.user.wallet;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -22,30 +21,30 @@ import com.wyw.ljtds.biz.exception.ZYException;
 import com.wyw.ljtds.biz.task.BizDataAsyncTask;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.model.DianZiBiLog;
-import com.wyw.ljtds.model.PointRecord;
 import com.wyw.ljtds.model.Ticket;
 import com.wyw.ljtds.ui.base.BaseFragment;
-import com.wyw.ljtds.utils.DateUtils;
 import com.wyw.ljtds.utils.GsonUtils;
-import com.wyw.ljtds.utils.Utils;
+import com.wyw.ljtds.utils.StringUtils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.List;
 
+import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder;
+
 /**
  * Created by wsy on 17-7-28.
  */
 
-@ContentView(R.layout.fragment_order_list2)
+@ContentView(R.layout.fragment_list_dianzibi)
 public class DianZiBiListFragment extends BaseFragment {
-    @ViewInject(R.id.reclcyer)
+    @ViewInject(R.id.fragment_list_dianzibi_ryv_data)
     private RecyclerView recyclerView;
-    @ViewInject(R.id.header_con)
-    private RelativeLayout llCon;
     @ViewInject(R.id.dianzibi_tv_total)
     private TextView dianzibiTvTotal;
+    @ViewInject(R.id.dianzibi_iv_barcode)
+    private ImageView dianzibiIvBarcode;
 
     private boolean end = false;
 
@@ -86,9 +85,16 @@ public class DianZiBiListFragment extends BaseFragment {
             @Override
             protected void onExecuteSucceeded(List<Ticket> dianZiBiLogs) {
                 closeLoding();
-                Log.e(AppConfig.ERR_TAG, GsonUtils.Bean2Json(dianZiBiLogs));
                 if (dianZiBiLogs != null && dianZiBiLogs.size() > 0) {
-                    dianzibiTvTotal.setText("  ￥" + dianZiBiLogs.get(0).getUSED_AMOUNT());
+                    dianzibiTvTotal.setText("￥" + dianZiBiLogs.get(0).getUSED_AMOUNT());
+
+                    Log.e(AppConfig.ERR_TAG, "getRED_PACKET_ID:" + dianZiBiLogs.get(0).getRED_PACKET_ID());
+                    String barcode = dianZiBiLogs.get(0).getRED_PACKET_LOG_ID();
+                    if (!StringUtils.isEmpty(barcode)) {
+                        barcode = barcode.trim();
+                        Bitmap bitmap = QRCodeEncoder.syncEncodeBarcode(barcode, 300, 60, 0);
+                        dianzibiIvBarcode.setImageBitmap(bitmap);
+                    }
                 }
             }
 
@@ -104,13 +110,7 @@ public class DianZiBiListFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-//        ImageView imgDianZiBi = new ImageView(getContext());
-//        imgDianZiBi.setImageResource(R.mipmap.img_dianzibi_head);
-//        llCon.addView(imgDianZiBi);
-//        ViewGroup.LayoutParams lp = llCon.getLayoutParams();
-//        lp.height = R.dimen.x40;
-//        android:background="@drawable/bg_dianzibi_head"
-//        llCon.setLayoutParams(lp);
+//
         initRecyclerView();
         return view;
     }
@@ -152,6 +152,7 @@ public class DianZiBiListFragment extends BaseFragment {
     }
 
     private void updAdapter() {
+        if (!isAdded()) return;
         if (adapter1 == null) {
             adapter1 = new MyAdapter1();
             View noData = getActivity().getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
