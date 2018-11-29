@@ -6,13 +6,13 @@ package com.wyw.ljtds.model;
 
 public class GoodsModel {
     //积分商城活动
-    public static final String HUODONG_JIFEN="10" ;
+    public static final String HUODONG_JIFEN = "10";
     //特价
-    public static final String HUODONG_TEJIA="9" ;
+    public static final String HUODONG_TEJIA = "9";
     //秒杀
     public static final String HUODONG_MIAOSHA = "8";
     //满曾
-    public static final String[] HUODONG_MANZENG = {"11","12","13","14","15","16","17","18"};
+    public static final String[] HUODONG_MANZENG = {"11", "12", "13", "14", "15", "16", "17", "18"};
 
     //零元购
     public static final String TOP_FLG_LINGYUAN = "20";

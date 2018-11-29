@@ -38,12 +38,14 @@ import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.DividerGridItemDecoration;
 import com.wyw.ljtds.widget.RecycleViewDivider;
+import com.wyw.ljtds.widget.RecylerViewPagenator;
 import com.wyw.ljtds.widget.SpaceItemDecoration;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.wyw.ljtds.adapter.goodsinfo.MedicineItemAdapter1.RESIZE;
@@ -60,6 +62,7 @@ public class ActivityGoodsList extends BaseActivity {
     SwipeRefreshLayout srl;
     @ViewInject(R.id.recyclerView)
     private RecyclerView recyclerView;
+    RecylerViewPagenator pageNater;
     @ViewInject(R.id.back)
     private ImageView back;
     @ViewInject(R.id.zxing)
@@ -89,7 +92,6 @@ public class ActivityGoodsList extends BaseActivity {
     private boolean isRise = true;
     private List<CommodityListModel> list;
     private MyAdapter adapter;
-    private int pageIndex = 1;
     private boolean end = false;
     private String keyword = "";//搜索的关键字
     private String classId = "";//分类的typeid
@@ -118,17 +120,18 @@ public class ActivityGoodsList extends BaseActivity {
                 reset();
                 paixu1_tv.setTextColor(getResources().getColor(R.color.base_bar));
                 paixu1_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_1));
-                pageIndex = 1;
-                getlist(classId, true, true, "", keyword);
+
                 orderby = "";
+                getlist();
                 break;
 
             case R.id.paixu2:
                 reset();
+
                 paixu2_tv.setTextColor(getResources().getColor(R.color.base_bar));
-                pageIndex = 1;
-                getlist(classId, true, true, "SALE_NUM", keyword);
+
                 orderby = "SALE_NUM";
+                getlist();
                 break;
 
             case R.id.paixu3:
@@ -137,26 +140,23 @@ public class ActivityGoodsList extends BaseActivity {
                     paixu3_tv.setTextColor(getResources().getColor(R.color.base_bar));
                     paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_4));
                     isRise = false;
-                    pageIndex = 1;
-                    getlist(classId, true, true, "COST_MONEY", keyword);
                     orderby = "COST_MONEY";
+                    getlist();
                 } else {
                     reset();
                     paixu3_tv.setTextColor(getResources().getColor(R.color.base_bar));
                     paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_5));
                     isRise = true;
-                    pageIndex = 1;
-                    getlist(classId, true, true, "COST_MONEY desc", keyword);
                     orderby = "COST_MONEY desc";
+                    getlist();
                 }
                 break;
 
             case R.id.paixu4:
                 reset();
                 paixu4_tv.setTextColor(getResources().getColor(R.color.base_bar));
-                pageIndex = 1;
-                getlist(classId, true, true, "EVALUATE", keyword);
                 orderby = "EVALUATE";
+                getlist();
                 break;
         }
     }
@@ -168,7 +168,8 @@ public class ActivityGoodsList extends BaseActivity {
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getlist(classId, true, true, "", keyword);
+                reset();
+                getlist();
                 srl.setRefreshing(false);
             }
         });
@@ -177,11 +178,7 @@ public class ActivityGoodsList extends BaseActivity {
             search.setText(keyword);
         }
 
-        classId = getIntent().getStringExtra("typeid");
-        if (StringUtils.isEmpty(classId)) {
-            classId = getIntent().getStringExtra(TAG_TYPE_ID);
-        }
-        getlist(classId, true, true, "", keyword);
+        classId = getIntent().getStringExtra(TAG_TYPE_ID);
 
 
 //        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//必须有
@@ -190,15 +187,16 @@ public class ActivityGoodsList extends BaseActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         noData = getLayoutInflater().inflate(R.layout.main_empty_view, (ViewGroup) recyclerView.getParent(), false);
         recyclerView.addItemDecoration(new SpaceItemDecoration(10));
+        //分页
+        pageNater = new RecylerViewPagenator(recyclerView, new RecylerViewPagenator.NextPageListner() {
+            @Override
+            public void nextPage() {
+                getlist();
+            }
+        });
 
 
         adapter = new MyAdapter();
-        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                getlist(classId, true, false, orderby, keyword);
-            }
-        });
         recyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
@@ -214,67 +212,53 @@ public class ActivityGoodsList extends BaseActivity {
         llMessage.setVisibility(View.GONE);
         back.setVisibility(View.VISIBLE);
         setLocation();
+
+        getlist();
     }
 
-    BizDataAsyncTask<List<CommodityListModel>> getListTask;
-
-    private void getlist(final String classid, final boolean loadmore, final boolean refresh, final String orderby, final String keyword) {
+    private void getlist() {
         setLoding(this, false);
-        getListTask = new BizDataAsyncTask<List<CommodityListModel>>() {
+        pageNater.setLoading(loading);
+        new BizDataAsyncTask<List<CommodityListModel>>() {
             @Override
             protected List<CommodityListModel> doExecute() throws ZYException, BizFailure {
-                Log.e(AppConfig.ERR_TAG, "params:" + classid + "; " + keyword + "; " + orderby + "; " + loadmore + "; " + refresh);
-                if (refresh) {
-                    return CategoryBiz.getCommodityList("", classid, orderby, keyword, "0", AppConfig.DEFAULT_PAGE_COUNT + "");
-                } else {
-                    return CategoryBiz.getCommodityList(GoodsModel.HUODONG_JIFEN, classid, orderby, keyword, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "");
-                }
+                Utils.log("goodslist:" + classId + "-" + keyword + "-" + "" + pageNater.getPage());
+
+//                return CategoryBiz.getCommodityList("", classId, orderby, keyword, "" + pageNater.getPage(), AppConfig.DEFAULT_PAGE_COUNT + "");
+                return CategoryBiz.getCommodityList("", classId, orderby, keyword, "" + (pageNater.getPage() - 1), AppConfig.DEFAULT_PAGE_COUNT + "");
+//                return CategoryBiz.getCommodityList(GoodsModel.HUODONG_JIFEN, classid, orderby, keyword, pageIndex + "", AppConfig.DEFAULT_PAGE_COUNT + "");
             }
 
             @Override
             protected void onExecuteSucceeded(List<CommodityListModel> commodityListModels) {
-                if (commodityListModels.size() < AppConfig.DEFAULT_PAGE_COUNT) {
-                    end = true;
-                    //可以加入emptyview
-                    if (loadmore && commodityListModels.size() == 0) {
-                        adapter.setEmptyView(noData);
-                    }
-                } else {
-                    end = false;
-
-                }
-
-                list = commodityListModels;
-                if (loadmore) {
-                    adapter.addData(list);
-                    adapter.notifyDataSetChanged();
-                }
-                if (refresh) {
-                    adapter.setNewData(list);
-                    adapter.notifyDataSetChanged();
-                }
-
-
-                if (end) {
-                    adapter.addFooterView(getFooterView());
-                    adapter.notifyDataSetChanged();
-                } else {
-                    adapter.removeAllFooterView();
-                    adapter.notifyDataSetChanged();
-                }
-
-
-                pageIndex++;
                 closeLoding();
+                pageNater.setLoading(loading);
+                list = commodityListModels;
+                adapter.removeAllFooterView();
+                if (1 == pageNater.getPage()) {
+                    if (list == null || list.size() <= 0) {
+                        adapter.setEmptyView(noData);
+                        pageNater.setEnd(true);
+                        return;
+                    }
+                    adapter.setNewData(list);
+                } else {
+                    if (list == null || list.size() <= 0) {
+                        pageNater.setEnd(true);
+                        return;
+                    }
+                    adapter.addData(list);
+                    adapter.addFooterView(getFooterView());
+                }
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             protected void OnExecuteFailed() {
-                adapter.setEmptyView(noData);
                 closeLoding();
+                pageNater.setLoading(loading);
             }
-        };
-        getListTask.execute();
+        }.execute();
     }
 
     private View getFooterView() {
@@ -295,11 +279,7 @@ public class ActivityGoodsList extends BaseActivity {
         protected void convert(BaseViewHolder baseViewHolder, CommodityListModel commodityListModel) {
             baseViewHolder.setVisible(R.id.item_goods_grid_money_old, false);
             baseViewHolder.setText(R.id.goods_title, StringUtils.deletaFirst(commodityListModel.getTitle()))
-                    .setText(R.id.money, "￥" + Utils.formatFee(commodityListModel.getCostMoney() + ""));
-            if (GoodsModel.TOP_FLG_LINGYUAN.equals(commodityListModel.getTopFlg())) {
-                baseViewHolder.setText(R.id.item_goods_grid_money_old, "￥" + Utils.formatFee(commodityListModel.getMarketPrice() + ""));
-                baseViewHolder.setVisible(R.id.item_goods_grid_money_old, true);
-            }
+                    .setText(R.id.item_goods_grid_money, "￥" + Utils.formatFee(commodityListModel.getCostMoney() + ""));
 
 //            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_goods_grid_sdv);
             ImageView goods_img = baseViewHolder.getView(R.id.item_goods_grid_sdv);
@@ -311,11 +291,17 @@ public class ActivityGoodsList extends BaseActivity {
             /**
              * 活动小图标
              */
+            if (GoodsModel.TOP_FLG_LINGYUAN.equals(commodityListModel.getTopFlg())) {
+                baseViewHolder.setText(R.id.item_goods_grid_money_old, "￥" + Utils.formatFee(commodityListModel.getMarketPrice() + ""));
+                baseViewHolder.setVisible(R.id.item_goods_grid_money_old, true);
+            }
             baseViewHolder.setVisible(R.id.item_goods_huodong_te, false);
             baseViewHolder.setVisible(R.id.item_goods_huodong_zeng, false);
             if (GoodsModel.HUODONG_TEJIA.equals(commodityListModel.getTopFlg())) {
                 baseViewHolder.setVisible(R.id.item_goods_huodong_te, true);
-            } else if (GoodsModel.HUODONG_MANZENG.equals(commodityListModel.getTopFlg())) {
+                baseViewHolder.setText(R.id.item_goods_grid_money_old, "￥" + Utils.formatFee(commodityListModel.getMarketPrice() + ""));
+                baseViewHolder.setVisible(R.id.item_goods_grid_money_old, true);
+            } else if (Arrays.asList(GoodsModel.HUODONG_MANZENG).contains(commodityListModel.getTopFlg())) {
                 baseViewHolder.setVisible(R.id.item_goods_huodong_zeng, true);
             }
 
@@ -331,6 +317,9 @@ public class ActivityGoodsList extends BaseActivity {
         paixu3_iv.setImageDrawable(getResources().getDrawable(R.mipmap.paixu_3));
         paixu4_tv.setTextColor(getResources().getColor(R.color.font_black2));
         isRise = true;
+        pageNater.setPage(1);
+        pageNater.setEnd(false);
+        pageNater.setLoading(false);
     }
 
     private void setLocation() {

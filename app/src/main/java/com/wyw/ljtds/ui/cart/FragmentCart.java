@@ -621,6 +621,12 @@ public class FragmentCart extends BaseFragment {
                 String name = StringUtils.deletaFirst(goods.getWARENAME()) + "\n\n",
                         price = "￥" + Utils.formatFee(goods.getCOST_MONEY());
 
+                String topFlg = goods.getTOP_FLG();
+                if(GoodsModel.HUODONG_TEJIA.equals(topFlg)){
+                    price = "￥" + Utils.formatFee(goods.getPROMPRICE());
+                    goods.setCOST_MONEY(goods.getPROMPRICE());
+                }
+
                 if (CommodityDetailsModel.CUXIAOFLG_YES.equals(goods.getCUXIAO_FLG())) {
                     price = "￥" + Utils.formatFee(goods.getPROMPRICE());
                     goods.setCOST_MONEY(goods.getPROMPRICE());

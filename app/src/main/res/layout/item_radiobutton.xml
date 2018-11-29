@@ -3,12 +3,14 @@
 <RadioButton xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/x64"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/vertical_margin_mid"
+    android:layout_marginLeft="@dimen/vertical_margin"
     android:layout_marginRight="@dimen/vertical_margin"
     android:background="@drawable/select_btn_order"
     android:button="@null"
     android:gravity="center"
     android:padding="@dimen/x5"
     android:text="Item1"
-    android:textColor="@color/select_btn_order_text"
-    android:textSize="14sp" />
+    android:textColor="@color/font_1"
+    android:textSize="@dimen/font_5" />
 

@@ -143,6 +143,9 @@ public class FragmentGoodsPagerDetails extends BaseFragment {
 
     public void bindData2View(CommodityDetailsModel commodityModel) {
         if (commodityModel == null) return;
+        if (this.fragmentGoodsDetails == null) return;
+        if (this.fragmentGoodsParameter == null) return;
+        if (!isAdded()) return;
         this.fragmentGoodsDetails.bindData2View(commodityModel.getHtmlPath());
         this.fragmentGoodsParameter.bindData2View(commodityModel);
     }

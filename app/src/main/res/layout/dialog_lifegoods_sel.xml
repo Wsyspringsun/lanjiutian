@@ -110,6 +110,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/fapiao"
+                    android:layout_marginLeft="@dimen/vertical_margin_lg"
                     android:layout_marginTop="@dimen/x6"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -142,6 +143,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/fapiao"
+                    android:layout_marginLeft="@dimen/vertical_margin_lg"
                     android:layout_marginTop="@dimen/x6"
                     android:gravity="center"
                     android:layoutMode="clipBounds"

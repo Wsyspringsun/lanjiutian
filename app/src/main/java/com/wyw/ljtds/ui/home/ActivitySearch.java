@@ -4,18 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.wyw.ljtds.MainActivity;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.adapter.AbstractListViewAdapter;
@@ -27,6 +23,7 @@ import com.wyw.ljtds.ui.goods.ActivityGoodsList;
 import com.wyw.ljtds.ui.goods.ActivityMedicineList;
 import com.wyw.ljtds.utils.InputMethodUtils;
 import com.wyw.ljtds.utils.StringUtils;
+import com.wyw.ljtds.widget.ClearEditText;
 import com.wyw.ljtds.widget.MyGridView;
 
 import org.xutils.view.annotation.ContentView;
@@ -49,8 +46,8 @@ public class ActivitySearch extends BaseActivity {
     private MyGridView gridViewNearestKey;
     @ViewInject(R.id.back)
     private ImageView back;
-    @ViewInject(R.id.edHeader)
-    private EditText edHeader;
+    @ViewInject(R.id.main_header_search_edHeader)
+    private ClearEditText edHeader;
 
     @Event(value = {R.id.back, R.id.search_img, R.id.search_tv})
     private void onclick(View view) {
@@ -75,13 +72,13 @@ public class ActivitySearch extends BaseActivity {
 
     private void goSearchRlt() {
         String keyword = edHeader.getText().toString().trim();
-        KeywordsStore.add(keyword);
+        if (!StringUtils.isEmpty(keyword)) {
+            KeywordsStore.add(keyword);
+        }
         Intent it = null;
         if (getIntent().getIntExtra("from", 0) == 1) {
             //搜索 商品
-            it = new Intent(ActivitySearch.this, ActivityGoodsList.class);
-            it.putExtra("search", keyword);
-            it.putExtra("typeid", "");
+            it = ActivityGoodsList.getIntent(ActivitySearch.this, "", keyword);
         } else {
             //搜索 药品
             it = ActivityMedicineList.getIntent(ActivitySearch.this, "0", "", "", keyword);
@@ -173,17 +170,6 @@ public class ActivitySearch extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_SEARCH) {
-/*                    if (getIntent().getIntExtra("from", 0) == 1) {
-                        Intent it = new Intent(ActivitySearch.this, ActivityGoodsList.class);
-                        it.putExtra("search", edHeader.getText().toString().trim());
-                        it.putExtra("typeid", "");
-                        startActivity(it);
-                    } else {
-                        Intent it = new Intent(ActivitySearch.this, ActivityMedicineList.class);
-                        it.putExtra("search", edHeader.getText().toString().trim());
-                        it.putExtra("typeid", "");
-                        startActivity(it);
-                    }*/
                     goSearchRlt();
                 }
                 return false;
@@ -201,7 +187,7 @@ public class ActivitySearch extends BaseActivity {
 
     /**
      * @param context
-     * @param src activity来源
+     * @param src         activity来源
      * @param initKeyword 初始的关键字
      * @return
      */

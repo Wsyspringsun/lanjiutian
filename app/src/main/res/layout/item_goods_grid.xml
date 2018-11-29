@@ -24,7 +24,10 @@
             android:scaleType="fitXY"
             android:src="@mipmap/zhanweitu" />
 
-        <include layout="@layout/fragment_goods_listitem_huodong" />
+        <include
+            layout="@layout/fragment_goods_listitem_huodong"
+            android:layout_width="@dimen/x45"
+            android:layout_height="@dimen/x45" />
 
     </FrameLayout>
 
@@ -39,18 +42,27 @@
         android:textColor="@color/font_black2"
         android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/money"
-        style="@style/font_ww_14"
-        android:text="@string/money_renminbi"
-        android:textColor="@color/base_bar" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <com.wyw.ljtds.widget.TextViewDel
-        android:id="@+id/item_goods_grid_money_old"
-        style="@style/font_ww_14"
-        android:text="@string/money_renminbi"
-        android:textColor="@color/base_bar"
-        android:visibility="gone"
-        fresco:delLineColor="@color/black" />
+        <TextView
+            android:id="@+id/item_goods_grid_money"
+            style="@style/font_ww_14"
+            android:textSize="@dimen/font_4"
+            android:text="@string/money_renminbi"
+            android:textColor="@color/base_bar" />
+
+        <com.wyw.ljtds.widget.TextViewDel
+            android:id="@+id/item_goods_grid_money_old"
+            style="@style/font_ww_14"
+            android:layout_marginLeft="@dimen/vertical_margin_lg"
+            android:text="@string/money_renminbi"
+            android:textColor="@color/base_bar"
+            android:visibility="gone"
+            fresco:delLineColor="@color/black" />
+
+    </LinearLayout>
 
 </LinearLayout>

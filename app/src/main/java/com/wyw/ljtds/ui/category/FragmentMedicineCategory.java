@@ -62,7 +62,6 @@ public class FragmentMedicineCategory extends BaseFragment {
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        Log.e(AppConfig.ERR_TAG, "setUserVisibleHint");
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             if (mAdapter == null || mAdapter.getCount() <= 0) {

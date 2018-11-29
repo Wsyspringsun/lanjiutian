@@ -224,6 +224,7 @@
                     android:text="￥"
                     android:textColor="@color/white"
                     android:textSize="@dimen/font_7"
+                    android:visibility="gone"
                     app:delLineColor="@color/white" />
 
                 <com.wyw.ljtds.widget.TextViewDel
@@ -233,6 +234,7 @@
                     android:text="xx.xx"
                     android:textColor="@color/white"
                     android:textSize="@dimen/font_6"
+                    android:visibility="gone"
                     app:delLineColor="@color/white" />
 
 

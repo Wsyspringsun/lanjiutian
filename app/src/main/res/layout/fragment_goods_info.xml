@@ -213,7 +213,7 @@
                 android:id="@+id/ll_current_goods"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@color/whitesmoke"
                 android:paddingBottom="@dimen/x12"
                 android:paddingLeft="@dimen/x10"
                 android:paddingTop="@dimen/x12">
@@ -224,13 +224,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="选择颜色规格"
-                    android:textColor="@color/font_1"
-                    android:textSize="@dimen/font_5" />
+                    android:textColor="@color/font_0"
+                    android:textSize="@dimen/font_4" />
 
                 <ImageView
-                    android:layout_width="@dimen/x12"
-                    android:layout_height="@dimen/x12"
-                    android:layout_marginRight="@dimen/vertical_margin"
+                    android:layout_width="@dimen/x15"
+                    android:layout_height="@dimen/x15"
+                    android:layout_marginRight="@dimen/vertical_margin_lg"
                     android:src="@mipmap/jiantou_you_hui" />
 
             </LinearLayout>

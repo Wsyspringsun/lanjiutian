@@ -368,6 +368,8 @@ public class CommodityDetailsModel extends GoodsModel {
         private String flgDetail;
         //市场价
         private BigDecimal marketPrice;
+        //特价
+        private BigDecimal promPrice;
         //可购买库存
         private int quanlityUsable;
         //总库存
@@ -500,6 +502,12 @@ public class CommodityDetailsModel extends GoodsModel {
             this.flgDetail = flgDetail;
         }
 
+        public BigDecimal getPromPrice() {
+            return promPrice;
+        }
 
+        public void setPromPrice(BigDecimal promPrice) {
+            this.promPrice = promPrice;
+        }
     }
 }

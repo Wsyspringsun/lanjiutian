@@ -32,7 +32,7 @@ public class MedicineItemAdapter1 extends BaseQuickAdapter<MedicineListModel> {
     @Override
     protected void convert(BaseViewHolder baseViewHolder, MedicineListModel recommendModel) {
         baseViewHolder.setText(R.id.goods_title, StringUtils.deletaFirst(recommendModel.getWARENAME()))
-                .setText(R.id.money, "￥" + recommendModel.getSALEPRICE() + "");
+                .setText(R.id.item_goods_grid_money, "￥" + recommendModel.getSALEPRICE() + "");
 
         ImageView goods_img = baseViewHolder.getView(R.id.item_goods_grid_sdv);
         if (!StringUtils.isEmpty(recommendModel.getIMG_PATH())) {

@@ -32,8 +32,8 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/edHeader"
+            <com.wyw.ljtds.widget.ClearEditText
+                android:id="@+id/main_header_search_edHeader"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"

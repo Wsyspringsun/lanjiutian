@@ -461,7 +461,7 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
         @Override
         protected void convert(BaseViewHolder baseViewHolder, RecommendModel recommendModel) {
             baseViewHolder.setText(R.id.goods_title, StringUtils.deletaFirst(recommendModel.getWARENAME()))
-                    .setText(R.id.money, recommendModel.getSALEPRICE() + "");
+                    .setText(R.id.item_goods_grid_money, recommendModel.getSALEPRICE() + "");
 
             SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_head_img);
             if (StringUtils.isEmpty(recommendModel.getIMG_PATH())) {
@@ -555,7 +555,7 @@ public class ActivityOrderInfo extends BaseActivity implements EasyPermissions.P
                 title += "(" + goods.getGIVEAWAY() + ")";
             }
             baseViewHolder.setText(R.id.title, title)
-                    .setText(R.id.money, "￥" + Utils.formatFee("" + goods.getCOST_MONEY()))
+                    .setText(R.id.item_orderinfor_goods_money, "￥" + Utils.formatFee("" + goods.getCOST_MONEY()))
                     .setText(R.id.number, "X" + goods.getEXCHANGE_QUANLITY())
                     .setOnClickListener(R.id.shouhou, new View.OnClickListener() {
                         @Override

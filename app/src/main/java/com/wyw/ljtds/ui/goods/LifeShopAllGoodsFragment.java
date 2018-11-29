@@ -115,11 +115,18 @@ public class LifeShopAllGoodsFragment extends BaseFragment {
             ryData.setAdapter(adapter);
         }
         if (startIdx == 0) {
+            if (commodities == null || commodities.size() <= 0) {
+                end = true;
+            }
             adapter.setNewData(commodities);
             if (commodities == null || commodities.size() <= 0) {
                 adapter.setEmptyView(LayoutInflater.from(getActivity()).inflate(R.layout.main_empty_view, null));
             }
         } else {
+            if (commodities == null || commodities.size() <= 0) {
+                end = true;
+                return;
+            }
             adapter.addData(commodities);
         }
         adapter.notifyDataSetChanged();
@@ -128,6 +135,7 @@ public class LifeShopAllGoodsFragment extends BaseFragment {
     public void loadData() {
         final String shopId = getArguments().getString(ARG_SHOPID);
         Utils.log("getShopCommodities shopId:" + shopId);
+        setLoding(getActivity(), false);
         new BizDataAsyncTask<List<CommodityListModel>>() {
 
             @Override
@@ -137,13 +145,14 @@ public class LifeShopAllGoodsFragment extends BaseFragment {
 
             @Override
             protected void onExecuteSucceeded(List<CommodityListModel> commodityListModels) {
+                closeLoding();
                 commodities = commodityListModels;
                 bindData2View();
             }
 
             @Override
             protected void OnExecuteFailed() {
-
+                closeLoding();
             }
         }.execute();
     }

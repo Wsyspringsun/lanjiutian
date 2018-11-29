@@ -29,6 +29,7 @@ public class HuoDongActivity extends BaseActivityFragment {
     public static final String FLG_HUODONG_DIANZIBI = "6";
     public static final String FLG_HUODONG_LINGYUANGOU = "7";
     public static final String FLG_HUODONG_JIFENDUIHUAN = "8";
+    public static final String FLG_HUODONG_JIFENSHANGCHENG = "9";
 
     private static final String TAG_HUODONG_FLG = "com.wyw.ljtds.ui.home.HuoDongActivity";
     @ViewInject(R.id.activity_fragment_title)
@@ -89,6 +90,9 @@ public class HuoDongActivity extends BaseActivityFragment {
                 break;
             case FLG_HUODONG_JIFENDUIHUAN:
                 tvTitle.setText(getString(R.string.huodong_jifenduihuan));
+                break;
+            case FLG_HUODONG_JIFENSHANGCHENG:
+                tvTitle.setText("积分商城");
                 break;
             default:
                 break;

@@ -425,7 +425,7 @@ public class UserIndexAdapter extends RecyclerView.Adapter {
             super(itemView);
 //             item_goods_grid
             tvTitle = (TextView) itemView.findViewById(R.id.goods_title);
-            tvMoney = (TextView) itemView.findViewById(R.id.money);
+            tvMoney = (TextView) itemView.findViewById(R.id.item_goods_grid_money);
             sdv = (ImageView) itemView.findViewById(R.id.item_goods_grid_sdv);
             itemView.setOnClickListener(this);
         }

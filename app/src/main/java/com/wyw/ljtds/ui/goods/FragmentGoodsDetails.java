@@ -68,7 +68,7 @@ public class FragmentGoodsDetails extends BaseFragment {
                 "<html>\n" +
                 "<head>\n" +
                 "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\" />\n" +
-                "<style type='text/css'>img{width:" + format.format(1) + ";height:auto}</style>" +
+                "<style type='text/css'>img{width:100%;margin-top:-5px;}</style>" +
                 "</head>\n" +
                 "<body>\n" + html +
                 "<script src=\"http://code.jquery.com/jquery-1.11.3.min.js\"></script>"+

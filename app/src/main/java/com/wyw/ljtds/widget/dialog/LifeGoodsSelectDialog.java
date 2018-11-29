@@ -31,6 +31,7 @@ import com.wyw.ljtds.adapter.DataListAdapter;
 import com.wyw.ljtds.config.AppConfig;
 import com.wyw.ljtds.config.MyApplication;
 import com.wyw.ljtds.model.CommodityDetailsModel;
+import com.wyw.ljtds.model.GoodsModel;
 import com.wyw.ljtds.model.MedicineShop;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.Utils;
@@ -40,6 +41,7 @@ import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -49,6 +51,7 @@ import java.util.Set;
 
 public class LifeGoodsSelectDialog extends Dialog {
     MyCallback callback;
+    private CommodityDetailsModel model;
 
     public void setCallback(MyCallback callback) {
         this.callback = callback;
@@ -124,6 +127,7 @@ public class LifeGoodsSelectDialog extends Dialog {
 
     public void bindData2View(final CommodityDetailsModel model) {
         if (model == null) return;
+        this.model = model;
         if (model.getColorList() == null) return;
         final View.OnClickListener sizeSelChangeListener = new View.OnClickListener() {
             @Override
@@ -157,7 +161,7 @@ public class LifeGoodsSelectDialog extends Dialog {
                         rb.setText(sizeItem.getCommoditySize());
                         rb.setOnClickListener(sizeSelChangeListener);
                         rgSizeSelFlxLayout.addView(rb);
-                        if(i==0){
+                        if (i == 0) {
                             rb.setChecked(true);
                             sizeSelChangeListener.onClick(rb);
                         }
@@ -244,7 +248,19 @@ public class LifeGoodsSelectDialog extends Dialog {
         String selColor = "颜色", selSize = "规格";
         if (seledSize != null) {
             selSize = seledSize.getCommoditySize();
-            tvMoney.setText("￥" + seledSize.getCostMoney());
+            String topFlg = model.getTopFlg();
+            BigDecimal money = seledSize.getCostMoney();
+            if (GoodsModel.HUODONG_TEJIA.equals(topFlg)) {
+                //特价
+                money = seledSize.getPromPrice();
+            } else if (GoodsModel.HUODONG_JIFEN.equals(topFlg)) {
+
+            } else if (GoodsModel.TOP_FLG_LINGYUAN.equals(topFlg)) {
+
+            } else if (CommodityDetailsModel.CUXIAOFLG_YES.equals(model.getCuxiaoFlg())) {
+                money = seledSize.getPromPrice();
+            }
+            tvMoney.setText("￥" + Utils.formatFee(money + ""));
             tvStore.setText("库存:" + seledSize.getQuanlityUsable());
             imgGoods.setImageURI(Uri.parse(AppConfig.IMAGE_PATH_LJT + seledSize.getImgPath()));
             Utils.log("getImgPath:" + AppConfig.IMAGE_PATH_LJT + seledSize.getImgPath());

@@ -80,7 +80,7 @@ public class FragmentCategory extends BaseFragment {
         pager.setAdapter(new MyFrPagerAdapter(getActivity().getSupportFragmentManager(), titles, fragmentList));
         tabs.setViewPager(pager);
 
-        pager.setCurrentItem(1);
+        pager.setCurrentItem(0);
     }
 
 }

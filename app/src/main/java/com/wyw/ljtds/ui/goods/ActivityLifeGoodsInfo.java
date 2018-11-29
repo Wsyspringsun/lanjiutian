@@ -27,7 +27,6 @@ import com.wyw.ljtds.model.OrderTradeDto;
 import com.wyw.ljtds.model.ShoppingCartAddModel;
 import com.wyw.ljtds.model.SingleCurrentUser;
 import com.wyw.ljtds.model.XiaoNengData;
-import com.wyw.ljtds.ui.base.BaseActivity;
 import com.wyw.ljtds.ui.user.ActivityLoginOfValidCode;
 import com.wyw.ljtds.ui.user.order.ActivityOrder;
 import com.wyw.ljtds.utils.GsonUtils;
@@ -35,7 +34,6 @@ import com.wyw.ljtds.utils.StringUtils;
 import com.wyw.ljtds.utils.ToastUtil;
 import com.wyw.ljtds.utils.Utils;
 import com.wyw.ljtds.widget.MyCallback;
-import com.wyw.ljtds.widget.goodsinfo.NoScrollViewPager;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -401,126 +399,12 @@ public class ActivityLifeGoodsInfo extends ActivityGoodsInfo {
 
         XiaoNengData xnd = commodityModel.getXiaonengData();
         if (xnd != null) {
-//            sellerid = xnd.getSellerid();
-//            settingid1 = xnd.getSettingid1();
             String startPageUrl = AppConfig.WEB_APP_URL + "/lifeDetail.html?commodityId=" + commodityModel.getCommodityId();
             Ntalker.getBaseInstance().startAction_goodsDetail(commodityModel.getTitle(), startPageUrl, xnd.getSellerid(), "");
         }
-//        groupName = model.getGroupName();
 
         fragmentCommodityInfo.updeta(commodityModel);
         fragmentGoodsDetail.bindData2View(commodityModel);
-//        fragmentGoodsEvaluate.bindData2View(commodityModel);
     }
-//
-//    //添加购物车
-//    BizDataAsyncTask<String> cartTask;
-//
-//    private void addCart(final String str) {
-//        cartTask = new BizDataAsyncTask<String>() {
-//            @Override
-//            protected String doExecute() throws ZYException, BizFailure {
-//                return GoodsBiz.shoppingCart(str, "create");
-//            }
-//
-//            @Override
-//            protected void onExecuteSucceeded(String s) {
-//                ToastUtil.show(ActivityGoodsInfo.this, "添加购物车成功！");
-//            }
-//
-//            @Override
-//            protected void OnExecuteFailed() {
-//
-//            }
-//        };
-//        cartTask.execute();
-//    }
-//
-//    //显示咨询的模窗口
-//    public void showConsultImtes(int viewX, int viewY) {
-//        if (dialogConsult == null) {
-//            dialogConsult = new Dialog(this, R.style.Theme_AppCompat_Dialog);
-//            LayoutInflater inflater = this.getLayoutInflater();
-//
-//            View layout = inflater.inflate(R.layout.fragment_consult_items, (ViewGroup) findViewById(R.id.vp_content), false);
-//            View itemKefu = layout.findViewById(R.id.fragment_consult_ll_kefu);
-//            itemKefu.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    dialogConsult.dismiss();
-//                    //开启客服
-//                    openChat(model.getTitle(), "", settingid1, groupName, true, model.getCommodityId());
-//                }
-//            });
-//            View itemTel = layout.findViewById(R.id.fragment_consult_ll_tel);
-//            itemTel.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    dialogConsult.dismiss();
-//                    String mobile = AppConfig.LJG_TEL;
-//                    if (model != null) {
-//                        if (!StringUtils.isEmpty(model.getContactMobile())) {
-//                            mobile = model.getContactMobile();
-//                        } else if (!StringUtils.isEmpty(model.getContactTel())) {
-//                            mobile = model.getContactTel();
-//                        }
-//                    }
-//                    Log.e(AppConfig.ERR_TAG, model.getContactMobile() + " tel:" + model.getContactTel());
-//                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mobile));
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
-//                }
-//            });
-//
-//            dialogConsult.setContentView(layout);
-//            dialogConsult.setCancelable(true);
-//
-//
-//            Window dialogWindow = dialogConsult.getWindow();
-////        dialogWindow.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-//            dialogWindow.setGravity(Gravity.LEFT | Gravity.BOTTOM);
-//            //显示的坐标
-//            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-//
-//
-//            lp.y = viewY + 150;
-//            lp.x = viewX;
-//            //内容 透明度
-////        lp.alpha = 0.2f;
-//            //遮罩 透明度
-//            lp.dimAmount = 0.2f;
-////        //dialog的大小
-////            lp.width = width;
-////            lp.verticalMargin = 20f;
-//            dialogWindow.setAttributes(lp);
-//
-//        }
-//        dialogConsult.show();
-//
-//    }
-//
-////    private void addDb() {
-////
-////        DbManager dbManager = x.getDb( SqlUtils.getDaoConfig() );
-////
-////            SqlFavoritesModel sqlFavoritesModel = new SqlFavoritesModel();
-////            sqlFavoritesModel.setId( model.getWAREID() );
-////            sqlFavoritesModel.setMoney( model.getSALEPRICE() + "" );
-////            sqlFavoritesModel.setImage( "http://img4.hqbcdn.com/product/79/f3/79f3ef1b0b2283def1f01e12f21606d4.jpg" );
-////            sqlFavoritesModel.setName( model.getWARENAME() );
-////
-////        try {
-////            dbManager.save( sqlFavoritesModel );//添加数据
-////        } catch (DbException e) {
-////            e.printStackTrace();
-////        }
-////
-////    }
-//
-//
-//    private String buildTransaction(final String type) {
-//        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
-//    }
-
 
 }

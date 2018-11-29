@@ -2,6 +2,7 @@ package com.wyw.ljtds.ui.goods;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.squareup.picasso.Picasso;
 import com.wyw.ljtds.R;
 import com.wyw.ljtds.biz.biz.CategoryBiz;
 import com.wyw.ljtds.biz.exception.BizFailure;
@@ -210,10 +212,10 @@ public class PointShopLifeGoodsListActivity extends BaseActivity {
             }*/
 
 //            SimpleDraweeView goods_img = baseViewHolder.getView(R.id.item_goods_grid_sdv);
-            /*ImageView goods_img = baseViewHolder.getView(R.id.item_shopgoods_iv_thumb);
+            ImageView goods_img = baseViewHolder.getView(R.id.item_shopgoods_iv_thumb);
             if (!StringUtils.isEmpty(commodityListModel.getImgPath())) {
-                Picasso.with(mContext).load(Uri.parse(AppConfig.IMAGE_PATH_LJT + commodityListModel.getImgPath())).resize(RESIZE, RESIZE).placeholder(R.drawable.img_adv_zhanwei).into(goods_img);
-            }*/
+                Picasso.with(mContext).load(Uri.parse(AppConfig.IMAGE_PATH_LJT + commodityListModel.getImgPath())).placeholder(R.drawable.img_adv_zhanwei).into(goods_img);
+            }
 
             /**
              * 活动小图标

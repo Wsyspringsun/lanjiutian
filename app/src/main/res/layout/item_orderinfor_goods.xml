@@ -50,7 +50,7 @@
                 android:textColor="@color/gray" />
 
             <TextView
-                android:id="@+id/money"
+                android:id="@+id/item_orderinfor_goods_money"
                 style="@style/font_ww_14"
                 android:layout_alignParentBottom="true"
                 android:textColor="@color/base_bar" />

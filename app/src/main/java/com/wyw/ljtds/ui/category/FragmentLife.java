@@ -64,8 +64,9 @@ public class FragmentLife extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            if (mAdapter.isEmpty())
+            if (mAdapter == null || mAdapter.getCount() <= 0) {
                 getType();
+            }
         } else {
 
 

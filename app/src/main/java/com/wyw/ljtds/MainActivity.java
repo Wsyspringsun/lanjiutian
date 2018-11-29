@@ -520,95 +520,98 @@ public class MainActivity extends BaseActivity {
      */
     public static void navPage(Context context, Map m) {
 
-        Intent it = null;
         if (m == null) return;
 
         String flg = (String) m.get("flg");
         String headId = (String) m.get("headId");
         String advertizeShowName = (String) m.get("advertizeShowName");
-        switch (flg) {
-            case "ZC":
-                if (UserBiz.isLogined()) {
-                    if (!StringUtils.isEmpty(advertizeShowName)) {
-                        ToastUtil.show(context, advertizeShowName);
+        if (!StringUtils.isEmpty(flg)) {
+            Intent it = null;
+            switch (flg) {
+                case "ZC":
+                    if (UserBiz.isLogined()) {
+                        if (!StringUtils.isEmpty(advertizeShowName)) {
+                            ToastUtil.show(context, advertizeShowName);
+                        }
+                    } else {
+                        it = ActivityRegist.getIntent(context);
                     }
-                } else {
-                    it = ActivityRegist.getIntent(context);
-                }
-                break;
-            case "YX":
-                it = ActivityMedicinesInfo.getIntent(context, headId, "");
-                break;
-            case "YL":
-                it = ActivityMedicineList.getIntent(context, "0", "", headId, "");
-                break;
-            case "D":
-                it = ShopActivity.getIntent(context, headId);
-                break;
-            case "DZ":
-                //电子币
-                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_DIANZIBI);
-                break;
-            case "CJ":
-                //抽奖
-                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_CHOJIANG);
-                break;
-            case "MZ":
-                //满就送
-                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_MANZENG);
-                break;
-            case "TJ":
-                //特价
-                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_TEJIA);
-                break;
-            case "MS":
-                //秒杀
-                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_MIAOSHA);
-                break;
-            case "FL":
-                //福利中心
-                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_LIST);
-                break;
-            case "ZY":
-                //轻松找药
-                it = new Intent(context, ActivityFindCategort.class);
-                break;
-            case "KJ":
-                //砍价
-                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_KANJIA);
-                break;
-            case "LY":
-                //零元购
-                it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_LINGYUANGOU);
-                break;
-            case "ZX":
-                //咨询
-                ((BaseActivity) context).openChat("", "", AppConfig.CHAT_XN_LJT_SETTINGID2, AppConfig.CHAT_XN_LJT_TITLE2, false, "");
-                break;
-            case "JFDH":
-                it = PointShopActivity.getIntent(context);
-                break;
-            case "JFYL":
-                //积分商城
-                it = PointShopMedicineActivity.getIntent(context);
-                break;
-            case "LX":
-                it = ActivityLifeGoodsInfo.getIntent(context, headId);
-                break;
-            case "LL":
-                it = ActivityGoodsList.getIntent(context, headId, "");
-                break;
-            case "LD":
-                it = LifeShopActivity.getIntent(context, headId);
-                break;
-            case "JFLL":
-                it = PointShopLifeGoodsListActivity.getIntent(context);
-                break;
-            default:
-                break;
+                    break;
+                case "YX":
+                    it = ActivityMedicinesInfo.getIntent(context, headId, "");
+                    break;
+                case "YL":
+                    it = ActivityMedicineList.getIntent(context, "0", "", headId, "");
+                    break;
+                case "D":
+                    it = ShopActivity.getIntent(context, headId);
+                    break;
+                case "DZ":
+                    //电子币
+                    it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_DIANZIBI);
+                    break;
+                case "CJ":
+                    //抽奖
+                    it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_CHOJIANG);
+                    break;
+                case "MZ":
+                    //满就送
+                    it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_MANZENG);
+                    break;
+                case "TJ":
+                    //特价
+                    it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_TEJIA);
+                    break;
+                case "MS":
+                    //秒杀
+                    it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_MIAOSHA);
+                    break;
+                case "FL":
+                    //福利中心
+                    it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_LIST);
+                    break;
+                case "ZY":
+                    //轻松找药
+                    it = new Intent(context, ActivityFindCategort.class);
+                    break;
+                case "KJ":
+                    //砍价
+                    it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_KANJIA);
+                    break;
+                case "LY":
+                    //零元购
+                    it = HuoDongActivity.getIntent(context, HuoDongActivity.FLG_HUODONG_LINGYUANGOU);
+                    break;
+                case "ZX":
+                    //咨询
+                    ((BaseActivity) context).openChat("", "", AppConfig.CHAT_XN_LJT_SETTINGID2, AppConfig.CHAT_XN_LJT_TITLE2, false, "");
+                    break;
+                case "JFDH":
+                    it = PointShopActivity.getIntent(context);
+                    break;
+                case "JFYL":
+                    //积分商城
+                    it = PointShopMedicineActivity.getIntent(context);
+                    break;
+                case "LX":
+                    it = ActivityLifeGoodsInfo.getIntent(context, headId);
+                    break;
+                case "LL":
+                    it = ActivityGoodsList.getIntent(context, headId, "");
+                    break;
+                case "LD":
+                    it = LifeShopActivity.getIntent(context, headId);
+                    break;
+                case "JFLL":
+                    it = PointShopLifeGoodsListActivity.getIntent(context);
+                    break;
+                default:
+                    break;
+            }
+            if (it != null)
+                context.startActivity(it);
         }
-        if (it != null)
-            context.startActivity(it);
+
     }
 
 }

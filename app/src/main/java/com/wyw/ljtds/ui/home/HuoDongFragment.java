@@ -33,6 +33,7 @@ import com.wyw.ljtds.ui.base.BaseFragment;
 import com.wyw.ljtds.ui.goods.ActivityGoodsList;
 import com.wyw.ljtds.ui.goods.ActivityLifeGoodsInfo;
 import com.wyw.ljtds.ui.goods.ActivityMedicinesInfo;
+import com.wyw.ljtds.ui.goods.PointShopMedicineActivity;
 import com.wyw.ljtds.ui.user.ActivityLoginOfValidCode;
 import com.wyw.ljtds.ui.user.wallet.ChojiangRecActivity;
 import com.wyw.ljtds.ui.user.wallet.PointShopActivity;
@@ -194,6 +195,10 @@ public class HuoDongFragment extends BaseFragment implements ToolbarManager.Icon
                     getActivity().finish();
                     return;
                 }
+                break;
+            case HuoDongActivity.FLG_HUODONG_JIFENSHANGCHENG:
+                startActivity(PointShopMedicineActivity.getIntent(getActivity()));
+                getActivity().finish();
                 break;
             default:
                 break;

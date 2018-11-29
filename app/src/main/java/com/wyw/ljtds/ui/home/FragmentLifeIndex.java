@@ -66,6 +66,8 @@ public class FragmentLifeIndex extends BaseFragment {
     LinearLayout llLifeHeader;
     @ViewInject(R.id.main_header_location)
     TextView tvLocation;
+    @ViewInject(R.id.edHeader)
+    TextView edHeader;
 
     //存储首页数据
     private HomePageModel1 homePageModel;
@@ -91,6 +93,7 @@ public class FragmentLifeIndex extends BaseFragment {
         //加载服务器数据
         //Location
         loadhomeData();
+
     }
 
     @Override
@@ -103,7 +106,7 @@ public class FragmentLifeIndex extends BaseFragment {
         super.onStop();
     }
 
-    @Event(value = {R.id.ll_search, R.id.zxing, R.id.right_img })
+    @Event(value = {R.id.ll_search, R.id.zxing, R.id.right_img})
     private void onclick(View view) {
         Intent it;
         switch (view.getId()) {
@@ -202,7 +205,7 @@ public class FragmentLifeIndex extends BaseFragment {
                 }
             });
         }
-
+        edHeader.setText("请输入商品关键字");
     }
 
     //从网络加载首页所有数据
