@@ -1,11 +1,14 @@
 package com.wyw.ljtds.ui.home;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -31,6 +34,7 @@ import com.wyw.ljtds.model.UpdateAppModel;
 import com.wyw.ljtds.ui.user.ActivityLogin;
 import com.wyw.ljtds.utils.GsonUtils;
 import com.wyw.ljtds.utils.ToastUtil;
+import com.wyw.ljtds.utils.Utils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -38,15 +42,46 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.x;
 
 import java.io.File;
+import java.util.ArrayList;
 
 @ContentView(R.layout.activity_splash)
 public class ActivitySplash extends AppCompatActivity {
+    private final int SDK_PERMISSION_REQUEST = 127;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        x.view().inject(this);//xutils初始化视图
 
+        getPersimmions();
+        x.view().inject(this);//xutils初始化视图
+    }
+
+    @TargetApi(23)
+    private void getPersimmions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ArrayList<String> permissions = new ArrayList<>();
+            // 读写权限
+            if (addPermission(permissions, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+            }
+            if (permissions.size() > 0) {
+                requestPermissions(permissions.toArray(new String[permissions.size()]), SDK_PERMISSION_REQUEST);
+            }
+        }
+    }
+
+    @TargetApi(23)
+    private boolean addPermission(ArrayList<String> permissionsList, String permission) {
+        if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) { // 如果应用没有获得对应权限,则添加到列表中,准备批量申请
+            if (shouldShowRequestPermissionRationale(permission)) {
+                return true;
+            } else {
+                permissionsList.add(permission);
+                return false;
+            }
+        } else {
+            return true;
+        }
     }
 
     @Override
@@ -67,6 +102,7 @@ public class ActivitySplash extends AppCompatActivity {
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                Utils.log("download:" + result);
                 final UpdateAppModel updateAppModel = GsonUtils.Json2Bean(result, UpdateAppModel.class);
                 PackageManager packageManager = getPackageManager();
                 // getPackageName()是你当前类的包名，0代表是获取版本信息
